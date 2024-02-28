@@ -1,296 +1,211 @@
 @extends('layout.home')
-
+@section('title', 'Perawat')
 @section('content')
-    <div class="pendaftaran">
-      <div class="container">
-        <div class="judul">
-          <h2>Daftar Pasien</h2>
-        </div>
-        <div class="isian">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th>No</th>
-                      <th>No. RM</th>
-                      <th>Nama Pasien</th>
-                      <th>No. Antrian</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td>1</td>
-                      <td>2638582</td>
-                      <td>Mr. A</td>
-                      <td>B011</td>
-                      <td>Belum Periksa</td>
-                      <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#periksa">
-                          Periksa
-                        </button>
-                          <button id="hapus" class="btn btn-danger">
-                              Hapus
-                          </button>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>1</td>
-                      <td>2638582</td>
-                      <td>Mr. A</td>
-                      <td>B011</td>
-                      <td>Belum Periksa</td>
-                      <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#periksa">
-                          Periksa
-                        </button>
-                          <button id="hapus" class="btn btn-danger">
-                              Hapus
-                          </button>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>1</td>
-                      <td>2638582</td>
-                      <td>Mr. A</td>
-                      <td>B011</td>
-                      <td>Belum Periksa</td>
-                      <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#periksa">
-                          Periksa
-                        </button>
-                          <button id="hapus" class="btn btn-danger">
-                              Hapus
-                          </button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
 
-  <!-- Modal PERIKSA -->
-<div class="modal fade" id="periksa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="periksa" aria-hidden="true">
+<div class="pendaftaran">
+  <div class="container">
+      <div class="card">
+          <div class="card-body">
+              <div class="judul">
+                  <h2>Daftar Pasien</h2>
+                  <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#pasienbaru"><i class="bi bi-plus-lg"></i>
+                      Pasien Baru
+                  </button>
+              </div>
+              <div class="isian">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>No</th>
+                              <th>No. RM</th>
+                              <th>Nama Pasien</th>
+                              <th>Alamat</th>
+                              <th>Jenis Pembayaran</th>
+                              <th>Status</th>
+                              <th>Aksi</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        @if (empty($pasien))
+                            <tr>
+                              <td colspan="6" style="text-align: center">Tidak Ada Data Pasien</td>
+                            </tr>
+                        @else
+                          <?php $no = 1; ?>
+                          @foreach ($pasien as $item)
+                          <tr id="row_{{ $item->id }}">
+                              <td>{{ $no++ }}</td>
+                              <td>{{ $item->no_rm }}</td>
+                              <td>{{ $item->nama_pasien }}</td>
+                              <td>{{ $item->alamat }}</td>
+                              <td>{{ $item->jenis_bayar }}</td>
+                              <td>{{ $item->status }}</td>
+                              <td>
+                                  <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#periksa{{ $item->id }}">
+                                      Periksa
+                                  </button>
+                                  <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#hapuspasien{{ $item->id }}">
+                                      Hapus
+                                  </button>
+                              </td>
+                          </tr>
+                          @include('perawat.modalPerawat.ModalAnamnesis')
+                          @endforeach
+                        @endif
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+  {{-- Pasien Baru --}}
+  <div class="modal fade" id="pasienbaru" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Anamnesis</h1>
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Pendaftaran Pasien</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="anamnesis-s">
-            <h3 onclick="anamnesisS()">(S)</h3>
+          <form action="{{ url('pasien/store') }}" method="post" enctype="multipart/form-data">
+            @csrf
             <div class="form-group">
-              <label for="keluhan" onclick="toggleInput('a_keluhan_utama')">Keluhan Utama</label>
-              <input type="text" name="a_keluhan_utama" id="a_keluhan_utama" class="form-control mt-2 mb-2 ">
+              <label for="no_rm">No. RM</label>
+              <input type="text" class="form-control mt-2 mb-2" name="no_rm" id="no_rm" placeholder="Masukkan No.RM">
             </div>
             <div class="form-group">
-              <label for="riwayat-penyakit-skrg" onclick="toggleInput('a_riwayat_penyakit_skrg')">Riwayat Penyakit Sekarang</label>
-              <input type="text" name="a_riwayat_penyakit_skrg" id="a_riwayat_penyakit_skrg" class="form-control mt-2 mb-2 ">
+              <label for="nama_pasien">Nama Pasien</label>
+              <input type="text" class="form-control mt-2 mb-2" name="nama_pasien" id="nama_pasien" placeholder="Masukkan Nama Pasien">
             </div>
             <div class="form-group">
-              <label for="riwayat-penyakit-terdahulu" onclick="toggleInput('a_riwayat_penyakit_terdahulu')">Riwayat Penyakit Terdahulu</label>
-              <input type="text" name="a_riwayat_penyakit_terdahulu" id="a_riwayat_penyakit_terdahulu" class="form-control mt-2 mb-2 ">
+              <label for="nik">NIK</label>
+              <input type="text" class="form-control mt-2 mb-2" name="nik" id="nik" placeholder="Masukkan NIK">
             </div>
             <div class="form-group">
-              <label for="riwayat-penyakit-keluarga" onclick="toggleInput('a_riwayat_penyakit_keluarga')">Riwayat Penyakit Keluarga</label>
-              <input type="text" name="a_riwayat_penyakit_keluarga" id="a_riwayat_penyakit_keluarga" class="form-control mt-2 mb-2 ">
+              <label for="nama_kk">Nama Kepala Keluarga</label>
+              <input type="text" class="form-control mt-2 mb-2" name="nama_kk" id="nama_kk" placeholder="Masukkan Nama Kepala Keluarga">
             </div>
             <div class="form-group">
-              <label for="riwayat-alergi" onclick="toggleInput('a_riwayat_alergi')">Riwayat Alergi</label>
-              <select name="a_riwayat_alergi" id="a_riwayat_alergi" class="form-control mt-2 mb-2 ">
-                <option value="">Pilih Riwayat</option>
-                <option value="">Ada</option>
-                <option value="">Tidak</option>
+              <label for="tgllahir">Tanggal Lahir</label>
+              <input type="date" class="form-control mt-2 mb-2" name="tgllahir" id="tgllahir">
+            </div>
+            <div class="form-group">
+              <label for="alamat">Alamat</label>
+              <input type="text" class="form-control mt-2 mb-2" name="alamat" id="alamat" placeholder="Masukkan Alamat">
+            </div>
+            <div class="form-group">
+              <label for="noHP">No. HP</label>
+              <input type="text" class="form-control mt-2 mb-2" name="noHP" id="noHP" placeholder="Masukkan No. HP">
+            </div>
+            <div class="form-group">
+              <label for="jenis_bayar">Jenis Pembayaran</label>
+              <select name="jenis_bayar" id="jenis_bayar" class="form-control mt-2 mb-2">
+                <option value="" disabled selected>Pilih Pembayaran</option>
+                <option value="umum">Umum</option>
+                <option value="bpjs">BPJS</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="bpjs">No. BPJS</label>
+              <input type="text" class="form-control mt-2 mb-2" name="bpjs" id="bpjs" placeholder="Masukkan No. BPJS">
+            </div>
+            <div class="form-group">
+              <label for="status">Status</label>
+              <select name="status" id="status" class="form-control mt-2 mb-2">
+                <option value="" disabled selected>Pilih Status</option>
+                <option value="pasien">Pasien</option>
+                <option value="suami">Suami</option>
+                <option value="anak">Anak</option>
+                <option value="ibu_kandung">Ibu Kandung</option>
               </select>
             </div>
           </div>
-          <div class="anamnesis-o">
-            <h3 onclick="anamnesisO()">(0)</h3>
-            <div class="form-group">
-              <label for="keadaan_umum" onclick="toggleInput('keadaan_umum')">Keadaan Umum</label>
-              <input type="text" name="keadaan_umum" id="keadaan_umum" class="form-control mt-2 mb-2 ">
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('kesadaran')" style="margin-bottom: 5px;">Kesadaran</p>
-              <div id="kesadaran">
-                <label for="jawaban-ya">
-                  <input type="radio" name="kesadaran" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-kesadaran', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="kesadaran" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-kesadaran', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-kesadaran" style="display: none;">
-                <input type="text" id="alasan-kesadaran" name="alasan-kesadaran" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('kepala')" style="margin-bottom: 5px;">Kepala</p>
-              <div id="kepala">
-                <label for="jawaban-ya">
-                  <input type="radio" name="kepala" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-kepala', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="kepala" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-kepala', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-kepala" style="display: none;">
-                <input type="text" id="alasan-kepala" name="alasan-kepala" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('mata')" style="margin-bottom: 5px;">Mata</p>
-              <div id="mata">
-                <label for="jawaban-ya">
-                  <input type="radio" name="mata" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-mata', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="mata" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-mata', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-mata" style="display: none;">
-                <input type="text" id="alasan-mata" name="alasan-mata" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('leher')" style="margin-bottom: 5px;">Leher</p>
-              <div id="leher">
-                <label for="jawaban-ya">
-                  <input type="radio" name="leher" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-leher', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="leher" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-leher', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-leher" style="display: none;">
-                <input type="text" id="alasan-leher" name="alasan-leher" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('tht')" style="margin-bottom: 5px;">THT</p>
-              <div id="tht">
-                <label for="jawaban-ya">
-                  <input type="radio" name="tht" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-tht', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="tht" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-tht', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-tht" style="display: none;">
-                <input type="text" id="alasan-tht" name="alasan-tht" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('paru')" style="margin-bottom: 5px;">Paru</p>
-              <div id="paru">
-                <label for="jawaban-ya">
-                  <input type="radio" name="paru" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-paru', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="paru" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-paru', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-paru" style="display: none;">
-                <input type="text" id="alasan-paru" name="alasan-paru" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('jantung')" style="margin-bottom: 5px;">Jantung</p>
-              <div id="jantung">
-                <label for="jawaban-ya">
-                  <input type="radio" name="jantung" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-jantung', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="jantung" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-jantung', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-jantung" style="display: none;">
-                <input type="text" id="alasan-jantung" name="alasan-jantung" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('abdomen')" style="margin-bottom: 5px;">Abdomen / Otot Perut</p>
-              <div id="abdomen">
-                <label for="jawaban-ya">
-                  <input type="radio" name="abdomen" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-abdomen', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="abdomen" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-abdomen', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-abdomen" style="display: none;">
-                <input type="text" id="alasan-abdomen" name="alasan-abdomen" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('ekstremitas')" style="margin-bottom: 5px;">Ekstremitas / Anggota Gerak</p>
-              <div id="ekstremitas">
-                <label for="jawaban-ya">
-                  <input type="radio" name="ekstremitas" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-ekstremitas', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="ekstremitas" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-ekstremitas', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-ekstremitas" style="display: none;">
-                <input type="text" id="alasan-ekstremitas" name="alasan-ekstremitas" class="form-control mt-2 mb-2">
-              </div>
-            </div>
-            <div class="form-group mt-2 mb-2">
-              <p onclick="toggleInput('kulit')" style="margin-bottom: 5px;">Kulit</p>
-              <div id="kulit">
-                <label for="jawaban-ya">
-                  <input type="radio" name="kulit" id="jawaban-ya" value="ya" onclick="toggleChange('alasan-kulit', this)"> Ya
-                </label>
-                <label for="jawaban-tidak">
-                  <input type="radio" name="kulit" id="jawaban-tidak" value="tidak" onclick="toggleChange('alasan-kulit', this)"> Tidak
-                </label>
-              </div>
-              <div id="alasan-kulit" style="display: none;">
-                <input type="text" id="alasan-kulit" name="alasan-kulit" class="form-control mt-2 mb-2">
-              </div>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Daftar</button>
           </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Daftar</button>
-        </div>
+        </form>
       </div>
     </div>
-</div>
+  </div>
+
+  {{-- Delete Pasien --}}
+  @foreach ($pasien as $item)
+    <div class="modal fade text-left" id="hapuspasien{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header bg-danger">
+                  <h5 class="modal-title white" id="myModalLabel160">Hapus Data Pasien</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                      <i data-feather="x"></i>
+                  </button>
+              </div>
+              <form action="{{ url('pasien/hapus/'. $item->id ) }}" method="POST" enctype="multipart/form-data">
+                  @csrf
+                  @method('DELETE')
+                  <div class="modal-body">
+                      <center>
+                          <h5 class="mt-2 mb-3">Apakah anda ingin menghapus data pasien ini?</h5>
+                          <button type="submit" class="btn btn-danger ml-1">
+                              <i class="bx bx-check d-block d-sm-none"></i>
+                              <span class="d-none d-sm-block">Hapus</span>
+                          </button>
+                      </center>
+                  </div>
+              </form>
+          </div>
+      </div>
+    </div>
+  @endforeach
+     
 @endsection
 
 @push('script')
+<script src="{{ asset('assets/js/script.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
 <script>
-    function anamnesisS() {
-      var inputs = document.querySelectorAll('.anamnesis-s .form-group');
-      inputs.forEach(function(input) {
-        input.classList.toggle('hidden-input');
-      });
-    }
-    function anamnesisO() {
-      var inputs = document.querySelectorAll('.anamnesis-o .form-group');
-      inputs.forEach(function(input) {
-        input.classList.toggle('hidden-input');
-      });
-    }
-    function toggleInput(inputId) {
-      var inputElement = document.getElementById(inputId);
-      inputElement.classList.toggle('hidden-input');
-    }
+  
+// Pada modal pertama
+function saveDataAndShowNextModal() {
+    // Mendapatkan semua elemen <tr> yang memiliki atribut data-item-id
+    var tableRows = document.querySelectorAll('[data-item-id]');
 
-    hideInputs();
+    // Loop melalui setiap elemen <tr> dan ambil nilai data-item-id
+    tableRows.forEach(function (tableRow) {
+        var id = tableRow.getAttribute("data-item-id");
 
-    function toggleChange(elementId, radio) {
-      var element = document.getElementById(elementId);
+        // Mengumpulkan data dari form modal pertama
+        var formData = new FormData(document.getElementById("myForm1"));
+        formData.append('pasien', id); // Sisipkan nilai id ke dalam formData
 
-      if (radio.value === 'tidak') {
-        element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
-      } else {
-        element.style.display = 'none';
-      }
-    }
-  </script>
+        // Mengirim data ke server untuk disimpan ke dalam session
+        fetch('/modal1/store', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Menutup modal pertama
+                $('#periksa' + id).modal('hide');
+
+                // Menampilkan modal kedua
+                $('#periksa2' + id).modal('show');
+            } else {
+                // Menampilkan pesan error jika ada
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+}
+
+</script>
+
 @endpush

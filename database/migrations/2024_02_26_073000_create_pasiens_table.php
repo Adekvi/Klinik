@@ -17,10 +17,12 @@ class CreatePasiensTable extends Migration
             $table->id();
             $table->integer('no_rm');
             $table->string('nama_pasien');
+            $table->string('nik');
+            $table->string('nama_kk');
             $table->date('tgllahir');
             $table->text('alamat');
-            $table->integer('noHP');
-            $table->string('status_bayar');
+            $table->string('noHP');
+            $table->string('jenis_bayar');
             $table->string('bpjs')->nullable();
             $table->string('status');
             $table->timestamps();

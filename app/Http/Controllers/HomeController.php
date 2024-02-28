@@ -10,4 +10,9 @@ class HomeController extends Controller
     {
         return view('pasien.index');
     }
+
+    public function depan()
+    {
+        return view('index');
+    }
 }

@@ -7,5 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pasien extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'no_rm',
+        'nik',
+        'nama_kk',
+        'nama_pasien',
+        'tgllahir',
+        'alamat',
+        'noHP',
+        'jenis_bayar',
+        'bpjs',
+        'status'
+    ];
+
+
+    public function rm_da () 
+    {
+        return $this->hasMany(RmDa1::class, 'id');
+    }
+    public function isian () 
+    {
+        return $this->hasMany(IsianPerawat::class, 'id');
+    }
 }

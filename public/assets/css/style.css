@@ -2,6 +2,7 @@ body {
     background: #000;
     position: relative;
     overflow-y: auto; /* Menambahkan overflow-y: auto agar konten dapat di-scroll jika terlalu panjang */
+    overflow-x: hidden; /* Menambahkan overflow-y: auto agar konten dapat di-scroll jika terlalu panjang */
     margin: 0; /* Menambahkan margin 0 untuk menghindari margin default pada body */
 }
 
@@ -19,13 +20,25 @@ body::before {
     background-position: center;
 }
 
+section {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
 .container .icon {
     padding-top: 50px;
-    padding-bottom: 30px;
+    /* padding-bottom: 5px; */
     display: flex;
     justify-content: left;
     align-items: center;
 }
+.text h5 {
+    color: #ffffff;
+    font-size: 18px;
+    font-family: "Josefin Sans", sans-serif;
+    margin-left: 20px;
+}
+
 .container .icon img {
     width: 8%;
 }
@@ -42,16 +55,28 @@ body::before {
     border: none;
     background: none;
 }
+.icon-container-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.icon-container {
+    margin: 0 20px; /* Atur jarak antara kedua ikon */
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+}
 
 .card .card-header {
     background: #fff;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.10);
-
 }
 .card .card-header .col-3{
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 600;
     font-family: "Josefin Sans", sans-serif;
     text-align: center;
@@ -67,11 +92,12 @@ body::before {
 
     position: relative;
 }
+ 
 .nav {
     position: relative;
     background: #d9d9d9;
     width: 100%;
-    padding-top: 20px;
+    padding-top: 5px;
     padding-left: 60px;
 }
 
@@ -92,17 +118,21 @@ body::before {
 .nav li {
     margin-left: 15px;
 }
- .nav-link {
-    margin-bottom: -1px;
-    background: none;
-    border: 1px solid transparent;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    font-size: 15px;
-    color: #000;
-    font-size: 16px;
-    padding-bottom: 20px;
+
+.nav-tabs {
+    background-color: #eaeaea; /* Warna latar belakang untuk tab */
+    border-bottom: 2px solid #eaeaea; /* Garis bawah untuk tab */
+    border-radius: 10px; /* Mengatur sudut tab */
 }
+
+.nav-link {
+    color: #000000; /* Warna teks untuk tab */
+    font-weight: 500;
+    text-align: center;
+    border: none; /* Menghilangkan border */
+    border-radius: 10px 10px 0 0; /* Mengatur sudut tab */
+}
+
  .nav-link.active{
     font-weight: 600;
     font-size: 16px;
@@ -110,14 +140,16 @@ body::before {
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
 }
+
  .nav-link:hover {
     border-color: #e9ecef #e9ecef #dee2e6;
-    color: red;
+    color: blue;
     isolation: isolate;
 }
+
 .card-body .pendaftaran .judul {
     padding-top: 20px;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
 }
 .card-body .pendaftaran .judul h2 {
     text-align: center;
@@ -146,3 +178,144 @@ body::before {
 .hidden-input {
     display: none;
 }
+
+ /* CSS untuk form isian */
+ .form-isian {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+}
+
+.form-isian h5 {
+    /* text-decoration: underline; */
+    cursor: pointer;
+}
+
+.form-isian h5:hover {
+    color: #007bff;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group p {
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.form-group p:hover {
+    color: #007bff;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    /* width: calc(100% - 20px); */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.kebiasaan {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.riwayat-lahir {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.tanda-vital {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.asesmen-keperawatan {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.psicososial-pengetahuan {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.asesmen-nyeri {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.asesmen-resiko-jatuh {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.masalah-keperawatan {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.anamnesis-s {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.anamnesis-o {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.poliA {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+        box-shadow: 0px 15px 50px 0px rgba(0, 0, 0, 0.10), 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+
+
+
+

@@ -7,5 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class RmDa1 extends Model
 {
-    use HasFactory;
+    protected $guarded = [];
+
+    public function pasien () 
+    {
+        return $this->belongsTo(Pasien::class, 'pasien', 'id');
+    }
+    public function poli () 
+    {
+        return $this->belongsTo(Poli::class, 'poli','KdPoli');
+    }
+    public function soap () 
+    {
+        return $this->hasMany(Soap::class, 'id');
+    }
 }
