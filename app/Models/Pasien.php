@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,24 +10,53 @@ class Pasien extends Model
 {
     protected $fillable = [
         'no_rm',
+        'number',
+        'nama_pasien',
         'nik',
         'nama_kk',
-        'nama_pasien',
         'tgllahir',
-        'alamat',
+        'jekel',
+        'alamat_asal',
+        'domisili',
         'noHP',
-        'jenis_bayar',
+        'jenis_pasien',
         'bpjs',
-        'status'
+        'pekerjaan',
+        'kode_antrian',
     ];
 
+    public function getUploadStatusAttribute()
+    {
+        $createdAt = Carbon::parse($this->created_at);
+        return $createdAt->diffForHumans();
+    }
 
-    public function rm_da () 
+    public function booking()
+    {
+        return $this->hasMany(Booking::class, 'id');
+    }
+    public function pasienSehat()
+    {
+        return $this->hasMany(PasienSehat::class, 'id');
+    }
+    public function rm_da()
     {
         return $this->hasMany(RmDa1::class, 'id');
     }
-    public function isian () 
+    public function isian()
     {
         return $this->hasMany(IsianPerawat::class, 'id');
+    }
+    public function soap()
+    {
+        return $this->hasMany(Soap::class, 'id');
+    }
+    public function obat()
+    {
+        return $this->hasMany(AntrianPerawat::class, 'id');
+    }
+    public function kasir()
+    {
+        return $this->hasMany(Kasir::class, 'id');
     }
 }

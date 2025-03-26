@@ -15,7 +15,7 @@ body::before {
     height: 100%;
     opacity: 0.4;
     z-index: -1;
-    background: url('/assets/img/hospital.jpg');
+    background: url('/assets/images/footer-bg.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -40,7 +40,7 @@ section {
 }
 
 .container .icon img {
-    width: 8%;
+    width: 20%;
 }
 .container .icon h1{
     color: #fff;
@@ -51,7 +51,7 @@ section {
     margin-top: 20px;
 }
 .container .card {
-    padding-bottom: 50px;
+    /* padding-bottom: 50px; */
     border: none;
     background: none;
 }
@@ -92,12 +92,12 @@ section {
 
     position: relative;
 }
- 
+
 .nav {
     position: relative;
     background: #d9d9d9;
     width: 100%;
-    padding-top: 5px;
+    padding-top: 2px;
     padding-left: 60px;
 }
 
@@ -120,13 +120,13 @@ section {
 }
 
 .nav-tabs {
-    background-color: #eaeaea; /* Warna latar belakang untuk tab */
+    background-color: #0dcaf0; /* Warna latar belakang untuk tab */
     border-bottom: 2px solid #eaeaea; /* Garis bawah untuk tab */
     border-radius: 10px; /* Mengatur sudut tab */
 }
 
 .nav-link {
-    color: #000000; /* Warna teks untuk tab */
+    color: #ffffff; /* Warna teks untuk tab */
     font-weight: 500;
     text-align: center;
     border: none; /* Menghilangkan border */
@@ -138,12 +138,12 @@ section {
     font-size: 16px;
     color: #ad400c;
     background-color: #fff;
-    border-color: #dee2e6 #dee2e6 #fff;
+    border-color: #0dcaf0 #0dcaf0 #fff;
 }
 
  .nav-link:hover {
-    border-color: #e9ecef #e9ecef #dee2e6;
-    color: blue;
+    border-color: #0dcaf0 #0dcaf0 #0dcaf0;
+    color: rgb(255, 255, 255);
     isolation: isolate;
 }
 
@@ -220,6 +220,7 @@ input[type="text"] {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    height: 40px;
 }
 
 .kebiasaan {

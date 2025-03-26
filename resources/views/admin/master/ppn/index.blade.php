@@ -1,0 +1,77 @@
+@extends('admin.layout.dasbrod')
+@section('title', 'Admin | PPN')
+@section('content')
+
+    <div class="container-xxl flex-grow-1 container-p-y mt-4">
+        <div class="row">
+            <div class="col-lg-12 mb-4 order-0">
+                <div class="pasien-bpjs">
+                    <div class="card-title">
+                        <h5 style="margin-bottom: 20px"><strong>PPN</strong></h5>
+                        {{-- <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                            data-bs-target="#poto"><i class="bi bi-plus-lg"></i>Tambah</button> --}}
+                    </div>
+                    <div class="tb-umum">
+                        <table id="example" class="table table-striped table-bordered"
+                            style="width:100%; text-align: center">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Pajak</th>
+                                    <th>Tarif Pajak</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pajak as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            {{ $item->namaPajak }}
+                                        </td>
+                                        <td>{{ $item->tarifPpn }}%</td>
+                                        <td>
+                                            <div class="aksi d-flex justify-content-center">
+                                                <button class="btn btn-primary"
+                                                    data-bs-target="#editpoli{{ $item->id }}" data-bs-toggle="modal"><i
+                                                        class="fas fa-info"></i> Edit</button>
+                                                {{-- <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                                                    data-bs-target="#hapuspoli{{ $item->id }}"><i
+                                                        class="fa fa-trash"></i> Hapus</button> --}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @include('admin.master.ppn.tambah')
+    @include('admin.master.ppn.edit')
+    @include('admin.master.ppn.hapus')
+@endsection
+
+<!-- Modal -->
+<div id="imageModal"
+    style="display: none; position: fixed; z-index: 1; left: 0; top: 15%; width: 100%; height: auto%; overflow: auto;">
+    <span onclick="closeModal()"
+        style="position: absolute; top: 10px; right: 25px; color: #fff; font-size: 35px; font-weight: bold; cursor: pointer;">&times;</span>
+    <img id="modalImage" style="margin: auto; display: block; width: 80%; max-width: 700px;">
+</div>
+
+@push('style')
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+@endpush
+@push('script')
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
+@endpush

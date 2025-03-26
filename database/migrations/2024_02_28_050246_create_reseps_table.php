@@ -15,11 +15,18 @@ class CreateResepsTable extends Migration
     {
         Schema::create('reseps', function (Blueprint $table) {
             $table->id();
-            $table->string('gol');
-            $table->string('sediaan');
-            $table->string('nama_obat');
-            $table->string('zat');
-            $table->string('harga');
+            $table->unsignedBigInteger('id_margin')->nullable();
+            $table->foreign('id_margin')->references('id')
+                ->on('margins')
+                ->onDelete('cascade');
+            $table->string('nama_obat')->nullable();
+            $table->integer('harga_pokok')->nullable();
+            $table->integer('harga_jual')->nullable();
+            $table->integer('stok_awal')->nullable();
+            $table->integer('masuk')->nullable();
+            $table->integer('keluar')->nullable();
+            $table->integer('retur')->nullable();
+            $table->integer('stok')->nullable();
             $table->timestamps();
         });
     }

@@ -10,24 +10,36 @@ class Soap extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function pasien () 
+    public function pasien()
     {
-        return $this->belongsTo(Pasien::class, 'pasien', 'id');
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id');
     }
-    public function poli () 
+    public function poli()
     {
-        return $this->belongsTo(Poli::class, 'poli','KdPoli');
+        return $this->belongsTo(Poli::class, 'id_poli', 'KdPoli');
     }
-    public function rm_da () 
+    public function dokter()
     {
-        return $this->belongsTo(RmDa1::class, 'rm_da','id');
+        return $this->belongsTo(DataDokter::class, 'id_dokter', 'id');
     }
-    public function diagnosa () 
+    public function rm()
     {
-        return $this->belongsTo(Diagnosa::class, 'diagnosa', 'id');
+        return $this->belongsTo(RmDa1::class, 'id_rm', 'id');
     }
-    public function resep () 
+    public function isian()
     {
-        return $this->belongsTo(Resep::class, 'resep','id');
+        return $this->belongsTo(IsianPerawat::class, 'id_isian', 'id');
+    }
+    public function obat()
+    {
+        return $this->hasMany(Obat::class, 'id');
+    }
+    public function antrianPerawat()
+    {
+        return $this->hasMany(AntrianPerawat::class, 'id_soap', 'id');
+    }
+    public function kasir()
+    {
+        return $this->hasMany(Kasir::class, 'id');
     }
 }

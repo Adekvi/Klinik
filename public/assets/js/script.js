@@ -82,6 +82,26 @@ function poliA() {
 
     if (radio.value === 'Tidak') {
       element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+    } else if (radio.value === 'Abnormal') {
+      element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+    } else if (radio.value === 'Lainnya') {
+    } else if (radio.value === 'Aloanamnesis') {
+      element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+    } else if (radio.value === 'Lainnya') {
+      element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+    }else {
+      element.style.display = 'none';
+    }
+  }
+
+  function toggleChangeSoap(elementId, radio) {
+    var element = document.getElementById(elementId);
+
+    if (radio.value === 'Tidak') {
+      element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+    } else if (radio.value === 'Abnormal') {
+      element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+    } else if (radio.value === 'Lainnya') {
     } else if (radio.value === 'Aloanamnesis') {
       element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
     } else if (radio.value === 'Lainnya') {

@@ -15,8 +15,28 @@ class CreateRmDa1sTable extends Migration
     {
         Schema::create('rm_da1s', function (Blueprint $table) {
             $table->id();
-            $table->integer('pasien');
-            $table->integer('poli');
+            $table->unsignedBigInteger('id_pasien');
+            $table->foreign('id_pasien')
+                    ->references('id')
+                    ->on('pasiens')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->unsignedBigInteger('id_booking');
+            $table->foreign('id_booking')
+                    ->references('id')
+                    ->on('bookings')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->unsignedBigInteger('id_poli');
+            $table->foreign('id_poli')
+                    ->references('KdPoli')
+                    ->on('polis')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->unsignedBigInteger('id_dokter')->nullable();
+            $table->foreign('id_dokter')->references('id')
+                    ->on('data_dokters')
+                    ->onDelete('cascade');
             $table->string('a_keluhan_utama')->nullable();
             $table->string('a_riwayat_penyakit_skrg')->nullable();
             $table->string('a_riwayat_penyakit_terdahulu')->nullable();
@@ -32,6 +52,8 @@ class CreateRmDa1sTable extends Migration
             $table->string('o_leher_uraian')->nullable();
             $table->string('o_tht')->nullable();
             $table->string('o_tht_uraian')->nullable();
+            $table->string('o_thorax')->nullable();
+            $table->string('o_thorax_uraian')->nullable();
             $table->string('o_paru')->nullable();
             $table->string('o_paru_uraian')->nullable();
             $table->string('o_jantung')->nullable();
@@ -42,6 +64,7 @@ class CreateRmDa1sTable extends Migration
             $table->string('o_ekstremitas_uraian')->nullable();
             $table->string('o_kulit')->nullable();
             $table->string('o_kulit_uraian')->nullable();
+            $table->string('lain_lain')->nullable();
             $table->timestamps();
         });
     }

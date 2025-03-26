@@ -1,0 +1,516 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Balai Penyuluhan Pertaninan</title>
+
+    {{-- fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,700&display=swap" rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('user/css/style.css') }}">
+
+    <script src="https://unpkg.com/feather-icons"></script>
+
+</head>
+<body>
+
+    {{-- start Navbar --}}
+
+      <nav class="navbar navbar-expand-lg py-3">
+        <div class="container">
+          <a class="navbar-brand" href="#home"> investasi<span>lahan</span>.</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#home">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#menu">Menu</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Product
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#investasi">Investasi</a></li>
+                  <li><a class="dropdown-item" href="#">Lahan</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Tanaman</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="#">Kontak</a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="{{ __('login') }}">Login?</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    {{-- end Navbar --}}
+
+    {{-- start hero section --}}
+      <section class="hero bg-dark text-light text-center text-sm-start" id="home">
+        <div class="container py-5">
+            <div class="d-sm-flex align-items-center justify-content-between py-5">
+                <div class="content">
+                    <h1>Mari Investasi <span> Tanaman </span></h1>
+                        <h3 class="my-4"> <span> Mudah </span> dan Flexsible!</h3>
+                            <p>Dapatkan investasi yang bermanfaat tentunya bersama kami banyak pilihan tanaman dan lahan yang bisa anda pilih untuk Investasi. Amankan tempat anda mulai sekarang!</p>
+                            <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Investasi Sekarang</a>
+                </div>
+                {{-- <a href="#">
+                    <img src="{{ asset('user/img/bg.png') }}" class="img-fluid" width="700">
+                </a> --}}
+            </div>
+        </div>
+      </section>
+      {{-- end Hero section --}}
+
+      {{-- start login section --}}
+
+      <section class="letter text-light p-5">
+        <div class="container py-5">
+            <div class="d-md-flex justify-content-between align-items-center">
+                <h3 class="mb-3 mb-md-0">
+                    Mau Kirim Pesan Anda?
+                </h3>
+                <div class="input-group news-input">
+                    <input type="text" class="form-control" placeholder="Enter E-mail" name="">
+                    <button class="btn btn-dark btn-lg">
+                      {{-- <a href="{{ __('login') }}" class="text-primary">Login</a> --}}Send!
+                    </button>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      {{-- end login section --}}
+
+      {{-- start mini-menu section --}}
+
+      <section class="card py-5" id="menu">
+        <div class="container">
+          <div class="card">
+            <div class="img-box">
+              <img src="{{ asset('user/img/menu/1.jpg') }}" alt="">
+            </div>
+            <div class="content" id="investasi">
+              <h2>INVESTASI</h2>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facere quidem culpa consectetur nobis, maxime ex ducimus exercitationem voluptate obcaecati assumenda?
+              </p>
+              <a href="#">Read More</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+        {{-- <section class="card" id="menu">
+            <div class="container py-5">
+                <div class="row text-center g-4">
+                    <div class="col-md">
+                        <div class="card bg-dark text-light p-5">
+                            <div class="card-body text-center">
+                                <div class="h1 mb-3">
+                                    <i class="bi bi-laptop"></i>
+                                </div>
+                                <h3 class="card-title mb-3">
+                                    Investasi
+                                </h3>
+                                <p class="card-text">
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eaque sunt fugit deleniti quas labore doloribus sed rem cupiditate sint iste?
+                                </p>
+                                <a href="#" class="btn btn-primary">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="card bg-dark text-light p-5">
+                            <div class="card-body text-center">
+                                <div class="h1 mb-3">
+                                    <i class="bi bi-geo"></i>
+                                </div>
+                                <h3 class="card-title mb-3">
+                                    Lahan
+                                </h3>
+                                <p class="card-text">
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eaque sunt fugit deleniti quas labore doloribus sed rem cupiditate sint iste?
+                                </p>
+                                <a href="#" class="btn btn-primary">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="card bg-dark text-light p-5">
+                            <div class="card-body text-center">
+                                <div class="h1 mb-3">
+                                    <i class="bi bi-flower1"></i>
+                                </div>
+                                <h3 class="card-title mb-3">
+                                    Tanaman
+                                </h3>
+                                <p class="card-text">
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eaque sunt fugit deleniti quas labore doloribus sed rem cupiditate sint iste?
+                                </p>
+                                <a href="#" class="btn btn-primary">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> --}}
+
+      {{-- end services section--}}
+
+      {{-- start about section --}}
+        
+      <section class="p-5" id="about">
+        <div class="container py-5">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md">
+                    <a href="#about"><img src="{{ asset('user/img/bg-2.png') }}" class="img-fluid" alt=""></a>
+                </div>
+                <div class="col-md p-5">
+                    <h2>Kenapa Harus ber-Investasi di investasilahan. ?</h2>
+                    <p>Investasi yang tentunya mudah banyak informasi tentang Lahan Kosong, Tanaman yang cocok untuk ditanam sesuai dengan lahan serta Hasil Panen yang mempunyai produktifitas tinggi. </p>
+
+                    <p class="text-danger">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni nostrum iste sunt iusto, delectus necessitatibus.</p>
+                    <a href="#" class="btn btn-primary mt-3"><i class="bi bi-chevron-right"></i> Read More </a>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      {{-- end about section --}}
+
+      {{-- start learn section --}}
+
+      <section class="bg-dark text-light p-5" id="learn">
+        <div class="container py-5">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md p-5">
+                    <h2>Learn the React</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae veritatis fugit eveniet qui? Aliquam, eius? Soluta libero repellendus repellat ipsam!</p>
+
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni nostrum iste sunt iusto, delectus necessitatibus.</p>
+                    <a href="#" class="btn btn-light mt-3"><i class="bi bi-chevron-right"></i> Read More </a>
+                </div>
+                <div class="col-md">
+                    <a href="#">
+                        <img src="{{ asset('user/img/bg-3.png') }}" class="img-fluid">
+                    </a>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      {{-- end learn section --}}
+
+      {{-- start F&Q section --}}
+      
+      <section class="p-5" id="question">
+        <div class="container py-5">
+            <h2 class="text-center mb-4">Frequent Asked Question</h2>
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Our exact location ?
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                         It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Accordion Item #2
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      Accordion Item #3
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Accordion Item #3
+                      </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Accordion Item #3
+                      </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSix">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Accordion Item #3
+                      </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.
+                      </div>
+                    </div>
+                  </div>
+              </div>
+        </div>
+      </section>
+      
+      {{-- end F&Q section --}}
+
+      {{-- start intruction section --}}
+
+      <section class="p-5 bg-primary">
+        <div class="container py-5">
+            <h2 class="text-center text-white">Our Intruction</h2>
+
+            <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis soluta esse dolorem praesentium expedita autem fugiat error nesciunt distinctio minus sapiente nulla laudantium eaque hic labore deserunt, molestias perspiciatis molestiae libero earum. Sunt eveniet voluptatibus quo repellendus quaerat explicabo illo.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center  p-5">
+                            <img src="" class="rounded-circle mb-3">
+                            <h3 class="card-title"></h3>
+                            <p class="card-text">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus libero corrupti tempore adipisci quisquam eum?
+                            </p>
+                            <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center  p-5">
+                            <img src="" class="rounded-circle mb-3">
+                            <h3 class="card-title"></h3>
+                            <p class="card-text">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus libero corrupti tempore adipisci quisquam eum?
+                            </p>
+                            <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center  p-5">
+                            <img src="" class="rounded-circle mb-3">
+                            <h3 class="card-title"></h3>
+                            <p class="card-text">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus libero corrupti tempore adipisci quisquam eum?
+                            </p>
+                            <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center  p-5">
+                            <img src="" class="rounded-circle mb-3">
+                            <h3 class="card-title"></h3>
+                            <p class="card-text">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus libero corrupti tempore adipisci quisquam eum?
+                            </p>
+                            <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+      </section>
+
+      {{-- end instruction section --}}
+
+      {{-- start footer section --}}
+      
+      <footer id="content" class="page-footer p-5 text-md-left">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-uppercase font-weight-bold mb-4">
+                        investasilahan.
+                    </h5>
+                    <p >
+                        Balai Penyuluhan Pertanian Kecamatan Sukolilo
+                    </p>
+                    <p>
+                        Universitas Muria Kudus
+                    </p>
+                            <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
+                </div>
+
+                <div class="col-lg-2 col-md-2 mx-auto">
+                    <h5 class="text-uppercase font-weight-bold mb-4">Services</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-1"><a href="#">Investasi</a></li>
+                        <li class="mb-1"><a href="#">Lahan</a></li>
+                        <li class="mb-1"><a href="#">Tanaman</a></li>
+                        <li class="mb-1"><a href="#">Investasi</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-2 mx-auto">
+                    <h5 class="text-uppercase font-weight-bold mb-4">Page Links</h5>
+                    <ul class="list-styled">
+                        <li class="mb-1"><a href="#">Home</a></li>
+                        <li class="mb-1"><a href="#about">About</a></li>
+                        <li class="mb-1"><a href="#">Portfolio</a></li>
+                        <li class="mb-1"><a href="#">Documentation</a></li>
+                        <li class="mb-1"><a href="#">Contact</a></li>
+                        <li class="mb-1"><a href="#">Support Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-xs-12 location">
+                    <h5 class="text-uppercase font-weight-bold mb-4">Location</h5>
+                    <p class="d-flex">
+                        <i class="bi bi-geo-alt text-primary mx-2 lead"></i> 3W67+G84, Lb. Kulon, Kedungwinong, Kec. Sukolilo, Kabupaten Pati, Jawa Tengah 59172
+                    </p>
+                    <p class="d-flex align-items-center">
+                        <i class="bi bi-phone text-primary mx-2 lead"></i> (+987)6564-9876
+                    </p>
+                    <p class="d-flex align-items-center">
+                        <i class="bi bi-envelope text-primary mx-2 lead"></i>info@example
+                    </p>
+                </div>
+            </div>
+        </div>
+      </footer>
+
+      {{-- end footer section --}}
+
+      {{-- start footer bottom --}}
+
+      <footer class="p-2 bg-dark text-white text-center position-relative">
+        <div class="container">
+            <p class="mb-0">
+                Copyright &copy; <?= date('Y') ?> investasilahan.
+            </p>
+
+            <a href="#" class="position-absolute bottom-0 end-0 p-5">
+                <i class="bi bi-arrow-up-circle h1"></i>
+            </a>
+        </div>
+      </footer>
+      
+      {{-- end footer bottom --}}
+
+      {{-- start Modal --}}
+      
+      <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalToggleLabel">Contact to Me</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Fill Form and we will get back to you.
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Open second modal</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalToggleLabel2">Modal 2</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Hide this modal and show the first with the button below.
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Back to first</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- end Modal --}}
+      
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+      <script src="{{ asset('user/js/script.js') }}"></script>
+</body>
+</html>

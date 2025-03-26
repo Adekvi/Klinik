@@ -9,16 +9,40 @@ class RmDa1 extends Model
 {
     protected $guarded = [];
 
-    public function pasien () 
+    public function pasien()
     {
-        return $this->belongsTo(Pasien::class, 'pasien', 'id');
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id');
     }
-    public function poli () 
+    public function booking()
     {
-        return $this->belongsTo(Poli::class, 'poli','KdPoli');
+        return $this->belongsTo(Booking::class, 'id_booking', 'id');
     }
-    public function soap () 
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class, 'id_poli', 'KdPoli');
+    }
+    public function dokter()
+    {
+        return $this->belongsTo(DataDokter::class, 'id_dokter', 'id');
+    }
+    public function soap()
     {
         return $this->hasMany(Soap::class, 'id');
+    }
+    public function isian()
+    {
+        return $this->hasMany(IsianPerawat::class, 'id');
+    }
+    public function antrianDokter()
+    {
+        return $this->hasMany(AntrianDokter::class, 'id');
+    }
+    public function antrianPerawat()
+    {
+        return $this->hasMany(AntrianPerawat::class, 'id');
+    }
+    public function kasir()
+    {
+        return $this->hasMany(Kasir::class, 'id');
     }
 }
