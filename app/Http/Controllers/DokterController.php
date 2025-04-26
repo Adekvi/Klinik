@@ -34,7 +34,7 @@ class DokterController extends Controller
         $entries = $request->input('entries', 10);
         $page = $request->input('page', 1);
 
-        $query = AntrianPerawat::with(['booking.pasien', 'isian', 'rm', 'poli'])
+        $query = AntrianPerawat::with(['booking.pasien', 'isian', 'rm.ttd', 'poli'])
             ->where('status', 'M')
             ->where('id_dokter', $auth)
             ->orderBy('urutan', 'asc')
@@ -50,7 +50,8 @@ class DokterController extends Controller
         $antrianDokter = $query->paginate($entries, ['*'], 'page', $page);
         $antrianDokter->appends(['search' => $search, 'entries' => $entries]);
 
-        $ttd = TtdMedis::all();
+        $ttd = TtdMedis::where('status', true)->get();
+        // dd($ttd);
 
         // dd($antrianDokter);
 
@@ -73,7 +74,7 @@ class DokterController extends Controller
             AntrianPerawat::where('urutan', '>=', $urutanBaru)
                 ->where('status', 'M')
                 ->orderBy('urutan', 'asc')
-                ->update(['urutan' => \Illuminate\Support\Facades\DB::raw('urutan + 1')]);
+                ->update(['urutan' => DB::raw('urutan + 1')]);
 
             // Perbarui nomor antrian yang dilewati dengan urutan baru
             $antrian->urutan = $urutanBaru;

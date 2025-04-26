@@ -1,0 +1,10 @@
+includes:
+    - vendor/phpstan/phpstan-laravel/extension.neon
+
+parameters:
+    level: 5  # Level bisa dari 0 (mudah) sampai 9 (ketat)
+    paths:
+        - app  # Cek hanya folder app
+    ignoreErrors:
+        - '#Call to an undefined method#'  # Abaikan error tertentu
+    checkMissingIterableValueType: false

@@ -267,10 +267,12 @@
                         <div class="modal-body">
                             <div class="form-group" style="margin-bottom: 20px">
                                 <label for="profesi" style="font-weight: 600">Perawat Penanggung Jawab Pasien</label>
-                                @foreach ($ttd as $row)
+                                <input type="text" value="{{ $item->rm->ttd->nama ?? '-' }}"
+                                    class="form-control mt-2" disabled>
+                                {{-- @foreach ($ttd as $row)
                                     <input type="text" value="{{ $row->nama }}" class="form-control mt-2"
                                         disabled>
-                                @endforeach
+                                @endforeach --}}
                             </div>
                             <div class="tanda-vital">
                                 <h4 style="text-align: center">TANDA VITAL</h4>

@@ -67,7 +67,8 @@ class PerawatController extends Controller
 
         $poli = Poli::all();
         $soap = Soap::with('pasien', 'rm', 'isian')->get();
-        $ttd = TtdMedis::all();
+        $ttd = TtdMedis::where('status', true)->get();
+        // dd($ttd);
 
         // Pastikan $soap tidak kosong sebelum mengaksesnya
         $diagnosaPrimer = [];
@@ -154,11 +155,23 @@ class PerawatController extends Controller
             return redirect()->route('perawat.index');
         } else {
             $booking = Booking::where('id', $antrianPerawat->id_booking)->get()->first();
+
+            // Ambil id_ttd_medis dari request
+            $id_ttd_medis = $request->id_ttd_medis;
+
+            // Cek apakah id_ttd_medis ini valid dan status = aktif
+            $cek_ttd = TtdMedis::where('id', $id_ttd_medis)->where('status', true)->first();
+
+            if (!$cek_ttd) {
+                return back()->with('error', 'Tanda Tangan Perawat tidak valid atau tidak aktif.');
+            }
+
             $dataAnamnesis = [
                 'id_pasien' => $booking->id_pasien,
                 'id_booking' => $booking->id,
                 'id_poli' => $antrianPerawat->id_poli,
                 'id_dokter' => $antrianPerawat->id_dokter,
+                'id_ttd_medis' => $id_ttd_medis,
                 'a_keluhan_utama' => $data['a_keluhan_utama'],
                 'a_riwayat_penyakit_skrg' => $data['a_riwayat_penyakit_skrg'],
                 'a_riwayat_penyakit_terdahulu' => $data['a_riwayat_penyakit_terdahulu'],
@@ -189,8 +202,20 @@ class PerawatController extends Controller
                 'lain_lain' => $data['lain'],
             ];
 
+            // dd($dataAnamnesis);
+
             $anam = RmDa1::create($dataAnamnesis);
             $IdAnamnesis = $anam->id;
+
+            // Ambil id_ttd_medis dari request
+            $id_ttd_medis = $request->id_ttd_medis;
+
+            // Cek apakah id_ttd_medis ini valid dan status = aktif
+            $cek_ttd = TtdMedis::where('id', $id_ttd_medis)->where('status', true)->first();
+
+            if (!$cek_ttd) {
+                return back()->with('error', 'Tanda Tangan Perawat tidak valid atau tidak aktif.');
+            }
 
             $data2 = [
                 'id_pasien' => $booking->id_pasien,
@@ -198,6 +223,7 @@ class PerawatController extends Controller
                 'id_poli' => $antrianPerawat->id_poli,
                 'id_dokter' => $antrianPerawat->id_dokter,
                 'id_rm' => $IdAnamnesis,
+                'id_ttd_medis' => $id_ttd_medis,
                 'p_form_isian_pilihan' => $request->isian,
                 'p_form_isian_pilihan_uraian' => $request->isian_alasan,
                 'p_dws_rokok' => $request->rokok,
@@ -264,9 +290,11 @@ class PerawatController extends Controller
                 'jatuh_sempoyong' => $request->jatuh_sempoyong,
                 'jatuh_pegangan' => $request->jatuh_pegangan,
                 'jatuh_hasil_kajian' => $request->jatuh_hasil_kajian,
-                'ak_nama_perawat_bidan' => $request->ak_nama_perawat_bidan,
-                'ak_ttdperawat_bidan' => $request->ak_ttdperawat_bidan
+                'ak_analisis_masalah_keperawatan' => $request->ak_analisis_masalah_keperawatan,
+                // 'ak_ttdperawat_bidan' => $request->ak_ttdperawat_bidan
             ];
+
+            // dd($dataAnamnesis, $data2);
 
             $isianId = IsianPerawat::create($data2);
             $IdIsian = $isianId->id;

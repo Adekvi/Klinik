@@ -10,89 +10,92 @@
                         <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
                             data-bs-target="#tambahdokter"><i class="bi bi-plus-lg"></i>Tambah Tenaga Medis</button>
                     </div>
-                    <div class="tb-umum">
-                        <table id="example" class="table table-responsive table-striped table-bordered"
-                            style="width:100%; white-space: nowrap">
-                            <thead class="table-primary text-center">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Poli</th>
-                                    <th>Nik</th>
-                                    <th>Nama Tenaga Medis</th>
-                                    <th>Profesi</th>
-                                    <th>Tarif Jasa</th>
-                                    <th>Status Akun</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if (!function_exists('Rupiah')) {
-                                    function Rupiah($angka)
-                                    {
-                                        return 'Rp ' . number_format($angka, 2, ',', '.');
-                                    }
-                                }
-                                ?>
-                                @foreach ($dokter as $item)
+                    <div class="table-responsive">
+                        <div class="tb-umum">
+                            <table class="table table-striped table-bordered" style="white-space: nowrap">
+                                <thead class="table-primary text-center">
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        @if (!empty($item->poli->namapoli))
-                                            <td>{{ $item->poli->namapoli }}</td>
-                                        @else
-                                            <td style="text-align: center"> - </td>
-                                        @endif
-                                        @if (!empty($item->nik))
-                                            <td>{{ $item->nik }}</td>
-                                        @else
-                                            <td style="text-align: center"> - </td>
-                                        @endif
-                                        <td>{{ $item->nama_dokter }}</td>
-                                        <td>{{ $item->profesi }}</td>
-                                        @if (!empty($item->tarif))
-                                            <td>{{ Rupiah($item->tarif) }}</td>
-                                        @else
-                                            <td style="text-align: center"> - </td>
-                                        @endif
-                                        <td>
-                                            <form method="POST" action="{{ url('updateStatus-dokter') }}">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $item->id }}">
-                                                <div class="piket">
-                                                    <input type="checkbox" name="status" id="status_{{ $item->id }}"
-                                                        onchange="this.form.submit()"
-                                                        @if ($item->status) checked @endif>
-                                                    <label for="status_{{ $item->id }}" class="button"></label>
-
-                                                    <!-- Status text berada di bawah tombol toggle -->
-                                                    <div class="status-text">
-                                                        <span
-                                                            id="statusText">{{ $item->status ? 'Aktif' : 'Non-Aktif' }}</span>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <div class="aksi d-flex">
-                                                <button class="btn btn-primary"
-                                                    data-bs-target="#editdokter{{ $item->id }}"
-                                                    data-bs-toggle="modal"><i class="fas fa-info"></i> Edit</button>
-                                                <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
-                                                    data-bs-target="#hapusdokter{{ $item->id }}"><i
-                                                        class="fas fa-trash"></i> Hapus</button>
-                                            </div>
-                                        </td>
-                                        @include('admin.master.datadokter.modaledit')
+                                        <th>No</th>
+                                        <th>Poli</th>
+                                        <th>Nik</th>
+                                        <th>Nama Tenaga Medis</th>
+                                        <th>Profesi</th>
+                                        <th>Tarif Jasa</th>
+                                        <th>Status Akun</th>
+                                        <th>Aksi</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (!function_exists('Rupiah')) {
+                                        function Rupiah($angka)
+                                        {
+                                            return 'Rp ' . number_format($angka, 2, ',', '.');
+                                        }
+                                    }
+                                    ?>
+                                    @foreach ($dokter as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            @if (!empty($item->poli->namapoli))
+                                                <td>{{ $item->poli->namapoli }}</td>
+                                            @else
+                                                <td style="text-align: center"> - </td>
+                                            @endif
+                                            @if (!empty($item->nik))
+                                                <td>{{ $item->nik }}</td>
+                                            @else
+                                                <td style="text-align: center"> - </td>
+                                            @endif
+                                            <td>{{ $item->nama_dokter }}</td>
+                                            <td>{{ $item->profesi }}</td>
+                                            @if (!empty($item->tarif))
+                                                <td>{{ Rupiah($item->tarif) }}</td>
+                                            @else
+                                                <td style="text-align: center"> - </td>
+                                            @endif
+                                            <td>
+                                                <form method="POST" action="{{ url('updateStatus-dokter') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                                    <div class="piket">
+                                                        <input type="checkbox" name="status"
+                                                            id="status_{{ $item->id }}" onchange="this.form.submit()"
+                                                            @if ($item->status) checked @endif>
+                                                        <label for="status_{{ $item->id }}" class="button"></label>
+
+                                                        <!-- Status text berada di bawah tombol toggle -->
+                                                        <div class="status-text">
+                                                            <span
+                                                                id="statusText">{{ $item->status ? 'Aktif' : 'Non-Aktif' }}</span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <div class="aksi d-flex">
+                                                    <button class="btn btn-primary"
+                                                        data-bs-target="#editdokter{{ $item->id }}"
+                                                        data-bs-toggle="modal"><i class="fas fa-info"></i> Edit</button>
+                                                    <button type="button" class="btn btn-danger mx-2"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#hapusdokter{{ $item->id }}"><i
+                                                            class="fas fa-trash"></i> Hapus</button>
+                                                </div>
+                                            </td>
+                                            @include('admin.master.datadokter.modaledit')
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     @include('admin.master.datadokter.modaltambah')
+    @include('admin.master.datadokter.modaledit')
     @include('admin.master.datadokter.modalhapus')
 @endsection
 @push('style')

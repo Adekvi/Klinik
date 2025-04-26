@@ -17,26 +17,30 @@ class CreateRmDa1sTable extends Migration
             $table->id();
             $table->unsignedBigInteger('id_pasien');
             $table->foreign('id_pasien')
-                    ->references('id')
-                    ->on('pasiens')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
+                ->references('id')
+                ->on('pasiens')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unsignedBigInteger('id_booking');
             $table->foreign('id_booking')
-                    ->references('id')
-                    ->on('bookings')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
+                ->references('id')
+                ->on('bookings')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unsignedBigInteger('id_poli');
             $table->foreign('id_poli')
-                    ->references('KdPoli')
-                    ->on('polis')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
+                ->references('KdPoli')
+                ->on('polis')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unsignedBigInteger('id_dokter')->nullable();
             $table->foreign('id_dokter')->references('id')
-                    ->on('data_dokters')
-                    ->onDelete('cascade');
+                ->on('data_dokters')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('id_ttd_medis')->nullable();
+            $table->foreign('id_ttd_medis')->references('id')
+                ->on('data_dokters')
+                ->onDelete('cascade');
             $table->string('a_keluhan_utama')->nullable();
             $table->string('a_riwayat_penyakit_skrg')->nullable();
             $table->string('a_riwayat_penyakit_terdahulu')->nullable();

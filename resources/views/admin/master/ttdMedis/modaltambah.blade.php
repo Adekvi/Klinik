@@ -10,22 +10,26 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama">Nama Tenaga Medis</label>
-                        <select name="nama" id="nama" class="form-control mt-2 mb-2">
+                        <label for="id_medis">Nama Tenaga Medis</label>
+                        <select name="id_medis" id="id_medis" class="form-control mt-2 mb-2">
                             <option value="">Pilih Nama</option>
                             @foreach ($dokter as $item)
-                                <option value="{{ $item->nama_dokter }}">{{ $item->nama_dokter }}</option>
+                                <option value="{{ $item->id }}">{{ $item->nama_dokter }}</option>
                             @endforeach
                         </select>
-                        {{-- <input type="text" class="form-control mt-2 mb-2" name="nama" id="nama" placeholder="Masukkan Nama Tenaga Medis" required> --}}
                     </div>
-                    {{-- <div class="form-group">
-                        <label for="tgl">Tanggal</label>
-                        <input type="date" class="form-control mt-2 mb-2" name="tgl" id="tgl" placeholder="Masukkan Tanggal" required>
-                    </div> --}}
+
                     <div class="form-group">
                         <label for="">Foto</label>
                         <input type="file" class="form-control" name="foto" id="exampleInputFoto">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Status</label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="Aktif" selected>Aktif</option>
+                            <option value="Non-Aktif">Non-Aktif</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

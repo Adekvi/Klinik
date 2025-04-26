@@ -554,6 +554,11 @@
             font-size: 24px;
             color: #dc3545;
         }
+
+        /* Alert */
+        .swal2-container {
+            z-index: 9999 !important;
+        }
     </style>
 @endpush
 

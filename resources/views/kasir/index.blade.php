@@ -178,6 +178,12 @@
 
 @push('style')
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        /* Alert */
+        .swal2-container {
+            z-index: 9999 !important;
+        }
+    </style>
 @endpush
 
 @push('script')

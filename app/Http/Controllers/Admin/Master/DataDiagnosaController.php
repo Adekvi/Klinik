@@ -12,7 +12,7 @@ class DataDiagnosaController extends Controller
     {
         $entries = $request->input('entries', 10);
 
-        $diagnosa = Diagnosa::orderBy('id', 'desc')->paginate($entries);
+        $diagnosa = Diagnosa::orderBy('id', 'asc')->paginate($entries);
         // Ubah angka 10 sesuai dengan jumlah data yang ingin ditampilkan per halaman
         return view('admin.master.diagnosa.index', compact('diagnosa', 'entries'));
     }

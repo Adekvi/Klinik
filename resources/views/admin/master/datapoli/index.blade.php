@@ -12,7 +12,7 @@
                             data-bs-target="#tambahpoli"><i class="bi bi-plus-lg"></i>Tambah Poli</button>
                     </div>
                     <div class="tb-umum">
-                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <table id="example" class="table table-striped table-bordered text-center">
                             <thead class="table-primary text-center">
                                 <tr>
                                     <th>No</th>
@@ -20,13 +20,13 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody>
                                 @foreach ($poli as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->namapoli }}</td>
                                         <td>
-                                            <div class="aksi d-flex">
+                                            <div class="aksi d-flex align-items-center justify-content-center">
                                                 <button class="btn btn-primary"
                                                     data-bs-target="#editpoli{{ $item->KdPoli }}" data-bs-toggle="modal"><i
                                                         class="fas fa-pen"></i> Edit</button>

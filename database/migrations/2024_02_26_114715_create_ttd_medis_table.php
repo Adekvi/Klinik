@@ -15,8 +15,10 @@ class CreateTtdMedisTable extends Migration
     {
         Schema::create('ttd_medis', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_medis')->constrained('data_dokters')->onDelete('cascade');
             $table->string('nama');
             $table->text('foto')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

@@ -41,6 +41,12 @@ class RmDa1 extends Model
     {
         return $this->hasMany(AntrianPerawat::class, 'id');
     }
+
+    public function ttd()
+    {
+        return $this->belongsTo(TtdMedis::class, 'id_ttd_medis');
+    }
+
     public function kasir()
     {
         return $this->hasMany(Kasir::class, 'id');

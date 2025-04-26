@@ -350,14 +350,22 @@
                                                                 ) ?? [];
 
                                                             // Hanya ambil nilai yang tidak null atau kosong
-                                                            $jmlhP = array_filter(
-                                                                $jmlhP,
-                                                                fn($value) => !is_null($value) && $value !== '',
-                                                            );
-                                                            $jmlhR = array_filter(
-                                                                $jmlhR,
-                                                                fn($value) => !is_null($value) && $value !== '',
-                                                            );
+                                                            $jmlhP = array_filter($jmlhP, function ($value) {
+                                                                return !is_null($value) && $value !== '';
+                                                            });
+
+                                                            $jmlhR = array_filter($jmlhR, function ($value) {
+                                                                return !is_null($value) && $value !== '';
+                                                            });
+
+                                                            // $jmlhP = array_filter(
+                                                            //     $jmlhP,
+                                                            //     fn($value) => !is_null($value) && $value !== '',
+                                                            // );
+                                                            // $jmlhR = array_filter(
+                                                            //     $jmlhR,
+                                                            //     fn($value) => !is_null($value) && $value !== '',
+                                                            // );
 
                                                             // Gabungkan kedua array jumlah
                                                             $allJumlah = array_merge($jmlhP, $jmlhR);
@@ -375,14 +383,22 @@
                                                                 ) ?? [];
 
                                                             // Hanya ambil jenis obat yang sesuai
-                                                            $jenisObat = array_filter(
-                                                                $jenisObat,
-                                                                fn($value) => !is_null($value) && $value !== '',
-                                                            );
-                                                            $bangsaObat = array_filter(
-                                                                $bangsaObat,
-                                                                fn($value) => !is_null($value) && $value !== '',
-                                                            );
+                                                            $jenisObat = array_filter($jenisObat, function ($value) {
+                                                                return !is_null($value) && $value !== '';
+                                                            });
+
+                                                            $bangsaObat = array_filter($bangsaObat, function ($value) {
+                                                                return !is_null($value) && $value !== '';
+                                                            });
+
+                                                            // $jenisObat = array_filter(
+                                                            //     $jenisObat,
+                                                            //     fn($value) => !is_null($value) && $value !== '',
+                                                            // );
+                                                            // $bangsaObat = array_filter(
+                                                            //     $bangsaObat,
+                                                            //     fn($value) => !is_null($value) && $value !== '',
+                                                            // );
 
                                                             // Gabungkan kedua array jenis obat
                                                             $allJenisObat = array_merge($jenisObat, $bangsaObat);

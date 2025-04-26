@@ -43,6 +43,10 @@ class CreateIsianPerawatsTable extends Migration
                                 ->on('rm_da1s')
                                 ->onUpdate('cascade')
                                 ->onDelete('cascade');
+                        $table->unsignedBigInteger('id_ttd_medis')->nullable();
+                        $table->foreign('id_ttd_medis')->references('id')
+                                ->on('ttd_medis')
+                                ->onDelete('cascade');
                         $table->string('p_form_isian_pilihan')->nullable();
                         $table->string('p_form_isian_pilihan_uraian')->nullable();
                         $table->string('p_dws_rokok')->nullable();
@@ -109,8 +113,7 @@ class CreateIsianPerawatsTable extends Migration
                         $table->string('jatuh_sempoyong')->nullable();
                         $table->string('jatuh_pegangan')->nullable();
                         $table->string('jatuh_hasil_kajian')->nullable();
-                        $table->string('ak_nama_perawat_bidan')->nullable();
-                        $table->string('ak_ttdperawat_bidan')->nullable();
+                        $table->string('ak_analisis_masalah_keperawatan')->nullable();
                         $table->string('rujuk')->default('-')->nullable();
                         $table->timestamps();
                 });

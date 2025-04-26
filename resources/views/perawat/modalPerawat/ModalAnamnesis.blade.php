@@ -812,17 +812,15 @@
                              </div>
 
                              <div class="form-group">
-                                 <h5 for="ak_ttdperawat_bidan" style="margin-top: 30px; text-align: center">
+                                 <h5 for="id_ttd_medis" style="margin-top: 30px; text-align: center">
                                      <strong>Tanda Tangan Perawat</strong>
                                  </h5>
-                                 <select type="text" name="ak_ttdperawat_bidan"
-                                     id="ak_ttdperawat_bidan{{ $item->id }}" class="form-control mt-2 mb-2"
-                                     required>
+                                 <select type="text" name="id_ttd_medis" id="id_ttd_medis{{ $item->id }}"
+                                     class="form-control mt-2 mb-2" required>
                                      <option value="">Nama Perawat</option>
                                      <!-- Iterate through your perawat data to populate the dropdown -->
                                      @foreach ($ttd as $perawat)
-                                         <option value="{{ $perawat->id }}"
-                                             data-image="{{ Storage::url($perawat->foto) }}">{{ $perawat->nama }}
+                                         <option value="{{ $perawat->id }}">{{ $perawat->nama }}
                                          </option>
                                      @endforeach
                                  </select>
@@ -1186,50 +1184,44 @@
                                      </p>
                                      <div id="psikologis" style="font-size: 15px; text-align: center">
                                          <label for="psikologis-senang">
-                                             <input type="radio" name="ak_psikologis_senang"
+                                             <input type="checkbox" name="ak_psikologis_senang"
                                                  id="ak_psikologis_senang" value="Senang"
-                                                 onclick="toggleChange('ak_psikologis_senang', this)"
-                                                 style="transform: scale(1.5); margin-right: 10px;"> Senang
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Senang
                                          </label>
                                          <label for="psikologis-tenang">
-                                             <input type="radio" name="ak_psikologis_tenang"
+                                             <input type="checkbox" name="ak_psikologis_tenang"
                                                  id="ak_psikologis_tenang" value="Tenang"
-                                                 onclick="toggleChange('ak_psikologis_tenang', this)"
                                                  style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
                                              Tenang
                                          </label>
                                          <label for="psikologis-sedih">
-                                             <input type="radio" name="ak_psikologis_sedih"
+                                             <input type="checkbox" name="ak_psikologis_sedih"
                                                  id="ak_psikologis_sedih" value="Sedih"
-                                                 onclick="toggleChange('ak_psikologis_sedih', this)"
                                                  style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
                                              Sedih
                                          </label>
                                          <label for="psikologis-tegang">
-                                             <input type="radio" name="ak_psikologis_tegang"
+                                             <input type="checkbox" name="ak_psikologis_tegang"
                                                  id="ak_psikologis_tegang" value="Tegang"
-                                                 onclick="toggleChange('ak_psikologis_tegang', this)"
                                                  style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
                                              Tegang
                                          </label>
                                          <label for="psikologis-takut">
-                                             <input type="radio" name="ak_psikologis_takut"
+                                             <input type="checkbox" name="ak_psikologis_takut"
                                                  id="ak_psikologis_takut" value="Takut"
-                                                 onclick="toggleChange('ak_psikologis_takut', this)"
                                                  style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
                                              Takut
                                          </label>
                                          <label for="psikologis-depresi">
-                                             <input type="radio" name="ak_psikologis_depresi"
+                                             <input type="checkbox" name="ak_psikologis_depresi"
                                                  id="ak_psikologis_depresi" value="Depresi"
-                                                 onclick="toggleChange('ak_psikologis_depresi', this)"
                                                  style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
                                              Depresi
                                          </label>
                                          <label for="psikologis-lainnya">
-                                             <input type="radio" name="alasan_ak_psikologis_lain"
+                                             <input type="checkbox" name="alasan_ak_psikologis_lain"
                                                  id="ak_psikologis-lainnya" value="Lainnya"
-                                                 onclick="toggleChange('ak_psikologis_lainnya', this)"
                                                  style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
                                              Lainnya
                                          </label>
@@ -1564,11 +1556,11 @@
                                  <h5 class="text-center mt-4" style="font-size: 20px; font-weight: bold"
                                      onclick="toggleStep(this)">Analisa Masalah Keperawatan / Kebidanan</h5>
                                  <div class="form-group">
-                                     <label for="ak_nama_perawat_bidan"
-                                         onclick="toggleInput('ak_nama_perawat_bidan')">Analisa Masalah
+                                     <label for="ak_analisis_masalah_keperawatan"
+                                         onclick="toggleInput('ak_analisis_masalah_keperawatan')">Analisa Masalah
                                          Keperawatan</label>
-                                     <select name="ak_nama_perawat_bidan"
-                                         id="ak_nama_perawat_bidan{{ $item->id }}"
+                                     <select name="ak_analisis_masalah_keperawatan"
+                                         id="ak_analisis_masalah_keperawatan{{ $item->id }}"
                                          class="form-control mt-2 mb-2 ">
                                          <option value="">Pilih Masalah</option>
                                          <option value="Bersihkan Jalan Nafas tidak Efektif">Bersihkan Jalan Nafas
@@ -1613,8 +1605,8 @@
              console.log("Script dijalankan...");
 
              // Ambil semua elemen asesmen dan kajian
-             document.querySelectorAll("[id^='ak_ttdperawat_bidan']").forEach(asesmenSelect => {
-                 let id = asesmenSelect.id.replace("ak_ttdperawat_bidan", ""); // Ambil ID pasien
+             document.querySelectorAll("[id^='id_ttd_medis']").forEach(asesmenSelect => {
+                 let id = asesmenSelect.id.replace("id_ttd_medis", ""); // Ambil ID pasien
                  let statusAsesmen = document.getElementById("statusAsesmen" + id);
 
                  if (asesmenSelect && statusAsesmen) {
@@ -1634,8 +1626,8 @@
                  }
              });
 
-             document.querySelectorAll("[id^='ak_nama_perawat_bidan']").forEach(kajianSelect => {
-                 let id = kajianSelect.id.replace("ak_nama_perawat_bidan", ""); // Ambil ID pasien
+             document.querySelectorAll("[id^='ak_analisis_masalah_keperawatan']").forEach(kajianSelect => {
+                 let id = kajianSelect.id.replace("ak_analisis_masalah_keperawatan", ""); // Ambil ID pasien
                  let statusKajian = document.getElementById("statusKajian" + id);
 
                  if (kajianSelect && statusKajian) {

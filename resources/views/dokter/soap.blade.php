@@ -313,6 +313,11 @@
             vertical-align: top;
             /* Menyelaraskan teks ke atas untuk sel */
         }
+
+        /* Alert */
+        .swal2-container {
+            z-index: 9999 !important;
+        }
     </style>
 @endpush
 @push('script')

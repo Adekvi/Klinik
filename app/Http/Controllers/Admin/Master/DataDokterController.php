@@ -45,17 +45,23 @@ class DataDokterController extends Controller
     public function edit(Request $request, $id)
     {
         $data = $request->all();
+
+        // Jika memilih tanpa poli, set id_poli menjadi null atau 0 sesuai dengan kebutuhan
+        $idPoli = $data['poli'] == '0' ? null : $data['poli']; // Mengatur poli menjadi null jika 0
+
         $update = [
-            'id_poli' => $data['poli'],
+            'id_poli' => $idPoli, // Set id_poli menjadi null jika "Tidak ada Poli"
             'nama_dokter' => $data['dokter'],
             'nik' => $data['nik'],
             'tarif' => $data['tarif'],
             'profesi' => $data['profesi']
         ];
+
         DataDokter::where('id', $id)->update($update);
         return redirect()->route('master.datadokter');
     }
-    public function destroy(Request $request, $id)
+
+    public function destroy($id)
     {
         DataDokter::where('id', $id)->delete();
         return redirect()->route('master.datadokter');

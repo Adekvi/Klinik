@@ -12,7 +12,7 @@
                             id="uploadForm">
                             @csrf
                             <div class="d-flex align-items-end">
-                                <div class="col-md-5">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Upload File Excel</label>
                                         <p style="font-size: 15px; font-style: italic; color: red">

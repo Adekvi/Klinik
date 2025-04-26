@@ -329,6 +329,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('admin/tambah/master-ttd', [TtdController::class, 'store'])->name('master.ttd-tambah');
     Route::put('admin/edit/master-ttd/{id}', [TtdController::class, 'edit'])->name('master.ttd-edit');
     Route::delete('admin/hapus/master-ttd/{id}', [TtdController::class, 'destroy'])->name('master.ttd-hapus');
+    Route::post('status-ttd', [TtdController::class, 'updateStatus'])->name('updateStatus');
 
     // Tindakan Dokter
     Route::get('admin/master/tindakan', [TindakanController::class, 'index'])->name('tindakan.index');
