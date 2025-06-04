@@ -19,6 +19,8 @@ class CreateResepsTable extends Migration
             $table->foreign('id_margin')->references('id')
                 ->on('margins')
                 ->onDelete('cascade');
+            $table->string('golongan')->nullable();
+            $table->string('jenis_sediaan')->nullable();
             $table->string('nama_obat')->nullable();
             $table->integer('harga_pokok')->nullable();
             $table->integer('harga_jual')->nullable();

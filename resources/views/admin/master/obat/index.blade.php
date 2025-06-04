@@ -39,13 +39,15 @@
                         </div>
                     </div>
 
-                    <div class="tb-umum">
+                    <div class="table-responsive">
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead class="table-primary text-center" style="white-space: nowrap">
                                 <tr>
                                     <th>NO</th>
+                                    <th>GOLONGAN</th>
+                                    <th>JENIS SEDIAAN</th>
                                     <th>NAMA OBAT</th>
-                                    <th>HARGA POKOK</th>
+                                    <th>HARGA BELI</th>
                                     <th>HARGA JUAL</th>
                                     <th>MASUK</th>
                                     <th>KELUAR</th>
@@ -58,10 +60,10 @@
                                 @include('admin.master.obat.table', ['obat' => $obat])
                             </tbody>
                         </table>
-                        <div class="halaman d-flex justify-content-end">
-                            {{ $obat->appends(['entries' => $entries])->links() }}
-                        </div>
+                    </div>
 
+                    <div class="halaman d-flex justify-content-end mt-3">
+                        {{ $obat->appends(['entries' => $entries])->links() }}
                     </div>
                 </div>
             </div>

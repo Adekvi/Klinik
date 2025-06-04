@@ -56,4 +56,9 @@ class Kasir extends Model
     {
         return $this->belongsTo(ppnPajak::class, 'id');
     }
+
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'id_shift', 'id');
+    }
 }

@@ -72,6 +72,20 @@
 
                      @if ($createdAtRM && $now->greaterThanOrEqualTo($nextKajianDate))
                          <input type="hidden" name="idrm" value="{{ $item->rm->id }}">
+                         <input type="hidden" name="id_pasien" value="{{ $item->booking->pasien->id }}">
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="">Nama Pasien</label>
+                                 <input type="text" name="nama_pasien" id="nama_pasien"
+                                     class="form-control mt-2 mb-2" value="{{ $item->booking->pasien->nama_pasien }}">
+                             </div>
+                             <p class="text-danger">
+                                 <strong>
+                                     *Cek ulang Nama Pasien
+                                 </strong>
+                             </p>
+                         </div>
+
                          <div class="form-isian" style="margin-bottom: 30px">
                              <h5 style="font-size: 20px; text-align: center"><strong>Form Isian</strong></h5>
                              <div class="form-group mt-2 mb-2">
@@ -288,7 +302,25 @@
                          </div>
                      @else
                          <div id="formAsesmen{{ $item->id }}">
-                             <div class="form-isian" style="margin-bottom: 30px">
+                             <input type="hidden" name="id_pasien" value="{{ $item->booking->id_pasien }}">
+                             <div class="col-md-6">
+                                 <div class="form-group">
+                                     <label for="">Nama Pasien</label>
+                                     <input type="text" name="nama_pasien" id="nama_pasien"
+                                         class="form-control mt-2 mb-2"
+                                         value="{{ $item->booking->pasien->nama_pasien }}">
+                                 </div>
+                                 <p class="text-danger">
+                                     <span style="font-style: italic">
+                                         <strong>
+                                             <i class="fa-solid fa-circle-exclamation"></i> *Cek ulang Nama Pasien
+                                         </strong>
+                                     </span>
+                                 </p>
+                             </div>
+                             <hr style="border: none; height: 2px">
+
+                             <div class="form-isian" style="margin-bottom: 30px; margin-top: 20px">
                                  <h5 style="text-align: center; font-size: 20px"><strong>Form Isian</strong></h5>
                                  <div class="form-group mt-2 mb-2">
                                      <p onclick="toggleInput('isian')" style="margin-bottom: 3px; text-align: start">

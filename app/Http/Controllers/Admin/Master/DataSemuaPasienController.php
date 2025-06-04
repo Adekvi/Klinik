@@ -87,7 +87,6 @@ class DataSemuaPasienController extends Controller
         }
     }
 
-
     public function downloadTemplate()
     {
         $spreadsheet = new Spreadsheet();

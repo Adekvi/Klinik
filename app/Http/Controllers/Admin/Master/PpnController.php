@@ -29,6 +29,19 @@ class PpnController extends Controller
         return redirect()->route('admin.master.ppn.index')->with('toast_success', 'Data Berhasil disimpan');
     }
 
+    public function updateStatus(Request $request)
+    {
+        $ppnId = $request->input('id');
+        $isChecked = $request->has('status');
+
+        $ppn = ppnPajak::findOrFail($ppnId);
+        // dd($ppn);
+        $ppn->status = $isChecked;
+        $ppn->save();
+
+        return redirect()->back()->with('status', 'Status updated successfully');
+    }
+
     public function edit(Request $request, $id)
     {
         $data = [

@@ -1,42 +1,65 @@
 @foreach ($obat as $item)
-<div class="modal fade" id="editobat{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Edit Data Stok Obat</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ url('admin/edit/obat/'. $item->id) }}" method="post" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="nama_obat">Nama Obat</label>
-                        <input type="text" class="form-control mt-2 mb-2" name="nama_obat" id="nama_obat" placeholder="Masukkan Nama Obat" required value="{{ $item->nama_obat }}">
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
+    <div class="modal fade" id="editobat{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Edit Data Stok Obat</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url('admin/edit/obat/' . $item->id) }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="harga_pokok">Harga Pokok</label>
-                                <div class="input-group">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)"><b>Rp.</b></span>
-                                    </div>
-                                    <input type="number" class="form-control mt-2 mb-2" name="harga_pokok" id="harga_pokok" placeholder="Masukkan Harga Pokok Obat" value="{{ $item->harga_pokok ? $item->harga_pokok : '' }}">
-                                </div>
+                                <label for="">Golongan</label>
+                                <input type="text" name="golongan" id="golongan" class="form-control mt-2 mb-2"
+                                    placeholder="Golongan" value="{{ $item->golongan }}">
                             </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="stok_akhir">Jumlah Stok</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control mt-2 mb-2" name="stok" id="stok_akhir{{ $item->id }}" value="{{ $item->stok }}" readonly>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                                            <b>Total</b>
-                                        </span>
+                                <label for="">Jenis Sediaan</label>
+                                <input type="text" name="jenis_sediaan" id="jenis_sediaan"
+                                    class="form-control mt-2 mb-2" placeholder="Jenis Sediaan"
+                                    value="{{ $item->jenis_sediaan }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="nama_obat">Nama Obat</label>
+                                <input type="text" class="form-control mt-2 mb-2" name="nama_obat" id="nama_obat"
+                                    placeholder="Masukkan Nama Obat" required value="{{ $item->nama_obat }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="harga_pokok">Harga Beli</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text mt-2"
+                                                style="background: rgb(228, 228, 228)"><b>Rp.</b></span>
+                                        </div>
+                                        <input type="number" class="form-control mt-2 mb-2" name="harga_pokok"
+                                            id="harga_pokok" placeholder="Masukkan Harga Pokok Obat"
+                                            value="{{ $item->harga_pokok ? $item->harga_pokok : '' }}">
                                     </div>
                                 </div>
-                            </div>
-                            {{-- <div class="form-group">
+                                <div class="form-group">
+                                    <label for="stok_akhir">Jumlah Stok</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control mt-2 mb-2" name="stok"
+                                            id="stok_akhir{{ $item->id }}" value="{{ $item->stok }}" readonly>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
+                                                <b>Total</b>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="form-group">
                                 <label for="stok_awal">Stok</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control mt-2 mb-2" name="stok_awal" id="stok_awal{{ $item->id }}" value="{{ $item->stok_awal ?? 0 }}" readonly>
@@ -47,80 +70,87 @@
                                     </div>
                                 </div>
                             </div> --}}
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="harga_jual">Harga Jual</label>
-                                <div class="input-group">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)"><b>Rp.</b></span>
-                                    </div>
-                                    <input type="number" class="form-control mt-2 mb-2" name="harga_jual" id="harga_jual" placeholder="Masukkan Harga Jual Obat" value="{{ $item->harga_jual ? $item->harga_jual : '' }}">
-                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="stok_masuk">Stok Masuk</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control mt-2 mb-2" name="masuk" id="stok_masuk{{ $item->id }}" placeholder="Masukkan Stok Masuk">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                                            <b>Total</b>
-                                        </span>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="harga_jual">Harga Jual</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text mt-2"
+                                                style="background: rgb(228, 228, 228)"><b>Rp.</b></span>
+                                        </div>
+                                        <input type="number" class="form-control mt-2 mb-2" name="harga_jual"
+                                            id="harga_jual" placeholder="Masukkan Harga Jual Obat"
+                                            value="{{ $item->harga_jual ? $item->harga_jual : '' }}">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="stok_masuk">Stok Masuk</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control mt-2 mb-2" name="masuk"
+                                            id="stok_masuk{{ $item->id }}" placeholder="Masukkan Stok Masuk">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
+                                                <b>Total</b>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        {{-- <div class="col-lg-4">
+                            {{-- <div class="col-lg-4">
                         </div> --}}
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="stok_keluar">Stok Keluar</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control mt-2 mb-2" name="keluar" id="stok_keluar{{ $item->id }}" placeholder="Masukkan Stok Keluar">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                                            <b>Total</b>
-                                        </span>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="stok_keluar">Stok Keluar</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control mt-2 mb-2" name="keluar"
+                                            id="stok_keluar{{ $item->id }}" placeholder="Masukkan Stok Keluar">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text mt-2"
+                                                style="background: rgb(228, 228, 228)">
+                                                <b>Total</b>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="stok_retur">Retur</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control mt-2 mb-2" name="retur" id="stok_retur{{ $item->id }}" placeholder="Masukkan Retur">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                                            <b>Total</b>
-                                        </span>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="stok_retur">Retur</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control mt-2 mb-2" name="retur"
+                                            id="stok_retur{{ $item->id }}" placeholder="Masukkan Retur">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text mt-2"
+                                                style="background: rgb(228, 228, 228)">
+                                                <b>Total</b>
+                                            </span>
+                                        </div>
                                     </div>
+                                    <p style="color: blue; font-size: 12px">
+                                        *Jika ada pengembalian obat, bisa diisi
+                                    </p>
                                 </div>
-                                <p style="color: blue; font-size: 12px">
-                                    *Jika ada pengembalian obat, bisa diisi
-                                </p>
                             </div>
                         </div>
                     </div>
-                </div>                                                            
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Tutup</span>
-                    </button>
-                    <button type="submit" class="btn btn-primary ml-1">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Simpan</span>
-                    </button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Tutup</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Simpan</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endforeach
 
 @push('css')
-    
 @endpush
 
 @push('script')
@@ -131,7 +161,6 @@
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
 
     <script>
-
         // Fungsi untuk mendapatkan Stok Akhir
         // document.addEventListener('DOMContentLoaded', function () {
         //     // Objek untuk menyimpan stok awal dan nilai terakhir dari masing-masing input
@@ -141,7 +170,7 @@
         //     // Fungsi untuk menghitung stok akhir
         //     function hitungStokAkhir(modalId) {
         //         const stokAwal = stokAkhirSebelumnya[modalId] || parseFloat(document.getElementById('stok_akhir' + modalId).value) || 0;
-                
+
         //         const stokMasukElem = document.getElementById('stok_masuk' + modalId);
         //         const stokKeluarElem = document.getElementById('stok_keluar' + modalId);
         //         const stokReturElem = document.getElementById('stok_retur' + modalId);
@@ -207,15 +236,16 @@
         //     });
         // });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Objek untuk menyimpan stok awal dan nilai terakhir dari masing-masing input
             const stokAkhirSebelumnya = {};
             const nilaiTerakhir = {};
 
             // Fungsi untuk menghitung stok akhir
             function hitungStokAkhir(modalId) {
-                const stokAwal = stokAkhirSebelumnya[modalId] || parseFloat(document.getElementById('stok_akhir' + modalId).value) || 0;
-                
+                const stokAwal = stokAkhirSebelumnya[modalId] || parseFloat(document.getElementById('stok_akhir' +
+                    modalId).value) || 0;
+
                 const stokMasukElem = document.getElementById('stok_masuk' + modalId);
                 const stokKeluarElem = document.getElementById('stok_keluar' + modalId);
                 const stokReturElem = document.getElementById('stok_retur' + modalId);
@@ -232,7 +262,8 @@
                 const stokRetur = parseFloat(stokReturElem.value) || 0;
 
                 // Hitung stok akhir: stok awal + (stok masuk baru - stok masuk terakhir) - (stok keluar baru - stok keluar terakhir) + (stok retur baru - stok retur terakhir)
-                const stokAkhirSaatIni = stokAwal + (stokMasuk - stokMasukTerakhir) - (stokKeluar - stokKeluarTerakhir) + (stokRetur - stokReturTerakhir);
+                const stokAkhirSaatIni = stokAwal + (stokMasuk - stokMasukTerakhir) - (stokKeluar -
+                    stokKeluarTerakhir) + (stokRetur - stokReturTerakhir);
 
                 // Simpan nilai saat ini sebagai nilai terakhir
                 nilaiTerakhir[modalId] = {
@@ -249,7 +280,7 @@
             }
 
             // Event listener untuk perubahan input
-            document.addEventListener('input', function (event) {
+            document.addEventListener('input', function(event) {
                 if (
                     event.target.id.startsWith('stok_masuk') ||
                     event.target.id.startsWith('stok_keluar') ||
@@ -261,11 +292,12 @@
             });
 
             // Panggil fungsi saat halaman pertama kali dimuat
-            window.addEventListener('load', function () {
+            window.addEventListener('load', function() {
                 const modals = document.querySelectorAll('.modal');
                 modals.forEach(modal => {
                     const modalId = modal.id.replace(/\D/g, ''); // Ambil ID unik modal
-                    const stokAwal = parseFloat(document.getElementById('stok_awal' + modalId)?.value) || 0;
+                    const stokAwal = parseFloat(document.getElementById('stok_awal' + modalId)
+                        ?.value) || 0;
 
                     // Simpan stok awal dan nilai awal untuk modal ini
                     stokAkhirSebelumnya[modalId] = stokAwal;
@@ -334,6 +366,5 @@
         //         });
         //     });
         // });
-
     </script>
 @endpush

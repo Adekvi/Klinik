@@ -51,7 +51,7 @@ class DataUserController extends Controller
                 'role' => $data['role']
             ];
             User::where('id', $id)->update($dataUser);
-        }else{
+        } else {
             $dataUser = [
                 'name' => $data['name'],
                 'username' => $data['username'],
@@ -62,11 +62,11 @@ class DataUserController extends Controller
             User::where('id', $id)->update($dataUser);
         }
 
-        return redirect()->route('master.user');
+        return redirect()->route('master.user')->with('toast_success', 'Data berhasil diubah');
     }
     public function destroy(Request $request, $id)
     {
         User::findOrFail($id)->delete();
-        return redirect()->route('master.user');
+        return redirect()->route('master.user')->with('toast_success', 'Data berhasil dihapus');
     }
 }

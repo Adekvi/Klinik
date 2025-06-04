@@ -15,7 +15,8 @@
                         </div>
                     </div>
                 </div>
-                <form action="{{ url('kasir/tambah/' . $antrianKasir->id) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ url('kasir/tambah/' . $antrianKasir->id) }}" id="transaksiForm" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="row d-flex justify-content-between">
                         <div class="col-md-6">
@@ -36,7 +37,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="row" style="padding: 4px; text-align: left;">Nama Pasien</th>
+                                            <th scope="row" style="padding: 4px; text-align: left;">Nama Petugas</th>
                                             <td style="padding: 4px; width: 10px;">:</td>
                                             <td style="padding: 4px;"><input type="text" name="nama_kasir"
                                                     id="nama_kasir" class="form-control" value="{{ Auth::user()->name }}"
@@ -44,32 +45,12 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="row" style="padding: 4px; text-align: left;">Jenis Pasien</th>
+                                            <th scope="row" style="padding: 4px; text-align: left;">Shift</th>
                                             <td style="padding: 4px; width: 10px;">:</td>
                                             <td style="padding: 4px;">
-                                                @php
-                                                    // Mengambil waktu sekarang sebagai objek Carbon
-                                                    $currentTime = \Carbon\Carbon::now();
-
-                                                    // Mendefinisikan batasan waktu shift pagi dan siang sebagai objek Carbon
-                                                    $startPagi = \Carbon\Carbon::createFromTime(7, 0);
-                                                    $endPagi = \Carbon\Carbon::createFromTime(12, 0);
-                                                    $startSiang = \Carbon\Carbon::createFromTime(12, 0);
-                                                    $endSiang = \Carbon\Carbon::createFromTime(17, 0);
-
-                                                    // Default shift value
-                                                    $shift = '-';
-
-                                                    // Menentukan shift berdasarkan waktu sekarang
-                                                    if ($currentTime->between($startPagi, $endPagi)) {
-                                                        $shift = 'Pagi';
-                                                    } elseif ($currentTime->between($startSiang, $endSiang)) {
-                                                        $shift = 'Siang';
-                                                    }
-                                                @endphp
-                                                <input type="text" name="shift" id="shift" class="form-control"
-                                                    style="margin-left: 5px; text-align: end" value="{{ $shift }}"
-                                                    readonly>
+                                                <input type="text" name="shift_display" id="shift_display"
+                                                    class="form-control" style="margin-left: 5px; text-align: end"
+                                                    value="{{ $namaShift }}" readonly>
                                             </td>
                                         </tr>
                                     </table>
@@ -97,7 +78,7 @@
                                             <span>:</span>
                                             <input type="text" name="no_transaksi" id="no_transaksi"
                                                 style="margin-left: 5px; text-align: end" class="form-control"
-                                                value="{{ $noTransaksi }}" readonly>
+                                                value="{{ $kasir->no_transaksi ?? '-' }}" readonly>
                                         </div>
                                         <div class="info-item mb-2">
                                             <label style="min-width: 120px;">No. RM Pasien</label>
@@ -121,12 +102,18 @@
                                                 style="margin-left: 5px; text-align: end" readonly>
                                         </div>
                                         <div class="info-item mb-2">
-                                            <label style="min-width: 120px;">ID/NIK/BPJS</label>
+                                            <label style="min-width: 120px;">NIK</label>
                                             <span>:</span>
                                             <input type="text" name="nik_bpjs" id="nik_bpjs" class="form-control"
                                                 style="margin-left: 5px; text-align: end"
-                                                value="{{ !empty($antrianKasir->pasien->nik) ? $antrianKasir->pasien->nik : '-' }}"
-                                                readonly>
+                                                value="{{ $antrianKasir->booking->pasien->nik ?? '-' }}" readonly>
+                                        </div>
+                                        <div class="info-item mb-2">
+                                            <label style="min-width: 120px;">No. BPJS</label>
+                                            <span>:</span>
+                                            <input type="text" name="nik_bpjs" id="nik_bpjs" class="form-control"
+                                                style="margin-left: 5px; text-align: end"
+                                                value="{{ $antrianKasir->booking->pasien->bpjs ?? '-' }}" readonly>
                                         </div>
                                         <div class="info-item mb-2">
                                             <label style="min-width: 120px;">Poli</label>
@@ -149,7 +136,6 @@
                                             <div class="d-flex align-items-center">
                                                 <h5 class="font-weight-bold" style="min-width: 110px; font-size: 28px">
                                                     TOTAL</h5>
-                                                {{-- <span>:</span> --}}
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"
@@ -161,6 +147,9 @@
                                                         id="total-{{ $antrianKasir->id }}" class="form-control"
                                                         style="text-align: end; font-size: 20px; font-weight: bold"
                                                         readonly>
+                                                    <!-- Hidden input untuk total asli -->
+                                                    <input type="hidden" name="total_hidden"
+                                                        id="total_hidden-{{ $antrianKasir->id }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -168,7 +157,7 @@
                                         <div class="info-item mb-2" data-pasien-id="{{ $antrianKasir->id }}">
                                             <label style="min-width: 110px;">Sub. Total Rincian</label>
                                             <span>:</span>
-                                            @foreach ($obatPasien as $item)
+                                            @if ($obatPasien)
                                                 <?php
                                                 // Fungsi untuk memformat harga ke dalam format Rupiah
                                                 if (!function_exists('Rupiah')) {
@@ -179,8 +168,8 @@
                                                 }
                                                 
                                                 // Mendekode nama obat dari soap_p
-                                                $namaObat = json_decode($item->obat_Ro_namaObatUpdate, true) ?? [];
-                                                $jumlahObat = json_decode($item->obat_Ro_jumlah, true) ?? []; // Ambil jumlah obat dari field yang sesuai
+                                                $namaObat = json_decode($obatPasien->obat_Ro_namaObatUpdate, true) ?? [];
+                                                $jumlahObat = json_decode($obatPasien->obat_Ro_jumlah, true) ?? []; // Ambil jumlah obat dari field yang sesuai
                                                 
                                                 // Data harga jual yang sudah diurutkan berdasarkan nama obat
                                                 $hargaJualData = $reseps->keyBy('nama_obat'); // $reseps ini adalah koleksi harga dari model Resep atau Obat
@@ -205,10 +194,10 @@
                                                         }
                                                     }
                                                 } else {
-                                                    echo '0';
+                                                    echo '';
                                                 }
                                                 ?>
-                                            @endforeach
+                                            @endif
 
                                             <!-- Bagian input Sub Total -->
                                             <div class="input-group">
@@ -290,9 +279,9 @@
                                             $totalObat = 0;
                                             
                                             // Loop melalui setiap item dalam $kasir
-                                            foreach ($obatPasien as $item) {
+                                            if ($obatPasien) {
                                                 // Decode jumlah obat dari soap_p_jumlah
-                                                $jumlahObat = json_decode($item->obat_Ro_jumlah, true) ?? [];
+                                                $jumlahObat = json_decode($obatPasien->obat_Ro_jumlah, true) ?? [];
                                             
                                                 // Jika ada jumlah obat, tambahkan ke total
                                                 if (!empty($jumlahObat)) {
@@ -304,11 +293,6 @@
                                             ?>
 
                                             <div class="input-group">
-                                                {{-- <div class="input-group-prepend">
-                                                            <span class="input-group-text" style="background: rgb(228, 228, 228)">
-                                                                <b></b>
-                                                            </span>
-                                                        </div> --}}
                                                 <!-- Menampilkan total jumlah obat yang telah dihitung -->
                                                 <input type="text" value="{{ $totalObat }}" name="total_obat"
                                                     id="total_obat-{{ $antrianKasir->id }}" class="form-control"
@@ -343,7 +327,7 @@
                                         <strong>Keterangan Obat</strong>
                                     </h5>
                                     <hr>
-                                    <div class="tabel col-md-12" data-pasien-id="{{ $antrianKasir->id }}">
+                                    <div class="table col-md-12" data-pasien-id="{{ $antrianKasir->id }}">
                                         <table class="table table-responsive table-bordered" style="overflow-x: auto">
                                             <thead class="text center table-primary" style="white-space: nowrap">
                                                 <th>No</th>
@@ -355,72 +339,127 @@
                                                 <th>Tarif</th>
                                             </thead>
                                             <tbody class="text-center">
-                                                @foreach ($obatPasien as $item)
-                                                    <tr data-pasien-id="{{ $item->id }}">
-                                                        <td>{{ $loop->iteration }}</td>
-                                                        <td class="text-start">
+                                                @php $no = 1; @endphp
+
+                                                @if ($obatPasien)
+                                                    <tr data-pasien-id="{{ $obatPasien->id }}">
+                                                        <td>{{ $no++ }}</td>
+                                                        <!-- Tidak perlu nomor iterasi karena hanya satu entri -->
+                                                        {{-- KETERANGAN --}}
+                                                        <td class="text-start" data-pasien-id="{{ $obatPasien->id }}">
                                                             @php
-                                                                $namaObat = json_decode($item->obat_Ro, true) ?? [];
-                                                                foreach ($namaObat as $index => $obat) {
-                                                                    echo $index + 1 . '. ' . $obat . '<br><hr>';
+                                                                $namaObat =
+                                                                    json_decode(
+                                                                        $obatPasien->obat_Ro_namaObatUpdate,
+                                                                        true,
+                                                                    ) ?? [];
+                                                                if (!empty($namaObat)) {
+                                                                    foreach ($namaObat as $index => $obat) {
+                                                                        echo $index + 1 . '. ' . $obat . '<br><hr>';
+                                                                    }
+                                                                } else {
+                                                                    echo 'Tidak ada data obat<br><hr>';
                                                                 }
                                                             @endphp
                                                         </td>
-                                                        <td>
+                                                        {{-- SATUAN --}}
+                                                        <td data-pasien-id="{{ $obatPasien->id }}">
                                                             @php
                                                                 $jenisObat =
-                                                                    json_decode($item->obat_Ro_jenisObat, true) ?? [];
-                                                                foreach ($jenisObat as $JnsObt) {
-                                                                    echo $JnsObt . '<hr>';
+                                                                    json_decode($obatPasien->obat_Ro_jenisObat, true) ??
+                                                                    [];
+                                                                if (!empty($jenisObat)) {
+                                                                    foreach ($jenisObat as $JnsObt) {
+                                                                        echo $JnsObt . '<hr>';
+                                                                    }
+                                                                } else {
+                                                                    echo 'Tidak ada data jenis obat<hr>';
                                                                 }
                                                             @endphp
                                                         </td>
-                                                        <td>
+                                                        {{-- QTY --}}
+                                                        <td data-pasien-id="{{ $obatPasien->id }}">
                                                             @php
                                                                 $jumlahObat =
-                                                                    json_decode($item->obat_Ro_jumlah, true) ?? [];
-                                                                foreach ($jumlahObat as $jumlah) {
-                                                                    echo $jumlah . '<hr>';
+                                                                    json_decode($obatPasien->obat_Ro_jumlah, true) ??
+                                                                    [];
+                                                                if (!empty($jumlahObat)) {
+                                                                    foreach ($jumlahObat as $jumlah) {
+                                                                        echo $jumlah . '<hr>';
+                                                                    }
+                                                                } else {
+                                                                    echo 'Tidak ada data jumlah<hr>';
                                                                 }
                                                             @endphp
                                                         </td>
-                                                        <td>
+                                                        {{-- HARGA JUAL --}}
+                                                        <td data-pasien-id="{{ $obatPasien->id }}">
                                                             @php
+                                                                $namaObat =
+                                                                    json_decode(
+                                                                        $obatPasien->obat_Ro_namaObatUpdate,
+                                                                        true,
+                                                                    ) ?? [];
                                                                 $hargaJualData = $reseps->keyBy('nama_obat');
-                                                                foreach ($namaObat as $obat) {
-                                                                    echo isset($hargaJualData[$obat])
-                                                                        ? 'Rp ' .
+                                                                if (!empty($namaObat)) {
+                                                                    foreach ($namaObat as $obat) {
+                                                                        echo isset($hargaJualData[$obat])
+                                                                            ? 'Rp ' .
+                                                                                number_format(
+                                                                                    $hargaJualData[$obat]['harga_jual'],
+                                                                                    0,
+                                                                                    ',',
+                                                                                    '.',
+                                                                                ) .
+                                                                                '<hr>'
+                                                                            : '0<hr>';
+                                                                    }
+                                                                } else {
+                                                                    echo '0<hr>';
+                                                                }
+                                                            @endphp
+                                                        </td>
+                                                        {{-- TOTAL --}}
+                                                        <td data-pasien-id="{{ $obatPasien->id }}">
+                                                            @php
+                                                                $namaObat =
+                                                                    json_decode(
+                                                                        $obatPasien->obat_Ro_namaObatUpdate,
+                                                                        true,
+                                                                    ) ?? [];
+                                                                $jumlahObat =
+                                                                    json_decode($obatPasien->obat_Ro_jumlah, true) ??
+                                                                    [];
+                                                                if (!empty($namaObat) && !empty($jumlahObat)) {
+                                                                    foreach ($namaObat as $index => $obat) {
+                                                                        $hargaPokok =
+                                                                            $hargaJualData[$obat]['harga_jual'] ?? 0;
+                                                                        $jumlah = $jumlahObat[$index] ?? 1;
+                                                                        echo 'Rp ' .
                                                                             number_format(
-                                                                                $hargaJualData[$obat]['harga_jual'],
+                                                                                $hargaPokok * $jumlah,
                                                                                 0,
                                                                                 ',',
                                                                                 '.',
                                                                             ) .
-                                                                            '<hr>'
-                                                                        : '0<hr>';
+                                                                            '<hr>';
+                                                                    }
+                                                                } else {
+                                                                    echo '0<hr>';
                                                                 }
                                                             @endphp
                                                         </td>
-                                                        <td>
-                                                            @php
-                                                                foreach ($namaObat as $index => $obat) {
-                                                                    $hargaPokok =
-                                                                        $hargaJualData[$obat]['harga_jual'] ?? 0;
-                                                                    $jumlah = $jumlahObat[$index] ?? 1;
-                                                                    echo 'Rp ' .
-                                                                        number_format(
-                                                                            $hargaPokok * $jumlah,
-                                                                            0,
-                                                                            ',',
-                                                                            '.',
-                                                                        ) .
-                                                                        '<hr>';
-                                                                }
-                                                            @endphp
+                                                        {{-- TARIF --}}
+                                                        <td data-pasien-id="{{ $obatPasien->id }}">
+                                                            {{ $obatPasien->booking->pasien->jenis_pasien }}
                                                         </td>
-                                                        <td>{{ $item->booking->pasien->jenis_pasien }}</td>
                                                     </tr>
-                                                @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="7" class="text-center">Tidak ada data obat untuk
+                                                            pasien ini.</td>
+                                                    </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -443,10 +482,32 @@
                                     <div class="totalan col-md-6">
                                         <div class="info-container">
                                             <div class="info-item">
-                                                <button type="button" class="btn btn-outline-success">BPJS</button>
+                                                <button type="button" class="btn btn-outline-success"
+                                                    id="btn-bpjs-{{ $antrianKasir->id }}"
+                                                    onclick="handlePaymentType('bpjs', {{ $antrianKasir->id }})">BPJS</button>
                                                 <button type="button" class="btn btn-outline-primary"
+                                                    id="btn-non-kapitasi-{{ $antrianKasir->id }}"
+                                                    onclick="handlePaymentType('non-kapitasi', {{ $antrianKasir->id }})"
                                                     style="white-space: nowrap; width: 100%;">Non Kapitasi</button>
-                                                <button type="button" class="btn btn-outline-info">UMUM</button>
+                                                <button type="button" class="btn btn-outline-info"
+                                                    id="btn-umum-{{ $antrianKasir->id }}"
+                                                    onclick="handlePaymentType('umum', {{ $antrianKasir->id }})">UMUM</button>
+                                            </div>
+                                            <div class="info-item text-nowrap" data-pasien-id="{{ $antrianKasir->id }}">
+                                                <label for="" style="padding-left: 15px;">TOTAL</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+                                                            style="background: rgb(228, 228, 228)">
+                                                            <b>Rp.</b>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" id="totalbayar-{{ $antrianKasir->id }}"
+                                                        class="form-control" style="text-align: end;" readonly>
+                                                    <!-- Hidden input untuk total bayar -->
+                                                    <input type="hidden" name="totalbayar_hidden"
+                                                        id="totalbayar_hidden-{{ $antrianKasir->id }}">
+                                                </div>
                                             </div>
                                             <div class="info-item" data-pasien-id="{{ $antrianKasir->id }}">
                                                 <label for="" style="padding-left: 15px;">BAYAR</label>
@@ -457,7 +518,8 @@
                                                     </div>
                                                     <input type="number" name="bayar"
                                                         id="bayar-{{ $antrianKasir->id }}" style="text-align: end"
-                                                        class="form-control">
+                                                        class="form-control" required
+                                                        oninput="hitungKembalian({{ $antrianKasir->id }})">
                                                 </div>
                                             </div>
                                             <div class="info-item" data-pasien-id="{{ $antrianKasir->id }}">
@@ -477,8 +539,10 @@
                                 </div>
 
                                 <div class="info-item" style="justify-content: flex-end">
-                                    <button type="submit" class="btn btn-primary" id="saveButton"
-                                        style="padding-left: 15px;">SIMPAN TRANSAKSI</button>
+                                    <button type="button" class="btn btn-primary" id="saveButton"
+                                        onclick="simpanDanCetak({{ $antrianKasir->id }})">
+                                        <i class="fas fa-file"></i> SIMPAN TRANSAKSI
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -586,49 +650,211 @@
         updateClock();
 
         // TOTAL BAYAR
-        // Fungsi format angka ke format Rupiah
         function formatRupiah(angka) {
-            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
 
-        // Fungsi untuk menghitung total
+        function initializeButtons(id) {
+            const jenisPasien = document.getElementById('jenis_pasien').value.toLowerCase();
+            const btnBpjs = document.getElementById('btn-bpjs-' + id);
+            const btnNonKapitasi = document.getElementById('btn-non-kapitasi-' + id);
+            const btnUmum = document.getElementById('btn-umum-' + id);
+
+            if (jenisPasien === 'umum') {
+                btnBpjs.disabled = true;
+                btnNonKapitasi.disabled = false;
+                btnUmum.disabled = false;
+                handlePaymentType('umum', id);
+            } else if (jenisPasien === 'bpjs') {
+                btnBpjs.disabled = false;
+                btnNonKapitasi.disabled = true;
+                btnUmum.disabled = true;
+                handlePaymentType('bpjs', id);
+            } else {
+                btnBpjs.disabled = false;
+                btnNonKapitasi.disabled = false;
+                btnUmum.disabled = false;
+                handlePaymentType('umum', id);
+            }
+
+            hitungTotal(id);
+        }
+
         function hitungTotal(id) {
             let subTotal = parseFloat(document.getElementById('sub_total_rincian-' + id).value.replace(/\./g, '')) || 0;
-            let administrasi = parseFloat(document.getElementById('administrasi-' + id).value) || 0;
+            let administrasi = parseFloat(document.getElementById('administrasi-' + id).value.replace(/\./g, '')) || 0;
             let konsulDokter = parseFloat(document.getElementById('konsul_dokter-' + id).value.replace(/\./g, '')) || 0;
-            let embalase = parseFloat(document.getElementById('embalase-' + id).value) || 0;
+            let embalase = parseFloat(document.getElementById('embalase-' + id).value.replace(/\./g, '')) || 0;
             let ppnPersen = parseFloat(document.getElementById('ppn-' + id).value) || 0;
 
-            // Total sebelum PPN
-            let totalSebelumPPN = subTotal + administrasi + konsulDokter + embalase;
+            console.log('subTotal:', subTotal);
+            console.log('administrasi:', administrasi);
+            console.log('konsulDokter:', konsulDokter);
+            console.log('embalase:', embalase);
+            console.log('ppnPersen:', ppnPersen);
 
-            // Hitung PPN dan total
+            let totalSebelumPPN = subTotal + administrasi + konsulDokter + embalase;
             let ppn = Math.floor(totalSebelumPPN * (ppnPersen / 100));
             let total = totalSebelumPPN + ppn;
 
-            // Update input total
+            console.log('total:', total);
+
             document.getElementById('total-' + id).value = formatRupiah(total);
+            document.getElementById('total_hidden-' + id).value = total;
         }
 
-        // Fungsi untuk menghitung kembalian
+        function handlePaymentType(type, id) {
+            console.log('ID yang digunakan:', id);
+            console.log('totalbayar ID:', 'totalbayar-' + id);
+            console.log('totalbayar_hidden ID:', 'totalbayar_hidden-' + id);
+
+            const jenisPasien = document.getElementById('jenis_pasien').value.toLowerCase();
+            let totalBayar = 0;
+
+            hitungTotal(id);
+            let totalAsli = parseFloat(document.getElementById('total_hidden-' + id).value) || 0;
+            console.log('totalAsli:', totalAsli);
+
+            if (type === 'bpjs' && jenisPasien === 'bpjs') {
+                totalBayar = 0;
+                document.getElementById('bayar-' + id).value = 0;
+                document.getElementById('bayar-' + id).readOnly = true;
+                document.getElementById('kembalian-' + id).value = 0;
+            } else {
+                totalBayar = totalAsli;
+                document.getElementById('bayar-' + id).readOnly = false;
+            }
+
+            console.log('totalBayar:', totalBayar);
+            document.getElementById('totalbayar-' + id).value = formatRupiah(totalBayar);
+            document.getElementById('totalbayar_hidden-' + id).value = totalBayar;
+
+            hitungKembalian(id);
+        }
+
         function hitungKembalian(id) {
-            let total = parseFloat(document.getElementById('total-' + id).value.replace(/\./g, '')) || 0;
+            let totalBayar = parseFloat(document.getElementById('totalbayar_hidden-' + id).value) || 0;
             let bayar = parseFloat(document.getElementById('bayar-' + id).value) || 0;
 
-            let kembalian = bayar - total;
+            let kembalian = bayar - totalBayar;
             if (kembalian < 0) {
                 kembalian = 0;
             }
 
-            // Update input kembalian
             document.getElementById('kembalian-' + id).value = formatRupiah(kembalian);
         }
+
+        // Fungsi untuk simpan dan membuka tab cetak
+        function simpanDanCetak(id) {
+            const form = document.getElementById('transaksiForm');
+            if (!form) {
+                console.error('Form tidak ditemukan.');
+                alert('Form tidak ditemukan. Silakan periksa halaman.');
+                return;
+            }
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            if (!csrfToken) {
+                console.error('CSRF token tidak ditemukan.');
+                alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
+                return;
+            }
+
+            // Buat FormData dan sanitasi input
+            const formData = new FormData(form);
+            const numericFields = [
+                'total_hidden',
+                'bayar',
+                'kembalian',
+                'sub_total_rincian',
+                'administrasi',
+                'konsul_dokter',
+                'embalase',
+                'total_obat',
+                'ppn',
+                'totalbayar_hidden'
+            ];
+            numericFields.forEach(field => {
+                const value = formData.get(field);
+                formData.set(field, value ? value.replace(/[^0-9]/g, '') : '0');
+            });
+
+            console.log('Data yang dikirim:', [...formData.entries()]);
+
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Status respons:', response.status);
+                    if (response.status === 419) {
+                        alert('Sesi kedaluwarsa. Silakan refresh halaman atau login ulang.');
+                        return Promise.reject(new Error('Sesi kedaluwarsa'));
+                    }
+                    return response.json().then(data => ({
+                        status: response.status,
+                        data
+                    }));
+                })
+                .then(({
+                    status,
+                    data
+                }) => {
+                    console.log('Respons server:', data);
+                    if (status === 200 && data.success) {
+                        if (data.transaksi_id) {
+                            const printUrl = '/kasir/cetakTransaksi/' + data.transaksi_id;
+                            console.log('Membuka URL cetak:', printUrl);
+                            const printWindow = window.open(printUrl, '_blank');
+                            if (printWindow) {
+                                printWindow.focus();
+                                setTimeout(() => {
+                                    console.log('Mencetak struk...');
+                                    printWindow.print();
+                                }, 200);
+                            } else {
+                                console.error('Gagal membuka jendela cetak.');
+                                alert('Gagal membuka jendela cetak. Pastikan popup tidak diblokir.');
+                            }
+                            alert('Transaksi berhasil disimpan!');
+                            window.location.href = '/kasir/index'; // Redirect ke halaman antrian
+                        } else {
+                            console.error('transaksi_id tidak ditemukan di respons:', data);
+                            alert('Gagal mencetak: ID transaksi tidak ditemukan.');
+                        }
+                    } else {
+                        console.error('Gagal menyimpan transaksi:', data.message);
+                        alert(`Gagal menyimpan transaksi: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Terjadi kesalahan: ${error.message}`);
+                });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const id = {{ $antrianKasir->id }};
+            initializeButtons(id);
+
+            // Add event listeners for input changes
+            ['sub_total_rincian', 'administrasi', 'konsul_dokter', 'embalase', 'ppn'].forEach(field => {
+                const input = document.getElementById(field + '-' + id);
+                if (input) {
+                    input.addEventListener('input', () => hitungTotal(id));
+                }
+            });
+        });
 
         // Tambahkan event listener untuk setiap pasien
         document.querySelectorAll('[data-pasien-id]').forEach(function(element) {
             const id = element.getAttribute('data-pasien-id');
 
-            // Tambahkan event listener ke elemen terkait
             document.getElementById('administrasi-' + id).addEventListener('input', function() {
                 hitungTotal(id);
             });
@@ -639,157 +865,16 @@
                 hitungTotal(id);
             });
             document.getElementById('ppn-' + id).addEventListener('input', function() {
-                hitungTotal(id); // Hitung total saat PPN berubah
+                hitungTotal(id);
             });
             document.getElementById('bayar-' + id).addEventListener('input', function() {
                 hitungKembalian(id);
             });
 
-            // Panggil fungsi saat halaman dimuat untuk setiap pasien
             window.onload = function() {
-                hitungTotal(id); // Hitung total awal
-                hitungKembalian(id); // Hitung kembalian awal
+                hitungTotal(id);
+                hitungKembalian(id);
             };
         });
-
-        // function simpanTransaksi(id) {
-        //     const formData = new FormData(document.querySelector('form')); // Ganti dengan selector form Anda jika diperlukan
-
-        //     fetch(`/kasir/tambah/${id}`, { // Menggunakan template string untuk memasukkan ID
-        //         method: 'POST',
-        //         body: formData,
-        //         headers: {
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}', // Sertakan token CSRF jika menggunakan Laravel
-        //         }
-        //     })
-        //     .then(response => {
-        //         if (response.ok) {
-        //             // Jika berhasil, alihkan ke halaman kasir.index
-        //             window.location.href = '{{ route('kasir.index') }}'; // Gunakan route Laravel untuk mengarahkan
-        //         } else {
-        //             alert('Terjadi kesalahan saat menyimpan transaksi.');
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //         alert('Terjadi kesalahan saat menyimpan transaksi.');
-        //     });
-        // }
     </script>
 @endpush
-
-{{-- function formatRupiah(angka) {
-    // Format angka ke dalam format Rupiah tanpa .00
-    return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-function hitungTotal(id) {
-    let subTotal = parseFloat(document.getElementById('sub_total_rincian-' + id).value.replace(/\./g, '')) || 0;
-    let administrasi = parseFloat(document.getElementById('administrasi-' + id).value) || 0;
-    let konsulDokter = parseFloat(document.getElementById('konsul_dokter-' + id).value.replace(/\./g, '')) || 0;
-    let embalase = parseFloat(document.getElementById('embalase-' + id).value) || 0;
-    let ppnPersen = parseFloat(document.getElementById('ppn-' + id).value) || 0;
-
-    let totalSebelumPPN = subTotal + administrasi + konsulDokter + embalase;
-    // Hitung PPN dengan bilangan bulat
-    let ppn = Math.floor(totalSebelumPPN * (ppnPersen / 100));
-    let total = totalSebelumPPN + ppn;
-
-    document.getElementById('total-' + id).value = formatRupiah(total);
-}
-
-function hitungKembalian(id) {
-    let total = parseFloat(document.getElementById('total-' + id).value.replace(/\./g, '')) || 0;
-    let bayar = parseFloat(document.getElementById('bayar-' + id).value) || 0;
-
-    let kembalian = bayar - total;
-    if (kembalian < 0) {
-        kembalian = 0;
-    }
-
-    document.getElementById('kembalian-' + id).value = formatRupiah(kembalian);
-}
-
-// Menambahkan event listener untuk setiap pasien
-document.querySelectorAll('[data-pasien-id]').forEach(function (element) {
-    const id = element.getAttribute('data-pasien-id');
-
-    document.getElementById('administrasi-' + id).addEventListener('input', function() { hitungTotal(id); });
-    document.getElementById('embalase-' + id).addEventListener('input', function() { hitungTotal(id); });
-    document.getElementById('sub_total_rincian-' + id).addEventListener('input', function() { hitungTotal(id); });
-    document.getElementById('ppn-' + id).addEventListener('input', function() { hitungTotal(id); });
-    document.getElementById('bayar-' + id).addEventListener('input', function() { hitungKembalian(id); });
-
-    // Panggil fungsi saat halaman dimuat untuk setiap pasien
-    window.onload = function() {
-        hitungTotal(id); // Hitung total saat halaman dimuat
-        hitungKembalian(id); // Hitung kembalian saat halaman dimuat
-    };
-}); --}}
-
-{{-- <script>
-
-        // TOTAL BAYAR
-        // Fungsi untuk memformat angka ke dalam format Rupiah
-        function formatRupiah(angka) {
-            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-
-        // Fungsi untuk menghitung total
-        function hitungTotal() {
-            // Ambil nilai dari masing-masing input, jika tidak ada nilai maka diasumsikan 0
-            let subTotal = parseFloat(document.getElementById('sub_total_rincian').value.replace(/\./g, '')) || 0;
-            let administrasi = parseInt(document.getElementById('administrasi').value) || 0;
-            let konsulDokter = parseInt(document.getElementById('konsul_dokter').value.replace(/\./g, '')) || 0;
-            let embalase = parseInt(document.getElementById('embalase').value) || 0;
-            let ppnPersen = parseInt(document.getElementById('ppn').value) || 0;
-
-            // Hitung PPN berdasarkan subtotal
-            let totalSebelumPPN = subTotal + administrasi + konsulDokter + embalase;
-            let ppn = totalSebelumPPN * (ppnPersen / 100);
-
-            // Hitung total keseluruhan
-            let total = totalSebelumPPN + ppn;
-
-            // Tampilkan hasil di input total
-            document.getElementById('total').value = formatRupiah(total.toFixed(0));
-        }
-
-        // Menambahkan event listener untuk menghitung total setiap kali input berubah
-        document.getElementById('administrasi').addEventListener('input', hitungTotal);
-        document.getElementById('embalase').addEventListener('input', hitungTotal);
-        document.getElementById('sub_total_rincian').addEventListener('input', hitungTotal);
-        document.getElementById('ppn').addEventListener('input', hitungTotal);
-
-        // Panggil fungsi hitungTotal saat halaman dimuat
-        window.onload = hitungTotal;
-
-        // KEMBALIAN
-        // Fungsi untuk menghitung kembalian
-        function hitungKembalian() {
-            // Ambil nilai dari input 'bayar' dan 'total'
-            let total = parseInt(document.getElementById('total').value.replace(/\./g, '')) || 0;
-            let bayar = parseInt(document.getElementById('bayar').value) || 0;
-
-            // Hitung kembalian: bayar - total
-            let kembalian = bayar - total;
-
-            // Pastikan kembalian tidak negatif
-            if (kembalian < 0) {
-                kembalian = 0;
-            }
-
-            // Tampilkan kembalian di input kembalian
-            document.getElementById('kembalian').value = formatRupiah(kembalian.toFixed(0));
-        }
-
-        // Event listener untuk menghitung kembalian saat input 'bayar' berubah
-        document.getElementById('bayar').addEventListener('input', hitungKembalian);
-
-        // Panggil fungsi hitungKembalian ketika halaman dimuat (opsional, jika kamu ingin menghitung dari awal)
-        window.onload = function() {
-            hitungTotal(); // Memastikan total dihitung saat halaman dimuat
-            hitungKembalian(); // Menghitung kembalian setelah total dihasilkan
-        };
-
-</script> --}}

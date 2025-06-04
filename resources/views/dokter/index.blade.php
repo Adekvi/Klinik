@@ -279,7 +279,7 @@
                                 <table class="table table-bordered">
                                     <tbody style="padding: 5px; width: 90%">
                                         <tr>
-                                            <th style="padding-right: 260px">TENSI</th>
+                                            <th style="padding-right: 220px">TENSI</th>
                                             <td style="text-align: end">
                                                 <b>{{ $item->isian->p_tensi }}</b>
                                             </td>
@@ -335,7 +335,7 @@
                                     </tbody>
                                 </table>
                                 <h4 style="text-align: center; margin-top: 10px">PEMERIKSAAN FISIK UMUM (O)</h4>
-                                <table class="detail table table-bordered" style="width: 100%;">
+                                <table class="detail table table-bordered" style="width: 105%;">
                                     <tbody>
                                         <tr>
                                             <th scope="keluhan">KEADAAN UMUM</th>

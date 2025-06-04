@@ -21,7 +21,8 @@
 <link rel="stylesheet" href="{{ asset('aset/vendor/libs/apex-charts/apex-charts.css') }}" />
 <link href="{{ asset('assetss/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
 
-<!-- Page CSS -->
+<!-- CSS Chat -->
+{{-- <link rel="stylesheet" href="{{ asset('aset/css/chat.css') }}"> --}}
 
 <!-- Helpers -->
 <script src="{{ asset('aset/vendor/js/helpers.js') }}"></script>

@@ -244,7 +244,7 @@
                                         <i class="fa-solid fa-magnifying-glass"></i> Cari</button>
                                 </div>
                             </form>
-                            <div class="isian" style="overflow-x: scroll">
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered"
                                     style="background-color: white; white-space: nowrap;">
                                     <thead class="table-primary"
@@ -265,7 +265,7 @@
                                     <tbody style="text-align: center">
                                         @if (count($pasien) === 0)
                                             <tr>
-                                                <td colspan="10" style="text-align: center; font-size: bold">Tidak ada
+                                                <td colspan="10" style="text-align: center; font-size: bold">Belum ada
                                                     data
                                                 </td>
                                             </tr>
@@ -385,9 +385,9 @@
                                         @endif
                                     </tbody>
                                 </table>
-                                <div class="halaman d-flex justify-content-end">
-                                    {{ $pasien->appends(request()->only(['search', 'entries']))->links() }}
-                                </div>
+                            </div>
+                            <div class="halaman d-flex justify-content-end">
+                                {{ $pasien->appends(request()->only(['search', 'entries']))->links() }}
                             </div>
                         </div>
                     </div>
@@ -475,9 +475,9 @@
                                     @endif
                                 </tbody>
                             </table>
-                            <div class="page d-flex justify-content-end">
-                                {{ $periksa->appends(request()->only(['periksa_search', 'periksa_entries']))->links() }}
-                            </div>
+                        </div>
+                        <div class="page d-flex justify-content-end">
+                            {{ $periksa->appends(request()->only(['periksa_search', 'periksa_entries']))->links() }}
                         </div>
                     </div>
                 </div>

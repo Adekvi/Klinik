@@ -17,7 +17,9 @@
                                         <label for="">Upload File Excel</label>
                                         <p style="font-size: 15px; font-style: italic; color: red">
                                             *Silahkan masukkan data pasien terbaru dengan format xlsx, xls, csv. <br>
-                                            *Silahkan donwload file excelnya untuk menyesuaikan kolomnya!</p>
+                                            *Silahkan donwload file excelnya untuk menyesuaikan kolomnya! <br>
+                                            *Nomor RM diambil dari nomor RM terakhir!
+                                        </p>
                                         <input type="file" name="file" id="file" class="form-control" required>
                                     </div>
                                 </div>
@@ -43,7 +45,8 @@
 
                     <h3 class="mt-3 d-flex justify-content-between align-items-center">
                         <strong>Data Pasien baru diunggah</strong>
-                        <span class="text-muted" style="font-size: 17px">{{ $uploadStatus }}</span>
+                        <span class="text-muted" style="font-size: 17px">
+                            <i class="fa-solid fa-circle-info text-success"></i> {{ $uploadStatus }}</span>
                     </h3>
 
                     @if ($recentPatients->count() > 0)
@@ -215,6 +218,12 @@
 
 @push('style')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+
+    <style>
+        .swal2-container {
+            z-index: 9999 !important;
+        }
+    </style>
 @endpush
 
 @push('script')

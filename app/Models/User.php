@@ -44,8 +44,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function dokter ()
+    public function dokter()
     {
-        return $this->belongsTo(DataDokter::class, 'id_dokter','id');
+        return $this->belongsTo(DataDokter::class, 'id_dokter', 'id');
+    }
+
+    public function sentChats()
+    {
+        return $this->hasMany(Chats::class, 'sender_id');
+    }
+
+    public function receivedChats()
+    {
+        return $this->hasMany(Chats::class, 'receiver_id');
     }
 }

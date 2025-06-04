@@ -33,10 +33,11 @@ class CreateKasirsTable extends Migration
             $table->foreign('id_booking')->references('id')
                 ->on('bookings')
                 ->onDelete('cascade');
+            $table->foreignId('id_shift')->constrained('shifts')->onDelete('cascade');
 
             // Pasien information
             $table->string('no_rm'); // No. RM Pasien
-            $table->string('no_transaksi')->nullable(); // No. Transaksi
+            $table->string('no_transaksi')->unique(); // No. Transaksi
             $table->string('nama_pasien')->nullable(); // Nama Pasien
             $table->string('jenis_pasien')->nullable(); // Jenis Pasien
             $table->string('nik_bpjs')->nullable(); // NIK/BPJS
@@ -56,7 +57,7 @@ class CreateKasirsTable extends Migration
             $table->decimal('ppn', 15, 2)->nullable(); // PPN %
             $table->decimal('bayar', 15, 2)->nullable(); // Bayar
             $table->decimal('kembalian', 15, 2)->nullable(); // Kembalian
-            $table->string('status', 15, 2);
+            $table->string('status');
 
             $table->timestamps();
         });

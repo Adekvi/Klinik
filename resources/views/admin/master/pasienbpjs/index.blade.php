@@ -8,8 +8,8 @@
                 <div class="pasien-bpjs">
                     <div class="card-title">
                         <h5 style="margin-bottom: 20px"><strong>Daftar Pasien BPJS</strong></h3>
-                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                                data-bs-target="#pasienbaru"><i class="bi bi-plus-lg"></i> Tambah Pasien</button>
+                            {{-- <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                                data-bs-target="#pasienbaru"><i class="bi bi-plus-lg"></i> Tambah Pasien</button> --}}
                     </div>
 
                     <form method="GET" action="{{ route('master.pasienbpjs') }}"

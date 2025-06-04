@@ -34,8 +34,8 @@ class DataObatController extends Controller
         if ($request->ajax()) {
             $query = $request->input('query');
             $obat = Resep::where('nama_obat', 'like', '%' . $query . '%')
-                // ->orWhere('gol', 'like', '%'.$query.'%')
-                // ->orWhere('sediaan', 'like', '%'.$query.'%')
+                ->orWhere('golongan', 'like', '%' . $query . '%')
+                ->orWhere('jenis_sediaan', 'like', '%' . $query . '%')
                 ->orWhere('stok', 'like', '%' . $query . '%')
                 ->orWhere('harga_jual', 'like', '%' . $query . '%')
                 ->orWhere('harga_pokok', 'like', '%' . $query . '%')
@@ -80,6 +80,8 @@ class DataObatController extends Controller
 
         // Data untuk tabel Resep
         $data = [
+            'golongan' => $request->golongan,
+            'jenis_sediaan' => $request->jenis_sediaan,
             'nama_obat' => $request->nama_obat,
             'harga_pokok' => $request->harga_pokok,
             'harga_jual' => $hargaJual, // Simpan harga jual yang telah dihitung
@@ -121,6 +123,8 @@ class DataObatController extends Controller
         if (!$obat) {
             // Jika obat tidak ditemukan, tambahkan obat baru
             $data = [
+                'golongan' => $request->golongan,
+                'jenis_sediaan' => $request->jenis_sediaan,
                 'nama_obat' => $request->nama_obat,
                 'harga_pokok' => $request->harga_pokok,
                 'harga_jual' => $request->harga_jual,
@@ -155,6 +159,8 @@ class DataObatController extends Controller
 
         // Update data obat di database
         $obat->update([
+            'golongan' => $request->golongan,
+            'jenis_sediaan' => $request->jenis_sediaan,
             'nama_obat' => $request->nama_obat,
             'harga_pokok' => $request->harga_pokok,
             'harga_jual' => $request->harga_jual,

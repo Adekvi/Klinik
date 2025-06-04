@@ -19,6 +19,7 @@
                                     <th>No</th>
                                     <th>Nama Pajak</th>
                                     <th>Tarif Pajak</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -30,6 +31,24 @@
                                             {{ $item->namaPajak }}
                                         </td>
                                         <td>{{ $item->tarifPpn }}%</td>
+                                        <td>
+                                            <form method="POST" action="{{ url('updateStatus-pajak') }}">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                                <div class="piket">
+                                                    <input type="checkbox" name="status" id="status_{{ $item->id }}"
+                                                        onchange="updateStatusText(this)"
+                                                        @if ($item->status) checked @endif>
+                                                    <label for="status_{{ $item->id }}" class="button"></label>
+
+                                                    <div class="status-text">
+                                                        <span id="statusText_{{ $item->id }}">
+                                                            {{ $item->status ? 'Aktif' : 'Non-Aktif' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </td>
                                         <td>
                                             <div class="aksi d-flex justify-content-center">
                                                 <button class="btn btn-primary"
@@ -64,6 +83,55 @@
 
 @push('style')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+
+    <style>
+        .piket {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button {
+            width: 50px;
+            height: 25px;
+            background-color: #ccc;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            top: 3.5px;
+            left: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"]:checked+.button {
+            background-color: #3b82f6;
+            /* Tailwind blue */
+        }
+
+        input[type="checkbox"]:checked+.button::before {
+            transform: translateX(24px);
+        }
+
+        .status-text {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
 @endpush
 @push('script')
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

@@ -51,4 +51,9 @@ class RmDa1 extends Model
     {
         return $this->hasMany(Kasir::class, 'id');
     }
+
+    public function fisik()
+    {
+        return $this->hasMany(Fisik::class, 'id_rm', 'id');
+    }
 }

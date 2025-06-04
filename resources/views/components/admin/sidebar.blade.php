@@ -36,6 +36,7 @@
         'diagnosa' => 'Data Diagnosa',
         'obat' => 'Data Obat',
         'master-margin' => 'Setting Margin',
+        'master-shift' => 'Data Shift',
         'tindakan' => 'Data Tindakan Dokter',
         'ppn' => 'Data Pajak',
         'video' => 'Custom Video Antrian',
@@ -48,6 +49,26 @@
                                 </a>
                             </li>
                         @endforeach
+                    </ul>
+                </li>
+
+                <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">User</li>
+                <li class="menu-item {{ Request::is('admin/aktifitas-user/*') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons fa-solid fa-toggle-on"></i>
+                        <div>Aktifitas User</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ Request::is('admin/aktifitas-user/status-user') ? 'active' : '' }}">
+                            <a href="{{ url('admin/aktifitas-user/status-user') }}" class="menu-link">
+                                <div data-i18n="Without menu">Status User</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/aktiitas-user/kelola-pesan') ? 'active' : '' }}">
+                            <a href="{{ url('admin/aktiitas-user/kelola-pesan') }}" class="menu-link">
+                                <div data-i18n="Without menu">Kelola Pesan</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -196,6 +217,15 @@
                         class="menu-link {{ Request::is('perawat/index') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-user-nurse"></i>
                         <div data-i18n="Analytics">Perawat</div>
+                    </a>
+                </li>
+
+                {{-- Rekapan Harian --}}
+                <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Rekapan</li>
+                <li class="menu-item {{ Request::is('perawat/rekap/harian') ? 'active' : '' }}">
+                    <a href="{{ url('perawat/rekap/harian') }}" class="menu-link">
+                        <i class="menu-icon tf-icons fa-solid fa-calendar"></i>
+                        <div data-i18n="Account Settings">Rekap Kunjungan Pasien</div>
                     </a>
                 </li>
 

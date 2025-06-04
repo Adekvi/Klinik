@@ -12,6 +12,8 @@ use App\Models\Poli;
 use App\Models\RmDa1;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -26,102 +28,48 @@ class PasienController extends Controller
 
     public function storeUmum(Request $request)
     {
-        // Validasi input dari form
-        $request->validate([
-            'nik' => 'nullable|digits:16|numeric',
-            // tambahkan validasi lainnya sesuai kebutuhan
+        $request->merge([
+            'kategori' => $request->input('kategori', 'dewasa') // Default ke dewasa jika tidak ada
         ]);
 
-        if ($request->filled('nik')) {
-            // Validasi jenis kelamin sesuai dengan NIK
-            $nik = $request->nik;
-            $jenisKelamin = $this->determineGenderFromNIK($nik);
+        $request->validate([
+            'nik' => 'nullable|digits:16|numeric',
+            'kategori' => 'required|in:dewasa,anak,tanpa_identitas',
+        ]);
 
+        $nik = $request->filled('nik') ? $request->nik : null;
+        $no_rm = $request->no_rm;
+        $today = Carbon::today();
+
+        // Cek duplikasi NIK jika diisi
+        if ($nik) {
+            $jenisKelamin = $this->determineGenderFromNIK($nik);
             if ($jenisKelamin !== $request->jekel) {
                 return response()->json(['error' => 'Jenis kelamin tidak sesuai dengan NIK.'], 422);
             }
-        } else {
-            $nik = null;
-        }
 
-        $no_rm = $request->input('no_rm');
-        $today = Carbon::today();
-
-        // Cek jika ada pasien dengan nomor RM yang sama yang mendaftar hari ini
-        $existingRegistrationToday = Booking::where('no_rm', $no_rm)
-            ->whereDate('created_at', $today)
-            ->exists();
-
-        if ($existingRegistrationToday) {
-            return response()->json(['error' => 'Pasien dengan No. RM ini sudah mendaftar hari ini.'], 422);
-        }
-
-        // Cek apakah pasien sudah terdaftar hari ini
-        $existingBookingToday = Booking::where('id_pasien', function ($query) use ($request) {
-            $query->select('id')
-                ->from('pasiens')
-                ->where('nik', $request->nik);
-        })
-            ->whereDate('created_at', Carbon::today())
-            ->exists();
-
-        if ($existingBookingToday) {
-            // Jika sudah ada booking di hari yang sama
-            return response()->json(['error' => 'Pasien ini sudah mendaftar hari ini.'], 422);
-        }
-
-        // Cek jika ada pasien yang sudah terdaftar dengan no_rm yang sama
-        $existingPasien = Pasien::where('no_rm', $no_rm)->first();
-
-        if ($existingPasien) {
-            // Jika pasien sudah ada, lakukan proses booking dan antrian
-            $bookingData = [
-                'id_pasien' => $existingPasien->id,
-                'no_rm' => $existingPasien->no_rm,
-                // tambahkan field booking lainnya sesuai kebutuhan
-            ];
-            $booking = Booking::create($bookingData);
-
-            // Buat antrian perawat
-            $urutanAntrian = AntrianPerawat::max('urutan') ?? 0;
-            $antrianBaru = $urutanAntrian + 1;
-            $antrianData = [
-                'id_booking' => $booking->id,
-                'id_poli' => $request->poli,
-                'id_dokter' => $request->dokter,
-                'urutan' => $antrianBaru,
-                'status' => 'D',
-            ];
-            $antrian = AntrianPerawat::create($antrianData);
-
-            // Tambahkan ke Pasien Sehat jika diperlukan
-            $existingPasienDomisili = Pasien::where('domisili', $existingPasien->domisili)->get();
-            $now = Carbon::now();
-            if ($existingPasienDomisili->isNotEmpty()) {
-                foreach ($existingPasienDomisili as $pasien) {
-                    if (!PasienSehat::where('id_pasien', $pasien->id)->exists()) {
-                        $dataSehat = [
-                            'id_pasien' => $pasien->id,
-                            'tgl_kunjungan' => $now,
-                            'kegiatan' => 'Konseling',
-                            'status' => 'A',
-                        ];
-                        PasienSehat::create($dataSehat);
-                    }
-                }
+            // Cek apakah NIK sudah ada di database
+            $existingWithNik = Pasien::where('nik', $nik)->first();
+            if ($existingWithNik) {
+                return response()->json(['error' => 'Pasien dengan NIK ini sudah terdaftar sebelumnya.'], 422);
             }
+        }
 
-            $redirectUrl = route('pasien.show', ['id_antrian' => $antrian->id]);
-            session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
-            return response()->json(['redirect' => $redirectUrl]);
-        } else {
-            // Buat nomor RM baru untuk pasien baru
+        // Cek duplikasi No RM jika diisi
+        if ($no_rm) {
+            $existingWithNoRm = Pasien::where('no_rm', $no_rm)->first();
+            if ($existingWithNoRm) {
+                return response()->json(['error' => 'Pasien dengan No. RM ini sudah terdaftar sebelumnya.'], 422);
+            }
+        }
+
+        // Jika pasien baru
+        return DB::transaction(function () use ($request, $nik) {
             $nomorUrutanTerakhir = Pasien::max('number') ?? 0;
             $nomorUrutanBaru = $nomorUrutanTerakhir + 1;
             $nomorUrutan = str_pad($nomorUrutanBaru, 5, '0', STR_PAD_LEFT);
 
-            // Data pasien baru
-            $data = [
+            $pasienBaru = Pasien::create([
                 'no_rm' => $nomorUrutan,
                 'number' => $nomorUrutanBaru,
                 'nik' => $nik,
@@ -135,54 +83,43 @@ class PasienController extends Controller
                 'jenis_pasien' => $request->jenis_pasien,
                 'bpjs' => $request->bpjs,
                 'pekerjaan' => $request->pekerjaan,
-            ];
+                'status' => $request->status,
+                'kategori' => $request->kategori,
+            ]);
 
-            // dd($data);
-
-            // Simpan data pasien baru
-            $pasien = Pasien::create($data);
-
-            // Proses booking dan antrian
-            $bookingData = [
-                'id_pasien' => $pasien->id,
+            $booking = Booking::create([
+                'id_pasien' => $pasienBaru->id,
                 'no_rm' => $nomorUrutan,
-                // tambahkan field booking lainnya sesuai kebutuhan
-            ];
-            $booking = Booking::create($bookingData);
+            ]);
 
-            // Buat antrian perawat
             $urutanAntrian = AntrianPerawat::max('urutan') ?? 0;
-            $antrianBaru = $urutanAntrian + 1;
-            $antrianData = [
+            $antrian = AntrianPerawat::create([
                 'id_booking' => $booking->id,
                 'id_poli' => $request->poli,
                 'id_dokter' => $request->dokter,
-                'urutan' => $antrianBaru,
+                'urutan' => $urutanAntrian + 1,
                 'status' => 'D',
-            ];
-            $antrian = AntrianPerawat::create($antrianData);
+            ]);
 
-            // Tambahkan ke Pasien Sehat jika diperlukan
-            $existingPasienDomisili = Pasien::where('domisili', $data['domisili'])->get();
-            $now = Carbon::now();
-            if ($existingPasienDomisili->isNotEmpty()) {
-                foreach ($existingPasienDomisili as $pasien) {
-                    if (!PasienSehat::where('id_pasien', $pasien->id)->exists()) {
-                        $dataSehat = [
-                            'id_pasien' => $pasien->id,
-                            'tgl_kunjungan' => $now,
-                            'kegiatan' => 'Konseling',
-                            'status' => 'A',
-                        ];
-                        PasienSehat::create($dataSehat);
-                    }
-                }
-            }
+            PasienSehat::create([
+                'id_pasien' => $pasienBaru->id,
+                'tgl_kunjungan' => now(),
+                'kegiatan' => 'Konseling',
+                'status' => 'A',
+            ]);
 
-            $redirectUrl = route('pasien.show', ['id_antrian' => $antrian->id]);
+            // session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
+            // return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);
+            // Kondisikan redirect berdasarkan status login
             session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
-            return response()->json(['redirect' => $redirectUrl]);
-        }
+            if (!Auth::check()) {
+                // Pengguna belum login (pendaftaran mandiri)
+                return response()->json(['redirect' => route('/')]);
+            } else {
+                // Pengguna sudah login
+                return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);
+            }
+        });
     }
 
     public function storeBpjs(Request $request)
@@ -205,12 +142,10 @@ class PasienController extends Controller
             return response()->json(['error' => 'Pasien tidak ditemukan'], 422);
         }
 
-        // Cek apakah pasien sudah mendaftar hari ini
-        $existingBookingToday = Booking::where('id_pasien', function ($query) use ($request) {
-            $query->select('id')
-                ->from('pasiens')
-                ->where('nik', $request->nik);
-        })
+        // // Cek apakah pasien sudah mendaftar hari ini
+        $pasienIds = Pasien::where('nik', $request->nik)->pluck('id');
+
+        $existingBookingToday = Booking::whereIn('id_pasien', $pasienIds)
             ->whereDate('created_at', Carbon::today())
             ->exists();
 
@@ -240,6 +175,8 @@ class PasienController extends Controller
                 return response()->json(['error' => 'Gagal memperbarui data pasien'], 500);
             }
 
+            // dd($updated);
+
             // Membuat booking
             $bookingData = [
                 'id_pasien' => $existingPasien->id,
@@ -267,9 +204,19 @@ class PasienController extends Controller
                 return response()->json(['error' => 'Gagal membuat antrian pasien'], 500);
             }
 
-            // Redirect ke metode `show` menggunakan ID antrian yang benar
-            $redirectUrl = route('pasien.show', ['id_antrian' => $antrian->id]);
-            return response()->json(['redirect' => $redirectUrl]);
+            // Kondisikan redirect berdasarkan status login
+            session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
+            if (!Auth::check()) {
+                // Pengguna belum login (pendaftaran mandiri)
+                return response()->json(['redirect' => route('/')]);
+            } else {
+                // Pengguna sudah login
+                return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);
+            }
+
+            // // Redirect ke metode `show` menggunakan ID antrian yang benar
+            // $redirectUrl = route('pasien.show', ['id_antrian' => $antrian->id]);
+            // return response()->json(['redirect' => $redirectUrl]);
         } catch (\Exception $e) {
             Log::error('Error saat memperbarui pasien: ' . $e->getMessage());
             return response()->json(['error' => 'Terjadi kesalahan saat menyimpan data'], 500);

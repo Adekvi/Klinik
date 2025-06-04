@@ -17,6 +17,7 @@ class CreatePpnPajaksTable extends Migration
             $table->id();
             $table->string('namaPajak')->nullable();
             $table->string('tarifPpn')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

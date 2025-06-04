@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pasien extends Model
 {
     protected $fillable = [
+        'id',
         'no_rm',
         'number',
         'nama_pasien',
@@ -23,6 +24,8 @@ class Pasien extends Model
         'bpjs',
         'pekerjaan',
         'kode_antrian',
+        'kategori',
+        'status',
     ];
 
     public function getUploadStatusAttribute()
@@ -58,5 +61,10 @@ class Pasien extends Model
     public function kasir()
     {
         return $this->hasMany(Kasir::class, 'id');
+    }
+
+    public function fisik()
+    {
+        return $this->hasMany(Fisik::class, 'id_pasien', 'id');
     }
 }

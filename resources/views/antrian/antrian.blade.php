@@ -22,18 +22,18 @@
             flex-direction: column;
             background-color: rgba(31, 125, 108, 0.95);
         }
-    
+
         .container-fluid {
             width: 100%;
             margin: 0 auto;
         }
-    
+
         @media (max-width: 768px) {
             .container-fluid {
                 width: 80%;
             }
         }
-    
+
         .header {
             width: 100%;
             position: fixed;
@@ -42,47 +42,47 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to right top, #008B8B,rgba(98, 231, 207, 1));
+            background: linear-gradient(to right top, #008B8B, rgba(98, 231, 207, 1));
             padding: 10px 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             z-index: 999;
         }
-    
+
         .header img {
             width: 100px;
             margin-right: 10px;
         }
-    
+
         .header h4 {
             margin: 0;
             font-weight: bold;
             font-family: 'Open Sans', sans-serif;
             color: white;
         }
-    
+
         @media screen and (min-width: 1024px) {
             body {
                 zoom: 75%;
             }
         }
-    
+
         .header .date-time {
             text-align: right;
             color: white;
         }
-    
+
         .header .date-time .tanggal,
         .header .date-time .jam {
             margin: 0;
             padding: 0;
             color: white;
         }
-    
+
         .header .date-time .jam h1 {
             font-weight: bold;
             font-size: 20px;
         }
-    
+
         .main-container {
             width: 100%;
             display: flex;
@@ -93,7 +93,7 @@
             padding: 10px;
             box-sizing: border-box;
         }
-    
+
         .video-container {
             width: 100%;
             max-width: 670px;
@@ -107,7 +107,7 @@
             justify-content: center;
             box-sizing: border-box;
         }
-    
+
         .info-container {
             width: 100%;
             max-width: 600px;
@@ -115,7 +115,7 @@
             flex-direction: column;
             gap: 20px;
         }
-    
+
         .info-box {
             width: 100%;
             background: #008B8B;
@@ -129,7 +129,7 @@
             justify-content: center;
             box-sizing: border-box;
         }
-    
+
         .inpo-boxs {
             width: 100%;
             background: #fff;
@@ -143,42 +143,42 @@
             justify-content: center;
             box-sizing: border-box;
         }
-    
+
         .table-responsive {
             width: 100%;
         }
-    
+
         .info-table {
             width: 100%;
             border-collapse: collapse;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-    
+
         .info-table thead {
             background-color: #008B8B;
             color: white;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-    
+
         .info-table th,
         .info-table td {
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-    
+
         .info-table tr:nth-child(even) {
             background-color: #f2f2f2;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-    
+
         .video-container video,
         .video-container img {
             width: 100%;
             height: auto;
         }
-    
+
         #stats-container {
             width: 100%;
             display: flex;
@@ -190,8 +190,8 @@
             box-sizing: border-box;
             margin-bottom: 80px;
         }
-    
-        #stats-container > div {
+
+        #stats-container>div {
             flex: 1 1 200px;
             max-width: 280px;
             text-align: center;
@@ -204,26 +204,26 @@
             transition: transform 0.3s ease;
             box-sizing: border-box;
         }
-    
-        #stats-container > div:hover {
+
+        #stats-container>div:hover {
             transform: translateY(-10px);
         }
-    
-        #stats-container > div p {
+
+        #stats-container>div p {
             margin: auto;
             font-size: 20px;
             font-weight: bold;
             margin-top: -20px;
         }
-    
-        #stats-container > div p:first-child {
+
+        #stats-container>div p:first-child {
             font-weight: bold;
             color: #008B8B;
             font-size: 80px;
             margin-bottom: 0px;
             margin-top: -30px;
         }
-    
+
         .footer {
             width: 100%;
             position: fixed;
@@ -235,32 +235,33 @@
             text-align: center;
             padding: 10px 0;
         }
-    
+
         .marquee {
             display: block;
             white-space: nowrap;
             overflow: hidden;
             box-sizing: border-box;
         }
-    
+
         .marquee span {
             display: inline-block;
             padding-left: 100%;
             animation: marquee 25s linear infinite;
         }
-    
+
         @keyframes marquee {
             from {
                 transform: translate(0, 0);
             }
-    
+
             to {
                 transform: translate(-100%, 0);
             }
         }
-    
+
         .table-responsive {
-            height: 200px; /* Sesuaikan tinggi container */
+            height: 200px;
+            /* Sesuaikan tinggi container */
             overflow: hidden;
             position: relative;
         }
@@ -269,6 +270,7 @@
             0% {
                 transform: translateY(100%);
             }
+
             100% {
                 transform: translateY(-100%);
             }
@@ -281,7 +283,8 @@
             top: 0;
         }
 
-        .info-table thead, .info-table tbody tr {
+        .info-table thead,
+        .info-table tbody tr {
             display: table;
             width: 100%;
             table-layout: fixed;
@@ -293,7 +296,7 @@
             z-index: 1;
         }
     </style>
-    
+
 </head>
 
 <body>
@@ -320,20 +323,25 @@
                                 Your browser does not support the video tag.
                             </video>
                         @else
-                            <img src="{{ asset('storage/' . $item->video_path) }}" class="mediaItem" alt="Uploaded Image">
+                            <img src="{{ asset('storage/' . $item->video_path) }}" class="mediaItem"
+                                alt="Uploaded Image">
                         @endif
                     @endforeach
                 </div>
             </div>
             <div class="info-container col-lg-6 col-md-12">
                 <div class="info-box">
-                    <strong><h4 style="color: white">Informasi<span style="color: #FFE033"> Terkini?</strong></span></h4>
+                    <strong>
+                        <h4 style="color: white">Informasi<span style="color: #FFE033"> Terkini?
+                    </strong></span></h4>
                     <div id="infoContent">
                         <!-- Konten tambahan bisa Anda tambahkan di sini -->
                     </div>
                 </div>
                 <div class="inpo-boxs">
-                    <strong><h4 style="color: #008B8B">Daftar<span style="color: #FFE033"> Antrian Pasien</strong></span></h4>
+                    <strong>
+                        <h4 style="color: #008B8B">Daftar<span style="color: #FFE033"> Antrian Pasien
+                    </strong></span></h4>
                     <div id="inpoContent2">
                         <div class="table-responsive">
                             <table class="info-table table table-striped">
@@ -341,7 +349,7 @@
                                     <tr>
                                         {{-- <th>No. Antrian</th> --}}
                                         <th>Nama</th>
-                                        <th>Umur</th>
+                                        <th>Jenis Kelamin</th>
                                         <th>Alamat</th>
                                         <th>Status</th>
                                     </tr>
@@ -360,27 +368,34 @@
                                             <tr class="text-center">
                                                 {{-- <td>{{ $item->antrianDokter }}</td> --}}
                                                 <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }} Tahun</td>
+                                                @if ($item->booking->pasien->jekel)
+                                                    <td>{{ $item->booking->pasien->jekel ?? 'Perempuan' }}</td>
+                                                @else
+                                                    <td>{{ $item->booking->pasien->jekel ?? 'Laki-laki' }}</td>
+                                                @endif
+                                                </td>
+                                                {{-- <td>{{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }}
+                                                    Tahun</td> --}}
                                                 <td>{{ $item->booking->pasien->alamat_asal }}</td>
                                                 <td>
                                                     @switch($item->status)
                                                         @case('D')
                                                             Datang
-                                                            @break
-                                                
+                                                        @break
+
                                                         @case('B')
                                                             Periksa
-                                                            @break
-                                                
+                                                        @break
+
                                                         @case('P')
                                                             Obat
-                                                            @break
-                                                
+                                                        @break
+
                                                         @default
-                                                            Belum Ada Pasien
+                                                            Pendaftaran
                                                     @endswitch
                                                 </td>
-                                                
+
                                             </tr>
                                         @endforeach
                                     @endif
@@ -391,7 +406,7 @@
                 </div>
             </div>
         </div>
-    
+
         <div id="stats-container">
             <div id="total">
                 <p class="totalPasien">{{ $totalHariIni }}</p>
@@ -412,10 +427,10 @@
                     {{ $nomorAntrianGigi }}
                 </p>
                 <p class="namePoli">Poli Gigi</p>
-            </div>        
+            </div>
             <div id="obat">
                 <p id="nomorAntrianObat">{{ $nomorAntrianObat }}</p>
-                <p class="nameObat">Obat</p>
+                <p class="nameObat">Ruang Farmasi</p>
             </div>
         </div>
         <footer class="footer">
@@ -448,7 +463,12 @@
             function updateClock() {
                 var now = new Date();
                 var tanggalElement = document.getElementById('tanggal');
-                var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
                 tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
                 var jamElement = document.getElementById('jam');
@@ -486,7 +506,9 @@
                     nextMediaItem.play().catch(function(error) {
                         console.log("Autoplay error:", error);
                     });
-                    nextMediaItem.addEventListener('ended', playNextMediaItem, { once: true });
+                    nextMediaItem.addEventListener('ended', playNextMediaItem, {
+                        once: true
+                    });
                 } else {
                     setTimeout(playNextMediaItem, 5000);
                 }
@@ -499,7 +521,9 @@
                 currentMediaItem.play().catch(function(error) {
                     console.log("Autoplay error:", error);
                 });
-                currentMediaItem.addEventListener('ended', playNextMediaItem, { once: true });
+                currentMediaItem.addEventListener('ended', playNextMediaItem, {
+                    once: true
+                });
             } else {
                 setTimeout(playNextMediaItem, 5000);
             }
@@ -523,4 +547,3 @@
 </body>
 
 </html>
-

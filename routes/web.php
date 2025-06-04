@@ -16,9 +16,11 @@ use App\Http\Controllers\Admin\Master\DataUserController;
 use App\Http\Controllers\Admin\Master\PidioController;
 use App\Http\Controllers\Admin\Master\PotoController;
 use App\Http\Controllers\Admin\Master\PpnController;
+use App\Http\Controllers\Admin\Master\ShiftController;
 use App\Http\Controllers\Admin\Master\TindakanController;
 use App\Http\Controllers\Admin\Master\TtdController;
 use App\Http\Controllers\Admin\Obat\MasukObatController;
+use App\Http\Controllers\Admin\Pesan\ChatController;
 use App\Http\Controllers\Admin\Rekapan\AncController;
 use App\Http\Controllers\Admin\Rekapan\DiagnosaController;
 use App\Http\Controllers\Admin\Rekapan\HarianController;
@@ -67,7 +69,7 @@ use Illuminate\Support\Facades\Storage;
 //     return view('');
 // });
 
-Route::get('/home', [HomeController::class, 'index']);
+// Route::get('/home', [HomeController::class, 'index']);
 Route::get('/', [HomeController::class, 'depan'])->name('/');
 Route::get('/antrian', [HomeController::class, 'dashboard']);
 
@@ -85,7 +87,12 @@ Route::get('/get_pasien_bpjs', [PasienController::class, 'getPasienDetailBpjs'])
 Route::get('pasien/index', [PasienController::class, 'index'])->name('pasien.index');
 
 // Pasien Baru
-Route::post('/pasien/store-umum', [PasienController::class, 'storeUmum']);
+Route::post('/pasien/store-umum', [PasienController::class, 'storeUmum'])->name('pasien.store-umum');
+
+// TOKEN
+Route::get('/refresh-csrf', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
 
 // Pasien Lama
 Route::post('/pasien/store-bpjs', [PasienController::class, 'storeBpjs']);
@@ -163,6 +170,9 @@ Route::group(['middleware' => ['auth', 'perawat']], function () {
 
     // Route untuk mendapatkan lewati
     Route::post('perawat/lewati/{id}', [PerawatController::class, 'lewatiAntrian'])->name('perawat.lewati');
+
+    // Rekap pasien
+    Route::get('perawat/rekap/harian', [PerawatController::class, 'rekapHarian'])->name('perawat.rekap.harian');
 });
 
 Route::group(['middleware' => ['auth', 'dokter']], function () {
@@ -175,6 +185,7 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
     Route::get('dokter/index', [DokterController::class, 'index'])->name('dokter.index');
     Route::get('dokter/soap/{id}', [DokterController::class, 'soap'])->name('dokter.soap');
     Route::post('dokter/store/{id}', [DokterController::class, 'store'])->name('dokter.store');
+    Route::put('soap/update/{id}', [DokterController::class, 'updateSoap'])->name('soap.update');
 
     // datapasien telah diperiksa
     Route::get('dokter/periksa', [BerandaDokterController::class, 'periksa'])->name('dokter.periksa');
@@ -183,11 +194,12 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
     Route::get('dokter/tubuh/{id}', [DokterController::class, 'dokterUmum'])->name('dokter.tubuh');
 
     // Dokter Gigi
-    Route::get('dokter/odontogram', [DokterController::class, 'dokterGigi'])->name('dokter.odontogram');
+    Route::get('dokter/odontogram/{id}', [DokterController::class, 'dokterGigi'])->name('dokter.odontogram');
 
     // tambah gambar dokter
     Route::post('dokter/tambah/{id}', [DokterController::class, 'tambah'])->name('dokter.tambah');
-    Route::put('dokter/edit/{id}', [DokterController::class, 'editgambar'])->name('dokterGambar.edit');
+
+    Route::put('dokter/edit-fisik/{id}', [DokterController::class, 'editUmumGigi'])->name('dokter.editUmumGigi');
 
     Route::get('/search-diagnosa', [DokterController::class, 'searchDiagnosa']);
     Route::get('/resep-autocomplete', [DokterController::class, 'autocomplete']);
@@ -213,6 +225,10 @@ Route::group(['middleware' => ['auth', 'apoteker']], function () {
     Route::put('apoteker/dataobat-edit/{id}', [ApotekerObatController::class, 'edit'])->name('apoteker.edit');
     Route::delete('apoteker/dataobat-hapus/{id}', [ApotekerObatController::class, 'hapus'])->name('apoteker.hapus');
     Route::get('apoteker/master/obat/cari', [ApotekerObatController::class, 'search'])->name('apoteker.obat.cari');
+
+    // UPLOUD OBAT
+    Route::post('/apoteker/import', [ApotekerObatController::class, 'uploudObat'])->name('resep.import');
+    Route::get('/master/obat/download-template', [ApotekerObatController::class, 'downloadTemplate'])->name('resep.downloadTemplate');
 
     // Stok Obat
     Route::get('apoteker/stok-Obat', [StokObatApotekerController::class, 'stokObat'])->name('apoteker.stok.obat');
@@ -252,6 +268,11 @@ Route::post('/panggil-antrian-perawat', [PerawatController::class, 'panggilAntri
 Route::post('/panggil-antrian-obat', [ObatController::class, 'panggilAntrianObat'])->name('antrian.panggil-obat');
 Route::post('/simpan-video', [DataVideController::class, 'saveVideo'])->name('simpan-video');
 
+// Customer service - Chat
+// web.php
+Route::get('/chat/fetchMessages/{userId}', [ChatController::class, 'fetchMessages']);
+Route::post('/chat/sendMessage', [ChatController::class, 'sendMessage']);
+
 // ROUTE ADMIN
 Route::group(['middleware' => ['auth', 'admin']], function () {
     // dashboard
@@ -262,6 +283,12 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
     // Informasi
     Route::get('admin/info', [InfoController::class, 'index'])->name('admin.info');
+
+    // Aktifitas User
+    Route::get('admin/aktifitas-user/status-user', [InfoController::class, 'controlUser']);
+
+    // Kelola Pesan
+    Route::get('admin/aktiitas-user/kelola-pesan', [ChatController::class, 'index'])->name('admin.kelola.pesan');
 
     // master poli
     Route::get('admin/master/datapoli', [DataPoliController::class, 'index'])->name('master.datapoli');
@@ -312,6 +339,13 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::put('admin/master/margin-edit/{id}', [DataMarginController::class, 'edit'])->name('edit.margin');
     Route::delete('admin/master/margin-hapus/{id}', [DataMarginController::class, 'hapus'])->name('hapus.margin');
 
+    // master shift
+    Route::get('admin/master/master-shift', [ShiftController::class, 'index'])->name('master-shift');
+    Route::post('admin/master/shift-tambah', [ShiftController::class, 'tambah'])->name('master.shift-store');
+    Route::put('admin/master/shift-edit/{id}', [ShiftController::class, 'edit'])->name('edit.shift');
+    Route::delete('admin/master/shift-hapus/{id}', [ShiftController::class, 'hapus'])->name('hapus.shift');
+    Route::post('updateStatus-shift', [ShiftController::class, 'updateStatus'])->name('updateStatus');
+
     // master user
     Route::get('admin/master/user', [DataUserController::class, 'index'])->name('master.user');
     Route::post('admin/tambah/user', [DataUserController::class, 'store'])->name('tambah.user');
@@ -345,6 +379,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('admin/master/ppn-tambah', [PpnController::class, 'tambah'])->name('admin.master.ppn.tambah');
     Route::put('admin/master/ppn-edit/{id}', [PpnController::class, 'edit'])->name('admin.master.ppn.edit');
     Route::delete('admin/master/ppn-hapus/{id}', [PpnController::class, 'hapus'])->name('admin.master.ppn.hapus');
+    Route::post('updateStatus-pajak', [PpnController::class, 'updateStatus'])->name('updateStatus');
 
     // REKAPAN
 

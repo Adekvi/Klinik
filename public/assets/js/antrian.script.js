@@ -71,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
             success: function (responsePerawat) {
                 $('#nomorAntrianPerawat').text(responsePerawat.nomorAntrianPerawat);
                 $('#perawat').html(responsePerawat.view);
-                playAudio(responsePerawat.nomorAntrianPerawat, "Silahkan Menuju Poli " + poli);
+                // playAudio(responsePerawat.nomorAntrianPerawat, "Silahkan Menuju Poli " + poli);
+                playAudio(responsePerawat.nomorAntrianPerawat, "Silahkan Menuju Pendaftaran");
             },
             error: function (error) {
                 console.error('Gagal memuat tampilan antrian:', error);
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             success: function (responseObat) {
                 $('#nomorAntrianObat').text(responseObat.nomorAntrianObat);
                 $('#obat').html(responseObat.view);
-                playAudio(responseObat.nomorAntrianObat, "Silahkan Menuju ke Apotik");
+                playAudio(responseObat.nomorAntrianObat, "Silahkan Menuju Ruang Farmasi");
             },
             error: function (error) {
                 console.error('Gagal memuat tampilan antrian:', error);

@@ -1,10 +1,10 @@
-<?php 
-    if (!function_exists('Rupiah')) {
-        function Rupiah($angka)
-        {
-            return "Rp " . number_format($angka, 0, ',', '.');
-        }
+<?php
+if (!function_exists('Rupiah')) {
+    function Rupiah($angka)
+    {
+        return 'Rp ' . number_format($angka, 0, ',', '.');
     }
+}
 ?>
 
 @foreach ($obat as $item)
@@ -17,6 +17,8 @@
     @endphp
     <tr class="text-center" style="white-space: nowrap">
         <td>{{ ($obat->currentPage() - 1) * $obat->perPage() + $loop->iteration }}</td>
+        <td>{{ $item->golongan ?? '-' }}</td>
+        <td>{{ $item->jenis_sediaan }}</td>
         <td>{{ $item->nama_obat }}</td>
         <td>{{ $item->harga_pokok ? Rupiah($item->harga_pokok) : '0' }}</td>
         <td>{{ Rupiah($item->harga_jual) }}</td>
@@ -34,10 +36,12 @@
         </td>
         <td>
             <div class="aksi d-flex" style="white-space: nowrap">
-                <button type="button" data-bs-target="#editobat{{ $item->id }}" data-bs-toggle="modal" class="btn btn-primary mx-2">
+                <button type="button" data-bs-target="#editobat{{ $item->id }}" data-bs-toggle="modal"
+                    class="btn btn-primary mx-2">
                     <i class="fa-solid fa-cart-shopping"></i> Stok
                 </button>
-                <button type="button" data-bs-target="#hapusobat{{ $item->id }}" data-bs-toggle="modal" class="btn btn-danger mx-2">
+                <button type="button" data-bs-target="#hapusobat{{ $item->id }}" data-bs-toggle="modal"
+                    class="btn btn-danger mx-2">
                     <i class="fa-solid fa-trash "></i> Hapus
                 </button>
             </div>

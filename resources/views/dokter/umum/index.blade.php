@@ -97,26 +97,24 @@
                                 <!-- Kolom Kiri: Gambar -->
                                 <div class="col-md-6 mt-2">
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary"
+                                        <button type="button" class="btn btn-outline-primary"
                                             onclick="showImage('depan')">Depan</button>
-                                        <input name="depan" class="form-control mt-2 mb-2" id="depan" rows="2"
-                                            placeholder="Belum Ada Catatan">
+                                        <textarea name="depan" id="depan" class="form-control mt-2 mb-2" cols="10" rows="5"
+                                            placeholder="Belum ada catatan"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary"
+                                        <button type="button" class="btn btn-outline-primary"
                                             onclick="showImage('samping')">Samping</button>
-                                        <input name="samping" class="form-control mt-2 mb-2" id="samping" rows="2"
-                                            placeholder="Belum Ada Catatan">
+                                        <textarea name="samping" id="samping" class="form-control mt-2 mb-2" cols="10" rows="5"
+                                            placeholder="Belum ada catatan"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary"
+                                        <button type="button" class="btn btn-outline-primary"
                                             onclick="showImage('belakang')">Belakang</button>
-                                        <input name="belakang" class="form-control mt-2 mb-2" id="belakang" rows="2"
-                                            placeholder="Belum Ada Catatan">
+                                        <textarea name="belakang" id="belakang" class="form-control mt-2 mb-2" cols="10" rows="5"
+                                            placeholder="Belum ada catatan"></textarea>
                                     </div>
                                     <div class="tutup" style="margin-top: 20px; margin-bottom: 30px;">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Tutup</button>
                                         <button type="submit" class="btn btn-primary ml-1">Simpan</button>
                                     </div>
                                 </div>
@@ -174,31 +172,5 @@
         document.getElementById("lihatGambarButton").addEventListener("click", function() {
             showImage();
         });
-
-        function showImage(position) {
-            var imageElement = document.getElementById('displayedImage');
-
-            if (position === 'depan') {
-                imageElement.src = '{{ asset('assets/images/depan.png') }}';
-                imageElement.alt = 'Depan';
-            } else if (position === 'samping') {
-                imageElement.src = '{{ asset('assets/images/samping.png') }}';
-                imageElement.alt = 'Samping';
-            } else if (position === 'belakang') {
-                imageElement.src = '{{ asset('assets/images/belakang.png') }}';
-                imageElement.alt = 'Belakang';
-            }
-            // Gigi
-            else if (position === 'gigi') {
-                imageElement.src = '{{ asset('assets/images/atas.png') }}';
-                imageElement.alt = 'Gigi';
-            } else if (position === 'gigidepan') {
-                imageElement.src = '{{ asset('assets/images/gigi_depan.png') }}';
-                imageElement.alt = 'Gigidepan';
-            } else if (position === 'gigibelakang') {
-                imageElement.src = '{{ asset('assets/images/gigi_belakang.png') }}';
-                imageElement.alt = 'Gigibelakang';
-            }
-        }
     </script>
 @endpush

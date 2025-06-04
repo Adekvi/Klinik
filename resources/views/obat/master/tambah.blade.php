@@ -3,13 +3,27 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Tambah Obat</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: rgb(0, 0, 0)">Tambah Obat</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ url('apoteker/dataobat-tambah') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Golongan</label>
+                                <input type="text" name="golongan" id="golongan" class="form-control mt-2 mb-2"
+                                    placeholder="Golongan">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Jenis Sediaan</label>
+                                <input type="text" name="jenis_sediaan" id="jenis_sediaan"
+                                    class="form-control mt-2 mb-2" placeholder="Jenis Sediaan">
+                            </div>
+                        </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="nama_obat">Nama Obat</label>

@@ -9,32 +9,41 @@ class Fisik extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'id_dokter',
-        'id_pasien',
-        'depan',
-        'samping',
-        'belakang',
-        'gigi',
-        'tanggal',
-        'no_gigi',
-        'keterangan',
-    ];
+    protected $guarded = [];
 
-    // AntrianDokter.php
-    public function booking()
+    public function dokter()
     {
-        return $this->belongsTo(Booking::class, 'id_booking');
+        return $this->belongsTo(DataDokter::class, 'id_dokter', 'id');
     }
 
     // Booking.php
     public function pasien()
     {
-        return $this->belongsTo(Pasien::class, 'id_pasien');
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id');
+    }
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'id_booking', 'id');
+    }
+
+    public function rm()
+    {
+        return $this->belongsTo(RmDa1::class, 'id_rm', 'id');
+    }
+
+    public function isian()
+    {
+        return $this->belongsTo(IsianPerawat::class, 'id_isian', 'id');
     }
 
     public function antrianDokter()
     {
-        return $this->belongsTo(AntrianDokter::class, 'id');
+        return $this->belongsTo(AntrianPerawat::class, 'id');
+    }
+
+    public function soap()
+    {
+        return $this->hasMany(Soap::class, 'id');
     }
 }

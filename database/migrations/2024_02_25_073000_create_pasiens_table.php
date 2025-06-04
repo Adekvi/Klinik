@@ -28,6 +28,8 @@ class CreatePasiensTable extends Migration
             $table->string('jenis_pasien');
             $table->string('bpjs')->nullable();
             $table->string('pekerjaan')->nullable();
+            $table->enum('kategori', ['dewasa', 'anak', 'tanpa_identitas'])->default('dewasa')->nullable();
+            $table->enum('status', ['baru', 'lama'])->default('baru')->nullable();
             $table->timestamps();
         });
     }

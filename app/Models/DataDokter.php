@@ -42,4 +42,9 @@ class DataDokter extends Model
     {
         return $this->hasMany(Kasir::class, 'id');
     }
+
+    public function fisik()
+    {
+        return $this->hasMany(Fisik::class, 'id_dokter', 'id');
+    }
 }

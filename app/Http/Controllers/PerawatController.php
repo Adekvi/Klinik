@@ -14,6 +14,7 @@ use App\Models\Soap;
 use App\Models\TtdMedis;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PerawatController extends Controller
 {
@@ -44,6 +45,8 @@ class PerawatController extends Controller
 
         // Menjaga parameter pencarian tetap ada saat navigasi halaman
         $pasien->appends(['search' => $search, 'entries' => $entries]);
+
+        // dd($pasien);
 
         $periksaSearch = $request->input('periksa_search');
         $periksaEntries = $request->input('periksa_entries', 10); // Default 10
@@ -121,16 +124,32 @@ class PerawatController extends Controller
         $antrianPerawat = AntrianPerawat::where('id', $id)->get()->first();
         $now = Carbon::now();
         // dd($data);
+
         if (!empty($data['idrm'])) {
+
+            if ($request->filled('id_pasien') && $request->filled('nama_pasien')) {
+                $idPasien = $request->id_pasien;
+                $newNama = $request->nama_pasien;
+
+                $pasien = Pasien::findOrFail($idPasien);
+
+                if (strtolower(trim($pasien->nama_pasien)) !== strtolower(trim($newNama))) {
+                    $pasien->nama_pasien = $newNama;
+                    $pasien->save();
+
+                    Log::info("Update nama pasien menjadi: $newNama");
+                }
+            }
+
             $anamnesa = AntrianPerawat::where('id_rm', $data['idrm'])->get()->first();
             $dataAnamnesis = [
                 'id_poli' => $antrianPerawat->id_poli,
                 'id_dokter' => $antrianPerawat->id_dokter,
-                // 'a_keluhan_utama' => $request->has('a_keluhan_utama') ? $data['a_keluhan_utama'] : null,
                 'a_keluhan_utama' => $data['a_keluhan_utama'],
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
+
             $dataIsian = [
                 'id_poli' => $antrianPerawat->id_poli,
                 'id_dokter' => $antrianPerawat->id_dokter,
@@ -152,8 +171,45 @@ class PerawatController extends Controller
             ];
 
             AntrianPerawat::where('id', $id)->update($updateAntrianP);
+
+            // Simpan data AntrianDokter
+            $antrianDokter = [
+                'id_booking' => $antrianPerawat->id_booking, // Menggunakan id_booking dari antrianPerawat
+                'id_rm' => $data['idrm'],
+                'id_poli' => $antrianPerawat->id_poli,
+                'id_isian' => $isianId, // id_isian dari IsianPerawat yang telah disimpan
+                'id_dokter' => $antrianPerawat->id_dokter,
+                'number' => $antrianPerawat->number,
+                'kode_antrian' => $antrianPerawat->kode_antrian, // Mengambil kode_antrian yang dihasilkan
+                'status' => 'M',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            // dd($dataAnamnesis, $antrianDokter);
+
+            AntrianDokter::create($antrianDokter);
+
             return redirect()->route('perawat.index');
         } else {
+
+            if ($request->filled('id_pasien') && $request->filled('nama_pasien')) {
+                $idPasien = $request->id_pasien;
+                $newNama = $request->nama_pasien;
+
+                $pasien = Pasien::findOrFail($idPasien);
+
+                if (strtolower(trim($pasien->nama_pasien)) !== strtolower(trim($newNama))) {
+                    $pasien->nama_pasien = $newNama;
+                    $pasien->save();
+
+                    Log::info("Update nama pasien menjadi: $newNama");
+
+                    // Debug output untuk memastikan data berubah
+                    // dd($pasien);
+                }
+            }
+
             $booking = Booking::where('id', $antrianPerawat->id_booking)->get()->first();
 
             // Ambil id_ttd_medis dari request
@@ -294,33 +350,93 @@ class PerawatController extends Controller
                 // 'ak_ttdperawat_bidan' => $request->ak_ttdperawat_bidan
             ];
 
-            // dd($dataAnamnesis, $data2);
-
             $isianId = IsianPerawat::create($data2);
             $IdIsian = $isianId->id;
             $isian = IsianPerawat::find($IdIsian);
 
-            // dd($isian);
-
             $updateAntrianP = [
-                'status' => 'M',
+                'status' => 'M', // Menunggu
                 'id_rm' => $IdAnamnesis,
                 'id_isian' => $isian->id,
             ];
+
+            // dd($dataAnamnesis, $data2, $updateAntrianP);
+
             AntrianPerawat::where('id_booking', $booking->id)->update($updateAntrianP);
+
+            // Ambil data pasien
+            $pasien = Pasien::find($booking->id_pasien); // atau dari mana pun id_pasien berasal
+
+            // Mendapatkan nomor antrian terakhir untuk hari ini
+            $lastQueueToday = AntrianDokter::whereDate('created_at', now())
+                ->whereNotNull('number')
+                ->latest()
+                ->first();
+
+            $lastNumber = $lastQueueToday ? $lastQueueToday->number + 1 : 1; // Jika ada, increment nomor, jika tidak, mulai dari 1
+
+            // Menentukan kode_antrian berdasarkan id_poli
+            $poli = $antrianPerawat->id_poli; // Anda perlu menyesuaikan ini dengan hubungan antara AntrianPerawat dan Poli
+            $kodeAntrianPrefix = ($poli == 1) ? 'A' : 'B'; // Misalnya, Anda bisa menggunakan id poli tertentu untuk menentukan prefiks
+
+            // Membuat kode_antrian baru
+            $antrianBaru = $kodeAntrianPrefix . str_pad($lastNumber, 3, '0', STR_PAD_LEFT); // Mengubah panjang menjadi 3
+
+            // Siapkan data antrian untuk disimpan
+            $antrianDokter = [
+                'id_booking' => $booking->id,
+                'id_poli' => $antrianPerawat->id_poli,
+                'id_dokter' => $antrianPerawat->id_dokter,
+                'id_rm' => $IdAnamnesis,
+                'id_isian' => $isian->id,
+                'id_ttd_medis' => $id_ttd_medis,
+                'number' => $pasien->number,
+                'kode_antrian' => $antrianBaru, // Menggunakan kode antrian yang telah dibuat
+                'status' => 'M',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            // dd($dataAnamnesis, $data2, $antrianDokter);
+
+            AntrianDokter::create($antrianDokter);
+
             return redirect()->route('perawat.index')->with('success', 'Pasien Telah Di Asesmen');
         }
     }
 
-    // public function pasienPerluKajian()
-    // {
-    //     $tigaBulanLalu = Carbon::now()->subMonths(3);
+    public function rekapHarian(Request $request)
+    {
+        $search = $request->input('search');
+        $entries = $request->input('entries', 10);
+        $page = $request->input('page', 1);
 
-    //     // Ambil pasien yang asesmen terakhirnya lebih dari 3 bulan yang lalu
-    //     $pasienPerluKajian = RmDa1::where('created_at', '<', $tigaBulanLalu)->get();
+        $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian', 'soap'])
+            ->where('status', 'M') // status dari antrian perawat
+            ->whereHas('soap', function ($q) {
+                $q->where('status', 'P'); // status dari SOAP (dokter)
+            })
+            ->orderBy('urutan', 'asc')
+            ->orderBy('created_at', 'asc');
 
-    //     return view('perawat.index', compact('pasienPerluKajian'));
-    // }
+        if ($search) {
+            $query->whereHas('booking.pasien', function ($q) use ($search) {
+                $q->where('nama_pasien', 'LIKE', "%{$search}%")
+                    ->orWhere('nik', 'LIKE', "%{$search}%")
+                    ->orWhere('no_rm', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Paginasi dengan jumlah entri yang dipilih
+        $rekap = $query->orderBy('id', 'desc')->paginate($entries, ['*'], 'page', $page);
+
+        // Menjaga parameter pencarian tetap ada saat navigasi halaman
+        $rekap->appends(['search' => $search, 'entries' => $entries]);
+
+        dd($rekap);
+
+        return view('perawat.rekap.harian', compact('rekap', 'entries', 'search'));
+    }
 
     public function lewatiAntrian($id)
     {
@@ -382,232 +498,4 @@ class PerawatController extends Controller
 
         return response()->json(['nomorAntrianPerawat' => $nomorAntrianPerawat]);
     }
-
-    // public function storeUmum(Request $request)
-    // {
-    //     $tanggal = Carbon::now()->year;
-
-    //     $nomorUrutanTerakhir = Pasien::max('number');
-    //     $nomorUrutanBaru = $nomorUrutanTerakhir + 1;
-    //     $nomorUrutan = $tanggal . str_pad($nomorUrutanBaru, 3, '0', STR_PAD_LEFT);
-
-    //     $data = [
-    //         'no_rm' => $nomorUrutan,
-    //         'number' => $nomorUrutanBaru,
-    //         'nik' => $request->nik,
-    //         'nama_kk' => $request->nama_kk,
-    //         'nama_pasien' => $request->nama_pasien,
-    //         'tgllahir' => $request->tgllahir,
-    //         'jekel' => $request->jekel,
-    //         'alamat_asal' => $request->alamat_asal,
-    //         'domisili' => $request->domisili,
-    //         'noHP' => $request->noHP,
-    //         'jenis_pasien' => 'Umum',
-    //         'bpjs' => $request->bpjs,
-    //         'pekerjaan' => $request->pekerjaan,
-    //     ];
-
-    //     // Cek apakah pasien sudah terdaftar hari ini
-    //     $existingBookingToday = Booking::where('id_pasien', function ($query) use ($request) {
-    //         $query->select('id')
-    //             ->from('pasiens')
-    //             ->where('nik', $request->nik);
-    //     })
-    //         ->whereDate('created_at', Carbon::today())
-    //         ->exists();
-
-    //     if ($existingBookingToday) {
-    //         // Jika sudah ada booking di hari yang sama
-    //         return response()->json(['error' => 'Pasien ini sudah mendaftar hari ini.'], 422);
-    //     }
-
-    //     // Cek apakah NIK sudah terdaftar sebelumnya
-    //     $existingPasien = Pasien::where('nik', $data['nik'])->first();
-    //     if ($existingPasien) {
-    //         $dataUpdate = [
-    //             'alamat_asal' => $request->alamat_asal,
-    //             'domisili' => $request->domisili,
-    //             'noHP' => $request->noHP,
-    //             'pekerjaan' => $request->pekerjaan,
-    //         ];
-    //         Pasien::where('id', $existingPasien->id)->update($dataUpdate);
-
-    //         $bookingData = [
-    //             'id_pasien' => $existingPasien->id,
-    //             'no_rm' => $nomorUrutan,
-    //         ];
-    //         Booking::create($bookingData);
-    //         $booking = Booking::where('id_pasien', $existingPasien->id)->latest()->first();
-
-    //         $rm = RmDa1::where('id_pasien', $existingPasien->id)->latest()->first();
-    //         $isian = IsianPerawat::where('id_pasien', $existingPasien->id)->latest()->first();
-
-    //         $urutanAntrian = AntrianPerawat::max('urutan');
-    //         $antrianBaru = $urutanAntrian + 1;
-
-    //         $antrian = [
-    //             'id_booking' => $booking->id,
-    //             'id_poli' => $request->poli,
-    //             'id_dokter' => $request->dokter,
-    //             'id_rm' => $rm->id,
-    //             'id_isian' => $isian->id,
-    //             'urutan' => $antrianBaru,
-    //             'status' => 'D'
-    //         ];
-    //         AntrianPerawat::create($antrian);
-
-    //         return response()->json(['redirect' => route('perawat.index')]);
-    //     }
-
-    //     $pasien = Pasien::create($data);
-    //     $bookingData = [
-    //         'id_pasien' => $pasien->id,
-    //         'no_rm' => $nomorUrutan
-    //     ];
-    //     $booking = Booking::create($bookingData);
-
-    //     $urutanAntrian = AntrianPerawat::max('urutan');
-    //     $antrianBaru = $urutanAntrian + 1;
-
-    //     $antrian = [
-    //         'id_booking' => $booking->id,
-    //         'id_poli' => $request->poli,
-    //         'id_dokter' => $request->dokter,
-    //         'urutan' => $antrianBaru,
-    //         'status' => 'D'
-    //     ];
-    //     AntrianPerawat::create($antrian);
-
-    //     return response()->json(['redirect' => route('perawat.index')]);
-    // }
-
-    // public function storeBpjs(Request $request)
-    // {
-    //     $tanggal = Carbon::now()->year;
-
-    //     // Hitung nomor urutan terakhir
-    //     $nomorUrutanTerakhir = Pasien::max('number');
-    //     $nomorUrutanBaru = $nomorUrutanTerakhir + 1;
-
-    //     // Format nomor rekam medis
-    //     $nomorUrutan = $tanggal . str_pad($nomorUrutanBaru, 3, '0', STR_PAD_LEFT);
-
-    //     // Data pasien
-    //     $data = [
-    //         'bpjs' => $request->bpjs,
-    //         'no_rm' => $nomorUrutan,
-    //         'number' => $nomorUrutanBaru,
-    //         'nik' => $request->nik,
-    //         'nama_kk' => $request->nama_kk,
-    //         'nama_pasien' => $request->nama_pasien,
-    //         'tgllahir' => $request->tgllahir,
-    //         'jekel' => $request->jekel,
-    //         'alamat_asal' => $request->alamat_asal,
-    //         'domisili' => $request->domisili,
-    //         'noHP' => $request->noHP,
-    //         'jenis_pasien' => 'Bpjs',
-    //         'pekerjaan' => $request->pekerjaan,
-    //     ];
-
-    //     // Cari pasien berdasarkan BPJS atau NIK
-    //     $existingPasien = Pasien::where('bpjs', $data['bpjs'])
-    //         ->orWhere('nik', $data['bpjs'])
-    //         ->first();
-
-    //     if ($existingPasien) {
-    //         // Cek apakah pasien sudah mendaftar pada hari ini
-    //         $todayBooking = Booking::where('id_pasien', $existingPasien->id)
-    //             ->whereDate('created_at', Carbon::today())
-    //             ->exists();
-
-    //         if ($todayBooking) {
-    //             // Pasien sudah mendaftar hari ini, hentikan proses
-    //             return response()->json([
-    //                 'message' => 'Pasien sudah terdaftar hari ini.',
-    //             ], 400);
-    //         }
-
-    //         // Update data pasien
-    //         $dataUpdate = [
-    //             'alamat_asal' => $request->alamat_asal,
-    //             'domisili' => $request->domisili,
-    //             'noHP' => $request->noHP,
-    //             'pekerjaan' => $request->pekerjaan,
-    //         ];
-    //         Pasien::where('id', $existingPasien->id)->update($dataUpdate);
-
-    //         // Tambahkan data ke tabel Booking
-    //         $bookingData = [
-    //             'id_pasien' => $existingPasien->id,
-    //             'no_rm' => $existingPasien->no_rm,
-    //         ];
-    //         $booking = Booking::create($bookingData);
-    //         $IdBooking = $booking->id;
-
-    //         // Tambahkan ke tabel AntrianPerawat
-    //         $rm = RmDa1::where('id_pasien', $existingPasien->id)->get()->last();
-    //         $isian = IsianPerawat::where('id_pasien', $existingPasien->id)->get()->last();
-
-    //         $urutanAntrian = AntrianPerawat::max('urutan');
-    //         $antrianBaru = $urutanAntrian + 1;
-
-    //         $antrian = [
-    //             'id_booking' => $IdBooking,
-    //             'id_poli' => $request->poli,
-    //             'id_dokter' => $request->dokter,
-    //             'id_rm' => $rm->id ?? null,
-    //             'id_isian' => $isian->id ?? null,
-    //             'urutan' => $antrianBaru,
-    //             'status' => 'D',
-    //         ];
-    //         AntrianPerawat::create($antrian);
-
-    //         return response()->json(['redirect' => route('perawat.index')]);
-    //     } else {
-    //         // Cek pasien dengan domisili yang sama
-    //         $existingPasienDomisili = Pasien::where('domisili', $data['domisili'])->get();
-    //         $now = Carbon::now();
-    //         if ($existingPasienDomisili->isNotEmpty()) {
-    //             foreach ($existingPasienDomisili as $pasien) {
-    //                 $pasienSehat = PasienSehat::where('id_pasien', $pasien->id)->exists();
-
-    //                 if (!$pasienSehat) {
-    //                     $dataSehat = [
-    //                         'id_pasien' => $pasien->id,
-    //                         'tgl_kunjungan' => $now,
-    //                         'kegiatan' => 'Konseling',
-    //                         'status' => 'A',
-    //                     ];
-    //                     PasienSehat::create($dataSehat);
-    //                 }
-    //             }
-    //         }
-
-    //         // Simpan data pasien baru
-    //         $pasien = Pasien::create($data);
-
-    //         // Tambahkan data ke tabel Booking
-    //         $bookingData = [
-    //             'id_pasien' => $pasien->id,
-    //             'no_rm' => $nomorUrutan,
-    //         ];
-    //         $booking = Booking::create($bookingData);
-    //         $IdBooking = $booking->id;
-
-    //         // Tambahkan ke tabel AntrianPerawat
-    //         $urutanAntrian = AntrianPerawat::max('urutan');
-    //         $antrianBaru = $urutanAntrian + 1;
-
-    //         $antrian = [
-    //             'id_booking' => $IdBooking,
-    //             'id_poli' => $request->poli,
-    //             'id_dokter' => $request->dokter,
-    //             'urutan' => $antrianBaru,
-    //             'status' => 'D',
-    //         ];
-    //         AntrianPerawat::create($antrian);
-
-    //         return response()->json(['redirect' => route('perawat.index')]);
-    //     }
-    // }
 }

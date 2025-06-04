@@ -2,18 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ResepImport;
 use App\Models\Margin;
 use App\Models\Obat;
 use App\Models\RecordStok;
 use App\Models\Resep;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ApotekerObatController extends Controller
 {
-    public function masterObat()
+    public function masterObat(Request $request)
     {
-        $obat = Resep::paginate(10);
+        $obat = Resep::orderBy('id', 'desc')->paginate(10);
+        // Pencarian & jumlah entri untuk data semua pasien
+        $search = $request->input('search');
+        $entries = $request->input('entries', 10); // Default 10
+        $page = $request->input('page', 1);
+
         // dd($obat);
+
+        $query = Resep::where('created_at', '>=', now()->subDay()); // Data dalam 24 jam terakhir
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('golongan', 'LIKE', "%{$search}%")
+                    ->orWhere('jenis_sediaan', 'LIKE', "%{$search}%")
+                    ->orWhere('nama_obat', 'LIKE', "%{$search}%")
+                    ->orWhere('harga_pokok', 'LIKE', "%{$search}%")
+                    ->orWhere('harga_jual', 'LIKE', "%{$search}%")
+                    ->orWhere('stok_awal', 'LIKE', "%{$search}%")
+                    ->orWhere('masuk', 'LIKE', "%{$search}%")
+                    ->orWhere('keluar', 'LIKE', "%{$search}%")
+                    ->orWhere('stok', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $obatUploud = $query->orderBy('id', 'desc')->paginate($entries, ['*'], 'page', $page);
+        $obatUploud->appends(['search' => $search, 'entries' => $entries]);
+
+        $lastUploadTime = $obatUploud->max('created_at');
+
+        $uploadStatus = $lastUploadTime
+            ? Carbon::parse($lastUploadTime)->diffForHumans()
+            : 'Belum ada data yang diunggah';
+
         $apotek = Obat::with(['Booking', 'antrianPerawat', 'soap.poli', 'resep'])
             ->paginate(10);
 
@@ -21,7 +59,84 @@ class ApotekerObatController extends Controller
 
         $margen = Margin::latest()->first(); // Ambil margin terakhir
 
-        return view('obat.master.dataObatApoteker', compact('obat', 'apotek', 'lowStockObat', 'margen'));
+        return view('obat.master.dataObatApoteker', compact('obat', 'apotek', 'lowStockObat', 'margen', 'search', 'entries', 'obatUploud', 'lastUploadTime', 'uploadStatus'));
+    }
+
+    public function uploudObat(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            $activeMargin = Margin::first();
+            if (!$activeMargin) {
+                throw new \Exception('Tidak ada margin aktif yang ditemukan. Harap atur margin aktif terlebih dahulu.');
+            }
+
+            Log::info('File berhasil diupload:', [$request->file('file')->getClientOriginalName()]);
+
+            $import = new ResepImport();
+            Excel::import($import, $request->file('file'));
+
+            $uploadedCount = count($import->getUploadedRecords());
+            Log::info("Jumlah data yang berhasil diunggah: $uploadedCount");
+
+            if ($uploadedCount > 0) {
+                return redirect()->route('apoteker.master.obat')
+                    ->with('success', "Data obat berhasil diunggah! ($uploadedCount data baru ditambahkan)");
+            } else {
+                return redirect()->back()
+                    ->with('import_error', 'Tidak ada data yang berhasil diimpor.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Import Error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('import_error', 'Gagal mengunggah data: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Menentukan header kolom
+        $headers = ['golongan', 'jenis_sediaan', 'nama_obat', 'harga_pokok', 'harga_jual', 'stok_awal', 'masuk', 'keluar', 'retur', 'stok'];
+
+        // Menambahkan header ke baris pertama
+        $sheet->fromArray($headers, null, 'A1');
+
+        // Menentukan style untuk header (warna latar belakang)
+        $styleArray = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'], // Warna font putih
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '4CAF50'], // Warna hijau
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+        ];
+
+        // Menerapkan style ke semua header
+        $sheet->getStyle('A1:J1')->applyFromArray($styleArray);
+
+        // Simpan dan berikan sebagai file download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="Template_Obat.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
     }
 
     public function search(Request $request)
@@ -29,8 +144,8 @@ class ApotekerObatController extends Controller
         if ($request->ajax()) {
             $query = $request->input('query');
             $obat = Resep::where('nama_obat', 'like', '%' . $query . '%')
-                // ->orWhere('gol', 'like', '%'.$query.'%')
-                // ->orWhere('sediaan', 'like', '%'.$query.'%')
+                ->orWhere('golongan', 'like', '%' . $query . '%')
+                ->orWhere('jenis_sediaan', 'like', '%' . $query . '%')
                 ->orWhere('stok', 'like', '%' . $query . '%')
                 ->orWhere('harga_jual', 'like', '%' . $query . '%')
                 ->orWhere('harga_pokok', 'like', '%' . $query . '%')
@@ -46,7 +161,7 @@ class ApotekerObatController extends Controller
         return redirect()->route('apoteker.master.obat');
     }
 
-    public function store(Request $request)
+    public function tambah(Request $request)
     {
         // dd($request->all());
 
@@ -75,6 +190,8 @@ class ApotekerObatController extends Controller
 
         // Data untuk tabel Resep
         $data = [
+            'golongan' => $request->golongan,
+            'jenis_sediaan' => $request->jenis_sediaan,
             'nama_obat' => $request->nama_obat,
             'harga_pokok' => $request->harga_pokok,
             'harga_jual' => $hargaJual, // Simpan harga jual yang telah dihitung
@@ -100,7 +217,7 @@ class ApotekerObatController extends Controller
             'stok_total' => $stokAkhir,
         ]);
 
-        return redirect()->route('master.obat')->with('success', 'Data Obat Berhasil Ditambah');
+        return redirect()->route('apoteker.master.obat')->with('success', 'Data Obat Berhasil Ditambah');
     }
 
     public function edit(Request $request, $id)
@@ -116,6 +233,8 @@ class ApotekerObatController extends Controller
         if (!$obat) {
             // Jika obat tidak ditemukan, tambahkan obat baru
             $data = [
+                'golongan' => $request->golongan,
+                'jenis_sediaan' => $request->jenis_sediaan,
                 'nama_obat' => $request->nama_obat,
                 'harga_pokok' => $request->harga_pokok,
                 'harga_jual' => $request->harga_jual,
@@ -131,7 +250,7 @@ class ApotekerObatController extends Controller
 
             // Simpan log perubahan stok
             RecordStok::create([
-                'id_obat' => $obat->id,
+                'id_respes' => $obat->id,
                 'stok_masuk' => $stokMasuk,
                 'stok_keluar' => $stokKeluar,
                 'stok_retur' => $stokRetur,
@@ -150,6 +269,8 @@ class ApotekerObatController extends Controller
 
         // Update data obat di database
         $obat->update([
+            'golongan' => $request->golongan,
+            'jenis_sediaan' => $request->jenis_sediaan,
             'nama_obat' => $request->nama_obat,
             'harga_pokok' => $request->harga_pokok,
             'harga_jual' => $request->harga_jual,
@@ -162,7 +283,7 @@ class ApotekerObatController extends Controller
 
         // Simpan log perubahan stok
         RecordStok::create([
-            'id_obat' => $obat->id,
+            'id_reseps' => $obat->id,
             'stok_masuk' => $stokMasuk,
             'stok_keluar' => $stokKeluar,
             'stok_retur' => $stokRetur,
@@ -172,7 +293,7 @@ class ApotekerObatController extends Controller
         return redirect()->route('apoteker.master.obat')->with('success', 'Data Obat Berhasil Diubah');
     }
 
-    public function delete($id)
+    public function hapus($id)
     {
         Resep::destroy($id);
         return redirect()->route('apoteker.master.obat', 'id')->with('success', 'Data Berhasil dihapus');

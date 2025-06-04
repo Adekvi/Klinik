@@ -61,73 +61,73 @@
                                     style="width:100%">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 NO.</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 NO. REG</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 TANGGAL</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 NAMA BUMIL</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 UMUR</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 NAMA SUAMI</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 ALAMAT</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 KELUHAN</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 G P A</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 UK</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 TM</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 HPHT</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 HPL</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 TD</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 LILA</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 TB</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 BB</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 STATUS GIZI</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 REFLEK PATELA</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 DJJ</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 KEPALA (M/BM)</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 TBJ</th>
-                                            <th class="custom-th"rowspan="24"
+                                            <th class="custom-th" rowspan="24"
                                                 style="text-align: center; vertical-align: middle; white-space: nowrap; width: auto">
                                                 PRESENTASI</th>
                                             <th class="custom-th" colspan="10" style="text-align: center">PEMERIKSAAN

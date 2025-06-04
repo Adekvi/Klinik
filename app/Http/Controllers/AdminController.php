@@ -54,6 +54,4 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact('pasienUmumPerBulan', 'pasienBpjsPerBulan', 'pasienSehatPerBulan', 'bulan', 'totalpasien', 'totalpasienUmum', 'totalpasienBpjs', 'totalpasienSehat', 'totalDokter', 'totalTenagamedis'));
     }
-
-    
 }

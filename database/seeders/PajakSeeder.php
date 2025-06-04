@@ -18,7 +18,8 @@ class PajakSeeder extends Seeder
             [
                 'id' => 1,
                 'namaPajak' => 'Ppn',
-                'tarifPpn' => 12,
+                'tarifPpn' => 0,
+                'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

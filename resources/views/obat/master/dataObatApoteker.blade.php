@@ -7,9 +7,141 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
                     <div class="card-title">
-                        <h3 style="margin-bottom: 20px; justify-content: center; display: flex">
+                        <h5 class="text-muted mb-3">
                             <strong>@yield('title')</strong>
-                        </h3>
+                        </h5>
+                        <h5 style="margin-bottom: 20px"><strong>Uploud Data Obat</strong></h5>
+                        <form action="{{ route('resep.import') }}" method="POST" enctype="multipart/form-data"
+                            id="uploadForm">
+                            @csrf
+                            <div class="d-flex align-items-end">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Upload File Excel</label>
+                                        <p style="font-size: 15px; font-style: italic; color: red">
+                                            *Silahkan masukkan data obat terbaru dengan format xlsx, xls, csv. <br>
+                                            *Silahkan donwload file excelnya untuk menyesuaikan format kolomnya! <br>
+                                        </p>
+                                        <input type="file" name="file" id="file" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="ms-2">
+                                    <button type="submit" class="btn btn-primary" id="uploadButton">
+                                        <i class="fa-solid fa-upload"></i> Upload</button>
+                                    <a href="{{ route('resep.downloadTemplate') }}" class="btn btn-success ms-2">
+                                        <i class="fa-solid fa-file-excel"></i> Download Format Excel
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Animasi Loading -->
+                        <div id="loading" class="mt-3 text-primary d-none">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Mengunggah...</span>
+                            </div>
+                            <span class="ms-2">Mengunggah file, mohon tunggu...</span>
+                        </div>
+
+                    </div>
+
+                    <h5 class="mt-3 d-flex justify-content-between align-items-center">
+                        <strong>Data Obat baru diunggah</strong>
+                        <span class="text-muted" style="font-size: 17px">
+                            <i class="fa-solid fa-circle-info text-success"></i> {{ $uploadStatus }}</span>
+                    </h5>
+
+                    @if ($obatUploud->count() > 0)
+                        <form method="GET" action="{{ route('apoteker.master.obat') }}"
+                            class="d-flex justify-content-between align-items-center mb-3">
+                            <input type="hidden" name="recent_page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                            <div class="d-flex align-items-center">
+                                <label for="entries" class="me-2">Tampilkan:</label>
+                                <select name="entries" id="entries" class="form-select form-select-sm me-3"
+                                    style="width: 80px;" onchange="this.form.submit()">
+                                    <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10
+                                    </option>
+                                    <option value="25" {{ request('entries', 10) == 25 ? 'selected' : '' }}>25
+                                    </option>
+                                    <option value="50" {{ request('entries', 10) == 50 ? 'selected' : '' }}>50
+                                    </option>
+                                    <option value="100" {{ request('entries', 10) == 100 ? 'selected' : '' }}>100
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    class="form-control form-control-sm me-2" style="width: 400px;" placeholder="Cari Obat">
+                                <button type="submit" class="btn btn-sm btn-primary">Cari</button>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive mb-2">
+                            <table id="example" class="table table-striped table-bordered"
+                                style="width:100%; margin-top: 10px;">
+                                <thead class="table-primary" style="text-align: center; white-space: nowrap">
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>GOLONGAN</th>
+                                        <th>JENIS SEDIAAN</th>
+                                        <th>NAMA OBAT</th>
+                                        <th>HARGA BELI</th>
+                                        <th>HARGA JUAL</th>
+                                        <th>OBAT MASUK</th>
+                                        <th>OBAT KELUAR</th>
+                                        <th>RETUR</th>
+                                        <th>JUMLAH STOK</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <?php
+                                    if (!function_exists('Rupiah')) {
+                                        function Rupiah($angka)
+                                        {
+                                            return 'Rp ' . number_format($angka, 0, ',', '.');
+                                        }
+                                    }
+                                    ?>
+                                    @foreach ($obatUploud as $index => $record)
+                                        <tr>
+                                            <td>{{ $obatUploud->firstItem() + $index }}</td>
+                                            <td>{{ !empty($record->golongan) ? $record->golongan : '-' }}</td>
+                                            <td>{{ !empty($record->jenis_sediaan) ? $record->jenis_sediaan : '-' }}</td>
+                                            <td>{{ !empty($record->nama_obat) ? $record->nama_obat : '-' }}</td>
+                                            <td>{{ !empty(Rupiah($record->harga_pokok)) ? Rupiah($record->harga_pokok) : '-' }}
+                                            </td>
+                                            <td>{{ !empty(Rupiah($record->harga_jual)) ? Rupiah($record->harga_jual) : '-' }}
+                                            </td>
+                                            <td>{{ !empty($record->stok_awal) ? $record->stok_awal : '-' }}</td>
+                                            <td>{{ !empty($record->masuk) ? $record->masuk : '-' }}</td>
+                                            <td>{{ !empty($record->keluar) ? $record->noHP : '-' }}</td>
+                                            <td>{{ !empty($record->stok) ? $record->stok : '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="page d-flex justify-content-end">
+                            {{ $obatUploud->appends(request()->only(['search', 'entries']))->links() }}
+                        </div>
+                    @else
+                        {{-- Pesan jika tidak ada data dalam 24 jam terakhir --}}
+                        <div class="alert alert-warning mt-3 text-center">
+                            <h5 class="mt-3 mb-3">
+                                <strong>
+                                    <i class="fa-solid fa-bell"></i> Belum ada data obat yang diunggah dalam 24 jam
+                                    terakhir.
+                                </strong>
+                            </h5>
+                        </div>
+                    @endif
+
+                    <hr>
+                    <div class="card-title">
+                        <h5 class="mt-3">
+                            <strong>Data Semua Obat</strong>
+                        </h5>
                         <div class="mb-1" style="display: flex; justify-content: space-between">
                             <div class="tambah">
                                 <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
@@ -30,8 +162,10 @@
                                 <thead class="table-primary text-center" style="white-space: nowrap">
                                     <tr>
                                         <th>NO</th>
+                                        <th>GOLONGAN</th>
+                                        <th>JENIS SEDIAAN</th>
                                         <th>NAMA OBAT</th>
-                                        <th>HARGA POKOK</th>
+                                        <th>HARGA BELI</th>
                                         <th>HARGA JUAL</th>
                                         <th>OBAT MASUK</th>
                                         <th>OBAT KELUAR</th>
@@ -57,12 +191,11 @@
     @include('obat.master.tambah')
     @include('obat.master.edit')
     @include('obat.master.hapus')
-    @include('obat.master.infoStok')
+    {{-- @include('obat.master.infoStok') --}}
 
 @endsection
 
 @push('style')
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
 
     <style>
@@ -104,7 +237,6 @@
 @push('script')
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -152,5 +284,19 @@
                 });
             @endif
         });
+
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            // Nonaktifkan tombol upload agar tidak diklik berulang
+            document.getElementById('uploadButton').disabled = true;
+
+            // Tampilkan animasi loading
+            document.getElementById('loading').classList.remove('d-none');
+        });
+
+        // Simulasi notifikasi sukses setelah upload (Opsional)
+        setTimeout(() => {
+            document.getElementById('loading').classList.add('d-none');
+            document.getElementById('notifSuccess').classList.remove('d-none');
+        }, 5000); // Simulasi 5 detik setelah upload dimulai
     </script>
 @endpush

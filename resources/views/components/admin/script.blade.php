@@ -25,3 +25,5 @@
 
 {{-- responsiveVoice --}}
 <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
+{{-- <script src="{{ asset('aset/js/chat.js') }}"></script> --}}

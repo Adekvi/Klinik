@@ -42,10 +42,6 @@ class CreateAntrianPerawatsTable extends Migration
                         $table->foreign('id_obat')->references('id')
                                 ->on('obats')
                                 ->onDelete('cascade');
-                        $table->unsignedBigInteger('id_ttd_medis')->nullable();
-                        $table->foreign('id_ttd_medis')->references('id')
-                                ->on('ttd_medis')
-                                ->onDelete('cascade');
                         $table->integer('urutan')->nullable();
                         $table->integer('number')->nullable();
                         $table->string('kode_antrian')->nullable();

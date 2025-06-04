@@ -53,4 +53,8 @@ class IsianPerawat extends Model
     {
         return $this->hasMany(Obat::class, 'id');
     }
+    public function fisik()
+    {
+        return $this->hasMany(Fisik::class, 'id_isian', 'id');
+    }
 }

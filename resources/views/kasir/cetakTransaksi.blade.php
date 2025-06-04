@@ -1,247 +1,280 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Transaksi</title>
-
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Struk Pembayaran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap");
+
         body {
-            margin-top: 10px;
-            padding: 0;
-        }
-        .paper {
-            width: 80mm;
-            height: 120mm;
-            padding: 5mm;
-            border: 1px solid #000;
-            border-radius: 3px;
-            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            /* background-color: rgb(211, 255, 255); */
-        }
-        .container .top {
-            display: flex;
-            align-items: center;
         }
 
-        .container .top .left {
-            flex: 0 0 auto;
-            margin-right: 5px;
+        .courier-prime {
+            font-family: "Courier Prime", monospace;
         }
 
-        .container .top .right {
-            flex: 1;
-        }
-
-        .container .center .image img {
-            width: 50px;
-            margin-bottom: -18px;
-            /* margin-left: 10px; */
-        }
-
-        .container .top .clinic h4,
-        .container .top .clinic h4 {
-            margin: 0;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .container .top .address h5,
-        .container .top .tel h5 {
-            margin: 0;
-            /* font-size: 3px; */
-        }
-
-        .divider {
-            border-top: 1px solid #000;
-            margin-top: -8px;
-            margin-bottom: 5px;
-        }
-
-        .container .judul p {
-            font-weight: bold;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .container .judul .kalimat p {
-            text-align: start;
-            margin-top: -5px;
-            font-size: 10px;
-        }
-
-        .container .judul .kalimat .col-lg-6 #Tanggal {
-            font-weight: bold;
-        }
-
-        .kalimat {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-        }
-        .kalimat div {
-            flex: 1;
-        }
-        .nama-obat {
-            text-align: start;
-            margin-top: 15px;
-            font-size: 10px;
-        }
-        .aturan {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            margin-top: -20px;
+        table {
+            border-collapse: collapse;
         }
     </style>
 </head>
-<body>
 
-    <section class="laporan">
-        <div class="paper">
-            <div class="container">
-                <div class="center" style="display: flex; justify-content: center; align-items: center">
-                    <div class="image">
-                        <img src="{{ asset('assets/images/logo_multisari.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="top" style="text-align: center">
-                    <div class="right">
-                        <div class="clinic">
-                            <p style="font-size: 15px; font-weight: bold">
-                                KLINIK PRATAMA MULTISARI II <br>
-                            </p>
-                        </div>
-                        <div class="addres" style="margin-top: -14px">
-                            <h5 style="font-size: 10px; width: auto">
-                                Jl. Jepara-Kudus, Ruko Safira Regency
-                                Desa Sengonbugel RT. 03 RW. 01,
-                                Kec. Mayong, Kab. Jepara
-                            </h5>
-                        </div>
-                        <div class="telp" style="margin-top: -14px">
-                            <h5 style="font-size: 10px; width: auto">(0291) 7520234, e-mail: klinikmultisari@gmail.com</h5>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- <hr class="divider">
-                <hr class="divider"> --}}
-                
-                <div class="judul">
-                    {{-- <p style="">{{ $transaksi->booking->pasien->nama_pasien }}</p> --}}
-                    <div class="kalimat row" style="margin-top: -8px; display: flex; justify-content: space-between;">
-                        <div class="col-lg-6">                
-                            <div class="no-rm mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <label for="" style="display:inline-block; min-width: 65px;">No. Transaksi</label>
-                                <span>:</span>
-                                @if ($strukPembayaran->isNotEmpty())
-                                    {{ $strukPembayaran->first()->no_transaksi }}
-                                @else
-                                    <p>-</p>
-                                @endif
-                            </div>
-                            
-                            <div class="alamat mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <label for="" style="display:inline-block; min-width: 65px;">Kasir</label>
-                                <span>:</span>
-                                @if ($strukPembayaran->isNotEmpty())
-                                    {{ $strukPembayaran->first()->nama_kasir }}
-                                @else
-                                    <p>-</p>
-                                @endif
-                            </div>
-
-                            <div class="alamat mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <label for="" style="display:inline-block; min-width: 65px;">Nama Pasien</label>
-                                <span>:</span>
-                                {{ $transaksi->booking->pasien->nama_pasien }}
-                            </div>
-
-                            <div class="alamat mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <label for="" style="display:inline-block; min-width: 65px;">No. Hp</label>
-                                <span>:</span>
-                                {{ $transaksi->booking->pasien->noHP }}
-                            </div>
-
-                            <div class="alamat mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <label for="" style="display:inline-block; min-width: 65px;">No. Antrian</label>
-                                <span>:</span>
-                                {{ $transaksi->kode_antrian }}
-                            </div>
-                        </div>
-                        <div class="col-lg-6" style="margin-top: 60px; margin-left: -50px">
-                            <div class="umur-poli">
-                                {{ $date }}
-                            </div>
-                            <div class="poli">
-                                {{ $time }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="nama-obat">
-                    <h3>Transaksi</h3>
-                    <div class="row">
-                        <div class="tabel col-lg-12">
-                            <table class="table table-responsive table-bordered" style="overflow-x: auto; margin-top: -10px">
-                                <thead class="text-center" style="white-space: nowrap">
-                                    <th>Keterangan</th>
-                                    <th>Satuan</th>
-                                    <th>Qty</th>
-                                    <th>Harga Jual</th>
-                                    <th>Total</th>
-                                </thead>
-                                <tbody class="text-center">
-                                    <?php 
-                                        // Fungsi untuk memformat harga ke dalam format Rupiah
-                                        if (!function_exists('Rupiah')) {
-                                            function Rupiah($angka)
-                                            {
-                                                return "" . number_format($angka, 0, ',', '.');
-                                            }
-                                        }
-                                    ?>
-                                    @foreach ($transaksi as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            {{-- <td>{{ $item }}</td>
-                                            <td>{{ $item }}</td>
-                                            <td>{{ Rupiah($item) }}</td>
-                                            <td>{{ $item }}</td>
-                                            <td>{{ $item }}</td> --}}
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div> 
-
-                <h6 style="text-align: center; font-size: 10px; margin-top: 5px; margin-left: -30px">DIHABISKAN</h6>
-
-                <div class="aturan" style="margin-bottom: 5px;">
-                    <div class="pagi">
-                        <span style="display: inline-block; width: 40px;">Pagi</span> :
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="siang" style="margin-left: -87px;">
-                            <span style="display: inline-block; width: 40px;">Siang</span> :
-                        </div>
-                    </div>
-                    <div class="malam">
-                        <span style="display: inline-block; width: 40px; margin-left: -115px;">Malam</span> :
-                    </div>
-                </div>
+<body class="bg-white p-4 sm:p-6">
+    <div class="max-w-4xl mx-auto border border-black p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-1">
+            <img src="{{ asset('assets/images/logo_multisari.png') }}"
+                alt="Blue circular logo with white letter R and text Klinik Multisari II"
+                class="w-16 h-16 sm:w-20 sm:h-20 object-contain flex-shrink-0" width="80" height="80" />
+            <div class="flex-1 text-[10px] sm:text-[11px] font-bold leading-tight">
+                <p class="mb-[2px]" style="font-size: 15px">Klinik Multisari II</p>
+                {{-- <p class="mb-[2px]">
+                    No. Surat Izin Apotek :
+                    <span class="font-normal">503/00686/DPM-PTSP/kes/XII/2018</span>
+                </p> --}}
+                <p class="mb-[2px]">Jl. Jepara-Kudus, Ruko Safira Regency
+                    Desa Sengonbugel RT. 03 RW. 01,
+                    Kec. Mayong, Kab. Jepara</p>
+                <p>
+                    Telp. (0291) 7520234, Email :
+                    <span class="font-normal break-words">klinikmultisari@gmail.com</span>, Website :
+                    <span class="font-normal break-words">https://klinikmultisari2.com</span>
+                </p>
+            </div>
+            <div class="courier-prime text-3xl sm:text-4xl font-extrabold tracking-widest select-none whitespace-nowrap"
+                style="line-height: 1">
+                F A K T U R
             </div>
         </div>
-    </section>
+        <hr class="border-black border-t-[1.5px] mb-2" />
+        <div class="flex flex-col sm:flex-row justify-between text-[10px] sm:text-[11px] mb-2 gap-2 sm:gap-0">
+            <!-- Kolom Kiri -->
+            <div class="flex flex-col gap-[2px] w-full sm:w-1/2">
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">Nama Pasien</span>:
+                    <span class="font-normal">{{ $transaksi->booking->pasien->nama_pasien }}</span>
+                </div>
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">Jenis Pasien</span>:
+                    <span class="font-normal">{{ $transaksi->booking->pasien->jenis_pasien }}</span>
+                </div>
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">No. Telp</span>:
+                    <span class="font-normal">{{ $transaksi->booking->pasien->noHP ?? '' }}</span>
+                </div>
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">Alamat</span>:
+                    <span class="font-normal">{{ $transaksi->booking->pasien->alamat_asal }}</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-[2px] w-full sm:w-1/2">
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">Kasir</span>:
+                    <span class="font-normal">{{ Auth::user('username', 'kasir')->name ?? '' }}</span>
+                </div>
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">Tanggal</span>:
+                    <span class="font-normal">{{ Carbon\Carbon::now()->format('Y-m-d / H:i') }}</span>
+                </div>
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">No. Transaksi</span>:
+                    <span class="font-normal">{{ $transaksi->no_transaksi ?? '-' }}</span>
+                </div>
+                <div class="flex gap-1 flex-wrap">
+                    <span class="font-bold w-28 min-w-[110px]">Pembayaran</span>:
+                    <span class="font-normal">TUNAI</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-[9px] sm:text-[10px] border border-black min-w-[300px]">
+                <thead>
+                    <tr>
+                        {{-- <th class="border border-black px-1 py-0.5 text-center w-6">No</th> --}}
+                        <th class="border border-black px-1 py-0.5 text-center w-[180px]">
+                            Nama Obat
+                        </th>
+                        <th class="border border-black px-1 py-0.5 text-center w-14">
+                            Satuan
+                        </th>
+                        <th class="border border-black px-1 py-0.5 text-center w-10">Qty</th>
+                        <th class="border border-black px-1 py-0.5 text-center w-14">
+                            Harga
+                        </th>
+                        <th class="border border-black px-1 py-0.5 text-center w-16">
+                            Subtotal
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $no = 1;
+                    // Fungsi untuk memformat harga ke dalam format Rupiah
+                    if (!function_exists('Rupiah')) {
+                        function Rupiah($angka)
+                        {
+                            return '' . number_format($angka, 0, ',', '.');
+                        }
+                    }
+                    ?>
+
+                    @php
+                        $namaObat = json_decode($cetak->obat_Ro_namaObatUpdate, true) ?? [];
+                        $jumlahObat = json_decode($cetak->obat_Ro_jumlah, true) ?? [];
+                        $jenisObat = json_decode($cetak->obat_Ro_jenisObat, true) ?? [];
+                        $hargaJualData = $reseps->keyBy('nama_obat');
+
+                        $grandTotal = 0;
+                        $totalQty = 0;
+                    @endphp
+
+                    <tr>
+                        {{-- NAMA OBAT --}}
+                        <td class="border border-black px-1 py-0.5 align-top leading-tight">
+                            @foreach ($namaObat as $index => $obat)
+                                {{ $index + 1 }}. {{ $obat }}<br>
+                                <hr>
+                            @endforeach
+                        </td>
+
+                        {{-- QTY --}}
+                        <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
+                            @foreach ($jumlahObat as $jumlah)
+                                {{ $jumlah }}<br>
+                                <hr>
+                                @php $totalQty += $jumlah; @endphp
+                            @endforeach
+                        </td>
+
+                        {{-- SATUAN --}}
+                        <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
+                            @foreach ($jenisObat as $jenis)
+                                {{ $jenis }}<br>
+                                <hr>
+                            @endforeach
+                        </td>
+
+                        {{-- HARGA --}}
+                        <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
+                            @foreach ($namaObat as $obat)
+                                Rp {{ number_format($hargaJualData[$obat]['harga_jual'] ?? 0, 0, ',', '.') }}<br>
+                                <hr>
+                            @endforeach
+                        </td>
+
+                        {{-- SUBTOTAL --}}
+                        <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
+                            @foreach ($namaObat as $index => $obat)
+                                @php
+                                    $harga = $hargaJualData[$obat]['harga_jual'] ?? 0;
+                                    $jumlah = $jumlahObat[$index] ?? 1;
+                                    $sub = $harga * $jumlah;
+                                    $grandTotal += $sub;
+                                @endphp
+                                Rp {{ number_format($sub, 0, ',', '.') }}<br>
+                                <hr>
+                            @endforeach
+                        </td>
+                    </tr>
+
+                    {{-- BARIS TOTAL QTY & SUBTOTAL --}}
+                    <tr>
+                        <td class="px-1 py-0.5 text-center font-semibold">Keterangan</td>
+                        <td class="border border-black px-1 py-0.5 font-semibold  text-center">{{ $totalQty }}</td>
+                        <td class="px-1 py-0.5"></td> {{-- kolom kosong untuk satuan --}}
+                        <td class="px-1 py-0.5"></td> {{-- kolom kosong untuk harga --}}
+                        <td class="border border-black px-1 py-0.5 font-semibold text-center">
+                            Rp {{ number_format($grandTotal, 0, ',', '.') }}
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-2 border-t border-grey"></div>
+        <div class="flex justify-content-start mt-3 w-full max-w-[300px]">
+            <table class="w-full text-[11px]">
+                <tbody>
+                    <tr>
+                        <td class="font-semibold">
+                            Pajak (%)
+                        </td>
+                        <td>:</td>
+                        <td class="font-semibold">
+                            {{ $transaksi->ppn ? number_format($transaksi->ppn, 0, ',', '') : '-' }} %
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold">
+                            Konsultasi Dokter
+                        </td>
+                        <td>:</td>
+                        <td class="font-semibold">
+                            Rp. {{ Rupiah($transaksi->konsul_dokter) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold">
+                            Sub Total
+                        </td>
+                        <td>:</td>
+                        <td class="font-semibold">
+                            Rp. {{ Rupiah($grandTotal) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold">
+                            Total
+                        </td>
+                        <td>:</td>
+                        <td class="font-semibold">
+                            Rp. {{ Rupiah($grandTotal + $transaksi->konsul_dokter) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-extrabold">
+                            Bayar
+                        </td>
+                        <td>:</td>
+                        <td class="font-extrabold">
+                            Rp. {{ Rupiah($transaksi->bayar ?? '-') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-extrabold">
+                            Kembalian
+                        </td>
+                        <td>:</td>
+                        <td class="font-extrabold">
+                            Rp. {{ Rupiah($transaksi->kembalian ?? '-') }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="flex flex-col sm:flex-row gap-2 text-[10px] mt-3">
+            <div class="w-16 font-bold flex-shrink-0">Catatan</div>
+            <div class="flex-1 leading-tight">
+                <p>: Terimakasih Telah berkunjung. semoga sehat selalu</p>
+                <p><span class="font-semibold">Maaf,</span> barang yang sudah dibeli</p>
+                <p>tidak dapat ditukar atau dikembalikan</p>
+            </div>
+        </div>
+        <div class="flex flex-col sm:flex-row justify-between text-[10px] mt-6 px-1 gap-2 sm:gap-0">
+            <div>Penerima / Pembeli</div>
+            <div>Klinik Multisari II</div>
+        </div>
+    </div>
 
     <script>
         window.print();
     </script>
 
 </body>
+
 </html>

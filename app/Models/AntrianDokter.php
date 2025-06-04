@@ -10,52 +10,30 @@ class AntrianDokter extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function booking ()
+    public function booking()
     {
         return $this->belongsTo(Booking::class, 'id_booking', 'id');
     }
-    public function poli ()
+    public function poli()
     {
-        return $this->belongsTo(Poli::class, 'id_poli','KdPoli');
+        return $this->belongsTo(Poli::class, 'id_poli', 'KdPoli');
     }
-    public function rm ()
+    public function rm()
     {
         return $this->belongsTo(RmDa1::class, 'id_rm', 'id');
     }
-    public function isian ()
+    public function isian()
     {
         return $this->belongsTo(IsianPerawat::class, 'id_isian', 'id');
     }
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-
-    //     static::creating(function ($antrianDokter) {
-    //         $status = $antrianDokter->status;
-
-    //         // Mendapatkan nomor antrian terakhir berdasarkan status
-    //         $lastQueue = AntrianDokter::where('status', $status)->latest()->first();
-
-    //         if ($lastQueue) {
-    //             $lastNumber = $lastQueue->number + 1;
-    //         } else {
-    //             $lastNumber = 1;
-    //         }
-
-    //         // Menentukan kode_antrian berdasarkan status
-    //         $kodeAntrianPrefix = 'A'; // Bisa disesuaikan dengan kebutuhan
-    //         $antrianDokter->kode_antrian = $kodeAntrianPrefix . str_pad($lastNumber, 3, '0', STR_PAD_LEFT); // Mengubah panjang menjadi 3
-    //         $antrianDokter->number = $lastNumber;
-    //     });
-    // }
     public static function boot()
     {
         parent::boot();
 
-        static::creating(function ($antrianDokter) {
+        static::creating(function ($antrianPerawat) {
             // Mendapatkan nomor antrian terakhir untuk hari ini
-            $lastQueueToday = AntrianDokter::whereDate('created_at', now())
+            $lastQueueToday = AntrianPerawat::whereDate('created_at', now())
                 ->whereNotNull('number')
                 ->latest()
                 ->first();
@@ -64,7 +42,7 @@ class AntrianDokter extends Model
             $tomorrow = now()->addDay();
 
             // Mendapatkan nomor antrian terakhir untuk besok
-            $lastQueueTomorrow = AntrianDokter::whereDate('created_at', $tomorrow)
+            $lastQueueTomorrow = AntrianPerawat::whereDate('created_at', $tomorrow)
                 ->whereNotNull('number')
                 ->latest()
                 ->first();
@@ -81,11 +59,12 @@ class AntrianDokter extends Model
                 $lastNumber = 1;
             }
 
-            // Menentukan kode_antrian berdasarkan status
-            $kodeAntrianPrefix = 'D'; // Bisa disesuaikan dengan kebutuhan
-            $antrianDokter->kode_antrian = $kodeAntrianPrefix . str_pad($lastNumber, 3, '0', STR_PAD_LEFT); // Mengubah panjang menjadi 3
-            $antrianDokter->number = $lastNumber;
+            // Menentukan kode_antrian berdasarkan id_poli
+            $poli = $antrianPerawat->id_poli; // Anda perlu menyesuaikan ini dengan hubungan antara AntrianPerawat dan Poli
+            $kodeAntrianPrefix = ($poli == 1) ? 'A' : 'B'; // Misalnya, Anda bisa menggunakan id poli tertentu untuk menentukan prefiks
+
+            $antrianPerawat->kode_antrian = $kodeAntrianPrefix . str_pad($lastNumber, 3, '0', STR_PAD_LEFT); // Mengubah panjang menjadi 3
+            $antrianPerawat->number = $lastNumber;
         });
     }
-
 }

@@ -15,52 +15,6 @@
     <x-admin.style />
     @stack('style')
 
-    {{-- <style>
-        /* Membuat overlay menjadi transparan */
-        .modal-backdrop {
-            background-color: transparent !important;
-        }
-
-        body.dark-mode {
-            background-color: #3f3f3f;
-            color: #ffffff;
-        }
-
-        .dark-mode .table-bordered {
-            background-color: #1e1e1e;
-            color: #ffffff;
-        }
-
-        .dark-mode .navbar,
-        .dark-mode .sidebar,
-        .dark-mode .footer,
-        .dark-mode .menu-vertical {
-            background-color: #1e1e1e;
-        }
-
-        .dark-mode .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .dark-mode .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .dark-mode .menu-inner .menu-item .menu-link {
-            color: #ffffff;
-        }
-
-        .dark-mode .menu-inner .menu-item.active .menu-link {
-            background-color: #343a40;
-            color: #ffffff;
-        }
-
-        .dark-mode .menu-icon {
-            color: #ffffff;
-        }
-    </style> --}}
 </head>
 
 <body>
@@ -80,6 +34,41 @@
 
                     <!-- Content -->
                     @yield('content')
+
+                    <!-- Chat Box -->
+                    {{-- <div id="chat-box" class="chat-box">
+                        <div class="chat-header">
+                            <span>Customer Service</span>
+                            <button type="button" id="close-chat" class="btn btn-close mb-2 mt-2"
+                                aria-label="Close"></button>
+                        </div>
+
+                        <div class="chat-content" id="chat-content">
+                            <!-- Messages will be appended here -->
+                            <div class="message admin"><strong>Admin</strong>
+                                <p>Apakah ada yang bisa dibantu?</p>
+                            </div>
+                            <div class="message user">
+                                <strong>User</strong>
+                                <p>I need assistance with my order.</p>
+                            </div>
+                        </div>
+
+                        <!-- Chat Form -->
+                        <form id="chat-form" method="POST">
+                            @csrf
+                            <div class="kirim" style="display: flex; justify-content: center; align-items: center">
+                                <input type="hidden" id="receiver-id" name="receiver_id" value="1">
+                                <textarea id="message" name="message" placeholder="Type your message..."></textarea>
+                                <button type="submit">Send</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Customer Icon (fixed on screen) -->
+                    <div id="chat-icon" class="chat-icon">
+                        <img src="{{ asset('assets/images/cs.png') }}" alt="Customer" width="150" height="130">
+                    </div> --}}
 
                     <!-- Footer -->
                     <x-admin.footer />

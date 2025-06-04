@@ -1,7 +1,7 @@
 <!-- Modal Resep BARU -->
 <div class="modal fade" id="tambahObat{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="pasienbaru" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Tambah Obat atau
@@ -91,11 +91,11 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="table mt-2 mb-2 table-striped table-bordered"
-                                        style="overflow: auto; min-width: 130%;">
+                                        style="overflow: auto; min-width: 165%;">
                                         <thead class="table-primary text-center text-nowrap">
                                             <tr>
                                                 <th>NAMA OBAT</th>
-                                                <th>ATURAN MINUM</th>
+                                                <th>ATURAN PENGGUNAAN</th>
                                                 <th>JUMLAH OBAT</th>
                                                 <th>HARGA/TABLET</th>
                                                 <th>TOTAL HARGA</th>
@@ -103,509 +103,330 @@
                                         </thead>
                                         <tbody class="text-center">
                                             {{-- {{ dd($antrianObat) }} --}}
-                                            <tr>
-                                                {{-- NAMA OBAT --}}
-                                                <td>
-                                                    <div class="Obat" data-pasien-id="{{ $item->id }}">
-                                                        @php
-                                                            $semuaObat = json_decode($item->obat->obat_Ro, true) ?? [];
-                                                            $anjuranMinum =
-                                                                json_decode($item->obat->soap->soap_p_anjuran, true) ??
-                                                                [];
-                                                            $ngombe =
-                                                                json_decode($item->obat->soap->soap_r_minum, true) ??
-                                                                [];
-                                                            $olehNgombe = array_merge(
-                                                                (array) $anjuranMinum,
-                                                                (array) $ngombe,
-                                                            );
-                                                            $hargaJualData = $reseps->keyBy('nama_obat');
-                                                        @endphp
 
-                                                        @if (!empty($semuaObat) && !empty($olehNgombe))
-                                                            @foreach ($semuaObat as $index => $namaObat)
-                                                                @php
-                                                                    // Memastikan $namaObat adalah string
-                                                                    $namaObat = is_array($namaObat)
-                                                                        ? implode(', ', $namaObat)
-                                                                        : $namaObat;
+                                            {{-- NAMA OBAT --}}
+                                            <td>
+                                                <div class="obat-container" data-pasien-id="{{ $item->id }}">
+                                                    @php
+                                                        $semuaObat = json_decode($item->obat->obat_Ro, true) ?? [];
+                                                        $anjuranMinum =
+                                                            json_decode($item->obat->soap->soap_p_anjuran, true) ?? [];
+                                                        $ngombe =
+                                                            json_decode($item->obat->soap->soap_r_minum, true) ?? [];
+                                                        $olehNgombe = array_merge(
+                                                            (array) $anjuranMinum,
+                                                            (array) $ngombe,
+                                                        );
+                                                        $aturanMinum =
+                                                            json_decode($item->obat->soap->soap_p_aturan, true) ?? [];
+                                                        $minumAturan =
+                                                            json_decode($item->obat->soap->soap_r_minumRacikan, true) ??
+                                                            [];
+                                                        $allMinumAturan = array_merge(
+                                                            (array) $aturanMinum,
+                                                            array_filter((array) $minumAturan),
+                                                        );
+                                                        $hargaJualData = $reseps->keyBy('nama_obat');
+                                                    @endphp
 
-                                                                    // Pastikan $anjuran adalah string
-                                                                    $anjuran = isset($olehNgombe[$index])
-                                                                        ? $olehNgombe[$index]
-                                                                        : 'Kosong';
-
-                                                                    // Memeriksa keberadaan nama obat dan mengambil harga
-                                                                    $hargaPokok = '0'; // Default value
-                                                                    // dd($hargaPokok);
-
-                                                                    if (
-                                                                        $hargaJualData->contains('nama_obat', $namaObat)
-                                                                    ) {
-                                                                        $hargaJual = $hargaJualData->get($namaObat);
-
-                                                                        // Pastikan $hargaJual adalah objek dan memiliki properti harga_pokok
-                                                                        if (
-                                                                            is_object($hargaJual) &&
-                                                                            property_exists($hargaJual, 'harga_jual')
-                                                                        ) {
-                                                                            $hargaPokok = $hargaJual->harga_jual;
-                                                                        } else {
-                                                                            Log::warning(
-                                                                                'hargaJual tidak valid untuk: ' .
-                                                                                    $namaObat,
-                                                                            );
-                                                                        }
-                                                                    } else {
-                                                                        Log::warning(
-                                                                            'Nama obat tidak ditemukan dalam hargaJualData: ' .
-                                                                                $namaObat,
-                                                                        );
-                                                                    }
-                                                                @endphp
-                                                                <div class="form-group"
-                                                                    data-pasien-id="{{ $item->id }}"
-                                                                    style="display: flex; align-items: center;">
-                                                                    <div class="nama-obat"
-                                                                        style="margin-right: 10px; margin-top: 12px; display: flex; gap: 10px; align-items: center; width: 100%;">
-                                                                        <div class="input-row d-flex" style="flex: 1;">
+                                                    @if (!empty($semuaObat) && !empty($olehNgombe))
+                                                        @foreach ($semuaObat as $index => $namaObat)
+                                                            @php
+                                                                $namaObat = is_array($namaObat)
+                                                                    ? implode(', ', $namaObat)
+                                                                    : $namaObat;
+                                                                $anjuran = isset($olehNgombe[$index])
+                                                                    ? $olehNgombe[$index]
+                                                                    : 'AC';
+                                                                $aturan = isset($allMinumAturan[$index])
+                                                                    ? $allMinumAturan[$index]
+                                                                    : 'Sebelum Makan';
+                                                                $hargaPokok = $hargaJualData->contains(
+                                                                    'nama_obat',
+                                                                    $namaObat,
+                                                                )
+                                                                    ? $hargaJualData->get($namaObat)->harga_jual ?? '0'
+                                                                    : '0';
+                                                            @endphp
+                                                            <div class="form-group obat-row">
+                                                                <div class="nama-obat">
+                                                                    <div class="input-row">
+                                                                        <div class="nama-obat-container">
                                                                             <input type="text"
                                                                                 name="obat_Ro[{{ $index }}][namaObatUpdate]"
                                                                                 id="obat_Ro_{{ $item->id }}_{{ $index }}"
                                                                                 data-pasien-id="{{ $item->id }}"
+                                                                                data-index="{{ $index }}"
                                                                                 value="{{ $namaObat }}"
-                                                                                class="form-control text-center border-primary obat-input"
-                                                                                style="font-size: 14px; font-weight: bold; width: 180px"
-                                                                                placeholder="Cari Obat..." />
+                                                                                class="form-control obat-input"
+                                                                                placeholder="Cari Obat..."
+                                                                                aria-autocomplete="list"
+                                                                                aria-controls="results-{{ $item->id }}-{{ $index }}" />
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-hapus"
-                                                                                style="margin-left: 10px; font-size: 14px;"
                                                                                 data-pasien-id="{{ $item->id }}"
                                                                                 data-index="{{ $index }}"
                                                                                 data-nama-obat="{{ $namaObat }}"
-                                                                                data-harga="{{ $hargaPokok }}">
-                                                                                <i class="fa-solid fa-trash"
-                                                                                    style="justify-content: start"></i>
+                                                                                data-harga="{{ $hargaPokok }}"
+                                                                                aria-label="Hapus obat">
+                                                                                <i class="fa-solid fa-trash"></i>
                                                                             </button>
-
-                                                                            {{-- <div id="dropdown-namaobat-apoteker-{{ $item->id }}-{{ $index }}" class="dropdown-menu" data-pasien-id="{{ $item->id }}" style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 30%;"></div> --}}
-
-                                                                            <div class="search-results border-primary"
-                                                                                id="results-{{ $item->id }}-{{ $index }}"
-                                                                                data-pasien-id="{{ $item->id }}"
-                                                                                style="width: 170px; position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; display: none; cursor: pointer;">
-                                                                            </div>
                                                                         </div>
-                                                                        <div class="input-row" style="flex: 0 0 auto;">
-                                                                            <select
-                                                                                name="obat_Ro[{{ $index }}][anjuran]"
-                                                                                id="anjuran_{{ $item->id }}_{{ $index }}"
-                                                                                class="form-control border-primary text-center"
-                                                                                style="font-size: 14px;">
-                                                                                {{-- <option value="-" selected >-</option> --}}
-                                                                                <option value="AC"
-                                                                                    {{ $anjuran == 'AC' ? 'selected' : '' }}>
-                                                                                    AC</option>
-                                                                                <option value="AD"
-                                                                                    {{ $anjuran == 'AD' ? 'selected' : '' }}>
-                                                                                    AD</option>
-                                                                                <option value="AS"
-                                                                                    {{ $anjuran == 'AS' ? 'selected' : '' }}>
-                                                                                    AS</option>
-                                                                                <option value="C"
-                                                                                    {{ $anjuran == 'C' ? 'selected' : '' }}>
-                                                                                    C</option>
-                                                                                <option value="CTH"
-                                                                                    {{ $anjuran == 'CTH' ? 'selected' : '' }}>
-                                                                                    CTH</option>
-                                                                                <option value="DC"
-                                                                                    {{ $anjuran == 'DC' ? 'selected' : '' }}>
-                                                                                    DC</option>
-                                                                                <option value="PC"
-                                                                                    {{ $anjuran == 'PC' ? 'selected' : '' }}>
-                                                                                    PC</option>
-                                                                                <option value="OD"
-                                                                                    {{ $anjuran == 'OD' ? 'selected' : '' }}>
-                                                                                    OD</option>
-                                                                                <option value="OS"
-                                                                                    {{ $anjuran == 'OS' ? 'selected' : '' }}>
-                                                                                    OS</option>
-                                                                                <option value="ODS"
-                                                                                    {{ $anjuran == 'ODS' ? 'selected' : '' }}>
-                                                                                    ODS</option>
-                                                                                <option value="PRM"
-                                                                                    {{ $anjuran == 'PRM' ? 'selected' : '' }}>
-                                                                                    PRM</option>
-                                                                                <option value="UE"
-                                                                                    {{ $anjuran == 'UE' ? 'selected' : '' }}>
-                                                                                    UE</option>
-                                                                            </select>
-                                                                        </div>
+                                                                        <div class="search-results border-primary"
+                                                                            id="results-{{ $item->id }}-{{ $index }}"
+                                                                            role="listbox"></div>
+                                                                    </div>
+                                                                    <div class="anjuran">
+                                                                        <input type="text"
+                                                                            name="obat_Ro[{{ $index }}][anjuran]"
+                                                                            id="anjuran_{{ $item->id }}_{{ $index }}"
+                                                                            class="form-control anjuran-select"
+                                                                            value="{{ $anjuran }}">
                                                                     </div>
                                                                 </div>
-                                                            @endforeach
-                                                        @else
-                                                            <p>Kosong</p>
-                                                        @endif
-                                                    </div>
-                                                </td>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <p class="no-data">Tidak ada obat</p>
+                                                    @endif
+                                                </div>
+                                            </td>
 
-                                                {{-- ATURAN MINUM --}}
-                                                <td>
-                                                    <div class="minum mt-3"
-                                                        style="display: flex; align-items: center; gap: 15px; justify-content: center">
-                                                        <div class="ngombe">
+                                            <!-- ATURAN MINUM -->
+                                            <td>
+                                                <div class="minum-container">
+                                                    @if (!empty($allMinumAturan))
+                                                        @foreach ($allMinumAturan as $index => $minum)
+                                                            <div class="form-group minum-row">
+                                                                <div class="input-group">
+                                                                    <select name="obat_Ro[{{ $index }}][sehari]"
+                                                                        id="sehari_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control sehari-select"
+                                                                        aria-label="Pilih frekuensi minum">
+                                                                        <option value="1x1/5"
+                                                                            {{ $minum == '1x1/5' ? 'selected' : '' }}>
+                                                                            1x1/5</option>
+                                                                        <option value="2x1/5"
+                                                                            {{ $minum == '2x1/5' ? 'selected' : '' }}>
+                                                                            2x1/5</option>
+                                                                        <option value="3x1/5"
+                                                                            {{ $minum == '3x1/5' ? 'selected' : '' }}>
+                                                                            3x1/5</option>
+                                                                        <option value="3x2"
+                                                                            {{ $minum == '3x2' ? 'selected' : '' }}>
+                                                                            3x2</option>
+                                                                    </select>
+                                                                </div>
+                                                                <span class="separator">-</span>
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        name="obat_Ro[{{ $index }}][aturan]"
+                                                                        id="aturan_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control aturan-select"
+                                                                        value="Sebelum Makan">
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <p class="no-data">Kosong</p>
+                                                    @endif
+                                                </div>
+                                            </td>
+
+                                            <!-- JUMLAH OBAT -->
+                                            <td>
+                                                <div class="jumlah-container" data-pasien-id="{{ $item->id }}">
+                                                    @php
+                                                        $jmlhP =
+                                                            json_decode($item->obat->soap->soap_p_jumlah, true) ?? [];
+                                                        $jmlhR =
+                                                            json_decode(
+                                                                $item->obat->soap->soap_r_jumlahObatRacikan,
+                                                                true,
+                                                            ) ?? [];
+                                                        $jmlhP = array_filter($jmlhP, function ($value) {
+                                                            return !is_null($value) && $value !== '';
+                                                        });
+                                                        $jmlhR = array_filter($jmlhR, function ($value) {
+                                                            return !is_null($value) && $value !== '';
+                                                        });
+                                                        $allJumlah = array_merge($jmlhP, $jmlhR);
+                                                        $jenisObat =
+                                                            json_decode($item->obat->soap->soap_p_jenisobat, true) ??
+                                                            [];
+                                                        $bangsaObat =
+                                                            json_decode(
+                                                                $item->obat->soap->soap_r_jenisObatRacikan,
+                                                                true,
+                                                            ) ?? [];
+                                                        $jenisObat = array_filter($jenisObat, function ($value) {
+                                                            return !is_null($value) && $value !== '';
+                                                        });
+                                                        $bangsaObat = array_filter($bangsaObat, function ($value) {
+                                                            return !is_null($value) && $value !== '';
+                                                        });
+                                                        $allJenisObat = array_merge($jenisObat, $bangsaObat);
+                                                    @endphp
+                                                    @if (!empty($allJenisObat))
+                                                        @foreach ($allJenisObat as $index => $jenis)
                                                             @php
-                                                                $aturanMinum =
-                                                                    json_decode(
-                                                                        $item->obat->soap->soap_p_aturan,
-                                                                        true,
-                                                                    ) ?? [];
-                                                                $minumAturan =
-                                                                    json_decode(
-                                                                        $item->obat->soap->soap_r_minumRacikan,
-                                                                        true,
-                                                                    ) ?? []; // Decode JSON menjadi array
-
-                                                                // Gabungkan data aturan minum dari kedua sumber
-                                                                $allMinumAturan = array_merge(
-                                                                    (array) $aturanMinum,
-                                                                    array_filter((array) $minumAturan),
-                                                                );
-                                                                // dd($allMinumAturan);
+                                                                $jumlah = $allJumlah[$index] ?? 0;
                                                             @endphp
-
-                                                            {{-- ATURAN MINUM --}}
-                                                            @if (!empty($allMinumAturan))
-                                                                @foreach ($allMinumAturan as $index => $minum)
-                                                                    <div class="form-group"
-                                                                        style="display: flex; align-items: center;">
-                                                                        <div class="input-group">
-                                                                            <select
-                                                                                name="obat_Ro[{{ $index }}][sehari]"
-                                                                                id="sehari[{{ $index }}]"
-                                                                                style="min-width: 80px; margin-right: 10px; width: 50px; font-weight: bold"
-                                                                                class="form-control border border-primary text-center">
-                                                                                <option value="1x1"
-                                                                                    {{ $minum == '1x1' ? 'selected' : '' }}>
-                                                                                    1x1</option>
-                                                                                <option value="2x1"
-                                                                                    {{ $minum == '2x1' ? 'selected' : '' }}>
-                                                                                    2x1</option>
-                                                                                <option value="3x1"
-                                                                                    {{ $minum == '3x1' ? 'selected' : '' }}>
-                                                                                    3x1</option>
-                                                                                <option value="4x1"
-                                                                                    {{ $minum == '4x1' ? 'selected' : '' }}>
-                                                                                    4x1</option>
-                                                                                <option value="5x1"
-                                                                                    {{ $minum == '5x1' ? 'selected' : '' }}>
-                                                                                    5x1</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="input-group">
-                                                                            <select
-                                                                                name="obat_Ro[{{ $index }}][aturan]"
-                                                                                id="aturan[{{ $index }}]"
-                                                                                class="form-control mt-1 mb-1 border border-primary text-black"
-                                                                                style="font-size: 14px; width: auto; font-weight: bold">
-                                                                                <option value="Sesudah Makan"
-                                                                                    {{ $minum == 'Sesudah Makan' ? 'selected' : '' }}>
-                                                                                    Sesudah Makan</option>
-                                                                                <option value="Sebelum Makan"
-                                                                                    {{ $minum == 'Sebelum Makan' ? 'selected' : '' }}>
-                                                                                    Sebelum Makan</option>
-                                                                                <option value="Bersama Makan"
-                                                                                    {{ $minum == 'Bersama Makan' ? 'selected' : '' }}>
-                                                                                    Bersama Makan</option>
-                                                                                <option value="Dilarutkan"
-                                                                                    {{ $minum == 'Dilarutkan' ? 'selected' : '' }}>
-                                                                                    Dilarutkan</option>
-                                                                                <option value="Dioleskan"
-                                                                                    {{ $minum == 'Dioleskan' ? 'selected' : '' }}>
-                                                                                    Dioleskan</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @else
-                                                                <p>Kosong</p>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-                                                {{-- JUMLAH OBAT --}}
-                                                <td>
-                                                    <div class="jumlah mt-3" data-pasien-id="{{ $item->id }}">
-                                                        @php
-                                                            // Decode JSON menjadi array
-                                                            $jmlhP =
-                                                                json_decode($item->obat->soap->soap_p_jumlah, true) ??
-                                                                [];
-                                                            $jmlhR =
-                                                                json_decode(
-                                                                    $item->obat->soap->soap_r_jumlahObatRacikan,
-                                                                    true,
-                                                                ) ?? [];
-
-                                                            // Hanya ambil nilai yang tidak null atau kosong
-                                                            $jmlhP = array_filter($jmlhP, function ($value) {
-                                                                return !is_null($value) && $value !== '';
-                                                            });
-
-                                                            $jmlhR = array_filter($jmlhR, function ($value) {
-                                                                return !is_null($value) && $value !== '';
-                                                            });
-
-                                                            // $jmlhP = array_filter(
-                                                            //     $jmlhP,
-                                                            //     fn($value) => !is_null($value) && $value !== '',
-                                                            // );
-                                                            // $jmlhR = array_filter(
-                                                            //     $jmlhR,
-                                                            //     fn($value) => !is_null($value) && $value !== '',
-                                                            // );
-
-                                                            // Gabungkan kedua array jumlah
-                                                            $allJumlah = array_merge($jmlhP, $jmlhR);
-
-                                                            // jenis obat
-                                                            $jenisObat =
-                                                                json_decode(
-                                                                    $item->obat->soap->soap_p_jenisobat,
-                                                                    true,
-                                                                ) ?? [];
-                                                            $bangsaObat =
-                                                                json_decode(
-                                                                    $item->obat->soap->soap_r_jenisObatRacikan,
-                                                                    true,
-                                                                ) ?? [];
-
-                                                            // Hanya ambil jenis obat yang sesuai
-                                                            $jenisObat = array_filter($jenisObat, function ($value) {
-                                                                return !is_null($value) && $value !== '';
-                                                            });
-
-                                                            $bangsaObat = array_filter($bangsaObat, function ($value) {
-                                                                return !is_null($value) && $value !== '';
-                                                            });
-
-                                                            // $jenisObat = array_filter(
-                                                            //     $jenisObat,
-                                                            //     fn($value) => !is_null($value) && $value !== '',
-                                                            // );
-                                                            // $bangsaObat = array_filter(
-                                                            //     $bangsaObat,
-                                                            //     fn($value) => !is_null($value) && $value !== '',
-                                                            // );
-
-                                                            // Gabungkan kedua array jenis obat
-                                                            $allJenisObat = array_merge($jenisObat, $bangsaObat);
-
-                                                            // Hitung total jumlah
-                                                            $totalJumlah = array_sum(array_map('intval', $allJumlah));
-                                                        @endphp
-
-                                                        {{-- Tampilkan jenis obat dengan jumlahnya --}}
-                                                        <div class="form-group"
-                                                            style="display: contents; align-items: center;">
-                                                            @if (!empty($allJenisObat))
-                                                                @foreach ($allJenisObat as $index => $jenis)
-                                                                    @php
-                                                                        $jumlah = $allJumlah[$index] ?? 0;
-                                                                    @endphp
-                                                                    <div class="jmlh">
-                                                                        <div class="input-row"
-                                                                            style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                                                            <select
-                                                                                name="obat_Ro[{{ $index }}][jenisObat]"
-                                                                                id="jenisObat[{{ $index }}]"
-                                                                                style="min-width: 100px; margin-right: 10px; width: 100px; font-weight: bold"
-                                                                                class="form-control border border-primary text-center">
-                                                                                <option value="Tablet"
-                                                                                    {{ $jenis == 'Tablet' ? 'selected' : '' }}>
-                                                                                    Tablet</option>
-                                                                                <option value="Kapsul"
-                                                                                    {{ $jenis == 'Kapsul' ? 'selected' : '' }}>
-                                                                                    Kapsul</option>
-                                                                                <option value="Bungkus"
-                                                                                    {{ $jenis == 'Bungkus' ? 'selected' : '' }}>
-                                                                                    Bungkus</option>
-                                                                                <option value="Salep"
-                                                                                    {{ $jenis == 'Salep' ? 'selected' : '' }}>
-                                                                                    Salep</option>
-                                                                                <option value="Krim"
-                                                                                    {{ $jenis == 'Krim' ? 'selected' : '' }}>
-                                                                                    Krim</option>
-                                                                                <option value="Mililiter"
-                                                                                    {{ $jenis == 'Mililiter' ? 'selected' : '' }}>
-                                                                                    Mililiter</option>
-                                                                                <option value="Sendok Teh"
-                                                                                    {{ $jenis == 'Sendok Teh' ? 'selected' : '' }}>
-                                                                                    Sendok Teh</option>
-                                                                                <option value="Sendok Makan"
-                                                                                    {{ $jenis == 'Sendok Makan' ? 'selected' : '' }}>
-                                                                                    Sendok Makan</option>
-                                                                                <option value="Tetes"
-                                                                                    {{ $jenis == 'Tetes' ? 'selected' : '' }}>
-                                                                                    Tetes</option>
-                                                                                <option value="Puyer/Racikan"
-                                                                                    {{ $jenis == 'Puyer/Racikan' ? 'selected' : '' }}>
-                                                                                    Puyer/Racikan</option>
-                                                                            </select>
-                                                                            <span>:</span>
-                                                                            <input type="text"
-                                                                                name="obat_Ro[{{ $index }}][jumlah]"
-                                                                                id="jumlah[{{ $index }}]"
-                                                                                class="form-control jumlahObatt"
-                                                                                data-pasien-id="{{ $item->id }}"
-                                                                                value="{{ $jumlah }}"
-                                                                                style="width: 70px"
-                                                                                placeholder="Jumlah">
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @else
-                                                                <p>Kosong</p>
-                                                            @endif
-                                                        </div>
-
-                                                        {{-- Tampilkan total jumlah --}}
-                                                        {{-- <div class="jmlah-total mt-2" data-group="jumlahObatt_{{ $index }}" style="display: flex; justify-content: center; align-items: center; height: 50%;">
-                                                    <div class="input-row">
-                                                        <input type="text" name="" class="form-control border-primary text-center jumlahTotal" disabled value="{{ $totalJumlah }}" style="font-size: 20px; font-weight: bold; width: 50px;">
-                                                    </div>
-                                                </div> --}}
-                                                    </div>
-                                                </td>
-
-                                                {{-- HARGA/TABLET --}}
-                                                <td>
-                                                    <div class="harga-tablet mr-3"
-                                                        data-pasien-id="{{ $item->id }}" id="hargaTablet">
-                                                        @php
-                                                            // Fungsi untuk memformat harga ke dalam format Rupiah
-                                                            if (!function_exists('Rupiah')) {
-                                                                function Rupiah($angka)
-                                                                {
-                                                                    return 'Rp ' . number_format($angka, 2, ',', '.');
-                                                                }
-                                                            }
-
-                                                            // Ambil data harga jual dari model resep dan simpan dalam array associative
-                                                            $hargaJualData = $reseps->keyBy('nama_obat'); // Pastikan $reseps adalah koleksi dari model Resep
-
-                                                            // Decode JSON menjadi array
-                                                            $regoObat =
-                                                                json_decode($item->obat->soap->soap_p, true) ?? [];
-                                                            $regoObatRacikan =
-                                                                json_decode($item->obat->soap->soap_r, true) ?? [];
-
-                                                            // Gabungkan semua obat
-                                                            $regoDewedewe = array_merge(
-                                                                (array) $regoObat,
-                                                                array_filter((array) $regoObatRacikan),
-                                                            );
-                                                            // dd($regoDewedewe);
-                                                        @endphp
-
-                                                        {{-- Gabungan obat racikan dan resep --}}
-                                                        @if (is_array($regoDewedewe) && count($regoDewedewe) > 0)
-                                                            @foreach ($regoDewedewe as $namaObat)
-                                                                @php
-                                                                    // Dapatkan harga jual berdasarkan nama obat
-                                                                    $hargaJual =
-                                                                        $hargaJualData->get($namaObat)->harga_jual ??
-                                                                        '0,00'; // Default ke 0 jika tidak ada
-                                                                @endphp
-                                                                <div class="form-group" style="margin-top: -20px">
-                                                                    <label for="harga"></label>
-                                                                    <div class="input-group">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text mt-2"
-                                                                                style="background: rgb(228, 228, 228)">
-                                                                                <b>Rp.</b>
-                                                                            </span>
-                                                                        </div>
-                                                                        {{-- Tampilkan harga dengan format Rupiah --}}
-                                                                        <input type="text"
-                                                                            name="obat_Ro[{{ $loop->index }}][hargaTablet]"
-                                                                            id="hargaTablet[{{ $loop->index }}]"
-                                                                            class="form-control mt-2 text-end hargaTablet"
-                                                                            data-pasien-id="{{ $item->id }}"
-                                                                            readonly value="{{ $hargaJual }}">
-                                                                    </div>
-                                                                </div> <!-- Menampilkan nama obat dan harga jual -->
-                                                            @endforeach
-                                                        @else
-                                                            <p>Tidak ada obat yang tersedia</p>
-                                                        @endif
-                                                    </div>
-                                                </td>
-
-                                                {{-- HARGA TOTAL --}}
-                                                <td>
-                                                    <div class="harga-total mr-3"
-                                                        data-pasien-id="{{ $item->id }}">
-                                                        @php
-                                                            if (!function_exists('Rupiah')) {
-                                                                function Rupiah($angka)
-                                                                {
-                                                                    return 'Rp ' . number_format($angka, 2, ',', '.');
-                                                                }
-                                                            }
-
-                                                            $hargaJualData = $reseps->keyBy('nama_obat');
-                                                            $obatData =
-                                                                json_decode($item->obat->soap->soap_p, true) ?? [];
-                                                            $obatRacikanData =
-                                                                json_decode($item->obat->soap->soap_r, true) ?? [];
-                                                            $jmlhP =
-                                                                json_decode($item->obat->soap->soap_p_jumlah, true) ??
-                                                                [];
-                                                            $jmlhR =
-                                                                json_decode(
-                                                                    $item->obat->soap->soap_r_jumlahObatRacikan,
-                                                                    true,
-                                                                ) ?? [];
-                                                            $semuaObat = array_merge($obatData, $obatRacikanData);
-                                                            $allJumlah = array_merge($jmlhP, $jmlhR);
-                                                        @endphp
-
-                                                        @if (is_array($semuaObat) && count($semuaObat) > 0)
-                                                            @foreach ($semuaObat as $index => $namaObat)
-                                                                @php
-                                                                    $hargaJual =
-                                                                        $hargaJualData->get($namaObat)->harga_jual ?? 0;
-                                                                    $jumlahObat = $allJumlah[$index] ?? 0;
-                                                                    $totalHarga = $hargaJual * $jumlahObat;
-                                                                @endphp
-                                                                <div class="form-group" style="margin-top: -20px">
-                                                                    <label for="harga"></label>
-                                                                    <div class="input-group">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text mt-2"
-                                                                                style="background: rgb(228, 228, 228)">
-                                                                                <b>Rp.</b>
-                                                                            </span>
-                                                                        </div>
-                                                                        <input type="text"
-                                                                            name="obat_Ro[{{ $index }}][hargaTotal]"
-                                                                            data-pasien-id="{{ $item->id }}"
-                                                                            id="TotalHarga_{{ $item->id }}_{{ $index }}"
-                                                                            class="form-control mt-2 text-end harga_total"
-                                                                            value="{{ $totalHarga }}" readonly>
-                                                                    </div>
+                                                            <div class="form-group jumlah-row">
+                                                                <div class="jumlah-group">
+                                                                    <select
+                                                                        name="obat_Ro[{{ $index }}][jenisObat]"
+                                                                        id="jenisObat_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control jenis-obat-select"
+                                                                        aria-label="Pilih jenis obat">
+                                                                        <option value="Tablet"
+                                                                            {{ $jenis == 'Tablet' ? 'selected' : '' }}>
+                                                                            Tablet</option>
+                                                                        <option value="Kapsul"
+                                                                            {{ $jenis == 'Kapsul' ? 'selected' : '' }}>
+                                                                            Kapsul</option>
+                                                                        <option value="Bungkus"
+                                                                            {{ $jenis == 'Bungkus' ? 'selected' : '' }}>
+                                                                            Bungkus</option>
+                                                                        <option value="Sirup"
+                                                                            {{ $jenis == 'Sirup' ? 'selected' : '' }}>
+                                                                            Sirup</option>
+                                                                        <option value="Salep"
+                                                                            {{ $jenis == 'Salep' ? 'selected' : '' }}>
+                                                                            Salep</option>
+                                                                        <option value="Krim"
+                                                                            {{ $jenis == 'Krim' ? 'selected' : '' }}>
+                                                                            Krim</option>
+                                                                        <option value="Fls"
+                                                                            {{ $jenis == 'Fls' ? 'selected' : '' }}>
+                                                                            Fls</option>
+                                                                        <option value="Ampul"
+                                                                            {{ $jenis == 'Ampul' ? 'selected' : '' }}>
+                                                                            Ampul</option>
+                                                                        <option value="Vial"
+                                                                            {{ $jenis == 'Vial' ? 'selected' : '' }}>
+                                                                            Vial</option>
+                                                                        <option value="Puyer/Racikan"
+                                                                            {{ $jenis == 'Puyer/Racikan' ? 'selected' : '' }}>
+                                                                            Puyer/Racikan</option>
+                                                                    </select>
+                                                                    <span class="separator">:</span>
+                                                                    <input type="text"
+                                                                        name="obat_Ro[{{ $index }}][jumlah]"
+                                                                        id="jumlah_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control jumlah-input"
+                                                                        data-pasien-id="{{ $item->id }}"
+                                                                        data-index="{{ $index }}"
+                                                                        value="{{ $jumlah }}"
+                                                                        placeholder="Jumlah"
+                                                                        aria-label="Masukkan jumlah obat" />
                                                                 </div>
-                                                            @endforeach
-                                                        @else
-                                                            <p>Tidak ada obat yang tersedia</p>
-                                                        @endif
-                                                    </div>
-                                                </td>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <p class="no-data">Kosong</p>
+                                                    @endif
+                                                </div>
+                                            </td>
 
-                                            </tr>
+                                            <!-- HARGA/TABLET -->
+                                            <td>
+                                                <div class="harga-tablet-container"
+                                                    data-pasien-id="{{ $item->id }}" id="hargaTablet">
+                                                    @php
+                                                        $hargaJualData = $reseps->keyBy('nama_obat');
+                                                        $regoObat = json_decode($item->obat->soap->soap_p, true) ?? [];
+                                                        $regoObatRacikan =
+                                                            json_decode($item->obat->soap->soap_r, true) ?? [];
+                                                        $regoDewedewe = array_merge(
+                                                            (array) $regoObat,
+                                                            array_filter((array) $regoObatRacikan),
+                                                        );
+                                                    @endphp
+                                                    @if (is_array($regoDewedewe) && count($regoDewedewe) > 0)
+                                                        @foreach ($regoDewedewe as $index => $namaObat)
+                                                            @php
+                                                                $hargaJual =
+                                                                    $hargaJualData->get($namaObat)->harga_jual ?? '0';
+                                                            @endphp
+                                                            <div class="form-group harga-tablet-row">
+                                                                <div class="input-group">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text"
+                                                                            style="background: rgb(255, 255, 255)">
+                                                                            <b>Rp.</b>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text"
+                                                                        name="obat_Ro[{{ $index }}][hargaTablet]"
+                                                                        id="hargaTablet_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control harga-tablet-input"
+                                                                        data-pasien-id="{{ $item->id }}"
+                                                                        data-index="{{ $index }}"
+                                                                        data-nama-obat="{{ $namaObat }}"
+                                                                        value="{{ number_format($hargaJual, 0, ',', '.') }}"
+                                                                        readonly aria-label="Harga per tablet">
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <p class="no-data">Tidak ada obat yang tersedia</p>
+                                                    @endif
+                                                </div>
+                                            </td>
+
+                                            <!-- HARGA TOTAL -->
+                                            <td>
+                                                <div class="harga-total-container"
+                                                    data-pasien-id="{{ $item->id }}">
+                                                    @php
+                                                        $obatData = json_decode($item->obat->soap->soap_p, true) ?? [];
+                                                        $obatRacikanData =
+                                                            json_decode($item->obat->soap->soap_r, true) ?? [];
+                                                        $jmlhP =
+                                                            json_decode($item->obat->soap->soap_p_jumlah, true) ?? [];
+                                                        $jmlhR =
+                                                            json_decode(
+                                                                $item->obat->soap->soap_r_jumlahObatRacikan,
+                                                                true,
+                                                            ) ?? [];
+                                                        $semuaObat = array_merge($obatData, $obatRacikanData);
+                                                        $allJumlah = array_merge($jmlhP, $jmlhR);
+                                                    @endphp
+                                                    @if (is_array($semuaObat) && count($semuaObat) > 0)
+                                                        @foreach ($semuaObat as $index => $namaObat)
+                                                            @php
+                                                                $hargaJual =
+                                                                    $hargaJualData->get($namaObat)->harga_jual ?? 0;
+                                                                $jumlahObat = $allJumlah[$index] ?? 0;
+                                                                $totalHarga = $hargaJual * $jumlahObat;
+                                                            @endphp
+                                                            <div class="form-group harga-total-row">
+                                                                <div class="input-group">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text"
+                                                                            style="background: rgb(255, 255, 255)">
+                                                                            <b>Rp.</b>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text"
+                                                                        name="obat_Ro[{{ $index }}][hargaTotal]"
+                                                                        id="TotalHarga_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control harga-total-input"
+                                                                        data-pasien-id="{{ $item->id }}"
+                                                                        data-index="{{ $index }}"
+                                                                        data-nama-obat="{{ $namaObat }}"
+                                                                        value="{{ number_format($totalHarga, 0, ',', '.') }}"
+                                                                        readonly aria-label="Harga total">
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <p class="no-data">Tidak ada obat yang tersedia</p>
+                                                    @endif
+                                                </div>
+                                            </td>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -626,21 +447,22 @@
                             </div>
                             <div class="col-lg-4 mt-3" style="justify-content: end">
                                 <div class="form-group">
-                                    <label for="total_semua"><strong>TOTAL HARGA KESELURUHAN</strong></label>
+                                    <label for="totalSemuaHarga"><strong>TOTAL HARGA KESELURUHAN</strong></label>
                                     <div class="input-group">
                                         <div class="input-group-append">
                                             <span class="input-group-text mt-2"
-                                                style="background: rgb(228, 228, 228); padding: 12px 17px; font-size: 30px;">
+                                                style="background: rgb(255, 255, 255)">
                                                 <b>Rp.</b>
                                             </span>
                                         </div>
                                         <input type="text" name="totalSemuaHarga"
-                                            data-pasien-id="{{ $item->id }}" id="totalSemuaHarga"
-                                            class="form-control mt-2 text-end" readonly
-                                            style="padding: 12px 17px; font-size: 28px;" placeholder="Total Semua">
+                                            data-pasien-id="{{ $item->id }}"
+                                            id="totalSemuaHarga_{{ $item->id }}"
+                                            class="form-control mt-2 text-end" readonly placeholder="Total Semua">
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -658,29 +480,292 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     <style>
+        /* Container utama */
+        .obat-container,
+        .minum-container,
+        .jumlah-container,
+        .harga-tablet-container,
+        .harga-total-container {
+            padding: 12px;
+            width: 100%;
+            position: relative;
+            /* Pastikan elemen anak absolut diposisikan relatif ke container */
+        }
+
+        /* Form group untuk setiap baris */
+        .form-group.obat-row,
+        .form-group.minum-row,
+        .form-group.jumlah-row,
+        .form-group.harga-tablet-row,
+        .form-group.harga-total-row {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Jarak ke bawah hanya jika ada lebih dari 1 data */
+        .obat-container:has(.obat-row:nth-child(n+2)) .obat-row:not(:last-child),
+        .minum-container:has(.minum-row:nth-child(n+2)) .minum-row:not(:last-child),
+        .jumlah-container:has(.jumlah-row:nth-child(n+2)) .jumlah-row:not(:last-child),
+        .harga-tablet-container:has(.harga-tablet-row:nth-child(n+2)) .harga-tablet-row:not(:last-child),
+        .harga-total-container:has(.harga-total-row:nth-child(n+2)) .harga-total-row:not(:last-child) {
+            margin-bottom: 12px;
+        }
+
+        /* Container nama obat, select, dan tombol */
+        .nama-obat {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        /* Input row untuk input dan search results */
+        .input-row {
+            position: relative;
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 40px;
+            /* Pastikan ada ruang untuk search-results */
+        }
+
+        /* Container untuk input dan tombol hapus */
+        .nama-obat-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Container untuk jumlah obat */
+        .jumlah-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        /* Styling input obat */
+        .obat-input {
+            width: 200px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: border-color 0.2s ease;
+            padding: 6px 12px;
+        }
+
+        .obat-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Styling select anjuran */
+        .anjuran-select {
+            width: 80px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        /* Styling select aturan minum */
+        .sehari-select {
+            width: 100px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        .aturan-select {
+            width: 100px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        /* Styling select dan input jumlah */
+        .jenis-obat-select {
+            width: 120px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        .jumlah-input {
+            width: 80px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+            text-align: end;
+        }
+
+        .separator {
+            font-size: 14px;
+            color: #666;
+            flex: 0 0 auto;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Styling input harga */
+        .harga-tablet-input,
+        .harga-total-input {
+            width: 150px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+            text-align: end;
+        }
+
+        .input-group-text {
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 4px 0 0 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-right: none;
+        }
+
+        /* Styling tombol hapus */
+        .btn-hapus {
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+
+        /* Styling search results */
+        .search-results {
+            width: 100%;
+            /* Mengikuti lebar input */
+            min-height: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            border: 1px solid #007bff;
+            background: #ffffff;
+            color: #333;
+            position: static;
+            /* Ubah dari absolute ke static agar tetap di dalam input-row */
+            margin-top: 4px;
+            /* Berikan jarak kecil dari input */
+            display: none;
+            transition: opacity 0.2s ease;
+            opacity: 0;
+            z-index: 1000;
+            /* Turunkan z-index karena tidak lagi absolute */
+        }
+
+        .search-results.show {
+            display: block !important;
+            opacity: 1 !important;
+            overflow-x: auto;
+        }
+
+        .search-results .result-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: #333;
+            background: #ffffff;
+            /* Pastikan latar belakang item jelas */
+        }
+
+        .search-results .result-item:hover,
+        .search-results .result-item.selected {
+            background-color: #e9f5ff;
+        }
+
+        .search-results .result-item.loading {
+            color: #888;
+            font-style: italic;
+            cursor: default;
+        }
+
+        .search-results .result-item.error {
+            color: #d9534f;
+            font-style: italic;
+            cursor: default;
+        }
+
+        /* Styling untuk pesan "Tidak ada obat" atau "Kosong" */
+        .no-data {
+            margin: 12px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Konsistensi untuk elemen lain di halaman */
         .info-container {
             display: flex;
             flex-wrap: wrap;
-            margin-top: 40px;
-            gap: 1rem;
+            margin-top: 24px;
+            gap: 12px;
         }
 
         .info-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-left: 50px;
+            gap: 12px;
             flex: 1 1 200px;
-            /* Adjust the flex-basis if needed */
         }
 
         .info-item label {
             font-weight: bold;
-            margin-right: 0.5rem;
+            margin: 0;
         }
 
         .info-item p {
             margin: 0;
+        }
+
+        /* Responsivitas */
+        @media (max-width: 768px) {
+
+            .nama-obat,
+            .input-group,
+            .input-row,
+            .nama-obat-container,
+            .jumlah-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .obat-input,
+            .search-results,
+            .anjuran-select,
+            .sehari-select,
+            .aturan-select,
+            .jenis-obat-select,
+            .jumlah-input,
+            .harga-tablet-input,
+            .harga-total-input {
+                width: 100% !important;
+            }
+
+            .btn-hapus {
+                width: 100%;
+                margin: 8px 0 0 0;
+            }
+
+            .separator {
+                display: none;
+            }
+
+            .form-group.obat-row,
+            .form-group.minum-row,
+            .form-group.jumlah-row,
+            .form-group.harga-tablet-row,
+            .form-group.harga-total-row {
+                margin-bottom: 8px;
+            }
+
+            .info-container {
+                margin-top: 16px;
+                gap: 8px;
+            }
         }
     </style>
 @endpush
@@ -695,412 +780,468 @@
     <script>
         // CARI OBAT DAN GANTI
         $(document).ready(function() {
+            // Fungsi debounce untuk membatasi frekuensi AJAX
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+
+            console.log('jQuery initialized. Found .obat-input:', $('.obat-input').length);
+
             $('.obat-input').each(function() {
                 const input = $(this);
-                const previousValue = input.val(); // Menyimpan nilai sebelumnya
+                let previousValue = input.val();
+                const inputId = input.attr('id');
+                console.log('Binding input:', inputId);
 
+                // Kosongkan input saat fokus dan kembalikan nilai sebelumnya saat blur
                 input.on('focus', function() {
-                    input.val(''); // Kosongkan saat kolom diklik
+                    previousValue = input.val();
+                    input.val('');
+                    console.log('Focus on input:', inputId);
                 }).on('blur', function() {
-                    if (input.val() === '') {
-                        input.val(previousValue); // Kembalikan nilai sebelumnya jika kosong
+                    if (input.val().trim() === '') {
+                        input.val(previousValue);
                     }
+                    console.log('Blur on input:', inputId);
                 });
 
-                input.on('input', function() {
-                    const [patientId, index] = input.attr('id').match(/_(\d+)_(\d+)/).slice(
-                        1); // Mendapatkan patientId dan index
-                    const query = input.val();
+                // Pencarian dengan debounce
+                input.on('input', debounce(function() {
+                    const match = input.attr('id').match(/_(\d+)_(\d+)/);
+                    if (!match) {
+                        console.error('Invalid input ID format:', inputId);
+                        return;
+                    }
+                    const [pasienId, index] = match.slice(1);
+                    const query = input.val().trim();
 
-                    if (query.length > 1) { // Minimal dua karakter untuk memulai pencarian
-                        $.ajax({
-                            url: '/cariObat-ganti',
-                            data: {
-                                term: query
-                            },
-                            success: function(data) {
-                                let resultsContainer = $('#results-' + patientId + '-' +
-                                    index);
-                                resultsContainer.empty(); // Kosongkan hasil sebelumnya
-                                resultsContainer.show(); // Tampilkan hasil
+                    // Jangan panggil AJAX jika query adalah 'Cari Obat' atau kosong
+                    if (query === 'Cari Obat' || query.length <= 1) {
+                        $(`#hargaTablet_${pasienId}_${index}`).val(formatAngka(0));
+                        calculateTotalHarga(pasienId, index);
+                        resultsContainer.empty().removeClass('show');
+                        return;
+                    }
 
-                                if (data.length) {
-                                    $.each(data, function(i, item) {
-                                        resultsContainer.append(
-                                            '<div class="result-item" data-id="' +
-                                            item.id + '">' + item.text +
-                                            '</div>');
-                                    });
-                                } else {
+                    const resultsContainer = $(`#results-${pasienId}-${index}`);
+                    if (!resultsContainer.length) {
+                        console.error('Results container not found for ID:',
+                            `results-${pasienId}-${index}`);
+                        return;
+                    }
+
+                    console.log('Searching for query:', query, 'Pasien ID:', pasienId, 'Index:',
+                        index);
+                    resultsContainer.empty().removeClass('show');
+
+                    resultsContainer.append('<div class="result-item loading">Memuat...</div>')
+                        .addClass('show');
+                    $.ajax({
+                        url: '/cariObat-ganti',
+                        method: 'GET',
+                        data: {
+                            term: query
+                        },
+                        success: function(data) {
+                            console.log('AJAX /cariObat-ganti success. Data:',
+                                data);
+                            resultsContainer.empty();
+                            if (data && Array.isArray(data) && data.length) {
+                                $.each(data, function(i, item) {
+                                    const itemText = item.text || item
+                                        .label || item.name || 'Unknown';
+                                    const itemId = item.id || i;
+                                    const itemHarga = parseFloat(item
+                                        .harga_jual) || 0;
                                     resultsContainer.append(
-                                        '<div>Tidak ada hasil</div>');
-                                }
-                            },
-                            delay: 100 // Mengurangi delay untuk pemanggilan AJAX
-                        });
-                    } else {
-                        $('#results-' + patientId + '-' + index)
-                            .hide(); // Sembunyikan jika kurang dari dua karakter
-                    }
-                });
+                                        `<div class="result-item" data-id="${itemId}" data-harga="${itemHarga}" role="option">${itemText}</div>`
+                                    );
+                                });
+                                resultsContainer.addClass('show');
+                            } else {
+                                resultsContainer.append(
+                                    '<div class="result-item">Tidak ada hasil</div>'
+                                ).addClass('show');
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX /cariObat-ganti error:', textStatus,
+                                errorThrown);
+                            resultsContainer.empty().append(
+                                '<div class="result-item error">Terjadi kesalahan saat mencari</div>'
+                            ).addClass('show');
+                        }
+                    });
+                }, 300));
             });
 
-            // Menangani klik pada hasil pencarian
+            // Tidak perlu perubahan besar, tetapi pastikan bagian ini tetap berfungsi
             $(document).on('click', '.result-item', function() {
-                const itemId = $(this).data('id');
                 const itemName = $(this).text();
-                const input = $(this).closest('.nama-obat').find('.obat-input');
+                const resultsContainer = $(this).parent();
+                const inputId = resultsContainer.attr('id').replace('results-', 'obat_Ro_');
+                const input = $(`#${inputId}`);
 
-                input.val(itemName); // Set nilai input dengan nama obat yang dipilih
-                $('#results-' + input.attr('id').match(/_(\d+)_(\d+)/)[1] + '-' + input.attr('id').match(
-                    /_(\d+)_(\d+)/)[2]).hide(); // Sembunyikan hasil
-
-                // Menyembunyikan semua hasil setelah pemilihan obat
-                $('.search-results').hide();
+                console.log('Selected item:', itemName, 'for input:', inputId);
+                input.val(itemName);
+                resultsContainer.removeClass('show'); // Pastikan dropdown disembunyikan setelah memilih
             });
 
-            // Sembunyikan hasil saat mengklik di luar
-            $(document).click(function(e) {
-                if (!$(e.target).closest('.nama-obat').length) {
-                    $('.search-results').hide();
+            // Sembunyikan hasil saat klik di luar
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.input-row').length) {
+                    console.log('Click outside, hiding search results');
+                    $('.search-results').removeClass('show');
+                }
+            });
+
+            // Navigasi keyboard untuk hasil pencarian
+            $('.obat-input').on('keydown', function(e) {
+                const inputId = $(this).attr('id');
+                const resultsContainer = $(`#results-${inputId.replace('obat_Ro_', '')}`);
+                const items = resultsContainer.find('.result-item');
+                let selectedIndex = items.filter('.selected').index();
+
+                console.log('Keydown:', e.key, 'on input:', inputId);
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex + 1) % items.length;
+                    items.removeClass('selected').eq(selectedIndex).addClass('selected');
+                    resultsContainer.scrollTop(items.eq(selectedIndex).position().top);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = selectedIndex === -1 ? items.length - 1 : (selectedIndex - 1 + items
+                        .length) % items.length;
+                    items.removeClass('selected').eq(selectedIndex).addClass('selected');
+                    resultsContainer.scrollTop(items.eq(selectedIndex).position().top);
+                } else if (e.key === 'Enter' && items.hasClass('selected')) {
+                    e.preventDefault();
+                    items.filter('.selected').trigger('click');
                 }
             });
         });
 
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     document.querySelectorAll('.obat-input').forEach(input => {
-        //         const previousValue = input.value; // Menyimpan nilai sebelumnya
-        //         let currentPage = 1; // Halaman awal untuk pagination
-
-        //         input.addEventListener('focus', () => {
-        //             input.value = ''; // Kosongkan saat kolom diklik
-        //         });
-
-        //         input.addEventListener('blur', () => {
-        //             if (input.value === '') {
-        //                 input.value = previousValue; // Kembalikan nilai sebelumnya jika kosong
-        //             }
-        //             setTimeout(() => { 
-        //                 const dropdownId = `dropdown-namaobat-apoteker-${input.dataset.pasienId}-${input.dataset.index}`;
-        //                 const dropdownElement = document.getElementById(dropdownId);
-        //                 dropdownElement.style.display = 'none'; // Sembunyikan dropdown setelah blur
-        //             }, 200);
-        //         });
-
-        //         input.addEventListener('input', () => {
-        //             const term = input.value;
-        //             const [patientId, index] = input.id.match(/_(\d+)_(\d+)/).slice(1); 
-        //             const dropdownId = `dropdown-namaobat-apoteker-${patientId}-${index}`;
-        //             const dropdownElement = document.getElementById(dropdownId);
-
-        //             if (term.length >= 4) { // Minimal empat karakter untuk memulai pencarian
-        //                 currentPage = 1; // Reset ke halaman pertama setiap kali input berubah
-        //                 searchObat(term, currentPage, function(results, totalPages) {
-        //                     showDropdown(input, dropdownElement, results, totalPages);
-        //                 });
-        //             } else {
-        //                 dropdownElement.style.display = 'none'; // Sembunyikan dropdown jika kurang dari empat karakter
-        //             }
-        //         });
-        //     });
-
-        //     // Fungsi untuk menampilkan hasil pencarian dan pagination dalam dropdown
-        //     function showDropdown(inputElement, dropdownElement, results, totalPages) {
-        //         dropdownElement.innerHTML = ''; // Bersihkan dropdown sebelumnya
-        //         if (results.length === 0) {
-        //             dropdownElement.style.display = 'none';
-        //             return;
-        //         }
-
-        //         results.forEach(result => {
-        //             const option = document.createElement('div');
-        //             option.classList.add('dropdown-item');
-        //             option.textContent = result.text; // Tampilkan nama obat
-        //             option.dataset.id = result.id;
-
-        //             // Pilih obat ketika salah satu item diklik
-        //             option.addEventListener('click', () => {
-        //                 inputElement.value = result.text;
-        //                 dropdownElement.style.display = 'none'; // Sembunyikan dropdown setelah dipilih
-        //             });
-
-        //             dropdownElement.appendChild(option);
-        //         });
-
-        //         // Tampilkan tombol untuk halaman berikutnya jika ada lebih dari satu halaman
-        //         if (totalPages > 1) {
-        //             const paginationDiv = document.createElement('div');
-        //             paginationDiv.classList.add('pagination-controls');
-
-        //             // Tombol untuk halaman sebelumnya
-        //             const prevButton = document.createElement('button');
-        //             prevButton.textContent = 'Previous';
-        //             prevButton.disabled = (currentPage === 1); // Nonaktifkan jika di halaman pertama
-        //             prevButton.addEventListener('click', () => {
-        //                 currentPage--;
-        //                 searchObat(inputElement.value, currentPage, function(results, totalPages) {
-        //                     showDropdown(inputElement, dropdownElement, results, totalPages);
-        //                 });
-        //             });
-
-        //             // Tombol untuk halaman berikutnya
-        //             const nextButton = document.createElement('button');
-        //             nextButton.textContent = 'Next';
-        //             nextButton.disabled = (currentPage === totalPages); // Nonaktifkan jika di halaman terakhir
-        //             nextButton.addEventListener('click', () => {
-        //                 currentPage++;
-        //                 searchObat(inputElement.value, currentPage, function(results, totalPages) {
-        //                     showDropdown(inputElement, dropdownElement, results, totalPages);
-        //                 });
-        //             });
-
-        //             paginationDiv.appendChild(prevButton);
-        //             paginationDiv.appendChild(nextButton);
-        //             dropdownElement.appendChild(paginationDiv);
-        //         }
-
-        //         dropdownElement.style.display = 'block';
-        //     }
-
-        //     // Fungsi untuk mengambil hasil pencarian dari server
-        //     function searchObat(term, page, callback) {
-        //         fetch(`/cariObat-ganti?term=${encodeURIComponent(term)}&page=${page}`)
-        //             .then(response => response.json())
-        //             .then(data => {
-        //                 console.log(data); 
-        //                 callback(data.data, data.total_pages);
-        //             })
-        //             .catch(error => console.error('Error:', error));
-        //     }
-
-        //     // Menyembunyikan dropdown saat mengklik di luar elemen dropdown atau input
-        //     document.addEventListener('click', function (e) {
-        //         if (!e.target.closest('.dropdown-menu') && !e.target.classList.contains('obat-input')) {
-        //             document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
-        //                 dropdown.style.display = 'none';
-        //             });
-        //         }
-        //     });
-        // });
-
-        // $(document).ready(function() {
-        //     $('.obat-input').each(function() {
-        //         const input = $(this);
-        //         const previousValue = input.val(); // Menyimpan nilai sebelumnya
-
-        //         input.on('focus', function() {
-        //             input.val(''); // Kosongkan saat kolom diklik
-        //         }).on('blur', function() {
-        //             if (input.val() === '') {
-        //                 input.val(previousValue); // Kembalikan nilai sebelumnya jika kosong
-        //             }
-        //         });
-
-        //         input.on('input', function() {
-        //             const [patientId, index] = input.attr('id').match(/_(\d+)_(\d+)/).slice(1); // Mendapatkan patientId dan index
-        //             const query = input.val();
-
-        //             if (query.length > 1) { // Minimal dua karakter untuk memulai pencarian
-        //                 $.ajax({
-        //                     url: '/cariObat-ganti',
-        //                     data: { term: query },
-        //                     success: function(data) {
-        //                         let resultsContainer = $('#results-' + patientId + '-' + index);
-        //                         resultsContainer.empty(); // Kosongkan hasil sebelumnya
-        //                         resultsContainer.show(); // Tampilkan hasil
-
-        //                         if (data.length) {
-        //                             $.each(data, function(i, item) {
-        //                                 resultsContainer.append('<div class="result-item" data-id="' + item.id + '">' + item.text + '</div>');
-        //                             });
-        //                         } else {
-        //                             resultsContainer.append('<div>Tidak ada hasil</div>');
-        //                         }
-        //                     },
-        //                     delay: 100 // Mengurangi delay untuk pemanggilan AJAX
-        //                 });
-        //             } else {
-        //                 $('#results-' + patientId + '-' + index).hide(); // Sembunyikan jika kurang dari dua karakter
-        //             }
-        //         });
-        //     });
-
-        //     // Menangani klik pada hasil pencarian
-        //     $(document).on('click', '.result-item', function() {
-        //         const itemId = $(this).data('id');
-        //         const itemName = $(this).text();
-        //         const input = $(this).closest('.nama-obat').find('.obat-input');
-
-        //         input.val(itemName); // Set nilai input dengan nama obat yang dipilih
-        //         $('#results-' + input.attr('id').match(/_(\d+)_(\d+)/)[1] + '-' + input.attr('id').match(/_(\d+)_(\d+)/)[2]).hide(); // Sembunyikan hasil
-        //     });
-
-        //     // Sembunyikan hasil saat mengklik di luar
-        //     $(document).click(function(e) {
-        //         if (!$(e.target).closest('.nama-obat').length) {
-        //             $('.search-results').hide();
-        //         }
-        //     });
-        // });
-
         // PERUBAHAN HARGA TABLET MENYESUAIKAN PERUBAHAN NAMA OBAT
         $(document).ready(function() {
-            var previousPrices = {};
+            // Fungsi debounce
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
 
-            // Fokus pada input untuk menyimpan harga sebelumnya
-            $(document).on('focus', '.obat-input', function() {
-                var input = $(this);
-                var pasienId = input.data('pasien-id'); // Ambil ID pasien
-                var index = input.attr('id').split('_').pop();
-                var hargaInput = $('#hargaTablet\\[' + index + '\\][data-pasien-id="' + pasienId +
-                    '"]'); // Pastikan sesuai pasien dan index
-                var previousHarga = hargaInput.val();
-                previousPrices[index] = previousHarga;
-            });
+            // Fungsi format angka
+            function formatAngka(angka) {
+                return parseInt(angka).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
 
-            // AJAX untuk saran obat saat pengguna mengetik
-            $(document).on('input', '.obat-input', function() {
-                var input = $(this);
-                var namaObat = input.val();
-                var pasienId = input.data('pasien-id');
-                var index = input.attr('id').split('_').pop();
-                var resultsContainer = $('#results-' + pasienId + '-' + index);
+            function unformatAngka(angka) {
+                return parseInt(angka.replace(/\./g, '')) || 0;
+            }
 
-                if (namaObat.length > 3) {
-                    $.ajax({
-                        url: '/gantiObat-RegoGanti',
-                        type: 'GET',
-                        data: {
-                            nama_obat: namaObat
-                        },
-                        success: function(response) {
-                            if (response.success && response.data.length > 0) {
-                                resultsContainer.empty()
-                                    .show(); // Bersihkan hasil dan tampilkan
+            // Fungsi untuk menghitung total harga
+            function calculateTotalHarga(pasienId, index) {
+                const jumlahInput = $(`#jumlah_${pasienId}_${index}`);
+                const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                const totalHargaInput = $(`#TotalHarga_${pasienId}_${index}`);
 
-                                let obatFound = false;
-                                response.data.forEach(function(item) {
-                                    var option = $('<div>')
-                                        .addClass('result-item')
-                                        .text(item.nama_obat)
-                                        .data('harga', item.harga_jual)
-                                        .data('id', item.id); // Simpan ID resep
-                                    resultsContainer.append(option);
-
-                                    // Jika input obat sama dengan nama di saran, otomatis update harga
-                                    if (item.nama_obat.toLowerCase() === namaObat
-                                        .toLowerCase()) {
-                                        $('#hargaTablet\\[' + index +
-                                            '\\][data-pasien-id="' + pasienId + '"]'
-                                        ).val(item.harga_jual);
-                                        previousPrices[index] = item
-                                            .harga_jual; // Simpan harga baru
-                                        obatFound = true;
-                                    }
-                                });
-
-                                // Jika tidak ditemukan harga, kosongkan
-                                if (!obatFound) {
-                                    $('#hargaTablet\\[' + index + '\\][data-pasien-id="' +
-                                        pasienId + '"]').val('');
-                                }
-
-                            } else {
-                                resultsContainer.hide(); // Sembunyikan jika tidak ada hasil
-                            }
-                        }
-                    });
-                } else {
-                    resultsContainer.hide(); // Sembunyikan jika input kurang dari 2 huruf
+                if (!jumlahInput.length || !hargaTabletInput.length || !totalHargaInput.length) {
+                    console.warn(`Input missing for Pasien ${pasienId}, Index ${index}`);
+                    return;
                 }
-            });
 
-            // Menangani pemilihan obat dari hasil pencarian
-            $(document).on('click', '.result-item', function() {
-                var selectedObat = $(this).text();
-                var harga = $(this).data('harga');
-                var idObat = $(this).data('id'); // Ambil ID resep
-                var pasienId = $(this).closest('.search-results').data('pasien-id'); // Ambil ID pasien
-                var index = $(this).closest('.search-results').attr('id').split('-').pop();
-                var input = $('#obat_Ro_' + pasienId + '_' + index); // Sesuaikan ID pasien
-                var hargaInput = $('#hargaTablet\\[' + index + '\\][data-pasien-id="' + pasienId +
-                    '"]'); // Sesuaikan ID pasien dan index
+                const jumlahObat = parseFloat(jumlahInput.val()) || 0;
+                const hargaTablet = unformatAngka(hargaTabletInput.val());
+                const totalHarga = jumlahObat * hargaTablet;
 
-                input.val(selectedObat);
-                hargaInput.val(harga);
-                previousPrices[index] = harga;
+                totalHargaInput.val(formatAngka(totalHarga));
+                updateTotalSemua(pasienId);
+            }
 
-                // Sembunyikan hasil pencarian setelah dipilih
-                $(this).closest('.search-results').hide();
+            function updateTotalSemua(pasienId) {
+                let totalSemua = 0;
+                const hargaTotalInputs = $(`.harga-total-input[data-pasien-id="${pasienId}"]`);
+                hargaTotalInputs.each(function() {
+                    const harga = unformatAngka($(this).val());
+                    totalSemua += harga;
+                });
 
-                // Panggil API berdasarkan ID obat yang dipilih untuk update harga
+                const totalSemuaInput = $(`#totalSemuaHarga_${pasienId}`);
+                if (totalSemuaInput.length) {
+                    totalSemuaInput.val(formatAngka(totalSemua));
+                }
+            }
+
+            function updateHargaObat(pasienId, index, obatId, obatName) {
+                if (obatName === 'Cari Obat' || !obatName) {
+                    console.log('Skipping updateHargaObat for Cari Obat');
+                    const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                    if (hargaTabletInput.length) {
+                        hargaTabletInput.val(formatAngka(0));
+                        hargaTabletInput.attr('data-nama-obat', '');
+                        hargaTabletInput.trigger('change');
+                    }
+                    calculateTotalHarga(pasienId, index);
+                    return;
+                }
+
+                console.log(`Updating harga for: ${obatName} (ID: ${obatId})`);
                 $.ajax({
                     url: '/gantiObat-RegoGanti',
                     type: 'GET',
                     data: {
-                        id_obat: idObat
+                        id_obat: obatId,
+                        nama_obat: obatName
                     },
                     success: function(response) {
-                        if (response.success) {
-                            hargaInput.val(response.data
-                                .harga_jual); // Set harga berdasarkan ID
-                            previousPrices[index] = response.data
-                                .harga_jual; // Simpan harga baru
+                        if (response.success && response.data) {
+                            const hargaJual = parseFloat(response.data.harga_jual) || 0;
+                            const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                            if (hargaTabletInput.length) {
+                                hargaTabletInput.val(formatAngka(hargaJual));
+                                hargaTabletInput.attr('data-nama-obat', obatName);
+                                hargaTabletInput.trigger('change');
+                                calculateTotalHarga(pasienId, index);
+                            }
+                        } else {
+                            $(`#hargaTablet_${pasienId}_${index}`).val(formatAngka(0)).trigger(
+                                'change');
+                            calculateTotalHarga(pasienId, index);
                         }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX /gantiObat-RegoGanti error:', textStatus, errorThrown);
+                        $(`#hargaTablet_${pasienId}_${index}`).val(formatAngka(0)).trigger('change');
+                        calculateTotalHarga(pasienId, index);
+                    }
+                });
+            }
+
+            $('.obat-input').each(function() {
+                const input = $(this);
+                let previousValue = input.val() || 'Cari Obat';
+                const inputId = input.attr('id');
+
+                input.on('focus', function() {
+                    previousValue = input.val();
+                    if (previousValue === 'Cari Obat') {
+                        input.val('');
+                    }
+                    console.log('Focus on input:', inputId, 'Previous:', previousValue);
+                }).on('blur', function() {
+                    if (input.val().trim() === '') {
+                        input.val('Cari Obat');
+                        previousValue = 'Cari Obat';
+                        input.trigger('change');
+
+                        const match = inputId.match(/_(\d+)_(\d+)/);
+                        if (match) {
+                            const [pasienId, index] = match.slice(1);
+                            const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                            if (hargaTabletInput.length) {
+                                hargaTabletInput.val(formatAngka(0));
+                                hargaTabletInput.attr('data-nama-obat', '');
+                                hargaTabletInput.trigger('change');
+                            }
+                            calculateTotalHarga(pasienId, index);
+                        }
+                    }
+                    console.log('Blur on input:', inputId, 'Value:', input.val());
+                });
+
+                input.on('input', debounce(function() {
+                    const match = input.attr('id').match(/_(\d+)_(\d+)/);
+                    if (!match) {
+                        console.error('Invalid input ID format:', inputId);
+                        return;
+                    }
+                    const [pasienId, index] = match.slice(1);
+                    const query = input.val().trim();
+
+                    if (query === 'Cari Obat' || query.length <= 1) {
+                        const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                        if (hargaTabletInput.length) {
+                            hargaTabletInput.val(formatAngka(0));
+                            hargaTabletInput.attr('data-nama-obat', '');
+                            hargaTabletInput.trigger('change');
+                        }
+                        calculateTotalHarga(pasienId, index);
+                        $(`#results-${pasienId}-${index}`).empty().removeClass('show');
+                        return;
+                    }
+
+                    const resultsContainer = $(`#results-${pasienId}-${index}`);
+                    if (!resultsContainer.length) {
+                        console.error('Results container not found for ID:',
+                            `results-${pasienId}-${index}`);
+                        return;
+                    }
+
+                    resultsContainer.empty().removeClass('show');
+                    resultsContainer.append('<div class="result-item loading">Memuat...</div>')
+                        .addClass('show');
+                    $.ajax({
+                        url: '/cariObat-ganti',
+                        method: 'GET',
+                        data: {
+                            term: query
+                        },
+                        success: function(data) {
+                            resultsContainer.empty();
+                            if (data && Array.isArray(data) && data.length) {
+                                $.each(data, function(i, item) {
+                                    const itemText = item.text || item
+                                        .label || item.name || 'Unknown';
+                                    const itemId = item.id || i;
+                                    const itemHarga = parseFloat(item
+                                        .harga_jual) || 0;
+                                    resultsContainer.append(
+                                        `<div class="result-item" data-id="${itemId}" data-harga="${itemHarga}" role="option">${itemText}</div>`
+                                    );
+                                });
+                                resultsContainer.addClass('show');
+                            } else {
+                                resultsContainer.append(
+                                    '<div class="result-item">Tidak ada hasil</div>'
+                                ).addClass('show');
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX /cariObat-ganti error:', textStatus,
+                                errorThrown);
+                            resultsContainer.empty().append(
+                                '<div class="result-item error">Terjadi kesalahan saat mencari</div>'
+                            ).addClass('show');
+                        }
+                    });
+                }, 300));
+            });
+
+            $(document).on('click', '.result-item', function() {
+                const itemText = $(this).text();
+                const itemId = $(this).data('id');
+                const itemHarga = parseFloat($(this).data('harga')) || 0;
+                const resultsContainer = $(this).parent();
+                const containerId = resultsContainer.attr('id');
+                const [pasienId, index] = containerId.match(/-(\d+)-(\d+)/).slice(1);
+
+                const inputObat = $(`#obat_Ro_${pasienId}_${index}`);
+                if (inputObat.length) {
+                    inputObat.val(itemText);
+                    inputObat.attr('data-nama-obat', itemText);
+                    inputObat.data('previous-value', itemText);
+                    inputObat.trigger('change');
+                }
+
+                const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                if (hargaTabletInput.length) {
+                    hargaTabletInput.val(formatAngka(itemHarga));
+                    hargaTabletInput.attr('data-nama-obat', itemText);
+                    hargaTabletInput.trigger('change');
+                }
+
+                calculateTotalHarga(pasienId, index);
+                resultsContainer.removeClass('show');
+                updateHargaObat(pasienId, index, itemId, itemText);
+            });
+
+            $(document).on('click', '.btn-hapus', function() {
+                const pasienId = $(this).data('pasien-id');
+                const index = $(this).data('index');
+
+                const inputObat = $(`#obat_Ro_${pasienId}_${index}`);
+                if (inputObat.length) {
+                    inputObat.val('Cari Obat');
+                    inputObat.attr('data-nama-obat', '');
+                    inputObat.data('previous-value', 'Cari Obat');
+                    inputObat.trigger('change');
+                }
+
+                const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                if (hargaTabletInput.length) {
+                    hargaTabletInput.val(formatAngka(0));
+                    hargaTabletInput.attr('data-nama-obat', '');
+                    hargaTabletInput.trigger('change');
+                }
+
+                const jumlahInput = $(`#jumlah_${pasienId}_${index}`);
+                if (jumlahInput.length) {
+                    jumlahInput.val('0');
+                    jumlahInput.trigger('change');
+                }
+
+                const totalHargaInput = $(`#TotalHarga_${pasienId}_${index}`);
+                if (totalHargaInput.length) {
+                    totalHargaInput.val(formatAngka(0));
+                    totalHargaInput.trigger('change');
+                }
+
+                $(`#anjuran_${pasienId}_${index}`).val('AC').trigger('change');
+                $(`#aturan_${pasienId}_${index}`).val('Sebelum Makan').trigger('change');
+                $(`#sehari_${pasienId}_${index}`).val('1x1/5').trigger('change');
+                $(`#jenisObat_${pasienId}_${index}`).val('Tablet').trigger('change');
+
+                calculateTotalHarga(pasienId, index);
+
+                console.log('Reset values:', {
+                    obat: inputObat.val(),
+                    hargaTablet: hargaTabletInput.val(),
+                    jumlah: jumlahInput.val(),
+                    totalHarga: totalHargaInput.val()
+                });
+            });
+
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.input-row').length) {
+                    $('.search-results').removeClass('show');
+                }
+            });
+
+            $('.obat-input').on('keydown', function(e) {
+                const inputId = $(this).attr('id');
+                const resultsContainer = $(`#results-${inputId.replace('obat_Ro_', '')}`);
+                const items = resultsContainer.find('.result-item');
+                let selectedIndex = items.filter('.selected').index();
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex + 1) % items.length;
+                    items.removeClass('selected').eq(selectedIndex).addClass('selected');
+                    resultsContainer.scrollTop(items.eq(selectedIndex).position().top);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = selectedIndex === -1 ? items.length - 1 : (selectedIndex - 1 + items
+                        .length) % items.length;
+                    items.removeClass('selected').eq(selectedIndex).addClass('selected');
+                    resultsContainer.scrollTop(items.eq(selectedIndex).position().top);
+                } else if (e.key === 'Enter' && items.hasClass('selected')) {
+                    e.preventDefault();
+                    items.filter('.selected').trigger('click');
+                }
+            });
+
+            $('form').on('submit', function(e) {
+                $('.obat-input').each(function() {
+                    const input = $(this);
+                    if (input.val() === 'Cari Obat') {
+                        input.val('');
                     }
                 });
             });
 
-            // Mengembalikan harga jika input kosong
-            $(document).on('blur', '.obat-input', function() {
-                var input = $(this);
-                var pasienId = input.data('pasien-id');
-                var index = input.attr('id').split('_').pop();
-                var hargaInput = $('#hargaTablet\\[' + index + '\\][data-pasien-id="' + pasienId + '"]');
-
-                if (input.val().trim() === '') {
-                    var previousHarga = previousPrices[index] || '0';
-                    hargaInput.val(previousHarga);
-                }
-            });
-
-            // HAPUS NAMA OBAT MERESET HARGA
-            $(document).on('click', '.btn-hapus', function() {
-                var pasienId = $(this).data('pasien-id');
-                var index = $(this).data('index');
-                var namaObatAwal = $(this).data('nama-obat');
-                var hargaAwal = parseFloat($(this).data('harga')); // Pastikan harga adalah angka
-                var jumlahAwal = parseInt($('#jumlah\\[' + index + '\\][data-pasien-id="' + pasienId + '"]')
-                    .val()); // Ambil nilai jumlah awal
-
-                var inputObat = $('#obat_Ro_' + pasienId + '_' + index);
-                var hargaInput = $('#hargaTablet\\[' + index + '\\][data-pasien-id="' + pasienId + '"]');
-                var totalHargaInput = $('#TotalHarga_' + pasienId + '_' + index);
-
-                // Reset input ke nilai awal
-                inputObat.val(namaObatAwal);
-                hargaInput.val(hargaAwal);
-
-                // Hitung harga total awal
-                var hargaTotalAwal = jumlahAwal > 1 ? hargaAwal * jumlahAwal : hargaAwal;
-                totalHargaInput.val(hargaTotalAwal); // Reset total harga untuk obat ini
-
-                // Update total semua harga
-                updateTotalSemuaHarga(pasienId);
-            });
-
-            // Fungsi untuk menghitung total semua harga
-            function updateTotalSemuaHarga(pasienId) {
-                var totalSemua = 0;
-                $('.harga_total[data-pasien-id="' + pasienId + '"]').each(function() {
-                    var harga = parseFloat($(this).val().replace(/[^\d.-]/g, '')) ||
-                        0; // Menghapus format Rupiah
-                    totalSemua += harga;
+            $('.obat-container').each(function() {
+                const pasienId = $(this).data('pasien-id');
+                $(`.harga-total-input[data-pasien-id="${pasienId}"]`).each(function(index) {
+                    calculateTotalHarga(pasienId, index);
                 });
-                $('#totalSemuaHarga[data-pasien-id="' + pasienId + '"]').val(
-                    totalSemua); // Update input total semua harga
-            }
-
+                updateTotalSemua(pasienId);
+            });
         });
 
         // JUMLAH OBAT
@@ -1140,158 +1281,286 @@
         });
 
         // TOTAL SEMUA
-        document.addEventListener("DOMContentLoaded", function() {
-            // Fungsi untuk memformat angka ke format rupiah
-            function formatRupiah(angka) {
-                return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        $(document).ready(function() {
+            // Fungsi debounce untuk membatasi frekuensi AJAX
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
             }
 
-            // Fungsi untuk menghapus format rupiah (menghapus titik) agar bisa diubah ke angka
-            function unformatRupiah(angka) {
-                return parseFloat(angka.replace(/\./g, '')); // Hapus titik untuk konversi ke angka
+            // Fungsi untuk format angka dengan pemisah titik (misalnya, 1000 -> 1.000)
+            function formatAngka(angka) {
+                return parseInt(angka).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             }
 
-            // Fungsi untuk mengupdate total harga berdasarkan jumlah obat dan harga per tablet
-            function updateTotalHarga(pasienId) {
-                const jumlahObatInputs = document.querySelectorAll(`.jumlahObatt[data-pasien-id="${pasienId}"]`);
-                const hargaTabletInputs = document.querySelectorAll(`.hargaTablet[data-pasien-id="${pasienId}"]`);
-                const hargaTotalInputs = document.querySelectorAll(`.harga_total[data-pasien-id="${pasienId}"]`);
+            // Fungsi untuk menghapus format angka (menghapus titik) agar bisa diubah ke angka
+            function unformatAngka(angka) {
+                return parseInt(angka.replace(/\./g, '')) || 0;
+            }
 
-                jumlahObatInputs.forEach((jumlahInput, index) => {
-                    const jumlah = parseFloat(jumlahInput.value) || 0;
-                    const hargaPerTablet = unformatRupiah(hargaTabletInputs[index].value) ||
-                        0; // Unformat harga terlebih dahulu
+            // Fungsi untuk menghitung total harga per obat
+            function calculateTotalHarga(pasienId, index) {
+                const jumlahInput = $(`#jumlah_${pasienId}_${index}`);
+                const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                const totalHargaInput = $(`#TotalHarga_${pasienId}_${index}`);
 
-                    // Hitung total harga per obat
-                    const totalHarga = hargaPerTablet * jumlah;
+                const jumlahObat = parseFloat(jumlahInput.val()) || 0;
+                const hargaTablet = unformatAngka(hargaTabletInput.val());
+                const totalHarga = jumlahObat * hargaTablet;
 
-                    // Update input harga total dengan format rupiah
-                    if (hargaTotalInputs[index]) {
-                        hargaTotalInputs[index].value = formatRupiah(totalHarga.toFixed(0));
-                    }
-                });
+                totalHargaInput.val(formatAngka(totalHarga));
+                console.log(`Calculated total: Pasien ${pasienId}, Index ${index}, Total ${totalHarga}`);
 
-                // Setelah total harga setiap obat diperbarui, hitung total keseluruhan untuk pasien
+                // Update total harga keseluruhan setelah menghitung total per obat
                 updateTotalSemua(pasienId);
             }
 
-            // Fungsi untuk mengupdate total harga keseluruhan untuk pasien tertentu
+            // Fungsi untuk menghitung total harga keseluruhan untuk pasien tertentu
             function updateTotalSemua(pasienId) {
                 let totalSemua = 0;
 
                 // Pilih semua input harga_total untuk pasien yang sesuai
-                const hargaInputs = document.querySelectorAll(`.harga_total[data-pasien-id="${pasienId}"]`);
-
-                hargaInputs.forEach(function(input) {
-                    const harga = unformatRupiah(input.value) || 0; // Unformat harga sebelum penjumlahan
+                const hargaTotalInputs = $(`.harga-total-input[data-pasien-id="${pasienId}"]`);
+                hargaTotalInputs.each(function() {
+                    const harga = unformatAngka($(this).val());
                     totalSemua += harga;
                 });
 
-                // Update totalSemuaHarga dengan format rupiah
-                const totalSemuaInput = document.querySelector(`#totalSemuaHarga[data-pasien-id="${pasienId}"]`);
-                if (totalSemuaInput) {
-                    totalSemuaInput.value = formatRupiah(totalSemua.toFixed(0));
+                // Update input totalSemuaHarga dengan format angka
+                const totalSemuaInput = $(`#totalSemuaHarga_${pasienId}`);
+                if (totalSemuaInput.length) {
+                    totalSemuaInput.val(formatAngka(totalSemua));
+                    console.log(`Updated total semua: Pasien ${pasienId}, Total ${totalSemua}`);
+                } else {
+                    console.warn(`Total semua input not found for Pasien ${pasienId}`);
                 }
             }
 
-            // Event listener untuk perubahan pada input jumlah dan harga
-            const jumlahObatInputs = document.querySelectorAll('.jumlahObatt');
-            jumlahObatInputs.forEach(input => {
-                const pasienId = input.getAttribute('data-pasien-id');
-                input.addEventListener('input', function() {
-                    updateTotalHarga(pasienId);
+            // Fungsi untuk update harga berdasarkan obat yang dipilih
+            function updateHargaObat(pasienId, index, obatId, obatName) {
+                console.log(`Updating harga for: ${obatName} (ID: ${obatId})`);
+                $.ajax({
+                    url: '/gantiObat-RegoGanti',
+                    type: 'GET',
+                    data: {
+                        id_obat: obatId,
+                        nama_obat: obatName
+                    },
+                    success: function(response) {
+                        console.log('AJAX /gantiObat-RegoGanti success:', response);
+                        if (response.success && response.data) {
+                            const hargaJual = parseFloat(response.data.harga_jual) || 0;
+                            const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                            hargaTabletInput.val(formatAngka(hargaJual));
+                            hargaTabletInput.attr('data-nama-obat', obatName);
+                            calculateTotalHarga(pasienId, index);
+                        } else {
+                            console.warn('No valid harga_jual in response:', response);
+                            $(`#hargaTablet_${pasienId}_${index}`).val(formatAngka(0));
+                            calculateTotalHarga(pasienId, index);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX /gantiObat-RegoGanti error:', textStatus, errorThrown);
+                        $(`#hargaTablet_${pasienId}_${index}`).val(formatAngka(0));
+                        calculateTotalHarga(pasienId, index);
+                    }
                 });
+            }
+
+            // Event untuk input obat
+            $('.obat-input').each(function() {
+                const input = $(this);
+                let previousValue = input.val();
+                const inputId = input.attr('id');
+                console.log('Binding input:', inputId);
+
+                input.on('focus', function() {
+                    previousValue = input.val();
+                    input.val('');
+                    console.log('Focus on input:', inputId);
+                }).on('blur', function() {
+                    if (input.val().trim() === '') {
+                        input.val(previousValue);
+                    }
+                    console.log('Blur on input:', inputId);
+                });
+
+                // Pencarian dengan debounce
+                input.on('input', debounce(function() {
+                    const match = input.attr('id').match(/_(\d+)_(\d+)/);
+                    if (!match) {
+                        console.error('Invalid input ID format:', inputId);
+                        return;
+                    }
+                    const [pasienId, index] = match.slice(1);
+                    const query = input.val().trim();
+
+                    const resultsContainer = $(`#results-${pasienId}-${index}`);
+                    if (!resultsContainer.length) {
+                        console.error('Results container not found for ID:',
+                            `results-${pasienId}-${index}`);
+                        return;
+                    }
+
+                    console.log('Searching for query:', query, 'Pasien ID:', pasienId, 'Index:',
+                        index);
+                    resultsContainer.empty().removeClass('show');
+
+                    if (query.length > 1) {
+                        resultsContainer.append(
+                            '<div class="result-item loading">Memuat...</div>').addClass(
+                            'show');
+                        $.ajax({
+                            url: '/cariObat-ganti',
+                            method: 'GET',
+                            data: {
+                                term: query
+                            },
+                            success: function(data) {
+                                console.log('AJAX /cariObat-ganti success. Data:',
+                                    data);
+                                resultsContainer.empty();
+                                if (data && Array.isArray(data) && data.length) {
+                                    $.each(data, function(i, item) {
+                                        const itemText = item.text || item
+                                            .label || item.name ||
+                                            'Unknown';
+                                        const itemId = item.id || i;
+                                        const itemHarga = parseFloat(item
+                                            .harga_jual) || 0;
+                                        resultsContainer.append(
+                                            `<div class="result-item" data-id="${itemId}" data-harga="${itemHarga}" role="option">${itemText}</div>`
+                                        );
+                                    });
+                                    resultsContainer.addClass('show');
+                                } else {
+                                    resultsContainer.append(
+                                        '<div class="result-item">Tidak ada hasil</div>'
+                                    ).addClass('show');
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('AJAX /cariObat-ganti error:',
+                                    textStatus, errorThrown);
+                                resultsContainer.empty().append(
+                                    '<div class="result-item error">Terjadi kesalahan saat mencari</div>'
+                                ).addClass('show');
+                            }
+                        });
+                    } else {
+                        console.log('Query too short:', query);
+                    }
+                }, 300));
             });
 
-            const hargaTabletInputs = document.querySelectorAll('.hargaTablet');
-            hargaTabletInputs.forEach(input => {
-                const pasienId = input.getAttribute('data-pasien-id');
-                input.addEventListener('input', function() {
-                    updateTotalHarga(
-                        pasienId
-                    ); // Memanggil updateTotalHarga juga akan memanggil updateTotalSemua
-                });
+            // Event klik pada hasil pencarian obat
+            $(document).on('click', '.result-item', function() {
+                const itemText = $(this).text();
+                const itemId = $(this).data('id');
+                const itemHarga = parseFloat($(this).data('harga')) || 0;
+                const resultsContainer = $(this).parent();
+                const containerId = resultsContainer.attr('id');
+                const [pasienId, index] = containerId.match(/-(\d+)-(\d+)/).slice(1);
+
+                console.log(`Selected item: ${itemText} (ID: ${itemId}, Harga: ${itemHarga})`);
+
+                // Update input obat
+                const inputObat = $(`#obat_Ro_${pasienId}_${index}`);
+                inputObat.val(itemText);
+                inputObat.attr('data-nama-obat', itemText);
+
+                // Update harga tablet
+                const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                hargaTabletInput.val(formatAngka(itemHarga));
+                hargaTabletInput.attr('data-nama-obat', itemText);
+
+                // Hitung total harga per obat dan update total semua
+                calculateTotalHarga(pasienId, index);
+
+                // Sembunyikan dropdown
+                resultsContainer.removeClass('show');
+
+                // Panggil AJAX untuk validasi harga dari server
+                updateHargaObat(pasienId, index, itemId, itemText);
+            });
+
+            // Event perubahan jumlah obat
+            $(document).on('input change', '.jumlah-input', function() {
+                const pasienId = $(this).data('pasien-id');
+                const index = $(this).data('index');
+                console.log(`Jumlah changed: Pasien ${pasienId}, Index ${index}, Value ${$(this).val()}`);
+                calculateTotalHarga(pasienId, index);
+            });
+
+            // Event tombol hapus
+            $(document).on('click', '.btn-hapus', function() {
+                const pasienId = $(this).data('pasien-id');
+                const index = $(this).data('index');
+                const namaObatAwal = $(this).data('nama-obat');
+                const hargaAwal = parseFloat($(this).data('harga')) || 0;
+
+                console.log(
+                    `Resetting: Pasien ${pasienId}, Index ${index}, Obat ${namaObatAwal}, Harga ${hargaAwal}`
+                );
+
+                // Reset nilai
+                const inputObat = $(`#obat_Ro_${pasienId}_${index}`);
+                inputObat.val(namaObatAwal);
+                inputObat.attr('data-nama-obat', namaObatAwal);
+
+                const hargaTabletInput = $(`#hargaTablet_${pasienId}_${index}`);
+                hargaTabletInput.val(formatAngka(hargaAwal));
+                hargaTabletInput.attr('data-nama-obat', namaObatAwal);
+
+                // Hitung ulang total harga per obat dan update total semua
+                calculateTotalHarga(pasienId, index);
+            });
+
+            // Sembunyikan hasil saat klik di luar
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.input-row').length) {
+                    console.log('Click outside, hiding search results');
+                    $('.search-results').removeClass('show');
+                }
+            });
+
+            // Navigasi keyboard untuk hasil pencarian
+            $('.obat-input').on('keydown', function(e) {
+                const inputId = $(this).attr('id');
+                const resultsContainer = $(`#results-${inputId.replace('obat_Ro_', '')}`);
+                const items = resultsContainer.find('.result-item');
+                let selectedIndex = items.filter('.selected').index();
+
+                console.log('Keydown:', e.key, 'on input:', inputId);
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex + 1) % items.length;
+                    items.removeClass('selected').eq(selectedIndex).addClass('selected');
+                    resultsContainer.scrollTop(items.eq(selectedIndex).position().top);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = selectedIndex === -1 ? items.length - 1 : (selectedIndex - 1 + items
+                        .length) % items.length;
+                    items.removeClass('selected').eq(selectedIndex).addClass('selected');
+                    resultsContainer.scrollTop(items.eq(selectedIndex).position().top);
+                } else if (e.key === 'Enter' && items.hasClass('selected')) {
+                    e.preventDefault();
+                    items.filter('.selected').trigger('click');
+                }
             });
 
             // Inisialisasi perhitungan total saat halaman dimuat
-            jumlahObatInputs.forEach(input => {
-                const pasienId = input.getAttribute('data-pasien-id');
-                updateTotalHarga(pasienId);
+            $('.obat-container').each(function() {
+                const pasienId = $(this).data('pasien-id');
+                $(`.harga-total-input[data-pasien-id="${pasienId}"]`).each(function(index) {
+                    calculateTotalHarga(pasienId, index);
+                });
+                updateTotalSemua(pasienId);
             });
         });
     </script>
 @endpush
-
-{{-- <div class="row">
-    <div class="row obat-row" style="margin-top: -10px">
-        <div class="col-lg-3">
-            <div class="form-group mt-3">
-                <label for="nama_obat">Nama Obat</label>
-                <input type="text" name="resep[]" value="{{ $obat }}" class="form-control mt-2 nama_obat">
-            </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="form-group mt-3">
-                <label for="">Aturan Minum</label>
-                <div class="input-group">
-                    <input type="text" name="aturan_minum[]" value="{{ isset($aturanMinum[$namaObat]) ? $aturanMinum[$namaObat] : '' }}" class="form-control mt-2">
-                    <select name="aturan[]" class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                        <option value="{{ isset($soapData[$obat]) ? $soapData[$obat] : '' }}">{{ isset($soapData[$obat]) ? $soapData[$obat] : '' }}</option>
-                        <option value="Sesudah Makan" style="background: white">Sesudah Makan</option>
-                        <option value="Sebelum Makan" style="background: white">Sebelum Makan</option>
-                        <option value="Bersama Makan" style="background: white">Bersama Makan</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mt-3">
-            <div class="form-group">
-                <label for="jumlah">Jumlah</label>
-                <input type="number" name="jumlah[]" class="form-control mt-2 jumlah" placeholder="Jumlah" oninput="calculateTotal(this)">
-            </div>
-        </div>
-        <div class="col-lg-6 mt-3">
-            <div class="form-group">
-                <label for="harga_satuan">Harga</label>
-                <div class="input-group">
-                    <div class="input-group-append">
-                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                            <b>Rp.</b>
-                        </span>
-                    </div>
-                    <input type="number" name="harga_satuan[]" class="form-control mt-2 harga_satuan" value="{{ $reseps->where('nama_obat', $obat)->first()->harga }}" placeholder="Harga Satuan" readonly>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mt-3">
-            <div class="form-group">
-                <label for="total">Total</label>
-                <div class="input-group">
-                    <div class="input-group-append">
-                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                            <b>Rp.</b>
-                        </span>
-                    </div>
-                    <input type="number" name="harga_obat[]" class="form-control mt-2 total_harga" placeholder="Total Harga" readonly>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mt-3">
-            <div class="form-group">
-                <label for="satuan">Satuan</label>
-                <select name="satuan[]" class="form-control mt-2">
-                    <option value="">--Pilih--</option>
-                    <option value="Tablet">Tablet</option>
-                    <option value="Kapsul">Kapsul</option>
-                    <option value="Bungkus">Bungkus</option>
-                    <option value="Salep">Salep</option>
-                    <option value="Krim">Krim</option>
-                    <option value="Ml">Ml</option>
-                    <option value="Sendok Sirup">Sendok Teh</option>
-                    <option value="Sendok Makan">Sendok Makan</option>
-                    <option value="Tetes">Tetes</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div> --}}

@@ -17,6 +17,8 @@ if (!function_exists('Rupiah')) {
     @endphp
     <tr class="text-center" style="white-space: nowrap">
         <td>{{ ($obat->currentPage() - 1) * $obat->perPage() + $loop->iteration }}</td>
+        <td>{{ $item->golongan ?? '-' }}</td>
+        <td>{{ $item->jenis_sediaan }}</td>
         <td>{{ $item->nama_obat }}</td>
         <td>{{ $item->harga_pokok ? Rupiah($item->harga_pokok) : '0' }}</td>
         <td>{{ Rupiah($item->harga_jual) }}</td>
@@ -37,6 +39,10 @@ if (!function_exists('Rupiah')) {
                 <button type="button" data-bs-target="#editobat{{ $item->id }}" data-bs-toggle="modal"
                     class="btn btn-outline-info mx-2">
                     <i class="fa-solid fa-cart-plus"></i> Stok
+                </button>
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                    data-bs-target="#hapusobat{{ $item->id }}">
+                    <i class="fas fa-trash"></i> Hapus
                 </button>
             </div>
         </td>
