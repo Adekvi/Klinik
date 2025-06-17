@@ -105,11 +105,6 @@
                                     untuk perawatan kesehatan rutin maupun mendesak.
                                 </strong>
                             </p>
-                            {{-- <p>
-              <strong>
-                Klinik Pratama Multisari II dilengkapi dengan fasilitas medis yang memadai dan tenaga medis yang profesional dan berpengalaman, sehingga memberikan pelayanan yang berkualitas dan terpercaya kepada pasien. Selain itu, klinik ini juga memiliki lingkungan yang bersih, nyaman, dan ramah, menciptakan suasana yang kondusif bagi pasien untuk mendapatkan perawatan yang optimal. Dengan komitmen untuk memberikan layanan kesehatan yang prima, Klinik Pratama Multisari II menjadi salah satu pilihan yang tepat bagi masyarakat dalam memenuhi kebutuhan kesehatan mereka.
-              </strong>
-            </p> --}}
                         </div>
                     </div>
 
