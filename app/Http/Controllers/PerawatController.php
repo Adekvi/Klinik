@@ -411,11 +411,11 @@ class PerawatController extends Controller
         $entries = $request->input('entries', 10);
         $page = $request->input('page', 1);
 
-        $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian', 'soap'])
+        $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
             ->where('status', 'M') // status dari antrian perawat
-            ->whereHas('soap', function ($q) {
-                $q->where('status', 'P'); // status dari SOAP (dokter)
-            })
+            // ->whereHas('soap', function ($q) {
+            //     $q->where('status', 'P'); // status dari SOAP (dokter)
+            // })
             ->orderBy('urutan', 'asc')
             ->orderBy('created_at', 'asc');
 
@@ -433,7 +433,7 @@ class PerawatController extends Controller
         // Menjaga parameter pencarian tetap ada saat navigasi halaman
         $rekap->appends(['search' => $search, 'entries' => $entries]);
 
-        dd($rekap);
+        // dd($rekap);
 
         return view('perawat.rekap.harian', compact('rekap', 'entries', 'search'));
     }

@@ -177,7 +177,7 @@
                                                                             role="listbox"></div>
                                                                     </div>
                                                                     <div class="anjuran">
-                                                                        <input type="text"
+                                                                        <input type="hidden"
                                                                             name="obat_Ro[{{ $index }}][anjuran]"
                                                                             id="anjuran_{{ $item->id }}_{{ $index }}"
                                                                             class="form-control anjuran-select"
@@ -198,27 +198,108 @@
                                                     @if (!empty($allMinumAturan))
                                                         @foreach ($allMinumAturan as $index => $minum)
                                                             <div class="form-group minum-row">
-                                                                <div class="input-group">
+                                                                <div class="input-group d-flex align-items-center">
+                                                                    <!-- Dropdown untuk frekuensi minum -->
                                                                     <select name="obat_Ro[{{ $index }}][sehari]"
                                                                         id="sehari_{{ $item->id }}_{{ $index }}"
                                                                         class="form-control sehari-select"
-                                                                        aria-label="Pilih frekuensi minum">
-                                                                        <option value="1x1/5"
-                                                                            {{ $minum == '1x1/5' ? 'selected' : '' }}>
-                                                                            1x1/5</option>
-                                                                        <option value="2x1/5"
-                                                                            {{ $minum == '2x1/5' ? 'selected' : '' }}>
-                                                                            2x1/5</option>
-                                                                        <option value="3x1/5"
-                                                                            {{ $minum == '3x1/5' ? 'selected' : '' }}>
-                                                                            3x1/5</option>
-                                                                        <option value="3x2"
-                                                                            {{ $minum == '3x2' ? 'selected' : '' }}>
-                                                                            3x2</option>
+                                                                        aria-label="Pilih frekuensi minum"
+                                                                        onchange="toggleInput(this, '{{ $item->id }}_{{ $index }}')">
+                                                                        <option value="1x1 SENDOK"
+                                                                            {{ $minum == '1x1 SENDOK' ? 'selected' : '' }}>
+                                                                            1x1 SENDOK</option>
+                                                                        <option value="1x1/2 SENDOK"
+                                                                            {{ $minum == '1x1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            1x1/2 SENDOK</option>
+                                                                        <option value="1x3/4 SENDOK"
+                                                                            {{ $minum == '1x3/4 SENDOK' ? 'selected' : '' }}>
+                                                                            1x3/4 SENDOK</option>
+                                                                        <option value="1x1 1/2 SENDOK"
+                                                                            {{ $minum == '1x1 1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            1x1 1/2 SENDOK</option>
+                                                                        <option value="2x1 SENDOK"
+                                                                            {{ $minum == '2x1 SENDOK' ? 'selected' : '' }}>
+                                                                            2x1 SENDOK</option>
+                                                                        <option value="2x1/2 SENDOK"
+                                                                            {{ $minum == '2x1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            2x1/2 SENDOK</option>
+                                                                        <option value="2x3/4 SENDOK"
+                                                                            {{ $minum == '2x3/4 SENDOK' ? 'selected' : '' }}>
+                                                                            2x3/4 SENDOK</option>
+                                                                        <option value="3x1 SENDOK"
+                                                                            {{ $minum == '3x1 SENDOK' ? 'selected' : '' }}>
+                                                                            3x1 SENDOK</option>
+                                                                        <option value="3x1/2 SENDOK"
+                                                                            {{ $minum == '3x1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            3x1/2 SENDOK</option>
+                                                                        <option value="3x3/4 SENDOK"
+                                                                            {{ $minum == '3x3/4 SENDOK' ? 'selected' : '' }}>
+                                                                            3x3/4 SENDOK</option>
+                                                                        <option value="3x1 1/2 SENDOK"
+                                                                            {{ $minum == '3x1 1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            3x1 1/2 SENDOK</option>
+                                                                        <option value="4x1 SENDOK"
+                                                                            {{ $minum == '4x1 SENDOK' ? 'selected' : '' }}>
+                                                                            4x1 SENDOK</option>
+                                                                        <option value="4x1 1/2 SENDOK"
+                                                                            {{ $minum == '4x1 1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            4x1 1/2 SENDOK</option>
+                                                                        <option value="4x1/2 SENDOK"
+                                                                            {{ $minum == '4x1/2 SENDOK' ? 'selected' : '' }}>
+                                                                            4x1/2 SENDOK</option>
+                                                                        <option value="4x3/4 SENDOK"
+                                                                            {{ $minum == '4x3/4 SENDOK' ? 'selected' : '' }}>
+                                                                            4x3/4 SENDOK</option>
+                                                                        <option value="3x SEHARI OLES TIPIS-TIPIS"
+                                                                            {{ $minum == '3x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
+                                                                            3x SEHARI OLES TIPIS-TIPIS</option>
+                                                                        <option value="2x SEHARI OLES TIPIS-TIPIS"
+                                                                            {{ $minum == '2x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
+                                                                            2x SEHARI OLES TIPIS-TIPIS</option>
+                                                                        <option value="1x1 TABLET"
+                                                                            {{ $minum == '1x1 TABLET' ? 'selected' : '' }}>
+                                                                            1x1 TABLET</option>
+                                                                        <option value="2x1 TABLET"
+                                                                            {{ $minum == '2x1 TABLET' ? 'selected' : '' }}>
+                                                                            2x1 TABLET</option>
+                                                                        <option value="3x1 TABLET"
+                                                                            {{ $minum == '3x1 TABLET' ? 'selected' : '' }}>
+                                                                            3x1 TABLET</option>
+                                                                        <option value="3x1 BUNGKUS"
+                                                                            {{ $minum == '3x1 BUNGKUS' ? 'selected' : '' }}>
+                                                                            3x1 BUNGKUS</option>
+                                                                        <option value="3x2 TETES"
+                                                                            {{ $minum == '3x2 TETES' ? 'selected' : '' }}>
+                                                                            3x2 TETES</option>
+                                                                        <option value="3x1 TETES"
+                                                                            {{ $minum == '3x1 TETES' ? 'selected' : '' }}>
+                                                                            3x1 TETES</option>
+                                                                        <option value="4x2 TETES"
+                                                                            {{ $minum == '4x2 TETES' ? 'selected' : '' }}>
+                                                                            4x2 TETES</option>
+                                                                        <option value="INJEKSI 1 ml"
+                                                                            {{ $minum == 'INJEKSI 1 ml' ? 'selected' : '' }}>
+                                                                            INJEKSI 1 ml</option>
+                                                                        <option value="INJEKSI 2 ml"
+                                                                            {{ $minum == 'INJEKSI 2 ml' ? 'selected' : '' }}>
+                                                                            INJEKSI 2 ml</option>
+                                                                        <option value="INJEKSI 3 ml"
+                                                                            {{ $minum == 'INJEKSI 3 ml' ? 'selected' : '' }}>
+                                                                            INJEKSI 3 ml</option>
+                                                                        <option value="NEBUL 1 ampul"
+                                                                            {{ $minum == 'NEBUL 1 ampul' ? 'selected' : '' }}>
+                                                                            NEBUL 1 ampul</option>
+                                                                        <option value="custom">Lainnya</option>
                                                                     </select>
-                                                                </div>
-                                                                <span class="separator">-</span>
-                                                                <div class="input-group">
+                                                                    <!-- Input kustom untuk opsi "Lainnya" (awalnya disembunyikan) -->
+                                                                    <input type="text"
+                                                                        name="obat_Ro[{{ $index }}][sehari]"
+                                                                        id="custom_sehari_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control sehari-select custom-input d-none"
+                                                                        placeholder="Masukkan aturan minum kustom"
+                                                                        style="display: none;">
+                                                                    <span class="separator">-</span>
+                                                                    <!-- Input untuk aturan minum -->
                                                                     <input type="text"
                                                                         name="obat_Ro[{{ $index }}][aturan]"
                                                                         id="aturan_{{ $item->id }}_{{ $index }}"
@@ -489,7 +570,6 @@
             padding: 12px;
             width: 100%;
             position: relative;
-            /* Pastikan elemen anak absolut diposisikan relatif ke container */
         }
 
         /* Form group untuk setiap baris */
@@ -527,7 +607,6 @@
             flex-direction: column;
             gap: 4px;
             min-height: 40px;
-            /* Pastikan ada ruang untuk search-results */
         }
 
         /* Container untuk input dan tombol hapus */
@@ -636,7 +715,6 @@
         /* Styling search results */
         .search-results {
             width: 100%;
-            /* Mengikuti lebar input */
             min-height: 20px;
             max-height: 200px;
             overflow-y: auto;
@@ -647,14 +725,11 @@
             background: #ffffff;
             color: #333;
             position: static;
-            /* Ubah dari absolute ke static agar tetap di dalam input-row */
             margin-top: 4px;
-            /* Berikan jarak kecil dari input */
             display: none;
             transition: opacity 0.2s ease;
             opacity: 0;
             z-index: 1000;
-            /* Turunkan z-index karena tidak lagi absolute */
         }
 
         .search-results.show {
@@ -670,7 +745,6 @@
             transition: background-color 0.2s ease;
             color: #333;
             background: #ffffff;
-            /* Pastikan latar belakang item jelas */
         }
 
         .search-results .result-item:hover,
@@ -721,6 +795,22 @@
             margin: 0;
         }
 
+        /* Styling tambahan untuk input kustom */
+        .input-group .custom-input {
+            width: 100px;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        /* Pastikan input-group tetap berdampingan */
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
         /* Responsivitas */
         @media (max-width: 768px) {
 
@@ -738,6 +828,7 @@
             .anjuran-select,
             .sehari-select,
             .aturan-select,
+            .custom-input,
             .jenis-obat-select,
             .jumlah-input,
             .harga-tablet-input,
@@ -1562,5 +1653,36 @@
                 updateTotalSemua(pasienId);
             });
         });
+
+        // INPUT ATURAN
+        function toggleInput(selectElement, uniqueId) {
+            const parent = selectElement.parentElement;
+            const selectedValue = selectElement.value;
+            const customInput = document.getElementById(`custom_sehari_${uniqueId}`);
+            const originalSelect = document.getElementById(`sehari_${uniqueId}`);
+
+            if (selectedValue === 'custom') {
+                // Tampilkan input kustom di sebelah select
+                customInput.classList.remove('d-none');
+                customInput.style.display = 'block';
+                customInput.focus();
+
+                // Tambahkan event listener untuk kembali ke select
+                customInput.addEventListener('blur', function revertToSelect() {
+                    if (customInput.value.trim() === '') {
+                        // Jika input kosong, sembunyikan input kustom
+                        customInput.classList.add('d-none');
+                        customInput.style.display = 'none';
+                        originalSelect.value = '1x1 SENDOK'; // Reset ke opsi default
+                    }
+                    // Hapus event listener setelah digunakan
+                    customInput.removeEventListener('blur', revertToSelect);
+                });
+            } else {
+                // Sembunyikan input kustom
+                customInput.classList.add('d-none');
+                customInput.style.display = 'none';
+            }
+        }
     </script>
 @endpush

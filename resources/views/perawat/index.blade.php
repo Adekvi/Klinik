@@ -42,7 +42,7 @@
                                         </div>
                                         <div class="offcanvas-body my-auto mx-0 flex-grow-0">
                                             <div class="text-center mb-3">
-                                                <h4 class="mb-3"><strong>Rekap Pasien</strong></h4>
+                                                <h4 class="mb-3"><strong>Update Pasien</strong></h4>
                                                 <div class="d-flex justify-content-between mb-3">
                                                     <div class="text-center d-flex flex-column align-items-center">
                                                         <!-- Teks dan ikon di atas -->
@@ -262,7 +262,7 @@
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody style="text-align: center">
+                                    <tbody style="text-align: center; text-transform: uppercase;">
                                         @if (count($pasien) === 0)
                                             <tr>
                                                 <td colspan="10" style="text-align: center; font-size: bold">Belum ada
@@ -430,9 +430,9 @@
                             </div>
                         </form>
                         <div class="isian" style="overflow-x: scroll">
-                            <table class="table table-striped table-bordered" style="background-color: white">
-                                <thead class="table-secondary"
-                                    style="text-align: center; white-space: nowrap; width: auto">
+                            <table class="table table-striped table-bordered"
+                                style="background-color: white; white-space: nowrap;">
+                                <thead class="table-secondary" style="text-align: center; width: auto">
                                     <tr>
                                         <th>No</th>
                                         <th>No. RM</th>
@@ -445,7 +445,7 @@
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody style="text-align: center">
+                                <tbody style="text-align: center; text-transform: uppercase;">
                                     @if (empty($periksa))
                                         <tr>
                                             <td colspan="7" style="text-align: center">Tidak Ada Data Pasien</td>
@@ -564,7 +564,7 @@
         @foreach ($soap as $asesmen)
             <div class="modal fade" id="detailAsesmen{{ $asesmen->id }}" tabindex="-1"
                 aria-labelledby="exampleModalLabelAsesmen{{ $asesmen->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg" style="display: contents">
+                <div class="modal-dialog modal-lg" style="display: contents">
                     <div class="modal-content" style="margin-top: 20px; width: 95%; margin-left: 3%;">
                         <div class="modal-header bg-primary">
                             <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Detail
@@ -746,7 +746,7 @@
     @foreach ($pasien as $item)
         <div class="modal fade" id="lewati{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati Pasien

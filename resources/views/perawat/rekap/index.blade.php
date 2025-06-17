@@ -31,7 +31,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="shifts">
+                        <div class="shifts" style="text-transform: uppercase">
                             <h4>Jumlah Pasien Per Shift</h4>
                             <div class="row">
                                 {{-- Shift Pagi --}}
@@ -178,8 +178,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="isian" style="overflow-x: scroll">
-                            <table class="table table-striped table-bordered" style="background-color: white">
-                                <thead class="table-primary text-center" style="white-space: nowrap; width: auto">
+                            <table class="table table-striped table-bordered"
+                                style="background-color: white; white-space: nowrap;">
+                                <thead class="table-primary text-center" style="width: auto">
                                     <tr>
                                         <th>No</th>
                                         {{-- <th>Aksi</th> --}}
@@ -195,7 +196,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody class="text-center" style="text-transform: uppercase">
                                     @if (empty($pasien))
                                         <tr>
                                             <td colspan="7" style="text-align: center">Tidak Ada Data Pasien</td>
@@ -246,9 +247,9 @@
                                     @endif
                                 </tbody>
                             </table>
-                            <div class="pagination mt-3 d-flex justify-content-end">
-                                {{ $pasien->appends(request()->input())->onEachSide(1)->links() }}
-                            </div>
+                        </div>
+                        <div class="pagination mt-3 d-flex justify-content-end">
+                            {{ $pasien->appends(request()->input())->onEachSide(1)->links() }}
                         </div>
                     </div>
                 </div>

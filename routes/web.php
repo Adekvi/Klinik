@@ -171,8 +171,14 @@ Route::group(['middleware' => ['auth', 'perawat']], function () {
     // Route untuk mendapatkan lewati
     Route::post('perawat/lewati/{id}', [PerawatController::class, 'lewatiAntrian'])->name('perawat.lewati');
 
-    // Rekap pasien
-    Route::get('perawat/rekap/harian', [PerawatController::class, 'rekapHarian'])->name('perawat.rekap.harian');
+    // Rekap Kunjungan
+    Route::get('perawat/rekap/kunjungan', [PerawatController::class, 'rekapHarian'])->name('perawat.rekap.kunjungan');
+
+    // Rekap Harian
+    Route::get('perawat/rekap/harian', [BerandaPerawatController::class, 'pemeriksaan'])->name('perawat.rekap.harian');
+
+    // EXPORT DATA
+    Route::get('/perawat/laporan/export/excel', [BerandaPerawatController::class, 'exportExcel'])->name('perawat.laporan.export.excel');
 });
 
 Route::group(['middleware' => ['auth', 'dokter']], function () {

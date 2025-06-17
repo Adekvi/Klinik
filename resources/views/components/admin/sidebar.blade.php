@@ -224,10 +224,16 @@
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Rekapan</li>
                 <li class="menu-item {{ Request::is('perawat/rekap/harian') ? 'active' : '' }}">
                     <a href="{{ url('perawat/rekap/harian') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-calendar-week"></i>
+                        <div data-i18n="Account Settings">Rekap Kunjungan Harian</div>
+                    </a>
+                </li>
+                {{-- <li class="menu-item {{ Request::is('perawat/rekap/kunjungan') ? 'active' : '' }}">
+                    <a href="{{ url('perawat/rekap/kunjungan') }}" class="menu-link">
                         <i class="menu-icon tf-icons fa-solid fa-calendar"></i>
                         <div data-i18n="Account Settings">Rekap Kunjungan Pasien</div>
                     </a>
-                </li>
+                </li> --}}
 
                 <!-- Rekap -->
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Menu</li>

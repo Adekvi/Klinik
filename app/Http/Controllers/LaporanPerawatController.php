@@ -39,7 +39,7 @@ class LaporanPerawatController extends Controller
                 });
             })
             ->whereTime('created_at', '>=', '07:00:00')
-            ->whereTime('created_at', '<', '12:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
             ->count();
 
         // PASIEN UMUM
@@ -51,7 +51,7 @@ class LaporanPerawatController extends Controller
                 });
             })
             ->whereTime('created_at', '>=', '07:00:00')
-            ->whereTime('created_at', '<', '12:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
             ->count();
 
         // SHIFT PAGI POLI GIGI
@@ -63,7 +63,7 @@ class LaporanPerawatController extends Controller
                 });
             })
             ->whereTime('created_at', '>=', '07:00:00')
-            ->whereTime('created_at', '<', '12:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
             ->count();
 
         // PASIEN UMUM
@@ -75,7 +75,7 @@ class LaporanPerawatController extends Controller
                 });
             })
             ->whereTime('created_at', '>=', '07:00:00')
-            ->whereTime('created_at', '<', '12:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
             ->count();
 
         // SHIFT SIANG POLI UMUM
@@ -86,8 +86,8 @@ class LaporanPerawatController extends Controller
                     $query->where('jenis_pasien', 'BPJS');
                 });
             })
-            ->whereTime('created_at', '>=', '12:00:00')
-            ->whereTime('created_at', '<', '17:00:00')
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
             ->count();
 
         // PASIEN UMUM
@@ -97,8 +97,8 @@ class LaporanPerawatController extends Controller
                     $query->where('jenis_pasien', 'Umum');
                 });
             })
-            ->whereTime('created_at', '>=', '12:00:00')
-            ->whereTime('created_at', '<', '17:00:00')
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
             ->count();
 
         // SHIFT SIANG POLI GIGI
@@ -109,8 +109,8 @@ class LaporanPerawatController extends Controller
                     $query->where('jenis_pasien', 'Umum');
                 });
             })
-            ->whereTime('created_at', '>=', '12:00:00')
-            ->whereTime('created_at', '<', '17:00:00')
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
             ->count();
 
         // PASIEN BPJS
@@ -120,8 +120,8 @@ class LaporanPerawatController extends Controller
                     $query->where('jenis_pasien', 'BPJS');
                 });
             })
-            ->whereTime('created_at', '>=', '12:00:00')
-            ->whereTime('created_at', '<', '17:00:00')
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
             ->count();
 
         // dd($countShiftSiangUmumUmum, $countShiftSiangGigiBpjs, $countShiftSiangGigiUmum);

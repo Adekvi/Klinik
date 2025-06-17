@@ -192,21 +192,19 @@ class ObatController extends Controller
                 Log::info('Nomor transaksi awal dihasilkan', ['no_transaksi' => $noTransaksi]);
             }
 
-            $now = Carbon::now()->format('H:i:s');
+            // Hitung shift berdasarkan tabel shift
+            $currentTime = Carbon::now()->format('H:i:s');
+            $shift = Shift::whereTime('jam_mulai', '<=', $currentTime)
+                ->whereTime('jam_selesai', '>=', $currentTime)
+                ->first();
 
-            $shift = Shift::where(function ($query) use ($now) {
-                $query->whereRaw('? between jam_mulai and jam_selesai', [$now])
-                    ->orWhere(function ($query) use ($now) {
-                        // Untuk shift malam: jam_mulai > jam_selesai
-                        $query->whereRaw('jam_mulai > jam_selesai')
-                            ->where(function ($query) use ($now) {
-                                $query->where('jam_mulai', '<=', $now)
-                                    ->orWhere('jam_selesai', '>=', $now);
-                            });
-                    });
-            })->first();
-
-            $idShift = $shift ? $shift->id : null;
+            if (!$shift) {
+                Log::warning('Shift tidak ditemukan untuk waktu saat ini', ['current_time' => $currentTime]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Shift tidak ditemukan untuk waktu saat ini.'
+                ], 422);
+            }
 
             // Menyiapkan data untuk antrian kasir
             $kasirData = [
@@ -218,7 +216,7 @@ class ObatController extends Controller
                 'id_poli' => $antrianDokter->id_poli,
                 'id_dokter' => $antrianDokter->id_dokter,
                 'id_pasien' => $idPasien,
-                'id_shift' => $idShift,
+                'id_shift' => $shift->id,
                 'status' => 'O',
             ];
 
@@ -244,153 +242,6 @@ class ObatController extends Controller
             return redirect()->route('apotek.index')->with('error', 'Gagal menyimpan data obat: ' . $e->getMessage());
         }
     }
-
-    // public function store(Request $request, $id)
-    // {
-    //     // Mengambil semua data dari form
-    //     $data = $request->all();
-    //     Log::info('Data yang diterima: ', $data);
-
-    //     // Mendapatkan ID booking dari AntrianPerawat berdasarkan ID yang diterima
-    //     $antrianDokter = AntrianPerawat::with(['booking.pasien', 'isian', 'rm', 'poli', 'obat.soap'])
-    //         ->where('id', $id)
-    //         ->firstOrFail();
-    //     $idBooking = $antrianDokter->id_booking;
-    //     $idPasien = $antrianDokter->booking->pasien->id;
-
-    //     // Mendapatkan ID booking dari AntrianPerawat berdasarkan ID yang diterima
-    //     // $idBooking = AntrianPerawat::findOrFail($id)->id_booking;
-
-    //     // Validasi input dari form
-    //     $request->validate([
-    //         'obat_Ro' => 'required|array',
-    //         'obat_Ro.*.namaObatUpdate' => 'nullable|string',
-    //         'obat_Ro.*.anjuran' => 'nullable|string',
-    //         'obat_Ro.*.sehari' => 'nullable|string',
-    //         'obat_Ro.*.aturan' => 'nullable|string',
-    //         'obat_Ro.*.jenisObat' => 'nullable|string',
-    //         'obat_Ro.*.jumlah' => 'nullable|numeric',
-    //         'obat_Ro.*.hargaTablet' => 'nullable|numeric',
-    //         'obat_Ro.*.hargaTotal' => 'nullable|numeric',
-    //         'aturan_tambahan' => 'nullable|string',
-    //         'totalSemuaHarga' => 'nullable|numeric',
-    //     ]);
-
-    //     // Ambil data antrian dokter dan informasi terkait pasien
-    //     $antrianDokter = AntrianPerawat::with(['booking.pasien', 'isian', 'rm', 'poli', 'obat.soap'])
-    //         ->where('id', $id)
-    //         ->firstOrFail();
-
-    //     // Ambil data obat yang sudah ada, jika ada
-    //     $existingObat = Obat::where('id_booking', $idBooking)->first();
-
-    //     // Siapkan array untuk menyimpan data baru
-    //     $obatRoNames = [];
-    //     $obatRoJenisObat = $existingObat ? json_decode($existingObat->obat_Ro_jenisObat, true) : [];
-    //     $obatRoAturan = $existingObat ? json_decode($existingObat->obat_Ro_aturan, true) : [];
-    //     $obatRoAnjuran = $existingObat ? json_decode($existingObat->obat_Ro_anjuran, true) : [];
-    //     $obatRoSehari = $existingObat ? json_decode($existingObat->obat_Ro_sehari, true) : [];
-    //     $obatRoJumlah = $existingObat ? json_decode($existingObat->obat_Ro_jumlah, true) : [];
-    //     $obatRoHargaTablet = $existingObat ? json_decode($existingObat->obat_Ro_hargaTablet, true) : [];
-    //     $obatRoHargaTotal = $existingObat ? json_decode($existingObat->obat_Ro_hargaTotal, true) : [];
-
-    //     // Proses setiap item dalam obat_Ro
-    //     foreach ($data['obat_Ro'] as $item) {
-    //         $obatRoNames[] = trim($item['namaObatUpdate'] ?? null);
-    //         $obatRoJenisObat[] = $item['jenisObat'] ?? null;
-    //         $obatRoAturan[] = $item['aturan'] ?? null;
-    //         $obatRoAnjuran[] = $item['anjuran'] ?? null;
-    //         $obatRoSehari[] = $item['sehari'] ?? null;
-    //         $obatRoJumlah[] = $item['jumlah'] ?? null;
-    //         $obatRoHargaTablet[] = $item['hargaTablet'] ?? null;
-    //         $obatRoHargaTotal[] = $item['hargaTotal'] ?? null;
-    //     }
-
-    //     // Siapkan data untuk disimpan ke dalam model Obat
-    //     $newObatData = [
-    //         'obat_Ro_namaObatUpdate' => json_encode($obatRoNames),
-    //         'obat_Ro_jenisObat' => json_encode($obatRoJenisObat),
-    //         'obat_Ro_aturan' => json_encode($obatRoAturan),
-    //         'obat_Ro_anjuran' => json_encode($obatRoAnjuran),
-    //         'obat_Ro_sehari' => json_encode($obatRoSehari),
-    //         'obat_Ro_jumlah' => json_encode($obatRoJumlah),
-    //         'obat_Ro_hargaTablet' => json_encode($obatRoHargaTablet),
-    //         'obat_Ro_hargaTotal' => json_encode($obatRoHargaTotal),
-    //         'obat_racikan' => $data['obat_racikan'] ?? null,
-    //         'aturan_tambahan' => $data['aturan_tambahan'] ?? null,
-    //         'status' => 'O',
-    //         'totalSemuaHarga' => $data['totalSemuaHarga'] ?? 0,
-    //     ];
-
-    //     // dd($newObatData);
-
-    //     // Simpan atau update data obat
-    //     if ($existingObat) {
-    //         $existingObat->update($newObatData); // Update jika data obat sudah ada
-    //         $obatId = $existingObat->id;
-    //     } else {
-    //         $newObat = Obat::create($newObatData); // Simpan data baru jika tidak ada
-    //         $obatId = $newObat->id;
-    //     }
-
-    //     // Cek apakah data kasir dengan id_pasien dan id_booking sudah ada
-    //     $existingKasir = Kasir::where('id_pasien', $idPasien)
-    //         ->where('id_booking', $idBooking)
-    //         ->first();
-
-    //     if ($existingKasir) {
-    //         Log::info('Data kasir sudah ada', [
-    //             'id_pasien' => $idPasien,
-    //             'id_booking' => $idBooking,
-    //             'no_transaksi' => $existingKasir->no_transaksi
-    //         ]);
-    //         return redirect()->route('apotek.index')->with('error', 'Transaksi untuk pasien dan booking ini sudah ada.');
-    //     }
-
-    //     // Generate no_transaksi
-    //     $lastKasir = Kasir::where('no_transaksi', 'LIKE', 'TSX%')
-    //         ->orderBy('no_transaksi', 'desc')
-    //         ->first();
-
-    //     Log::info('Data lastKasir', ['lastKasir' => $lastKasir ? $lastKasir->toArray() : null]);
-
-    //     if ($lastKasir && $lastKasir->no_transaksi && preg_match('/^TSX(\d+)$/', $lastKasir->no_transaksi, $matches)) {
-    //         $lastNumber = (int)$matches[1];
-    //         $newNumber = $lastNumber + 1;
-    //         $noTransaksi = 'TSX' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
-    //         Log::info('Nomor transaksi baru dihasilkan', ['last_no_transaksi' => $lastKasir->no_transaksi, 'new_no_transaksi' => $noTransaksi]);
-    //     } else {
-    //         $noTransaksi = 'TSX00001';
-    //         Log::info('Nomor transaksi awal dihasilkan', ['no_transaksi' => $noTransaksi]);
-    //     }
-
-    //     // Menyiapkan data untuk antrian kasir
-    //     $kasirData = [
-    //         'no_transaksi' => $noTransaksi,
-    //         'no_rm' => $antrianDokter->booking->pasien->no_rm,
-    //         'nama_pasien' => $antrianDokter->booking->pasien->nama_pasien,
-    //         'jenis_pasien' => $antrianDokter->booking->pasien->jenis_pasien,
-    //         'id_booking' => $antrianDokter->booking->id,
-    //         'id_poli' => $antrianDokter->id_poli,
-    //         'id_dokter' => $antrianDokter->id_dokter,
-    //         'id_pasien' => $antrianDokter->booking->pasien->id,
-    //         'status' => 'O',
-    //     ];
-
-    //     // dd($newObatData, $kasirData);
-
-    //     // Simpan data antrian kasir
-    //     Kasir::create($kasirData);
-
-    //     // Update status antrian perawat dengan ID obat yang baru
-    //     AntrianPerawat::find($id)->update([
-    //         'id_obat' => $obatId,
-    //         'status' => 'S' // Status berubah ke S (Selesai)
-    //     ]);
-
-    //     // Redirect kembali ke halaman apotek dengan pesan sukses
-    //     return redirect()->route('apotek.index')->with('success', 'Pasien telah diberi Obat, Silahkan Menuju ke kasir.');
-    // }
 
     public function lewatiAntrianObat($id)
     {

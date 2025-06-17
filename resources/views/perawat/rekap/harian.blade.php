@@ -109,7 +109,7 @@
                                                 DISKRIPSI</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody style="text-transform: uppercase">
                                         @if ($rekap->isEmpty())
                                             <tr>
                                                 <td colspan="31" class="text-center">Belum ada data</td>

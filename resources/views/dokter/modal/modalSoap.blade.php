@@ -564,10 +564,34 @@
                                 <span>:</span>
                                 <select class="form-control" name="soap_p[0][aturan]" id="aturan_0">
                                     <option value="">--Pilih Aturan Minum--</option>
-                                    <option value="1x1/5">1x1/5</option>
-                                    <option value="2x1/5">2x1/5</option>
-                                    <option value="3x1/5">3x1/5</option>
-                                    <option value="3x2">3x2</option>
+                                    <option value="1x1 SENDOK">1x1 SENDOK</option>
+                                    <option value="1x1/2 SENDOK">1x1/2 SENDOK</option>
+                                    <option value="1x3/4 SENDOK">1x3/4 SENDOK</option>
+                                    <option value="1x1 1/2 SENDOK">1x1 1/2 SENDOK</option>
+                                    <option value="2x1 SENDOK">2x1 SENDOK</option>
+                                    <option value="2x1/2 SENDOK">2x1/2 SENDOK</option>
+                                    <option value="2x3/4 SENDOK">2x3/4 SENDOK</option>
+                                    <option value="3x1 SENDOK">3x1 SENDOK</option>
+                                    <option value="3x1/2 SENDOK">3x1/2 SENDOK</option>
+                                    <option value="3x3/4 SENDOK">3x3/4 SENDOK</option>
+                                    <option value="3x1 1/2 SENDOK">3x1 1/2 SENDOK</option>
+                                    <option value="4x1 SENDOK">4x1 SENDOK</option>
+                                    <option value="4x1 1/2 SENDOK">4x1 1/2 SENDOK</option>
+                                    <option value="4x1/2 SENDOK">4x1/2 SENDOK</option>
+                                    <option value="4x3/4 SENDOK">4x3/4 SENDOK</option>
+                                    <option value="3x SEHARI OLES TIPIS-TIPIS">3x SEHARI OLES TIPIS-TIPIS</option>
+                                    <option value="2x SEHARI OLES TIPIS-TIPIS">2x SEHARI OLES TIPIS-TIPIS</option>
+                                    <option value="1x1 TABLET">1x1 TABLET</option>
+                                    <option value="2x1 TABLET">2x1 TABLET</option>
+                                    <option value="3x1 TABLET">3x1 TABLET</option>
+                                    <option value="3x1 BUNGKUS">3x1 BUNGKUS</option>
+                                    <option value="3x2 TETES">3x2 TETES</option>
+                                    <option value="3x1 TETES">3x1 TETES</option>
+                                    <option value="4x2 TETES">4x2 TETES</option>
+                                    <option value="INJEKSI 1 ml">INJEKSI 1 ml</option>
+                                    <option value="INJEKSI 2 ml">INJEKSI 2 ml</option>
+                                    <option value="INJEKSI 3 ml">INJEKSI 3 ml</option>
+                                    <option value="NEBUL 1 ampul">NEBUL 1 ampul</option>
                                 </select>
                             </div>
 
@@ -898,10 +922,34 @@
                         <span>:</span>
                         <select class="form-control" name="soap_p[${kolomIndex}][aturan]" id="aturan_${kolomIndex}" required>
                             <option value="">--Pilih Aturan Minum--</option>
-                            <option value="1x1/5">1x1/5</option>
-                            <option value="2x1/5">2x1/5</option>
-                            <option value="3x1/5">3x1/5</option>
-                            <option value="3x2">3x2</option>
+                            <option value="1x1 SENDOK">1x1 SENDOK</option>
+                            <option value="1x1/2 SENDOK">1x1/2 SENDOK</option>
+                            <option value="1x3/4 SENDOK">1x3/4 SENDOK</option>
+                            <option value="1x1 1/2 SENDOK">1x1 1/2 SENDOK</option>
+                            <option value="2x1 SENDOK">2x1 SENDOK</option>
+                            <option value="2x1/2 SENDOK">2x1/2 SENDOK</option>
+                            <option value="2x3/4 SENDOK">2x3/4 SENDOK</option>
+                            <option value="3x1 SENDOK">3x1 SENDOK</option>
+                            <option value="3x1/2 SENDOK">3x1/2 SENDOK</option>
+                            <option value="3x3/4 SENDOK">3x3/4 SENDOK</option>
+                            <option value="3x1 1/2 SENDOK">3x1 1/2 SENDOK</option>
+                            <option value="4x1 SENDOK">4x1 SENDOK</option>
+                            <option value="4x1 1/2 SENDOK">4x1 1/2 SENDOK</option>
+                            <option value="4x1/2 SENDOK">4x1/2 SENDOK</option>
+                            <option value="4x3/4 SENDOK">4x3/4 SENDOK</option>
+                            <option value="3x SEHARI OLES TIPIS-TIPIS">3x SEHARI OLES TIPIS-TIPIS</option>
+                            <option value="2x SEHARI OLES TIPIS-TIPIS">2x SEHARI OLES TIPIS-TIPIS</option>
+                            <option value="1x1 TABLET">1x1 TABLET</option>
+                            <option value="2x1 TABLET">2x1 TABLET</option>
+                            <option value="3x1 TABLET">3x1 TABLET</option>
+                            <option value="3x1 BUNGKUS">3x1 BUNGKUS</option>
+                            <option value="3x2 TETES">3x2 TETES</option>
+                            <option value="3x1 TETES">3x1 TETES</option>
+                            <option value="4x2 TETES">4x2 TETES</option>
+                            <option value="INJEKSI 1 ml">INJEKSI 1 ml</option>
+                            <option value="INJEKSI 2 ml">INJEKSI 2 ml</option>
+                            <option value="INJEKSI 3 ml">INJEKSI 3 ml</option>
+                            <option value="NEBUL 1 ampul">NEBUL 1 ampul</option>
                         </select>
                     </div>
 

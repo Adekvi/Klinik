@@ -14,6 +14,7 @@ class DataDiagnosaController extends Controller
 
         $diagnosa = Diagnosa::orderBy('id', 'asc')->paginate($entries);
         // Ubah angka 10 sesuai dengan jumlah data yang ingin ditampilkan per halaman
+        // dd($diagnosa);
         return view('admin.master.diagnosa.index', compact('diagnosa', 'entries'));
     }
     public function search(Request $request)
