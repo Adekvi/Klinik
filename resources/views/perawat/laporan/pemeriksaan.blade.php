@@ -195,7 +195,7 @@
                                     <tbody class="text-center">
                                         @if ($harian->isEmpty())
                                             <tr>
-                                                <td colspan="31" class="text-center">Belum ada data</td>
+                                                <td colspan="38" class="text-center">Belum ada data</td>
                                             </tr>
                                         @else
                                             <?php
@@ -208,53 +208,55 @@
                                             }
                                             ?>
                                             @foreach ($harian as $item)
-                                                @if ($item->status == 'WB')
-                                                    <tr>
-                                                        <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}
-                                                        </td>
-                                                        <td>{{ $item->jam_datang }}</td>
-                                                        <td>{{ $item->lama_daftar }}</td>
-                                                        <td>{{ $item->jam_periksa }}</td>
-                                                        <td>{{ $item->lama_periksa }}</td>
-                                                        <td>{{ $item->jam_selesai }}</td>
-                                                        <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                        <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                        <td>{{ $item->booking->pasien->status }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->format('d/m/Y') }}
-                                                        </td>
-                                                        <td>{{ $item->booking->pasien->bpjs ?? '-' }}</td>
-                                                        <td>{{ $item->booking->pasien->jenis_pasien }}</td>
-                                                        <td>Rp. {{ $item->harga_total }}</td>
-                                                        <td>{{ $item->booking->pasien->nik }}</td>
-                                                        <td>{{ $item->booking->pasien->noHP }}</td>
-                                                        <td>{{ $item->booking->pasien->pekerjaan }}</td>
-                                                        <td>{{ $item->booking->pasien->nama_kk }}</td>
-                                                        <td>{{ $item->booking->pasien->alamat_asal }}</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>{{ $item->obat->soap->keluhan_utama }}</td>
-                                                        <td>{{ $item->obat->soap->p_tensi }}</td>
-                                                        <td>{{ $item->obat->soap->p_nadi }}</td>
-                                                        <td>{{ $item->obat->soap->p_rr }}</td>
-                                                        <td>{{ $item->obat->soap->p_suhu }}</td>
-                                                        <td>{{ $item->obat->soap->spo2 }}</td>
-                                                        <td>{{ $item->obat->soap->p_bb }}</td>
-                                                        <td>{{ $item->obat->soap->p_tb }}</td>
-                                                        <td>{{ $item->kd_diagno }}</td>
-                                                        <td>{{ $item->nm_diagno }}</td>
-                                                        <td>{{ $item->nama_obat }}</td>
-                                                        <td>{{ $item->obat->soap->rujuk }}</td>
-                                                        <td>{{ $item->datadokter->nama_dokter }}</td>
-                                                        <td>{{ $item->datadokter->nik ?? '-' }}</td>
-                                                    </tr>
-                                                @else
-                                                    <tr>
-                                                        <td colspan="31" class="text-center">Tidak ada data</td>
-                                                    </tr>
-                                                @endif
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                                                    <td>{{ $item->jam_datang }}</td>
+                                                    <td>{{ $item->lama_daftar }}</td>
+                                                    <td>{{ $item->jam_periksa }}</td>
+                                                    <td>{{ $item->lama_periksa }}</td>
+                                                    <td>{{ $item->jam_selesai }}</td>
+                                                    <td>{{ $item->booking->pasien->no_rm ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->nama_pasien ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->status ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->tgllahir ? \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->format('d/m/Y') : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->booking->pasien->bpjs ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->jenis_pasien ?? '-' }}</td>
+                                                    <td>Rp. {{ $item->harga_total }}</td>
+                                                    <td>{{ $item->booking->pasien->nik ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->noHP ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->pekerjaan ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->nama_kk ?? '-' }}</td>
+                                                    <td>{{ $item->booking->pasien->alamat_asal ?? '-' }}</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->keluhan_utama : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->p_tensi : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->p_nadi : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->p_rr : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->p_suhu : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->spo2 : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->p_bb : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->p_tb : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->kd_diagno }}</td>
+                                                    <td>{{ $item->nm_diagno }}</td>
+                                                    <td>{{ $item->nama_obat }}</td>
+                                                    <td>{{ $item->obat && $item->obat->soap ? $item->obat->soap->rujuk : '-' }}
+                                                    </td>
+                                                    <td>{{ $item->dokter->nama_dokter ?? '-' }}</td>
+                                                    <td>{{ $item->dokter->nik ?? '-' }}</td>
+                                                </tr>
                                             @endforeach
                                         @endif
                                     </tbody>

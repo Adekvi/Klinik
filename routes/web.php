@@ -185,8 +185,6 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
     Route::get('dokter/dashboard', [BerandaDokterController::class, 'index']);
 
     Route::post('dokter/lewati/{id}', [DokterController::class, 'lewatiAntrianDokter'])->name('dokter.lewati');
-    Route::post('obat/lewati/{id}', [ObatController::class, 'lewatiAntrianObat'])->name('obat.lewati');
-
     // dokter
     Route::get('dokter/index', [DokterController::class, 'index'])->name('dokter.index');
     Route::get('dokter/soap/{id}', [DokterController::class, 'soap'])->name('dokter.soap');
@@ -216,6 +214,8 @@ Route::group(['middleware' => ['auth', 'apoteker']], function () {
     // apotek
     Route::get('apotek/index', [ObatController::class, 'index'])->name('apotek.index');
     Route::post('obat/store/{id}', [ObatController::class, 'store'])->name('apotek.store');
+
+    Route::post('obat/lewati/{id}', [ObatController::class, 'lewatiAntrianObat'])->name('obat.lewati');
 
     Route::get('cetak.kartu/{id}', [ObatController::class, 'cetakKartu'])->name('cetak.kartu');
 

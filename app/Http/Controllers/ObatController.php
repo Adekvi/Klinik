@@ -46,6 +46,8 @@ class ObatController extends Controller
         $antrianObat = $query->paginate($entries, ['*'], 'page', $page);
         $antrianObat->appends(['search' => $search, 'entries' => $entries]);
 
+        // dd($antrianObat);
+
         $reseps = Resep::all();
 
         $today = Carbon::today();
@@ -262,7 +264,7 @@ class ObatController extends Controller
             $antrian->save();
         }
 
-        return redirect()->route('obat.index');
+        return redirect()->route('apotek.index');
     }
 
     // Controller Antrian Obat

@@ -992,11 +992,11 @@
             // Pencarian Pasien BPJS
             $('#searchBtn').on('click', function(event) {
                 event.preventDefault();
-                var nama = $('#id_bpjs').val().trim();
-                console.log("Nilai input:", nama);
+                var identifier = $('#id_bpjs').val().trim();
+                console.log("Nilai input:", identifier);
 
-                if (!nama) {
-                    alert("Harap masukkan No. RM atau No. BPJS atau NIK.");
+                if (!identifier) {
+                    alert("Harap masukkan No. RM, No. BPJS, NIK, atau Nama Pasien.");
                     return;
                 }
 
@@ -1007,30 +1007,29 @@
                     url: '/search_pasien_bpjs',
                     method: 'GET',
                     data: {
-                        nama: nama
+                        nama: identifier
                     },
                     success: function(response) {
                         $('#loading').hide();
                         $('#searchBtn i').show();
 
-                        if (response) {
-                            var pasien = response;
-                            $('#noRM').val(pasien.no_rm);
-                            $('#namaPasien').val(pasien.nama_pasien);
-                            $('#nikPasien').val(pasien.nik);
-                            $('#tgllahirPasien').val(pasien.tgllahir);
-                            $('#jekelPasien').val(pasien.jekel);
-                            $('#namaKK').val(pasien.nama_kk);
-                            $('#alamatPasien').val(pasien.alamat_asal);
-                            $('#pekerjaanPasien').val(pasien.pekerjaan);
-                            $('#hpPasien').val(pasien.noHP);
-                            $('#alamatDomisili').val(pasien.domisili);
-                            $('#jenisPasien').val(pasien.jenis_pasien);
-                            $('#bpjsPasien').val(pasien.bpjs);
-                            $('#infoPasien').show();
-                        } else {
-                            alert('Pasien tidak ditemukan.');
+                        if (response.error) {
+                            alert(response.error);
                             $('#infoPasien').hide();
+                        } else {
+                            $('#noRM').val(response.no_rm);
+                            $('#namaPasien').val(response.nama_pasien);
+                            $('#nikPasien').val(response.nik || '');
+                            $('#tgllahirPasien').val(response.tgllahir);
+                            $('#jekelPasien').val(response.jekel);
+                            $('#namaKK').val(response.nama_kk);
+                            $('#alamatPasien').val(response.alamat_asal);
+                            $('#pekerjaanPasien').val(response.pekerjaan);
+                            $('#hpPasien').val(response.noHP);
+                            $('#alamatDomisili').val(response.domisili);
+                            $('#jenisPasien').val(response.jenis_pasien);
+                            $('#bpjsPasien').val(response.bpjs || '');
+                            $('#infoPasien').show();
                         }
                     },
                     error: function(xhr) {
@@ -1153,6 +1152,7 @@
                     domisili: $('#alamatDomisili').val(),
                     jenis_pasien: $('#jenisPasien').val(),
                     pekerjaan: $('#pekerjaanPasien').val(),
+                    bpjs: $('#bpjsPasien').val(),
                     poli: $('#poli_bpjs').val(),
                     dokter: $('#dokter_bpjs').val(),
                     _token: $('meta[name="csrf-token"]').attr('content')
@@ -1161,23 +1161,18 @@
                 var errorMessages = [];
                 if (!formData.no_rm) errorMessages.push("No RM harus diisi.");
                 if (!formData.nama_pasien) errorMessages.push("Nama pasien harus diisi.");
-                if (!formData.nik) errorMessages.push("NIK harus diisi.");
-                else if (formData.nik.length !== 16 || !/^\d+$/.test(formData.nik)) {
+                if (formData.nik && (formData.nik.length !== 16 || !/^\d+$/.test(formData.nik))) {
                     errorMessages.push("NIK harus terdiri dari 16 digit dan hanya angka.");
-                } else {
-                    const dayPart = parseInt(formData.nik.substr(6, 2));
-                    const expectedJekel = dayPart < 40 ? 'L' : 'P';
-                    if (formData.jekel !== 'L' && formData.jekel !== 'P') {
-                        errorMessages.push("Jenis kelamin harus 'L' atau 'P'.");
-                    } else if (formData.jekel !== expectedJekel) {
-                        errorMessages.push("Jenis kelamin tidak sesuai dengan NIK.");
-                    }
+                }
+                if (formData.bpjs && (formData.bpjs.length !== 13 || !/^\d+$/.test(formData.bpjs))) {
+                    errorMessages.push("No. BPJS harus terdiri dari 13 digit dan hanya angka.");
                 }
                 if (!formData.nama_kk) errorMessages.push("Nama Kepala Keluarga harus diisi.");
                 if (!formData.tgllahir) errorMessages.push("Tanggal lahir harus diisi.");
-                if (!formData.jekel) errorMessages.push("Jenis kelamin harus diisi.");
+                if (!formData.jekel || !['L', 'P'].includes(formData.jekel)) errorMessages.push(
+                    "Jenis kelamin harus 'L' atau 'P'.");
                 if (!formData.alamat_asal) errorMessages.push("Alamat harus diisi.");
-                if (!formData.noHP) errorMessages.push("No.Hp harus diisi.");
+                if (!formData.noHP) errorMessages.push("No. HP harus diisi.");
                 if (!formData.domisili) errorMessages.push("Domisili harus diisi.");
                 if (!formData.jenis_pasien) errorMessages.push("Jenis pasien harus diisi.");
                 if (!formData.pekerjaan) errorMessages.push("Pekerjaan harus diisi.");
@@ -1206,14 +1201,10 @@
                                 location.reload();
                             }, 3000);
                         } else if (response.error) {
-                            if (response.error === 'Pasien ini sudah mendaftar hari ini.') {
-                                alert("Pasien ini telah mendaftar hari ini.");
-                            } else {
-                                alert("Gagal menyimpan: " + response.error);
-                            }
+                            alert("Gagal menyimpan: " + response.error);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function(xhr) {
                         $('#loadingSpinnerLama').addClass('d-none');
                         $('#simpanBpjs').prop('disabled', false);
 
@@ -1226,13 +1217,9 @@
                             handleSessionExpired();
                         } else if (xhr.status === 422) {
                             const response = JSON.parse(xhr.responseText);
-                            if (response.error === 'Pasien ini sudah mendaftar hari ini.') {
-                                alert("Pasien ini telah mendaftar hari ini.");
-                            } else {
-                                alert("Validasi gagal: " + response.error);
-                            }
+                            alert("Validasi gagal: " + response.error);
                         } else {
-                            console.error("Error Ajax:", xhr.responseText, status, error);
+                            console.error("Error Ajax:", xhr.responseText);
                             alert("Terjadi kesalahan: Gagal menyimpan data pasien.");
                         }
                     }

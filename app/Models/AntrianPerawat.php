@@ -56,11 +56,6 @@ class AntrianPerawat extends Model
     {
         return $this->belongsTo(TtdMedis::class, 'id_ttd_medis'); // foreign key di AntrianPerawat
     }
-
-    public function datadokter()
-    {
-        return $this->belongsTo(DataDokter::class, 'id');
-    }
     public function ppn()
     {
         return $this->belongsTo(ppnPajak::class, 'id_ppnPajak');

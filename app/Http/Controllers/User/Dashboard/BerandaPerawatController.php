@@ -31,14 +31,19 @@ class BerandaPerawatController extends Controller
     public function pemeriksaan(Request $request)
     {
         try {
+            // $coba = AntrianPerawat::where('status', 'WB')->get();
+
+            // dd($coba);
             // Ambil input tanggal dari request
             $startDate = $request->query('start_date');
             $endDate = $request->query('end_date');
 
             // Inisialisasi query
-            $query = AntrianPerawat::with(['booking.pasien', 'obat.soap', 'poli', 'rm', 'isian', 'datadokter'])
+            $query = AntrianPerawat::with(['booking.pasien', 'obat.soap', 'poli', 'dokter', 'rm', 'isian'])
                 ->where('status', 'WB')
                 ->orderBy('id', 'asc');
+
+            // dd($query);
 
             // Filter berdasarkan rentang tanggal
             if ($startDate && $endDate) {
@@ -147,6 +152,8 @@ class BerandaPerawatController extends Controller
 
                 return $item;
             });
+
+            // dd($harian);
 
             return view('perawat.laporan.pemeriksaan', compact('harian'));
         } catch (\Exception $e) {

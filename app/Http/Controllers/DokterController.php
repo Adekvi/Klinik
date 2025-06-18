@@ -129,6 +129,8 @@ class DokterController extends Controller
         $resepAnjuran = $soapTerbaru && $soapTerbaru->soap_p_anjuran ? json_decode($soapTerbaru->soap_p_anjuran, true) : [];
         $resepJumlah = $soapTerbaru && $soapTerbaru->soap_p_jumlah ? json_decode($soapTerbaru->soap_p_jumlah, true) : [];
 
+        // dd($soapRiwayat);
+        // dd($diagnosaPrimer, $diagnosaSekunder);
         // $idpasien = $pasien->pasien->id;
 
         $fisik = Fisik::with(['booking.pasien', 'rm', 'isian', 'dokter'])

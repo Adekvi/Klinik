@@ -640,19 +640,92 @@
                                             <select class="form-control" name="soap_p[{{ $index }}][aturan]"
                                                 id="aturan_{{ $index }}">
                                                 <option value="">--Pilih Aturan Minum--</option>
-                                                <option value="1x1/5"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1/5' ? 'selected' : '' }}>
-                                                    1x1/5</option>
-                                                <option value="2x1/5"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1/5' ? 'selected' : '' }}>
-                                                    2x1/5</option>
-                                                <option value="3x1/5"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1/5' ? 'selected' : '' }}>
-                                                    3x1/5</option>
-                                                <option value="3x2"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x2' ? 'selected' : '' }}>
-                                                    3x2</option>
-                                                <!-- Opsi lainnya -->
+                                                <option value="1x1 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1 SENDOK' ? 'selected' : '' }}>
+                                                    1x1 SENDOK</option>
+                                                <option value="1x1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1/2 SENDOK' ? 'selected' : '' }}>
+                                                    1x1/2 SENDOK</option>
+                                                <option value="1x3/4 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x3/4 SENDOK' ? 'selected' : '' }}>
+                                                    1x3/4 SENDOK</option>
+                                                <option value="1x1 1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1 1/2 SENDOK' ? 'selected' : '' }}>
+                                                    1x1 1/2 SENDOK</option>
+                                                <option value="2x1 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1 SENDOK' ? 'selected' : '' }}>
+                                                    2x1 SENDOK</option>
+                                                <option value="2x1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1/2 SENDOK' ? 'selected' : '' }}>
+                                                    2x1/2 SENDOK</option>
+                                                <option value="2x3/4 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x3/4 SENDOK' ? 'selected' : '' }}>
+                                                    2x3/4 SENDOK</option>
+                                                <option value="3x1 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 SENDOK' ? 'selected' : '' }}>
+                                                    3x1 SENDOK</option>
+                                                <option value="3x1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1/2 SENDOK' ? 'selected' : '' }}>
+                                                    3x1/2 SENDOK</option>
+                                                <option value="3x3/4 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x3/4 SENDOK' ? 'selected' : '' }}>
+                                                    3x3/4 SENDOK</option>
+                                                <option value="3x1 1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 1/2 SENDOK' ? 'selected' : '' }}>
+                                                    3x1 1/2 SENDOK</option>
+                                                <option value="4x1 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x1 SENDOK' ? 'selected' : '' }}>
+                                                    4x1 SENDOK</option>
+                                                <option value="4x1 1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x1 1/2 SENDOK' ? 'selected' : '' }}>
+                                                    4x1 1/2 SENDOK</option>
+                                                <option value="4x1/2 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x1/2 SENDOK' ? 'selected' : '' }}>
+                                                    4x1/2 SENDOK</option>
+                                                <option value="4x3/4 SENDOK"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x3/4 SENDOK' ? 'selected' : '' }}>
+                                                    4x3/4 SENDOK</option>
+                                                <option value="3x SEHARI OLES TIPIS-TIPIS"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
+                                                    3x SEHARI OLES TIPIS-TIPIS
+                                                </option>
+                                                <option value="2x SEHARI OLES TIPIS-TIPIS"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
+                                                    2x SEHARI OLES TIPIS-TIPIS
+                                                </option>
+                                                <option value="1x1 TABLET"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1 TABLET' ? 'selected' : '' }}>
+                                                    1x1 TABLET</option>
+                                                <option value="2x1 TABLET"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1 TABLET' ? 'selected' : '' }}>
+                                                    2x1 TABLET</option>
+                                                <option value="3x1 TABLET"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 TABLET' ? 'selected' : '' }}>
+                                                    3x1 TABLET</option>
+                                                <option value="3x1 BUNGKUS"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 BUNGKUS' ? 'selected' : '' }}>
+                                                    3x1 BUNGKUS</option>
+                                                <option value="3x2 TETES"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x2 TETES' ? 'selected' : '' }}>
+                                                    3x2 TETES</option>
+                                                <option value="3x1 TETES"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 TETES' ? 'selected' : '' }}>
+                                                    3x1 TETES</option>
+                                                <option value="4x2 TETES"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x2 TETES' ? 'selected' : '' }}>
+                                                    4x2 TETES</option>
+                                                <option value="INJEKSI 1 ml"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'INJEKSI 1 ml' ? 'selected' : '' }}>
+                                                    INJEKSI 1 ml</option>
+                                                <option value="INJEKSI 2 ml"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'INJEKSI 2 ml' ? 'selected' : '' }}>
+                                                    INJEKSI 2 ml</option>
+                                                <option value="INJEKSI 3 ml"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'INJEKSI 3 ml' ? 'selected' : '' }}>
+                                                    INJEKSI 3 ml</option>
+                                                <option value="NEBUL 1 ampul"
+                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'NEBUL 1 ampul' ? 'selected' : '' }}>
+                                                    NEBUL 1 ampul</option>
                                             </select>
                                         </div>
 
@@ -937,92 +1010,6 @@
             initDiagnosaAutocomplete('soap_a_', 'dropdown-diagnosa-primer-');
             initDiagnosaAutocomplete('soap_a_b_', 'dropdown-diagnosa-sekunder-');
         });
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     // Fungsi untuk menampilkan dropdown diagnosa
-        //     function showDiagnosaDropdown(inputElement, dropdownElement, results) {
-        //         dropdownElement.innerHTML = '';
-        //         if (results.length === 0) {
-        //             dropdownElement.style.display = 'none';
-        //             return;
-        //         }
-
-        //         results.forEach(function(result) {
-        //             const option = document.createElement('div');
-        //             option.classList.add('dropdown-item');
-        //             option.textContent = result.text;
-        //             option.dataset.id = result.id;
-
-        //             option.addEventListener('click', function() {
-        //                 inputElement.value = result.text;
-        //                 dropdownElement.style.display = 'none';
-        //             });
-
-        //             dropdownElement.appendChild(option);
-        //         });
-        //         dropdownElement.style.display = 'block';
-        //     }
-
-        //     // Fungsi pencarian diagnosa
-        //     function searchDiagnosa(term, callback) {
-        //         if (term.length < 3) {
-        //             callback([]);
-        //             return;
-        //         }
-
-        //         fetch(`/search-diagnosa?term=${encodeURIComponent(term)}`)
-        //             .then(response => response.json())
-        //             .then(data => callback(data))
-        //             .catch(error => console.error('Error:', error));
-        //     }
-
-        //     // Inisialisasi autocomplete untuk semua input diagnosa
-        //     function initDiagnosaAutocomplete() {
-        //         // Untuk diagnosa primer
-        //         document.querySelectorAll('[id^="soap_a_"]').forEach(input => {
-        //             const dropdownId = input.id.replace('soap_a_', 'dropdown-diagnosa-primer-');
-        //             const dropdownElement = document.getElementById(dropdownId);
-
-        //             if (dropdownElement) {
-        //                 input.addEventListener('input', function() {
-        //                     searchDiagnosa(this.value, function(results) {
-        //                         showDiagnosaDropdown(input, dropdownElement, results);
-        //                     });
-        //                 });
-
-        //                 // Sembunyikan dropdown saat klik di luar
-        //                 document.addEventListener('click', function(e) {
-        //                     if (!input.contains(e.target) && !dropdownElement.contains(e.target)) {
-        //                         dropdownElement.style.display = 'none';
-        //                     }
-        //                 });
-        //             }
-        //         });
-
-        //         // Untuk diagnosa sekunder
-        //         document.querySelectorAll('[id^="soap_a_b_"]').forEach(input => {
-        //             const dropdownId = input.id.replace('soap_a_b_', 'dropdown-diagnosa-sekunder-');
-        //             const dropdownElement = document.getElementById(dropdownId);
-
-        //             if (dropdownElement) {
-        //                 input.addEventListener('input', function() {
-        //                     searchDiagnosa(this.value, function(results) {
-        //                         showDiagnosaDropdown(input, dropdownElement, results);
-        //                     });
-        //                 });
-
-        //                 // Sembunyikan dropdown saat klik di luar
-        //                 document.addEventListener('click', function(e) {
-        //                     if (!input.contains(e.target) && !dropdownElement.contains(e.target)) {
-        //                         dropdownElement.style.display = 'none';
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
-
-        //     // Panggil inisialisasi saat halaman dimuat
-        //     initDiagnosaAutocomplete();
-        // });
 
         // RESEP OBAT
         $(document).ready(function() {
@@ -1262,16 +1249,39 @@
                         </select>
                     </div>
 
-                    <!-- Aturan Minum Perhari -->
                     <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
                         <label for="aturan_${kolomIndex}" style="min-width: 100px;">Aturan Minum Perhari</label>
                         <span>:</span>
                         <select class="form-control" name="soap_p[${kolomIndex}][aturan]" id="aturan_${kolomIndex}" required>
                             <option value="">--Pilih Aturan Minum--</option>
-                            <option value="1x1/5">1x1/5</option>
-                            <option value="2x1/5">2x1/5</option>
-                            <option value="3x1/5">3x1/5</option>
-                            <option value="3x2">3x2</option>
+                            <option value="1x1 SENDOK">1x1 SENDOK</option>
+                            <option value="1x1/2 SENDOK">1x1/2 SENDOK</option>
+                            <option value="1x3/4 SENDOK">1x3/4 SENDOK</option>
+                            <option value="1x1 1/2 SENDOK">1x1 1/2 SENDOK</option>
+                            <option value="2x1 SENDOK">2x1 SENDOK</option>
+                            <option value="2x1/2 SENDOK">2x1/2 SENDOK</option>
+                            <option value="2x3/4 SENDOK">2x3/4 SENDOK</option>
+                            <option value="3x1 SENDOK">3x1 SENDOK</option>
+                            <option value="3x1/2 SENDOK">3x1/2 SENDOK</option>
+                            <option value="3x3/4 SENDOK">3x3/4 SENDOK</option>
+                            <option value="3x1 1/2 SENDOK">3x1 1/2 SENDOK</option>
+                            <option value="4x1 SENDOK">4x1 SENDOK</option>
+                            <option value="4x1 1/2 SENDOK">4x1 1/2 SENDOK</option>
+                            <option value="4x1/2 SENDOK">4x1/2 SENDOK</option>
+                            <option value="4x3/4 SENDOK">4x3/4 SENDOK</option>
+                            <option value="3x SEHARI OLES TIPIS-TIPIS">3x SEHARI OLES TIPIS-TIPIS</option>
+                            <option value="2x SEHARI OLES TIPIS-TIPIS">2x SEHARI OLES TIPIS-TIPIS</option>
+                            <option value="1x1 TABLET">1x1 TABLET</option>
+                            <option value="2x1 TABLET">2x1 TABLET</option>
+                            <option value="3x1 TABLET">3x1 TABLET</option>
+                            <option value="3x1 BUNGKUS">3x1 BUNGKUS</option>
+                            <option value="3x2 TETES">3x2 TETES</option>
+                            <option value="3x1 TETES">3x1 TETES</option>
+                            <option value="4x2 TETES">4x2 TETES</option>
+                            <option value="INJEKSI 1 ml">INJEKSI 1 ml</option>
+                            <option value="INJEKSI 2 ml">INJEKSI 2 ml</option>
+                            <option value="INJEKSI 3 ml">INJEKSI 3 ml</option>
+                            <option value="NEBUL 1 ampul">NEBUL 1 ampul</option>
                         </select>
                     </div>
 

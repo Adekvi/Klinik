@@ -244,14 +244,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Pendaftaran Pasien
-                        Lama
-                    </h1>
+                        Lama</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="alertMessage" class="alert d-none"></div>
-                    <div style="font-size: 15px; background:  rgb(241, 241, 241); padding: 5px; border-radius: 5px">
-                        <span style="color: green;">Infomasi :</span>
+                    <div style="font-size: 15px; background: rgb(241, 241, 241); padding: 5px; border-radius: 5px">
+                        <span style="color: green;">Informasi :</span>
                         <ul style="margin-bottom: 0px">
                             <li>Cari data pasien berdasarkan (No. BPJS / NIK / No. RM).</li>
                             <li>- No. Rekam Medis</li>
@@ -260,9 +259,9 @@
                         </ul>
                     </div>
                     <div class="form-group mt-2">
-                        <label for="no_rm">Poli</label>
-                        <select name="poli" id="poli_bpjs" class="form-control mt-2 mb-2">
-                            <option value="#" disabled selected>Pilih Poli</option>
+                        <label for="poli">Poli</label>
+                        <select name="poli" id="poli_bpjs" class="form-control mt-2 mb-2" required>
+                            <option value="" disabled selected>Pilih Poli</option>
                             @foreach ($poli as $item)
                                 <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
                             @endforeach
@@ -270,21 +269,21 @@
                     </div>
                     <div class="form-group">
                         <label for="dokter">Dokter</label>
-                        <select name="dokter" id="dokter_bpjs" class="form-control mt-2 mb-2">
-                            <option value="#">Pilih Dokter</option>
+                        <select name="dokter" id="dokter_bpjs" class="form-control mt-2 mb-2" required>
+                            <option value="" disabled selected>Pilih Dokter</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="identifier">No. RM / No. BPJS / KTP / Nama Pasien</label>
                         <div class="cari mt-2 mb-2" style="display: flex; align-items: center">
                             <input type="text" class="form-control mb-2" name="identifier" id="id_bpjs"
-                                placeholder="Masukkan No. RM atau No.BPJS atau KTP atau Nama Pasien">
+                                placeholder="Masukkan No. RM atau No.BPJS atau KTP atau Nama Pasien" required>
                             <button id="searchBtn" class="btn btn-primary search mb-2"
                                 style="margin-left: 9px; height: 40px;">
                                 <i class="fas fa-search"></i>
                                 <span id="loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
                             </button>
-                            <div id="autocompletebpjs-results"></div>
+                            <div id="autocompletebpjs-results" class="autocomplete-results"></div>
                         </div>
                     </div>
                     <!-- Informasi Pasien -->
@@ -300,67 +299,67 @@
                                     <th scope="row" style="width: 35%">No RM</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="no_rm" id="noRM"
-                                            style="font-weight: bold;" readonly></td>
+                                            style="font-weight: bold;" readonly required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Nama Pasien</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="nama_pasien" id="namaPasien"
-                                            placeholder="Nama Pasien"></td>
+                                            placeholder="Nama Pasien" required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Nama KK</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="nama_kk" id="namaKK"
-                                            placeholder="Nama KK"></td>
+                                            placeholder="Nama KK" required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Alamat Asal</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="alamat_asal" id="alamatPasien"
-                                            placeholder="Alamat Asal"></td>
+                                            placeholder="Alamat Asal" required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">NIK</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="nik" id="nikPasien"
-                                            placeholder="NIK"></td>
+                                            placeholder="NIK" required maxlength="16"></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Tanggal Lahir</th>
                                     <td>:</td>
-                                    <td><input type="date" class="form-control" name="tgllahir" id="tgllahirPasien">
-                                    </td>
+                                    <td><input type="date" class="form-control" name="tgllahir" id="tgllahirPasien"
+                                            required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Jenis Kelamin</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="jekel" id="jekelPasien"
-                                            placeholder="Jenis Kelamin"></td>
+                                            placeholder="Jenis Kelamin (L/P)" required maxlength="1"></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Pekerjaan</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="pekerjaan" id="pekerjaanPasien"
-                                            placeholder="Pekerjaan"></td>
+                                            placeholder="Pekerjaan" required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Alamat Domisili</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="domisili" id="alamatDomisili"
-                                            placeholder="Alamat Domisili"></td>
+                                            placeholder="Alamat Domisili" required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">No. HP</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="noHP" id="hpPasien"
-                                            placeholder="No. HP"></td>
+                                            placeholder="No. HP" required></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Jenis Pasien</th>
                                     <td>:</td>
                                     <td>
-                                        <select class="form-control" id="jenisPasien" name="jenis_pasien">
+                                        <select class="form-control" id="jenisPasien" name="jenis_pasien" required>
                                             <option value="">Pilih Jenis Pasien</option>
                                             <option value="Umum">Umum</option>
                                             <option value="Bpjs">BPJS</option>
@@ -371,7 +370,7 @@
                                     <th scope="row" style="width: 35%">No. BPJS</th>
                                     <td>:</td>
                                     <td><input type="text" class="form-control" name="bpjs" id="bpjsPasien"
-                                            placeholder="No. BPJS"></td>
+                                            placeholder="No. BPJS" maxlength="13"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -798,11 +797,11 @@
             // Pencarian Pasien BPJS
             $('#searchBtn').on('click', function(event) {
                 event.preventDefault();
-                var nama = $('#id_bpjs').val().trim();
-                console.log("Nilai input:", nama);
+                var identifier = $('#id_bpjs').val().trim();
+                console.log("Nilai input:", identifier);
 
-                if (!nama) {
-                    alert("Harap masukkan No. RM atau No. BPJS atau NIK.");
+                if (!identifier) {
+                    alert("Harap masukkan No. RM, No. BPJS, NIK, atau Nama Pasien.");
                     return;
                 }
 
@@ -813,30 +812,29 @@
                     url: '/search_pasien_bpjs',
                     method: 'GET',
                     data: {
-                        nama: nama
+                        nama: identifier
                     },
                     success: function(response) {
                         $('#loading').hide();
                         $('#searchBtn i').show();
 
-                        if (response) {
-                            var pasien = response;
-                            $('#noRM').val(pasien.no_rm);
-                            $('#namaPasien').val(pasien.nama_pasien);
-                            $('#nikPasien').val(pasien.nik);
-                            $('#tgllahirPasien').val(pasien.tgllahir);
-                            $('#jekelPasien').val(pasien.jekel);
-                            $('#namaKK').val(pasien.nama_kk);
-                            $('#alamatPasien').val(pasien.alamat_asal);
-                            $('#pekerjaanPasien').val(pasien.pekerjaan);
-                            $('#hpPasien').val(pasien.noHP);
-                            $('#alamatDomisili').val(pasien.domisili);
-                            $('#jenisPasien').val(pasien.jenis_pasien);
-                            $('#bpjsPasien').val(pasien.bpjs);
-                            $('#infoPasien').show();
-                        } else {
-                            alert('Pasien tidak ditemukan.');
+                        if (response.error) {
+                            alert(response.error);
                             $('#infoPasien').hide();
+                        } else {
+                            $('#noRM').val(response.no_rm);
+                            $('#namaPasien').val(response.nama_pasien);
+                            $('#nikPasien').val(response.nik || '');
+                            $('#tgllahirPasien').val(response.tgllahir);
+                            $('#jekelPasien').val(response.jekel);
+                            $('#namaKK').val(response.nama_kk);
+                            $('#alamatPasien').val(response.alamat_asal);
+                            $('#pekerjaanPasien').val(response.pekerjaan);
+                            $('#hpPasien').val(response.noHP);
+                            $('#alamatDomisili').val(response.domisili);
+                            $('#jenisPasien').val(response.jenis_pasien);
+                            $('#bpjsPasien').val(response.bpjs || '');
+                            $('#infoPasien').show();
                         }
                     },
                     error: function(xhr) {
@@ -959,6 +957,7 @@
                     domisili: $('#alamatDomisili').val(),
                     jenis_pasien: $('#jenisPasien').val(),
                     pekerjaan: $('#pekerjaanPasien').val(),
+                    bpjs: $('#bpjsPasien').val(),
                     poli: $('#poli_bpjs').val(),
                     dokter: $('#dokter_bpjs').val(),
                     _token: $('meta[name="csrf-token"]').attr('content')
@@ -967,23 +966,18 @@
                 var errorMessages = [];
                 if (!formData.no_rm) errorMessages.push("No RM harus diisi.");
                 if (!formData.nama_pasien) errorMessages.push("Nama pasien harus diisi.");
-                if (!formData.nik) errorMessages.push("NIK harus diisi.");
-                else if (formData.nik.length !== 16 || !/^\d+$/.test(formData.nik)) {
+                if (formData.nik && (formData.nik.length !== 16 || !/^\d+$/.test(formData.nik))) {
                     errorMessages.push("NIK harus terdiri dari 16 digit dan hanya angka.");
-                } else {
-                    const dayPart = parseInt(formData.nik.substr(6, 2));
-                    const expectedJekel = dayPart < 40 ? 'L' : 'P';
-                    if (formData.jekel !== 'L' && formData.jekel !== 'P') {
-                        errorMessages.push("Jenis kelamin harus 'L' atau 'P'.");
-                    } else if (formData.jekel !== expectedJekel) {
-                        errorMessages.push("Jenis kelamin tidak sesuai dengan NIK.");
-                    }
+                }
+                if (formData.bpjs && (formData.bpjs.length !== 13 || !/^\d+$/.test(formData.bpjs))) {
+                    errorMessages.push("No. BPJS harus terdiri dari 13 digit dan hanya angka.");
                 }
                 if (!formData.nama_kk) errorMessages.push("Nama Kepala Keluarga harus diisi.");
                 if (!formData.tgllahir) errorMessages.push("Tanggal lahir harus diisi.");
-                if (!formData.jekel) errorMessages.push("Jenis kelamin harus diisi.");
+                if (!formData.jekel || !['L', 'P'].includes(formData.jekel)) errorMessages.push(
+                    "Jenis kelamin harus 'L' atau 'P'.");
                 if (!formData.alamat_asal) errorMessages.push("Alamat harus diisi.");
-                if (!formData.noHP) errorMessages.push("No.Hp harus diisi.");
+                if (!formData.noHP) errorMessages.push("No. HP harus diisi.");
                 if (!formData.domisili) errorMessages.push("Domisili harus diisi.");
                 if (!formData.jenis_pasien) errorMessages.push("Jenis pasien harus diisi.");
                 if (!formData.pekerjaan) errorMessages.push("Pekerjaan harus diisi.");
@@ -1012,14 +1006,10 @@
                                 location.reload();
                             }, 3000);
                         } else if (response.error) {
-                            if (response.error === 'Pasien ini sudah mendaftar hari ini.') {
-                                alert("Pasien ini telah mendaftar hari ini.");
-                            } else {
-                                alert("Gagal menyimpan: " + response.error);
-                            }
+                            alert("Gagal menyimpan: " + response.error);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function(xhr) {
                         $('#loadingSpinnerLama').addClass('d-none');
                         $('#simpanBpjs').prop('disabled', false);
 
@@ -1032,13 +1022,9 @@
                             handleSessionExpired();
                         } else if (xhr.status === 422) {
                             const response = JSON.parse(xhr.responseText);
-                            if (response.error === 'Pasien ini sudah mendaftar hari ini.') {
-                                alert("Pasien ini telah mendaftar hari ini.");
-                            } else {
-                                alert("Validasi gagal: " + response.error);
-                            }
+                            alert("Validasi gagal: " + response.error);
                         } else {
-                            console.error("Error Ajax:", xhr.responseText, status, error);
+                            console.error("Error Ajax:", xhr.responseText);
                             alert("Terjadi kesalahan: Gagal menyimpan data pasien.");
                         }
                     }

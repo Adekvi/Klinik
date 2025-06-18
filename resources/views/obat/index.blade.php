@@ -343,7 +343,7 @@
     @foreach ($antrianObat as $item)
         <div class="modal fade" id="lewati{{ $item->id }}" tabindex="-1" data-bs-backdrop="static"
             data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati Pasien

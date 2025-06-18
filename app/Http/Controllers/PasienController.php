@@ -125,36 +125,54 @@ class PasienController extends Controller
     public function storeBpjs(Request $request)
     {
         // Validasi input
-        $request->validate([
+        $validated = $request->validate([
+            'no_rm' => 'required|string',
             'poli' => 'required|integer',
             'dokter' => 'required|integer',
+            'nama_pasien' => 'nullable|string',
+            'nik' => 'nullable|string|size:16',
+            'nama_kk' => 'nullable|string',
+            'tgllahir' => 'nullable|date',
+            'jekel' => 'nullable|in:L,P',
+            'alamat_asal' => 'nullable|string',
+            'noHP' => 'nullable|string',
+            'domisili' => 'nullable|string',
+            'jenis_pasien' => 'nullable',
+            'pekerjaan' => 'nullable|string',
+            'bpjs' => 'nullable|string|size:13',
         ]);
 
-        // Mencari pasien yang sudah ada berdasarkan no_rm, nik, atau bpjs
-        $existingPasien = Pasien::where(function ($query) use ($request) {
-            $query->where('no_rm', $request->no_rm)
-                ->orWhere('nik', $request->nik)
-                ->orWhere('bpjs', $request->bpjs);
-        })->first();
-
-        // Jika pasien tidak ditemukan
-        if (!$existingPasien) {
-            return response()->json(['error' => 'Pasien tidak ditemukan'], 422);
-        }
-
-        // // Cek apakah pasien sudah mendaftar hari ini
-        $pasienIds = Pasien::where('nik', $request->nik)->pluck('id');
-
-        $existingBookingToday = Booking::whereIn('id_pasien', $pasienIds)
-            ->whereDate('created_at', Carbon::today())
-            ->exists();
-
-        if ($existingBookingToday) {
-            // Jika sudah ada booking di hari yang sama
-            return response()->json(['error' => 'Pasien ini sudah mendaftar hari ini.'], 422);
-        }
-
         try {
+            // Mencari pasien berdasarkan no_rm terlebih dahulu
+            $existingPasien = Pasien::where('no_rm', $request->no_rm)->first();
+
+            // Jika pasien tidak ditemukan berdasarkan no_rm, coba cari berdasarkan nik atau bpjs
+            if (!$existingPasien) {
+                $existingPasien = Pasien::where(function ($query) use ($request) {
+                    $query->where('nik', $request->nik)
+                        ->orWhere('bpjs', $request->bpjs);
+                })->first();
+            }
+
+            // Jika pasien masih tidak ditemukan
+            if (!$existingPasien) {
+                return response()->json(['error' => 'Pasien tidak ditemukan'], 422);
+            }
+
+            // Pastikan no_rm yang ditemukan sesuai dengan input
+            if ($existingPasien->no_rm !== $request->no_rm) {
+                return response()->json(['error' => 'No RM tidak cocok dengan data pasien yang ditemukan'], 422);
+            }
+
+            // Cek apakah pasien sudah mendaftar hari ini
+            $existingBookingToday = Booking::where('id_pasien', $existingPasien->id)
+                ->whereDate('created_at', Carbon::today())
+                ->exists();
+
+            if ($existingBookingToday) {
+                return response()->json(['error' => 'Pasien ini sudah mendaftar hari ini.'], 422);
+            }
+
             // Update data pasien
             $updated = $existingPasien->update([
                 'nama_pasien' => $request->input('nama_pasien', $existingPasien->nama_pasien),
@@ -174,8 +192,6 @@ class PasienController extends Controller
                 Log::error('Gagal memperbarui data pasien dengan ID: ' . $existingPasien->id);
                 return response()->json(['error' => 'Gagal memperbarui data pasien'], 500);
             }
-
-            // dd($updated);
 
             // Membuat booking
             $bookingData = [
@@ -206,19 +222,13 @@ class PasienController extends Controller
 
             // Kondisikan redirect berdasarkan status login
             session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
-            if (!Auth::check()) {
-                // Pengguna belum login (pendaftaran mandiri)
-                return response()->json(['redirect' => route('/')]);
-            } else {
-                // Pengguna sudah login
-                return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);
-            }
+            $redirectUrl = Auth::check()
+                ? route('pasien.show', ['id_antrian' => $antrian->id])
+                : route('/');
 
-            // // Redirect ke metode `show` menggunakan ID antrian yang benar
-            // $redirectUrl = route('pasien.show', ['id_antrian' => $antrian->id]);
-            // return response()->json(['redirect' => $redirectUrl]);
+            return response()->json(['redirect' => $redirectUrl]);
         } catch (\Exception $e) {
-            Log::error('Error saat memperbarui pasien: ' . $e->getMessage());
+            Log::error('Error saat memperbarui pasien: ' . $e->getMessage(), ['exception' => $e]);
             return response()->json(['error' => 'Terjadi kesalahan saat menyimpan data'], 500);
         }
     }
@@ -258,21 +268,39 @@ class PasienController extends Controller
 
     public function searchPasienBpjs(Request $request)
     {
-        $nama = $request->input('nama');
+        $identifier = $request->query('nama') ?? $request->query('identifier');
 
-        // Cek apakah input adalah no_rm, bpjs, atau nik
-        $pasien = Pasien::where(function ($query) use ($nama) {
-            $query->where('bpjs', $nama)
-                ->orWhere('nama_pasien', 'like', "%$nama%")
-                ->orWhere('nik', $nama)
-                ->orWhere('no_rm', $nama); // Ganti 'like' menjadi '=' untuk pencarian tepat
-        })
-            ->first(['no_rm', 'nama_pasien', 'nik', 'jekel', 'alamat_asal', 'nama_kk', 'domisili', 'noHP', 'jenis_pasien', 'tgllahir', 'pekerjaan', 'bpjs']);
+        if (!$identifier) {
+            return response()->json(['error' => 'Harap masukkan No. RM, NIK, atau No. BPJS'], 422);
+        }
 
-        if ($pasien) {
-            return response()->json($pasien);
-        } else {
+        try {
+            $pasien = Pasien::where('no_rm', $identifier)
+                ->orWhere('nik', $identifier)
+                ->orWhere('bpjs', $identifier)
+                ->first();
+
+            if ($pasien) {
+                return response()->json([
+                    'no_rm' => $pasien->no_rm,
+                    'nama_pasien' => $pasien->nama_pasien,
+                    'nik' => $pasien->nik,
+                    'tgllahir' => $pasien->tgllahir,
+                    'jekel' => $pasien->jekel,
+                    'nama_kk' => $pasien->nama_kk,
+                    'alamat_asal' => $pasien->alamat_asal,
+                    'pekerjaan' => $pasien->pekerjaan,
+                    'noHP' => $pasien->noHP,
+                    'domisili' => $pasien->domisili,
+                    'jenis_pasien' => $pasien->jenis_pasien,
+                    'bpjs' => $pasien->bpjs,
+                ]);
+            }
+
             return response()->json(['error' => 'Pasien tidak ditemukan'], 404);
+        } catch (\Exception $e) {
+            Log::error('Error saat mencari pasien: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['error' => 'Terjadi kesalahan saat mencari pasien'], 500);
         }
     }
 

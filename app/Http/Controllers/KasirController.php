@@ -258,7 +258,7 @@ class KasirController extends Controller
                 Log::info('Transaksi selesai', ['transaksi_id' => $transaksiId]);
 
                 session(['transaksi' => $dataTransaksi]);
-                session()->flash('success', 'Transaksi berhasil disimpan! Silahkan Cetak Struk Pembayaran.');
+                session()->flash('success', 'Transaksi berhasil disimpan!');
 
                 return response()->json([
                     'success' => true,

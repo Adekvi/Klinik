@@ -68,16 +68,16 @@
                                             <p>{{ $item->poli->namapoli }}</p>
                                         </div>
                                         <div class="info-item">
-                                            <label style="min-width: 100px;">No NIK</label>
+                                            <label style="min-width: 100px;">No. NIK</label>
                                             <span>:</span>
                                             <p>{{ $item->booking->pasien->nik }}</p>
                                         </div>
                                         <div class="info-item">
-                                            <label style="min-width: 100px;">No BPJS</label>
+                                            <label style="min-width: 100px;">No. BPJS</label>
                                             <span>:</span>
                                             <p>
-                                                @if (!empty($item->pasien->booking->bpjs))
-                                                    {{ $item->pasien->booking->bpjs }}
+                                                @if (!empty($item->booking->pasien->bpjs))
+                                                    {{ $item->booking->pasien->bpjs }}
                                                 @else
                                                     -
                                                 @endif
@@ -91,7 +91,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="table mt-2 mb-2 table-striped table-bordered"
-                                        style="overflow: auto; min-width: 165%;">
+                                        style="overflow: auto; min-width: 120%;">
                                         <thead class="table-primary text-center text-nowrap">
                                             <tr>
                                                 <th>NAMA OBAT</th>
@@ -102,8 +102,6 @@
                                             </tr>
                                         </thead>
                                         <tbody class="text-center">
-                                            {{-- {{ dd($antrianObat) }} --}}
-
                                             {{-- NAMA OBAT --}}
                                             <td>
                                                 <div class="obat-container" data-pasien-id="{{ $item->id }}">
@@ -379,8 +377,8 @@
                                                                             {{ $jenis == 'Krim' ? 'selected' : '' }}>
                                                                             Krim</option>
                                                                         <option value="Fls"
-                                                                            {{ $jenis == 'Fls' ? 'selected' : '' }}>
-                                                                            Fls</option>
+                                                                            {{ $jenis == 'Fls' ? 'selected' : '' }}>Fls
+                                                                        </option>
                                                                         <option value="Ampul"
                                                                             {{ $jenis == 'Ampul' ? 'selected' : '' }}>
                                                                             Ampul</option>
@@ -507,7 +505,6 @@
                                                     @endif
                                                 </div>
                                             </td>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -567,9 +564,9 @@
         .jumlah-container,
         .harga-tablet-container,
         .harga-total-container {
-            padding: 12px;
-            width: 100%;
-            position: relative;
+            padding: 5px;
+            /* width: 80%;
+                                    position: relative; */
         }
 
         /* Form group untuk setiap baris */
@@ -596,7 +593,7 @@
             display: flex;
             gap: 12px;
             align-items: flex-start;
-            width: 100%;
+            width: 50%;
         }
 
         /* Input row untuk input dan search results */
@@ -621,7 +618,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            width: 100%;
+            width: 80%;
         }
 
         /* Styling input obat */
@@ -640,7 +637,7 @@
 
         /* Styling select anjuran */
         .anjuran-select {
-            width: 80px;
+            width: 100px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
@@ -663,7 +660,7 @@
 
         /* Styling select dan input jumlah */
         .jenis-obat-select {
-            width: 120px;
+            width: 80px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
@@ -681,7 +678,7 @@
             font-size: 14px;
             color: #666;
             flex: 0 0 auto;
-            width: 20px;
+            /* width: 10px; */
             text-align: center;
         }
 
