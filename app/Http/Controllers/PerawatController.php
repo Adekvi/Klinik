@@ -26,10 +26,11 @@ class PerawatController extends Controller
         $entries = $request->input('entries', 10); // Default 10
         $page = $request->input('page', 1);
 
-        // Query semua pasien
+        // Query untuk pasien dengan status 'D' (Datang)
         $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
-            ->orderByRaw("CASE WHEN status = 'D' THEN 1 ELSE 2 END")
-            ->orderBy('urutan', 'asc') // Menambahkan pengurutan berdasarkan urutan
+            ->where('status', 'D') // Filter hanya status D
+            ->whereDate('created_at', Carbon::today()) // Hanya data hari ini
+            ->orderBy('urutan', 'asc')
             ->orderBy('created_at', 'asc');
 
         if ($search) {
@@ -46,15 +47,15 @@ class PerawatController extends Controller
         // Menjaga parameter pencarian tetap ada saat navigasi halaman
         $pasien->appends(['search' => $search, 'entries' => $entries]);
 
-        // dd($pasien);
-
+        // Query untuk pasien dengan status 'M' (Menunggu)
         $periksaSearch = $request->input('periksa_search');
         $periksaEntries = $request->input('periksa_entries', 10); // Default 10
         $periksaPage = $request->input('periksa_page', 1);
 
         $periksaQuery = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
-            ->orderByRaw("CASE WHEN status = 'M' THEN 1 ELSE 2 END")
-            ->orderBy('urutan', 'asc') // Menambahkan pengurutan berdasarkan urutan
+            ->where('status', 'M') // Filter hanya status M
+            ->whereDate('created_at', Carbon::today()) // Hanya data hari ini
+            ->orderBy('urutan', 'asc')
             ->orderBy('created_at', 'asc');
 
         if ($periksaSearch) {
@@ -71,18 +72,15 @@ class PerawatController extends Controller
         $poli = Poli::all();
         $soap = Soap::with('pasien', 'rm', 'isian')->get();
         $ttd = TtdMedis::where('status', true)->get();
-        // dd($ttd);
 
-        // Pastikan $soap tidak kosong sebelum mengaksesnya
+        // Inisialisasi variabel untuk menghindari error
         $diagnosaPrimer = [];
         $diagnosaSekunder = [];
         $resep = [];
 
-        // jumlah pasien
+        // Jumlah pasien
         $today = Carbon::today();
-
         $totalpasien = Pasien::count();
-
         $pasienHariniUmum = Pasien::where('jenis_pasien', 'Umum')
             ->whereDate('created_at', $today)
             ->count();
@@ -90,8 +88,7 @@ class PerawatController extends Controller
             ->whereDate('created_at', $today)
             ->count();
 
-        // dd($pasien);
-
+        // Hapus dd($pasien) untuk mengembalikan view
         return view('perawat.index', compact(
             'pasien',
             'poli',

@@ -174,6 +174,33 @@
         </div>
     </div>
 
+    {{-- TAMPILKAN LEWATI --}}
+    @foreach ($antrianKasir as $item)
+        <div class="modal fade" id="lewati{{ $item->id }}" tabindex="-1" data-bs-backdrop="static"
+            data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati Pasien
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Apakah Anda yakin ingin melewati pasien ini?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <form action="{{ url('kasir/lewati/' . $item->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Lewati</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
 @endsection
 
 @push('style')

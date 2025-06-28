@@ -183,7 +183,6 @@
                                 <thead class="table-primary text-center" style="width: auto">
                                     <tr>
                                         <th>No</th>
-                                        {{-- <th>Aksi</th> --}}
                                         <th>No. RM</th>
                                         <th>NIK</th>
                                         <th>Nama Pasien</th>
@@ -197,36 +196,42 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center" style="text-transform: uppercase">
-                                    @if (empty($pasien))
+                                    @if ($pasien->isEmpty())
                                         <tr>
-                                            <td colspan="7" style="text-align: center">Tidak Ada Data Pasien</td>
+                                            <td colspan="11" style="text-align: center">Tidak Ada Data Pasien</td>
                                         </tr>
                                     @else
-                                        <?php $no = 1; ?>
                                         @foreach ($pasien as $item)
                                             @if ($item->status == 'M')
-                                                {{-- @if ($item->booking->tanggal == \Carbon\Carbon::today()->toDateString() && $item->status == 'M') --}}
                                                 <tr id="row_{{ $item->id }}" class="text-center">
-                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $pasien->firstItem() + $loop->index }}</td>
                                                     <td>{{ $item->booking->pasien->no_rm }}</td>
                                                     <td>{{ $item->booking->pasien->nik }}</td>
                                                     <td>{{ $item->booking->pasien->nama_pasien }}</td>
                                                     <td>{{ $item->booking->pasien->tgllahir }}</td>
                                                     <td>
-                                                        <?php
-                                                        // Parsing tanggal lahir dari data pasien menggunakan Carbon
-                                                        $tgllahir = \Carbon\Carbon::parse($item->booking->pasien->tgllahir);
-                                                        
-                                                        // Menghitung umur dalam bulan dari tanggal lahir hingga saat ini
-                                                        $umurDalamBulan = $tgllahir->diffInMonths(\Carbon\Carbon::now());
-                                                        
-                                                        // Mengubah umur ke dalam tahun dan bulan jika diperlukan
-                                                        $tahun = floor($umurDalamBulan / 12); // Hitung tahun
-                                                        $bulan = $umurDalamBulan % 12; // Sisa bulan setelah hitungan tahun
-                                                        
-                                                        // Menampilkan hasil dalam format "X tahun Y bulan"
-                                                        echo $tahun . ' tahun ';
-                                                        ?>
+                                                        @php
+                                                            // Parsing tanggal lahir dari data pasien menggunakan Carbon
+                                                            $tgllahir = \Carbon\Carbon::parse(
+                                                                $item->booking->pasien->tgllahir,
+                                                            );
+
+                                                            // Menghitung umur dalam bulan dari tanggal lahir hingga saat ini
+                                                            $umurDalamBulan = $tgllahir->diffInMonths(
+                                                                \Carbon\Carbon::now(),
+                                                            );
+
+                                                            // Mengubah umur ke dalam tahun dan bulan
+                                                            $tahun = floor($umurDalamBulan / 12); // Hitung tahun
+                                                            $bulan = $umurDalamBulan % 12; // Sisa bulan
+
+                                                            // Format umur
+                                                            $umur = $tahun . ' tahun';
+                                                            if ($bulan > 0) {
+                                                                $umur .= ' ' . $bulan . ' bulan';
+                                                            }
+                                                        @endphp
+                                                        {{ $umur }}
                                                     </td>
                                                     <td>{{ $item->poli->namapoli }}</td>
                                                     <td>{{ $item->dokter->nama_dokter }}</td>
@@ -248,8 +253,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="pagination mt-3 d-flex justify-content-end">
-                            {{ $pasien->appends(request()->input())->onEachSide(1)->links() }}
+                        <div class="page d-flex justify-content-end">
+                            {{ $pasien->appends(request()->only(['periksa_search', 'periksa_entries']))->links() }}
                         </div>
                     </div>
                 </div>

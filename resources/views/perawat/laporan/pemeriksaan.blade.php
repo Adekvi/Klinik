@@ -92,32 +92,34 @@
                                 </strong>
                             </h5>
                             <div class="sortir">
-                                <form method="GET" action=""
-                                    class="d-flex justify-content-between align-items-center mb-3">
-                                    <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
-                                    <div class="d-flex align-items-center">
-                                        <label for="entries" class="me-2">Tampilkan:</label>
-                                        <select name="entries" id="entries" class="form-select form-select-sm me-3"
-                                            style="width: 80px;" onchange="this.form.submit()">
-                                            <option value="10">10
-                                            </option>
-                                            <option value="25">25
-                                            </option>
-                                            <option value="50">50
-                                            </option>
-                                            <option value="100">100
-                                            </option>
-                                        </select>
-                                    </div>
+                                <div class="row">
+                                    <form method="GET" action=""
+                                        class="d-flex justify-content-between align-items-center mb-3">
+                                        <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                                        <div class="d-flex align-items-center">
+                                            <label for="entries" class="me-2">Tampilkan:</label>
+                                            <select name="entries" id="entries" class="form-select form-select-sm me-3"
+                                                style="width: 80px;" onchange="this.form.submit()">
+                                                <option value="10">10
+                                                </option>
+                                                <option value="25">25
+                                                </option>
+                                                <option value="50">50
+                                                </option>
+                                                <option value="100">100
+                                                </option>
+                                            </select>
+                                        </div>
 
-                                    <div class="d-flex align-items-center">
-                                        <input type="text" name="search" value=""
-                                            class="form-control form-control-sm me-2" style="width: 400px;"
-                                            placeholder="Cari Nama Pasien / No. Rm">
-                                        <button type="submit" class="btn btn-sm btn-primary">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Cari</button>
-                                    </div>
-                                </form>
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" name="search" value=""
+                                                class="form-control form-control-sm me-2" style="width: 400px;"
+                                                placeholder="Cari Nama Pasien / No. Rm">
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                <i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
 
                             <div class="table-responsive">
@@ -192,7 +194,7 @@
                                                 DISKRIPSI</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-center">
+                                    <tbody class="text-center" style="text-transform: uppercase">
                                         @if ($harian->isEmpty())
                                             <tr>
                                                 <td colspan="38" class="text-center">Belum ada data</td>

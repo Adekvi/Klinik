@@ -17,81 +17,172 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form method="GET" action="" class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
-                            <div class="d-flex align-items-center">
-                                <label for="entries" class="me-2">Tampilkan:</label>
-                                <select name="entries" id="entries" class="form-select form-select-sm me-3"
-                                    style="width: 80px;" onchange="this.form.submit()">
-                                    <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
-                                    </option>
-                                    <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
-                                    </option>
-                                    <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50
-                                    </option>
-                                    <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100
-                                    </option>
-                                </select>
+                        <div class="row">
+                            <div class="judul">
+                                <h5 class="text-muted">
+                                    <strong>
+                                        <li>Pilih Tanggal</li>
+                                    </strong>
+                                </h5>
                             </div>
+                            <hr>
+                            <div class="col-md-10">
+                                <div class="p-3">
+                                    <h5 class="mb-3">Filter Rentang Tanggal</h5>
+                                    <form method="GET" action="{{ route('kasir.check') }}"
+                                        class="row g-3 align-items-end">
+                                        <div class="col-md-4">
+                                            <label for="start_date">Tanggal Awal</label>
+                                            <input type="date" name="start_date" id="start_date" class="form-control"
+                                                value="{{ request()->query('start_date') }}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="end_date">Tanggal Akhir</label>
+                                            <input type="date" name="end_date" id="end_date" class="form-control"
+                                                value="{{ request()->query('end_date') }}">
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-end">
+                                            <button type="submit" class="btn btn-primary" style="margin-right: 10px">
+                                                <i class="fa fa-search me-1"></i> Tampilkan
+                                            </button>
+                                            <a href="{{ route('kasir.check') }}" class="btn btn-secondary ml-2">
+                                                <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+                                            </a>
+                                        </div>
+                                        <div class="button mb-3">
+                                            <div class="dropdown">
+                                                <button class="btn btn-success dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa-solid fa-file-export"></i> Export
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('kasir.laporan.export.excel', [
+                                                                'start_date' => request()->query('start_date'),
+                                                                'end_date' => request()->query('end_date'),
+                                                                'search' => request()->query('search'),
+                                                            ]) }}">Export
+                                                            to Excel</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
 
-                            <div class="d-flex align-items-center">
-                                <input type="text" name="search" value="{{ $search }}"
-                                    class="form-control form-control-sm me-2" style="width: 400px;"
-                                    placeholder="Cari Nama / No. Rm">
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class="fa-solid fa-magnifying-glass"></i> Cari</button>
-                            </div>
-                        </form>
+                        <div class="judul-judul">
+                            <h5 class="text-muted">
+                                <strong>
+                                    <li>Daftar Pasien</li>
+                                </strong>
+                            </h5>
+
+                            <form method="GET" action=""
+                                class="d-flex justify-content-between align-items-center mb-3">
+                                <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                                <div class="d-flex align-items-center">
+                                    <label for="entries" class="me-2">Tampilkan:</label>
+                                    <select name="entries" id="entries" class="form-select form-select-sm me-3"
+                                        style="width: 80px;" onchange="this.form.submit()">
+                                        <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
+                                        </option>
+                                        <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
+                                        </option>
+                                        <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50
+                                        </option>
+                                        <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <input type="text" name="search" value="{{ $search }}"
+                                        class="form-control form-control-sm me-2" style="width: 400px;"
+                                        placeholder="Cari Nama/No. Rm/No. Transaksi">
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+                                </div>
+                            </form>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-striped" style="white-space: nowrap;">
                                 <thead class="table-primary text-center">
                                     <tr>
                                         <th>No</th>
-                                        <th>Antrian</th>
-                                        <th>Dokter Pemeriksa</th>
+                                        <th>Tgl</th>
+                                        <th>Waktu</th>
+                                        {{-- <th>No. Antrian</th> --}}
                                         <th>No. RM</th>
+                                        <th>No. Transaksi</th>
                                         <th>Nama Pasien</th>
-                                        <th>Alamat Domisili</th>
                                         <th>Jenis Kelamin</th>
+                                        <th>Jenis Pasien</th>
+                                        <th>Alamat Domisili</th>
+                                        <th>No. Bpjs</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Total</th>
+                                        <th>Sub Total Rincian</th>
+                                        <th>Administrasi</th>
+                                        <th>Konsul Dokter</th>
+                                        <th>Embalase</th>
+                                        <th>Total Obat</th>
+                                        <th>Pajak(%)</th>
+                                        <th>Bayar</th>
+                                        <th>Kembalian</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
-                                    @if (count($antrianKasir) === 0)
+                                <tbody class="text-center" style="text-transform: uppercase">
+                                    <?php
+                                    // Fungsi untuk memformat harga ke dalam format Rupiah
+                                    if (!function_exists('Rupiah')) {
+                                        function Rupiah($angka)
+                                        {
+                                            return '' . number_format($angka, 0, ',', '.');
+                                        }
+                                    } ?>
+                                    @if ($antrianKasir->isEmpty())
                                         <tr>
-                                            <td colspan="9" style="text-align: center; font-size: bold">Tidak ada data
+                                            <td colspan="21" style="text-align: center; font-weight: bold;">Tidak ada data
                                             </td>
                                         </tr>
                                     @else
-                                        @php $allSoapPatients = []; @endphp
                                         @foreach ($antrianKasir as $item)
-                                            @php
-                                                $soapData = isset($item['obat']['resep'])
-                                                    ? json_decode($item['obat']['resep'], true)
-                                                    : [];
-
-                                                if (is_array($soapData)) {
-                                                    $allSoapPatients = array_merge(
-                                                        $allSoapPatients,
-                                                        array_keys($soapData),
-                                                    );
-                                                }
-                                            @endphp
-                                        @endforeach
-                                        @php $allSoapPatients = array_unique($allSoapPatients); @endphp
-                                        @foreach ($antrianKasir as $item)
-                                            @if ($item->status == 'U')
-                                                <tr id="row_{{ $item->id }}">
-                                                    <td>{{ $loop->iteration + ($antrianKasir->currentPage() - 1) * $antrianKasir->perPage() }}
-                                                    </td>
-                                                    <td>{{ $item->kode_antrian }}</td>
-                                                    <td>{{ $item->obat->soap->nama_dokter }}</td>
-                                                    <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                    <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                    <td>{{ $item->booking->pasien->alamat_asal }}</td>
-                                                    <td>{{ $item->booking->pasien->jekel }}</td>
-                                                </tr>
-                                            @endif
+                                            <tr id="row_{{ $item->id }}">
+                                                <td>{{ $loop->iteration + ($antrianKasir->currentPage() - 1) * $antrianKasir->perPage() }}
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
+                                                </td>
+                                                <td>{{ $item->no_rm }}</td>
+                                                <td>{{ $item->no_transaksi }}</td>
+                                                <td>{{ $item->nama_pasien }}</td>
+                                                <td>{{ $item->booking->pasien->jekel }}</td>
+                                                <td>{{ $item->jenis_pasien }}</td>
+                                                <td>{{ $item->booking->pasien->domisili }}</td>
+                                                <td>{{ $item->nik_bpjs ?? '-' }}</td>
+                                                <td>{{ $item->nama_kasir }}</td>
+                                                <td>Rp. {{ Rupiah($item->total) }}</td>
+                                                <td>Rp. {{ Rupiah($item->sub_total_rincian) }}</td>
+                                                <td>Rp. {{ Rupiah($item->administrasi) }}</td>
+                                                <td>Rp. {{ Rupiah($item->konsul_dokter) }}</td>
+                                                <td>Rp. {{ Rupiah($item->embalase) }}</td>
+                                                <td>{{ $item->total_obat }}</td>
+                                                <td>{{ $item->ppn ? number_format($item->ppn, 0, ',', '') : '-' }} %</td>
+                                                <td>Rp. {{ Rupiah($item->bayar) }}</td>
+                                                <td>Rp. {{ Rupiah($item->kembalian) }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-info">
+                                                        Telah Membayar
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -99,7 +190,7 @@
                         </div>
                         <!-- Paginasi -->
                         <div class="d-flex justify-content-center mt-3 mb-3">
-                            {{ $antrianKasir->links() }} <!-- Laravel's built-in pagination links -->
+                            {{ $antrianKasir->links() }}
                         </div>
                     </div>
                 </div>

@@ -201,11 +201,12 @@ class DokterController extends Controller
     public function store(Request $request, $id)
     {
         $data = $request->all();
-        // dd($data);
 
+        // Inisialisasi array untuk diagnosa primer dan sekunder
         $diagno = [];
         $diagnosek = [];
 
+        // Proses diagnosa primer
         if (isset($data['soap_a']) && is_array($data['soap_a'])) {
             foreach ($data['soap_a'] as $value) {
                 if (isset($value['diagnosa_primer']) && !empty($value['diagnosa_primer'])) {
@@ -217,6 +218,7 @@ class DokterController extends Controller
             }
         }
 
+        // Proses diagnosa sekunder
         if (isset($data['soap_a_b']) && is_array($data['soap_a_b'])) {
             foreach ($data['soap_a_b'] as $value) {
                 if (isset($value['diagnosa_sekunder']) && !empty($value['diagnosa_sekunder'])) {
@@ -228,49 +230,45 @@ class DokterController extends Controller
             }
         }
 
+        // Ambil nama diagnosa dan kode dari database
         $diagnosa = [];
-        foreach ($diagno as $p) {
-            // Pisahkan ID dan nama diagnosa
-            $parts = explode(' - ', $p);
-            if (isset($parts[0])) { // Hanya perlu memeriksa ID
-                $id_diagnosa = trim($parts[0]); // Ambil kode diagnosa
-                // Cek apakah ID ada di dalam database
-                $diagnoModel = Diagnosa::where('kd_diagno', $id_diagnosa)->first();
-
-                // Jika model ditemukan, simpan nama diagnosa dalam array
-                if ($diagnoModel) {
-                    $diagnosa[] = $diagnoModel->nm_diagno; // Hanya simpan nama diagnosa
-                }
-            }
-        }
-
         $diagnosa_sekun = [];
-        foreach ($diagnosek as $di) {
-            // Pisahkan ID dan nama diagnosa
-            $parts = explode(' - ', $di);
-            if (isset($parts[0])) { // Hanya perlu memeriksa ID
-                $id_diagnosa_sekun = trim($parts[0]); // Ambil kode diagnosa sekunder
-                // Cek apakah ID ada di dalam database
-                $diagnosekModel = Diagnosa::where('kd_diagno', $id_diagnosa_sekun)->first();
 
-                // Jika model ditemukan, simpan nama diagnosa sekunder dalam array
-                if ($diagnosekModel) {
-                    $diagnosa_sekun[] = $diagnosekModel->nm_diagno; // Hanya simpan nama diagnosa
+        foreach ($diagno as $p) {
+            $parts = explode(' - ', $p);
+            if (isset($parts[0])) {
+                $id_diagnosa = trim($parts[0]);
+                $diagnoModel = Diagnosa::where('kd_diagno', $id_diagnosa)->first();
+                if ($diagnoModel) {
+                    $diagnosa[] = [
+                        'id' => $diagnoModel->id,
+                        'kd_diagno' => $diagnoModel->kd_diagno,
+                        'nm_diagno' => $diagnoModel->nm_diagno,
+                    ];
                 }
             }
         }
 
-        // Debugging untuk memastikan nama diagnosa berhasil diambil
-        // dd($diagnosa, $diagnosa_sekun);
+        foreach ($diagnosek as $di) {
+            $parts = explode(' - ', $di);
+            if (isset($parts[0])) {
+                $id_diagnosa_sekun = trim($parts[0]);
+                $diagnosekModel = Diagnosa::where('kd_diagno', $id_diagnosa_sekun)->first();
+                if ($diagnosekModel) {
+                    $diagnosa_sekun[] = [
+                        'id' => $diagnosekModel->id,
+                        'kd_diagno' => $diagnosekModel->kd_diagno,
+                        'nm_diagno' => $diagnosekModel->nm_diagno,
+                    ];
+                }
+            }
+        }
 
-        // Menghilangkan loop yang tidak perlu
-        // Karena $diagnosa dan $diagnosa_sekun sudah berisi nama diagnosa
-        $encodeDiagnosaPrimer = json_encode($diagnosa);
-        $encodeDiagnosaSekunder = json_encode($diagnosa_sekun);
+        // Encode untuk penyimpanan di SOAP
+        $encodeDiagnosaPrimer = json_encode(array_column($diagnosa, 'nm_diagno'));
+        $encodeDiagnosaSekunder = json_encode(array_column($diagnosa_sekun, 'nm_diagno'));
 
-        // dd($encodeDiagnosaPrimer, $encodeDiagnosaSekunder);
-
-        // Inisialisasi array
+        // Proses resep
         $resep = [];
         $jenisobat = [];
         $aturan = [];
@@ -279,10 +277,7 @@ class DokterController extends Controller
 
         if (isset($data['soap_p']) && is_array($data['soap_p'])) {
             $cleanedSoapP = [];
-
-            // Iterasi setiap item dalam soap_p
             foreach ($data['soap_p'] as $item) {
-                // Memastikan semua kunci yang diperlukan ada
                 $cleanedSoapP[] = [
                     'resep' => $item['resep'] ?? null,
                     'jenisobat' => $item['jenisobat'] ?? null,
@@ -292,69 +287,58 @@ class DokterController extends Controller
                 ];
             }
 
-            // Debugging
-            // dd($cleanedSoapP);
-
-            // Proses data
-            $resep = [];
-            $jenisobat = [];
-            $aturan = [];
-            $anjuran = [];
-            $jumlah = [];
-
             foreach ($cleanedSoapP as $value) {
-                // Menyimpan nilai-nilai dalam array yang terpisah
                 $resep[] = $value['resep'];
                 $jenisobat[] = $value['jenisobat'];
                 $aturan[] = $value['aturan'];
                 $anjuran[] = $value['anjuran'];
                 $jumlah[] = $value['jumlah'];
             }
-
-            // Debugging
-            // dd($resep, $jenisobat, $aturan, $anjuran, $jumlah);
         } else {
-            dd('Data soap_p tidak ada atau bukan array.');
+            Log::error('Data soap_p tidak ada atau bukan array.', ['id_antrian' => $id]);
+            return redirect()->back()->with('error', 'Data resep tidak valid.');
         }
 
         $resepData = [];
-
-        // Misalkan $resep berisi nama obat, bukan ID
         foreach ($resep as $namaObat) {
-            // Menggunakan where untuk mencari berdasarkan nama obat
-            $resepModel = Resep::where('nama_obat', $namaObat)->first(); // Ambil model berdasarkan nama obat
-
+            $resepModel = Resep::where('nama_obat', $namaObat)->first();
             if ($resepModel) {
-                // Mengubah model menjadi array dan menambahkannya ke $resepData
                 $resepData[] = $resepModel->toArray();
             }
         }
 
-        // Debugging untuk melihat hasil
-        // dd($resepData);
+        $namaPasienArray = array_column($resepData, 'nama_obat');
 
-        $namaPasienArray = [];
-        foreach ($resepData as $resep) {
-            $namaPasien = $resep['nama_obat'];
-            $namaPasienArray[] = $namaPasien;
+        // Ambil data antrian dokter untuk gender
+        $antrianDokter = AntrianPerawat::with(['booking.pasien'])->where('id', $id)->first();
+        if (!$antrianDokter) {
+            Log::error('AntrianPerawat tidak ditemukan untuk id: ' . $id);
+            return redirect()->back()->with('error', 'Data antrian tidak ditemukan.');
         }
 
-        // dd($namaPasienArray);
-
-        $antrianDokter = AntrianPerawat::with(['booking.pasien', 'isian', 'rm', 'poli'])->where('id', $id)->first();
         $gender = $antrianDokter->booking->pasien->jekel == 'Laki-Laki' ? 'L' : 'P';
-        $allDiagnoses = array_merge($diagno, $diagnosek);
 
+        // Gabungkan diagnosa primer dan sekunder untuk disimpan ke diagnosa_terbanyaks
+        $allDiagnoses = array_merge($diagnosa, $diagnosa_sekun);
+
+        // Simpan ke tabel diagnosa_terbanyaks
         foreach ($allDiagnoses as $diagnosis) {
-            if (is_array($diagnosis)) {
-                DB::table('diagnosa_terbanyaks')->insert([
-                    'id_diagnosa' => $diagnosis['id'],
-                    'diagnosa' => $diagnosis['nm_diagno'],
-                    'kd_diagno' => $diagnosis['kd_diagno'],
-                    'gender' => $gender
-                ]);
-            }
+            DB::table('diagnosa_terbanyaks')->insert([
+                'id_diagnosa' => $diagnosis['id'],
+                'diagnosa' => $diagnosis['nm_diagno'],
+                'gender' => $gender,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
         }
+
+        // Log untuk debugging
+        Log::info('Diagnosa terbanyak disimpan', [
+            'id_antrian' => $id,
+            'diagnosa_primer' => $diagnosa,
+            'diagnosa_sekunder' => $diagnosa_sekun,
+            'gender' => $gender,
+        ]);
 
         $dokter = DataDokter::where('id', $antrianDokter->id_dokter)->first();
 
@@ -364,19 +348,12 @@ class DokterController extends Controller
         $encodeAturan = json_encode($aturan);
         $encodeJumlah = json_encode($jumlah);
 
-        // Pastikan jumlah elemen sama atau gunakan nilai default kosong
-        if (count($namaPasienArray) !== count($aturan)) {
-            $maxCount = max(count($namaPasienArray), count($aturan));
-
-            // Isi kekurangan elemen dengan nilai kosong untuk keseimbangan
-            $namaPasienArray = array_pad($namaPasienArray, $maxCount, '');
-            $aturan = array_pad($aturan, $maxCount, '');
-        }
-
+        // Pastikan jumlah elemen sama
+        $maxCount = max(count($namaPasienArray), count($aturan));
+        $namaPasienArray = array_pad($namaPasienArray, $maxCount, '');
+        $aturan = array_pad($aturan, $maxCount, '');
         $dataObat = array_combine($namaPasienArray, $aturan);
         $encodeObatTable = json_encode($namaPasienArray);
-
-        // dd($dataObat);
 
         $now = Carbon::now();
         $dataAnamnesis = [
@@ -487,26 +464,26 @@ class DokterController extends Controller
             'soap_p_anjuran' => $encodeAnjuran,
             'soap_p_jumlah' => $encodeJumlah,
             'obat_Ro' => $encodeObatTable,
-            'ObatRacikan' => $data['ObatRacikan'],
+            'ObatRacikan' => $data['ObatRacikan'] ?? null,
             'edukasi' => $data['edukasi'],
-            'rujuk' => $data['rujuk']
+            'rujuk' => $data['rujuk'],
+            'created_at' => $now,
+            'updated_at' => $now,
         ];
-
-        // dd($data2);
 
         $sDokter = Soap::create($data2);
         $IdSoap = $sDokter->id;
-        $SoapId = Soap::find($IdSoap);
+
         $obatData = [
             'id_booking' => $antrianDokter->booking->id,
             'id_dokter' => $antrianDokter->id_dokter,
             'id_pasien' => $antrianDokter->booking->pasien->id,
             'id_poli' => $antrianDokter->id_poli,
             'id_soap' => $IdSoap,
-            // 'obat_Ro' => $encodeObatTable,
             'obat_Ro' => $encodeObatTable,
-            // 'aturan_minum' => $encodeObatTable,
             'status' => 'B',
+            'created_at' => $now,
+            'updated_at' => $now,
         ];
 
         $obat = Obat::create($obatData);
@@ -516,8 +493,6 @@ class DokterController extends Controller
             'id_obat' => $idObat,
             'status' => 'P',
         ];
-
-        // dd($updateAnDokter);
 
         AntrianPerawat::find($id)->update($updateAnDokter);
 

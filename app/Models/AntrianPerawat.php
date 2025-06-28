@@ -10,6 +10,8 @@ class AntrianPerawat extends Model
     use HasFactory;
     protected $guarded = [];
 
+    // Gagal mengekspor ke Excel: Call to undefined relationship [datadokter] on model [App\Models\AntrianPerawat].
+
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'id_booking', 'id');
@@ -60,28 +62,7 @@ class AntrianPerawat extends Model
     {
         return $this->belongsTo(ppnPajak::class, 'id_ppnPajak');
     }
-    // public static function boot()
-    // {
-    //     parent::boot();
 
-    //     static::creating(function ($antrianPerawat) {
-    //         $status = $antrianPerawat->status;
-
-    //         // Mendapatkan nomor antrian terakhir berdasarkan status
-    //         $lastQueue = AntrianPerawat::where('status', $status)->latest()->first();
-
-    //         if ($lastQueue) {
-    //             $lastNumber = $lastQueue->number + 1;
-    //         } else {
-    //             $lastNumber = 1;
-    //         }
-
-    //         // Menentukan kode_antrian berdasarkan status
-    //         $kodeAntrianPrefix = 'A'; // Bisa disesuaikan dengan kebutuhan
-    //         $antrianPerawat->kode_antrian = $kodeAntrianPrefix . str_pad($lastNumber, 3, '0', STR_PAD_LEFT); // Mengubah panjang menjadi 3
-    //         $antrianPerawat->number = $lastNumber;
-    //     });
-    // }
     public static function boot()
     {
         parent::boot();

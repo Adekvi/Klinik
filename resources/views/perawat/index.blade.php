@@ -435,6 +435,7 @@
                                 <thead class="table-secondary" style="text-align: center; width: auto">
                                     <tr>
                                         <th>No</th>
+                                        <th>Tgl/Jam</th>
                                         <th>No. RM</th>
                                         <th>Nama Pasien</th>
                                         <th>No. Antrian</th>
@@ -446,9 +447,9 @@
                                     </tr>
                                 </thead>
                                 <tbody style="text-align: center; text-transform: uppercase;">
-                                    @if (empty($periksa))
+                                    @if (!empty($periksa))
                                         <tr>
-                                            <td colspan="7" style="text-align: center">Tidak Ada Data Pasien</td>
+                                            <td colspan="9" style="text-align: center">Tidak Ada Data Pasien</td>
                                         </tr>
                                     @else
                                         <?php $no = 1; ?>
@@ -456,6 +457,8 @@
                                             @if ($item->status == 'M')
                                                 <tr id="row_{{ $item->id }}">
                                                     <td>{{ $no++ }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y / H:i') }}
+                                                    </td>
                                                     <td>{{ $item->booking->pasien->no_rm }}</td>
                                                     <td>{{ $item->booking->pasien->nama_pasien }}</td>
                                                     <td>{{ $item->kode_antrian }}</td>
@@ -567,9 +570,11 @@
                 <div class="modal-dialog modal-lg" style="display: contents">
                     <div class="modal-content" style="margin-top: 20px; width: 95%; margin-left: 3%;">
                         <div class="modal-header bg-primary">
-                            <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Detail
-                                Asesmen
-                                Tanggal : 20-04-2024</h1>
+                            <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">
+                                Detail Asesmen
+                                Tanggal:
+                                {{ $asesmen->created_at ? date_format(date_create($asesmen->created_at), 'd-m-Y') : 'N/A' }}
+                            </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
@@ -584,11 +589,11 @@
                                             <th>EDUKASI</th>
                                         </tr>
                                     </thead>
-
                                     <tbody style="text-align: center;">
                                         <tr>
-                                            <td>{{ date_format(date_create($asesmen['created_at']), 'Y-m-d/H:i:s') }}</td>
-                                            <td>{{ $asesmen['nama_dokter'] }}</td>
+                                            <td>{{ $asesmen->created_at ? date_format(date_create($asesmen->created_at), 'Y-m-d H:i:s') : 'N/A' }}
+                                            </td>
+                                            <td>{{ $asesmen->nama_dokter ?? 'N/A' }}</td>
                                             <td style="text-align: left">
                                                 <table class="table">
                                                     <thead>
@@ -601,139 +606,117 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $asesmen['keluhan_utama'] }} </td>
+                                                            <td>{{ $asesmen->keluhan_utama ?? 'N/A' }}</td>
                                                             <td>
                                                                 <ul>
-                                                                    <li>Tensi : {{ $asesmen['p_tensi'] }} / mmHg</li>
-                                                                    <li>RR : {{ $asesmen['p_rr'] }} / minute</li>
-                                                                    <li>Nadi : {{ $asesmen['p_nadi'] }} / minute</li>
-                                                                    <li>Suhu : {{ $asesmen['p_suhu'] }} °c</li>
-                                                                    <li>TB : {{ $asesmen['p_tb'] }} / cm</li>
-                                                                    <li>BB : {{ $asesmen['p_bb'] }} / kg</li>
+                                                                    <li>Tensi: {{ $asesmen->p_tensi ?? 'N/A' }} mmHg</li>
+                                                                    <li>RR: {{ $asesmen->p_rr ?? 'N/A' }} / minute</li>
+                                                                    <li>Nadi: {{ $asesmen->p_nadi ?? 'N/A' }} / minute</li>
+                                                                    <li>Suhu: {{ $asesmen->p_suhu ?? 'N/A' }} °C</li>
+                                                                    <li>TB: {{ $asesmen->p_tb ?? 'N/A' }} cm</li>
+                                                                    <li>BB: {{ $asesmen->p_bb ?? 'N/A' }} kg</li>
                                                                 </ul>
                                                             </td>
                                                             <td>
                                                                 @php
-                                                                    $diagnosaPrimer = json_decode(
-                                                                        $asesmen['soap_a_primer'],
-                                                                        true,
-                                                                    );
-                                                                    $diagnosaPrimer = array_values($diagnosaPrimer); // menghapus kunci asosiatif
-                                                                    $diagnosaSekunder = json_decode(
-                                                                        $asesmen['soap_a_sekunder'],
-                                                                        true,
-                                                                    );
-                                                                    $diagnosaSekunder = array_values($diagnosaSekunder); // menghapus kunci asosiatif
-                                                                    // dd($diagnosaPrimer);
+                                                                    $diagnosaPrimer = !empty($asesmen->soap_a_primer)
+                                                                        ? json_decode($asesmen->soap_a_primer, true)
+                                                                        : [];
+                                                                    $diagnosaSekunder = !empty(
+                                                                        $asesmen->soap_a_sekunder
+                                                                    )
+                                                                        ? json_decode($asesmen->soap_a_sekunder, true)
+                                                                        : [];
+                                                                    $diagnosaPrimer = is_array($diagnosaPrimer)
+                                                                        ? array_values($diagnosaPrimer)
+                                                                        : [];
+                                                                    $diagnosaSekunder = is_array($diagnosaSekunder)
+                                                                        ? array_values($diagnosaSekunder)
+                                                                        : [];
                                                                 @endphp
                                                                 <p style="font-weight: bold">Diagnosa Primer</p>
-                                                                @foreach ($diagnosaPrimer as $diag)
-                                                                    <ul>
-                                                                        <li>{{ $diag }}</li>
-                                                                    </ul>
-                                                                @endforeach
+                                                                @if (!empty($diagnosaPrimer))
+                                                                    @foreach ($diagnosaPrimer as $diag)
+                                                                        <ul>
+                                                                            <li>{{ $diag }}</li>
+                                                                        </ul>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>-</p>
+                                                                @endif
                                                                 <p style="font-weight: bold">Diagnosa Sekunder</p>
-                                                                @if ($diagnosaSekunder != null)
+                                                                @if (!empty($diagnosaSekunder))
                                                                     @foreach ($diagnosaSekunder as $diagn)
                                                                         <ul>
                                                                             <li>{{ $diagn }}</li>
                                                                         </ul>
                                                                     @endforeach
                                                                 @else
-                                                                    -
+                                                                    <p>-</p>
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <p style="font-weight: bold; margin-bottom: -0px">Resep :
+                                                                <p style="font-weight: bold; margin-bottom: 0">Resep:</p>
+                                                                <p style="font-weight: bold; margin-bottom: 0">Non Racikan
                                                                 </p>
-                                                                <p style="font-weight: bold; margin-bottom: -0px">- Non
-                                                                    Racikan</p>
                                                                 @php
-                                                                    $resep = json_decode($item['soap_p'], true); // Mendecode data JSON obat
-                                                                    $aturan = json_decode($item['soap_p_aturan'], true); // Mendecode data JSON aturan
+                                                                    $resep = !empty($asesmen->soap_p)
+                                                                        ? json_decode($asesmen->soap_p, true)
+                                                                        : [];
+                                                                    $aturan = !empty($asesmen->soap_p_aturan)
+                                                                        ? json_decode($asesmen->soap_p_aturan, true)
+                                                                        : [];
                                                                 @endphp
-
-                                                                @if (is_array($resep) && is_array($aturan))
-                                                                    @if (count($resep) == count($aturan))
-                                                                        @foreach ($resep as $obat => $namaObat)
-                                                                            @php
-                                                                                // Ambil aturan minum yang sesuai berdasarkan nama obat
-                                                                                $aturanMinum = $aturan[$obat];
-                                                                            @endphp
-                                                                            <ul>
-                                                                                <li>{{ $namaObat }} |
-                                                                                    {{ $aturanMinum }}</li>
-                                                                            </ul>
-                                                                            <!-- Menampilkan nama obat, jumlah, dan aturan minum -->
-                                                                        @endforeach
-                                                                    @else
-                                                                        <p>-</p>
-                                                                    @endif
+                                                                @if (is_array($resep) && is_array($aturan) && count($resep) == count($aturan) && !empty($resep))
+                                                                    @foreach ($resep as $obat => $namaObat)
+                                                                        @php
+                                                                            $aturanMinum = $aturan[$obat] ?? 'N/A';
+                                                                        @endphp
+                                                                        <ul>
+                                                                            <li>{{ $namaObat }} | {{ $aturanMinum }}
+                                                                            </li>
+                                                                        </ul>
+                                                                    @endforeach
                                                                 @else
                                                                     <p>-</p>
                                                                 @endif
 
-                                                                <p style="font-weight: bold; margin-bottom: -0px">- Racikan
+                                                                <p style="font-weight: bold; margin-bottom: 0">Racikan
                                                                     (Puyer)
                                                                 </p>
-
                                                                 @php
-                                                                    $obatRacikan = json_decode($item['soap_r'], true);
-                                                                    $takaran = json_decode(
-                                                                        $item['soap_r_takaran'],
-                                                                        true,
-                                                                    );
-                                                                    // dd($obatRacikan);
+                                                                    $obatRacikan = !empty($asesmen->soap_r)
+                                                                        ? json_decode($asesmen->soap_r, true)
+                                                                        : [];
+                                                                    $takaran = !empty($asesmen->soap_r_takaran)
+                                                                        ? json_decode($asesmen->soap_r_takaran, true)
+                                                                        : [];
                                                                 @endphp
-
-                                                                @if (is_array($obatRacikan) && is_array($takaran))
-                                                                    @if (count($obatRacikan) == 0 && count($takaran) == 0)
-                                                                        <p>-</p>
-                                                                    @elseif(count($obatRacikan) == count($takaran))
-                                                                        @for ($i = 0; $i < count($obatRacikan); $i++)
-                                                                            <ul>
-                                                                                <li>{{ array_keys($obatRacikan)[$i] }} -
-                                                                                    {{ array_values($obatRacikan)[$i] }}
-                                                                                </li>
-                                                                            </ul>
-                                                                        @endfor
-                                                                    @else
-                                                                        <p>
+                                                                @if (is_array($obatRacikan) && is_array($takaran) && count($obatRacikan) > 0 && count($obatRacikan) == count($takaran))
+                                                                    @foreach ($obatRacikan as $namaObat => $jumlah)
                                                                         <ul>
-                                                                            <li></li>
+                                                                            <li>{{ $namaObat }} - {{ $jumlah }}
+                                                                                ({{ $takaran[$namaObat] ?? 'N/A' }})
+                                                                            </li>
                                                                         </ul>
-                                                                        </p>
-                                                                    @endif
+                                                                    @endforeach
                                                                 @else
-                                                                    <p>
-                                                                    <ul>
-                                                                        <li></li>
-                                                                    </ul>
-                                                                    </p>
+                                                                    <p>-</p>
                                                                 @endif
-
-                                                                {{-- @foreach ($allSoapPatients as $key => $patientName)
-                                                            <ul>
-                                                                @if (isset(json_decode($item['soap_p'], true)[$patientName]))
-                                                                    <li>{{ $patientName }} - {{ $keterangan[$key] }} - {{ json_decode($item['soap_p'], true)[$patientName] }} </li>
-                                                                @endif
-                                                            </ul>
-                                                        @endforeach --}}
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-
                                             </td>
-                                            <td>{{ $asesmen['edukasi'] }}</td>
+                                            <td>{{ $asesmen->edukasi ?? 'N/A' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                                data-bs-toggle="modal" data-bs-target="#riwayatModal{{ $asesmen->id }}">Kembali</button>
+                            <!-- Asumsikan kembali ke modal riwayat pasien yang sesuai -->
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Kembali</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -1487,18 +1470,6 @@
             var v = parseFloat(gcs_v.value) || 0;
 
             var totalInput = e + m + v;
-
-            // // Jika total input lebih dari 0, maka normalkan nilai input agar total selalu 15
-            // if (totalInput > 0) {
-            //     e = (e / totalInput) * 15;
-            //     m = (m / totalInput) * 15;
-            //     v = (v / totalInput) * 15;
-            // } else {
-            //     e = m = v = 0; // Jika semua input 0, totalnya tetap 0
-            // }
-
-            // var total = e + m + v;
-            // gcs_total.textContent = Math.round(total); // Membulatkan hasil ke bilangan bulat
 
             // Jika total input melebihi 15, normalkan nilai sehingga totalnya menjadi 15
             if (totalInput > 15) {

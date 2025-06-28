@@ -10,9 +10,9 @@ class DiagnosaTerbanyak extends Model
     use HasFactory;
 
     protected $guarded = [];
-    
+
     public function diagno()
     {
-        return $this->belongsTo(Diagnosa::class ,'id_diagnosa');
+        return $this->belongsTo(Diagnosa::class, 'id_diagnosa');
     }
 }

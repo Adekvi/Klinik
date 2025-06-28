@@ -13,7 +13,7 @@ class AksesController extends Controller
 
         $akses = User::where('role', 'user')->get();
 
-        dd($akses);
+        // dd($akses);
         return view('admin.master.kelolaakses.index', compact('akses'));
     }
 }

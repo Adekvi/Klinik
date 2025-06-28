@@ -271,13 +271,14 @@ class PasienController extends Controller
         $identifier = $request->query('nama') ?? $request->query('identifier');
 
         if (!$identifier) {
-            return response()->json(['error' => 'Harap masukkan No. RM, NIK, atau No. BPJS'], 422);
+            return response()->json(['error' => 'Harap masukkan No. RM, NIK, No. BPJS, atau Nama Pasien'], 422);
         }
 
         try {
             $pasien = Pasien::where('no_rm', $identifier)
                 ->orWhere('nik', $identifier)
                 ->orWhere('bpjs', $identifier)
+                ->orWhere('nama_pasien', 'LIKE', '%' . $identifier . '%') // Pencarian parsial untuk nama
                 ->first();
 
             if ($pasien) {
@@ -297,9 +298,13 @@ class PasienController extends Controller
                 ]);
             }
 
+            Log::warning('Pasien tidak ditemukan untuk identifier: ' . $identifier);
             return response()->json(['error' => 'Pasien tidak ditemukan'], 404);
         } catch (\Exception $e) {
-            Log::error('Error saat mencari pasien: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Error saat mencari pasien: ' . $e->getMessage(), [
+                'identifier' => $identifier,
+                'exception' => $e,
+            ]);
             return response()->json(['error' => 'Terjadi kesalahan saat mencari pasien'], 500);
         }
     }

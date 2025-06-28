@@ -10,13 +10,13 @@ class Diagnosa extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function soap ()
+    public function soap()
     {
         return $this->hasMany(Soap::class, 'id');
     }
 
     public function diagnosa_terbanyak()
     {
-        return $this->hasMany(DiagnosaTerbanyak::class, 'id');
+        return $this->hasMany(DiagnosaTerbanyak::class, 'id_diagnosa');
     }
 }

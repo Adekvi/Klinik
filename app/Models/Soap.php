@@ -37,7 +37,7 @@ class Soap extends Model
     }
     public function obat()
     {
-        return $this->hasMany(Obat::class, 'id');
+        return $this->hasMany(Obat::class, 'id_soap', 'id');
     }
     public function antrianPerawat()
     {

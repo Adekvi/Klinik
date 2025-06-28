@@ -31,10 +31,6 @@ class BerandaPerawatController extends Controller
     public function pemeriksaan(Request $request)
     {
         try {
-            // $coba = AntrianPerawat::where('status', 'WB')->get();
-
-            // dd($coba);
-            // Ambil input tanggal dari request
             $startDate = $request->query('start_date');
             $endDate = $request->query('end_date');
 
@@ -43,7 +39,9 @@ class BerandaPerawatController extends Controller
                 ->where('status', 'WB')
                 ->orderBy('id', 'asc');
 
-            // dd($query);
+            // Tentukan rentang tanggal default (minggu berjalan: Senin hingga hari ini)
+            $defaultStart = Carbon::now()->startOfWeek(Carbon::MONDAY)->startOfDay();
+            $defaultEnd = Carbon::now()->endOfDay();
 
             // Filter berdasarkan rentang tanggal
             if ($startDate && $endDate) {
@@ -59,7 +57,10 @@ class BerandaPerawatController extends Controller
                     return redirect()->back()->with('error', 'Format tanggal tidak valid.');
                 }
             } else {
-                $query->whereDate('created_at', Carbon::today());
+                // Default ke rentang 1 minggu (Senin hingga hari ini)
+                $start = $defaultStart;
+                $end = $defaultEnd;
+                $query->whereBetween('created_at', [$defaultStart, $defaultEnd]);
             }
 
             // Paginate hasil query
@@ -67,7 +68,6 @@ class BerandaPerawatController extends Controller
 
             // Proses data untuk diagnosa, obat, dan waktu
             $harian->getCollection()->transform(function ($item) {
-                // Inisialisasi array untuk kode dan nama diagnosa
                 $kdDiagnosa = [];
                 $nmDiagnosa = [];
 
@@ -153,9 +153,12 @@ class BerandaPerawatController extends Controller
                 return $item;
             });
 
-            // dd($harian);
+            // Data untuk notifikasi ekspor mingguan
+            $exportStart = $defaultStart->format('Y-m-d');
+            $exportEnd = $defaultEnd->format('Y-m-d');
+            $exportNotification = "Data minggu ini ({$defaultStart->format('d M Y')} - {$defaultEnd->format('d M Y')}) tersedia untuk diekspor. Silakan ekspor laporan mingguan.";
 
-            return view('perawat.laporan.pemeriksaan', compact('harian'));
+            return view('perawat.laporan.pemeriksaan', compact('harian', 'exportNotification', 'exportStart', 'exportEnd'));
         } catch (\Exception $e) {
             Log::error('Error mengambil data pemeriksaan: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Gagal mengambil data: ' . $e->getMessage());

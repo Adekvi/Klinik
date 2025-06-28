@@ -228,12 +228,12 @@
                         <div data-i18n="Account Settings">Rekap Kunjungan Harian</div>
                     </a>
                 </li>
-                {{-- <li class="menu-item {{ Request::is('perawat/rekap/kunjungan') ? 'active' : '' }}">
-                    <a href="{{ url('perawat/rekap/kunjungan') }}" class="menu-link">
-                        <i class="menu-icon tf-icons fa-solid fa-calendar"></i>
-                        <div data-i18n="Account Settings">Rekap Kunjungan Pasien</div>
+                <li class="menu-item {{ Request::is('perawat/diagnosa-terbanyak') ? 'active' : '' }}">
+                    <a href="{{ url('perawat/diagnosa-terbanyak') }}" class="menu-link">
+                        <i class="menu-icon tf-icons fa-solid fa-flask"></i>
+                        <div data-i18n="Account Settings">Rekap Diagnosa Tebanyak</div>
                     </a>
-                </li> --}}
+                </li>
 
                 <!-- Rekap -->
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Menu</li>
@@ -398,7 +398,7 @@
                     <a href="{{ url('kasir/rekap') }}"
                         class="menu-link {{ Request::is('kasir/rekap') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-money-bills"></i>
-                        <div data-i18n="Analytics">Check Pembayaran</div>
+                        <div data-i18n="Analytics">Rekap Pembayaran</div>
                     </a>
                 </li>
 

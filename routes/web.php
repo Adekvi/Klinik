@@ -41,6 +41,11 @@ use App\Http\Controllers\KasirController;
 use App\Http\Controllers\LaporanPerawatController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
+use App\Http\Controllers\Perawat\DiagnosaTerbanyakController;
+use App\Http\Controllers\Perawat\Laporan\PoliGigi\GigiBpjsController;
+use App\Http\Controllers\Perawat\Laporan\PoliGigi\GigiUmumController;
+use App\Http\Controllers\Perawat\Laporan\PoliUmum\UmumBpjsController;
+use App\Http\Controllers\Perawat\Laporan\PoliUmum\UmumUmumController;
 use App\Http\Controllers\PerawatController;
 use App\Http\Controllers\PetunjukController;
 use App\Http\Controllers\StokObatApotekerController;
@@ -124,43 +129,41 @@ Route::group(['middleware' => ['auth', 'perawat']], function () {
 
     // Laporan Perawat untuk Kunjungan Pasien
 
-    // Poli Umum
-    Route::get('laporan-perawat-pasienUmum', [LaporanPerawatController::class, 'poliUmumPasienUmum']);
-    Route::get('laporan-perawat-pasienBpjs', [LaporanPerawatController::class, 'poliUmumPasienBpjs']);
+    // Poli Umum - Pasien BPJS
+    Route::get('laporan-perawat-pasienBpjs', [UmumBpjsController::class, 'poliUmumPasienBpjs'])->name('perawat.laporan.poliUmum.bpjs');
 
-    // Pasien BPJS
-    // cari pasienBpjs
-    Route::post('perawat/cariPasienBpjs', [LaporanPerawatController::class, 'cariBpjs'])->name('cari-pasien-umum');
-    Route::post('/perawat/bpjs/cetak', [LaporanPerawatController::class, 'cetakUmumBpjs'])->name('cetakUmumBpjs');
+    // Cetak Pasien BPJS
+    // Route::post('/perawat/bpjs/cetak', [UmumBpjsController::class, 'cetakUmumBpjs'])->name('cetakUmumBpjs');
 
     // export PasienBpjs -> Excel
-    Route::get('export-UmumPasienBpjs', [LaporanPerawatController::class, 'exportExcelUmumBpjs'])->name('export-pasienBpjs-Umum');
+    Route::get('export-UmumPasienBpjs', [UmumBpjsController::class, 'exportExcelUmumBpjs'])->name('export-pasienBpjs-Umum');
 
-    // Pasien UMUM
+    // Poli Umum - Pasien UMUM
+    Route::get('laporan-perawat-pasienUmum', [UmumUmumController::class, 'poliUmumPasienUmum'])->name('perawat.laporan.poliUmum.umum');
+
     // cari pasienUmum
-    Route::post('perawat/cariPasienUmum', [LaporanPerawatController::class, 'searchUmumUmum'])->name('searchUmum-poliUmum');
-    Route::post('/perawat/umum/cetak', [LaporanPerawatController::class, 'cetakUmumUmum'])->name('cetak-Pasien-Umum');
+    // Route::post('/perawat/umum/cetak', [UmumUmumController::class, 'cetakUmumUmum'])->name('cetak-Pasien-Umum');
 
     // export PasienUmum -> Excel
-    Route::get('export/pasienUmum-Umum', [LaporanPerawatController::class, 'exportExcelUmumUmum'])->name('export-pasien-umum');
+    Route::get('export/pasienUmum-Umum', [UmumUmumController::class, 'exportExcelUmumUmum'])->name('export-pasienUmum-Umum');
 
-    // Poli Gigi
-    Route::get('laporan/poliGigi/pasienUmum', [LaporanPerawatController::class, 'poliGigiPasienUmum']);
-    Route::get('laporan/poliGigi/pasienBpjs', [LaporanPerawatController::class, 'poliGigiPasienBpjs']);
+    // Poli Gigi - Pasien Bpjs
+    Route::get('laporan/poliGigi/pasienBpjs', [GigiBpjsController::class, 'poliGigiPasienBpjs']);
 
     // Pasien BPJS
-    Route::post('perawat/CariGigiPasienBpjs', [LaporanPerawatController::class, 'cariGigiBpjs'])->name('cariGigi-PasienBpjs');
-    Route::post('/perawat/gigiBpjs/cetak', [LaporanPerawatController::class, 'printGigiBpjs'])->name('cetakGigi-PasienBpjs');
+    // Route::post('/perawat/gigiBpjs/cetak', [LaporanPerawatController::class, 'printGigiBpjs'])->name('cetakGigi-PasienBpjs');
 
     // export Pasien Bpjs -> Excel
-    Route::get('export/pasienBpjs-Gigi', [LaporanPerawatController::class, 'exportExcelPoliGigiBpjs'])->name('exportGigi-pasienBpjs');
+    Route::get('export/pasienBpjs-Gigi', [GigiBpjsController::class, 'exportExcelPoliGigiBpjs'])->name('exportGigi-pasienBpjs');
 
-    // Pasien Umum
-    Route::post('perawat/CariGigiPasienUmum', [LaporanPerawatController::class, 'cariGigiUmum'])->name('cari-pasienUmum-gigi');
-    Route::post('/perawat/gigiUmum/cetak', [LaporanPerawatController::class, 'printGigiUmum'])->name('ceta-PasienUmum-Gigi');
+    // Poli Gigi - Pasien Umum
+    Route::get('laporan/poliGigi/pasienUmum', [GigiUmumController::class, 'poliGigiPasienUmum']);
+
+    // Cetak Pasien Umum
+    // Route::post('/perawat/gigiUmum/cetak', [LaporanPerawatController::class, 'printGigiUmum'])->name('ceta-PasienUmum-Gigi');
 
     // export Pasien Umum -> Excel
-    Route::get('export/pasienUmum-Gigi', [LaporanPerawatController::class, 'exportExcelPoliGigiUmum'])->name('export-Gigi-Umum');
+    Route::get('export/pasienUmum-Gigi', [GigiUmumController::class, 'exportExcelPoliGigiUmum'])->name('export-Gigi-Umum');
 
     // pasien sehat
     Route::post('admin/pasien-sehat/tambah', [SehatController::class, 'store'])->name('pasien-sehat.tambah');
@@ -179,6 +182,10 @@ Route::group(['middleware' => ['auth', 'perawat']], function () {
 
     // EXPORT DATA
     Route::get('/perawat/laporan/export/excel', [BerandaPerawatController::class, 'exportExcel'])->name('perawat.laporan.export.excel');
+
+    // REKAP DIAGNOSA
+    Route::get('perawat/diagnosa-terbanyak', [DiagnosaTerbanyakController::class, 'indexdiagnosa'])->name('perawat.diagnosa');
+    Route::get('perawat/diagnosa-terbanyak/export', [DiagnosaTerbanyakController::class, 'exportExcel'])->name('perawat.diagnosa.export');
 });
 
 Route::group(['middleware' => ['auth', 'dokter']], function () {
@@ -254,6 +261,8 @@ Route::group(['middleware' => ['auth', 'kasir']], function () {
 
     Route::get('kasir/index', [KasirController::class, 'index'])->name('kasir.index');
 
+    Route::post('kasir/lewati/{id}', [KasirController::class, 'lewatiAntrianKasir'])->name('kasir.lewati');
+
     Route::get('kasir/rekap', [BerandaKasirController::class, 'check'])->name('kasir.check');
     Route::get('kasir/report', [BerandaKasirController::class, 'report'])->name('kasir.report');
 
@@ -262,6 +271,8 @@ Route::group(['middleware' => ['auth', 'kasir']], function () {
     Route::post('kasir/tambah/{id}', [KasirController::class, 'simpanTransaksi'])->name('kasir.tambah');
 
     Route::get('kasir/cetakTransaksi/{id}', [KasirController::class, 'cetakTransaksi'])->name('kasir.cetakTransaksi');
+
+    Route::get('/kasir/laporan/export/excel', [BerandaKasirController::class, 'exportExcel'])->name('kasir.laporan.export.excel');
 });
 
 // antrian
