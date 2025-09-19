@@ -47,4 +47,28 @@ class Soap extends Model
     {
         return $this->hasMany(Kasir::class, 'id');
     }
+
+    public function obats()
+    {
+        return $this->belongsToMany(Resep::class, 'soap_p_obats', 'soap_id', 'obat_id')
+            ->withTimestamps();
+    }
+
+    public function jenis()
+    {
+        return $this->belongsToMany(Jenisobat::class, 'soap_p_jenis', 'soap_id', 'jenis_id')
+            ->withTimestamps();
+    }
+
+    public function aturan()
+    {
+        return $this->belongsToMany(Aturan::class, 'soap_p_aturans', 'soap_id', 'aturan_id')
+            ->withTimestamps();
+    }
+
+    public function anjuran()
+    {
+        return $this->belongsToMany(Anjuran::class, 'soap_p_anjurans', 'soap_id', 'anjuran_id')
+            ->withTimestamps();
+    }
 }

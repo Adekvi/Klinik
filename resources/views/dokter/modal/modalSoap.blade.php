@@ -27,6 +27,14 @@
                                     value="{{ $antrianDokter->booking->pasien->nama_pasien }}" readonly>
                             </div>
                         </div>
+                        <div class="col-md-6 mt-2">
+                            <div class="form-group">
+                                <label for="">Umur</label>
+                                <input type="text" class="form-control mt-2"
+                                    value="{{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun' }}"
+                                    readonly>
+                            </div>
+                        </div>
                     </div>
                     <h6 class="mt-4" style="font-weight: bold; margin-bottom: 5px">ASESMEN</h6>
                     <div class="row">
@@ -503,150 +511,148 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label for="diagnosa_primer">Diagnosa Primer</label>
-                                    <input type="text" id="soap_a_0" name="soap_a[0][diagnosa_primer]"
-                                        class="soap_a form-control mt-2 mb-2" placeholder="Cari Diagnosa">
-                                    <div id="dropdown-diagnosa-primer" class="dropdown-menu"
-                                        style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 50%;">
-                                    </div> <!-- Dropdown -->
+                                    <div class="input-wrapper"> <!-- tambahkan wrapper -->
+                                        <input type="text" id="soap_a_0" name="soap_a[0][diagnosa_primer]"
+                                            class="soap_a form-control mt-2 mb-2" placeholder="Cari Diagnosa">
+                                        <div id="dropdown-diagnosa-primer" class="dropdown-menu"
+                                            style="z-index: 1000; display: none; cursor: pointer; width: 100%;">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <label for="diagnosa_sekunder">Diagnosa Sekunder</label>
-                                    <input type="text" id="soap_a_b_0" name="soap_a_b[0][diagnosa_sekunder]"
-                                        class="soap_a_b form-control mt-2 mb-2" placeholder="Cari Diagnosa">
-                                    <div id="dropdown-diagnosa-sekunder" class="dropdown-menu"
-                                        style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 50%;">
-                                    </div> <!-- Dropdown -->
+                                    <div class="input-wrapper"> <!-- tambahkan wrapper -->
+                                        <input type="text" id="soap_a_b_0" name="soap_a_b[0][diagnosa_sekunder]"
+                                            class="soap_a_b form-control mt-2 mb-2" placeholder="Cari Diagnosa">
+                                        <div id="dropdown-diagnosa-sekunder" class="dropdown-menu"
+                                            style="z-index: 1000; display: none; cursor: pointer; width: 100%;">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="form-group mt-3 mb-2">
                         <label for="soap_p_0"
                             style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
                             onclick="toggleObatContainer()">Pilih Obat (P)</label>
-                        <div class="resep" id="resep">
+                        <div class="resep" id="modal-resep">
                             <!-- Nama Obat -->
-                            <div class="input-row" id="namaObatContainer"
-                                style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-right: 10px;">
-                                <label for="namaobat" style="min-width: 100px;">Nama Obat</label>
+                            <div class="input-row" id="modal-namaObatContainer">
+                                <label for="modal-resep_0" style="min-width: 100px;">Nama Obat</label>
                                 <span>:</span>
-                                <input type="text" class="form-control soap_p" name="soap_p[0][resep]"
-                                    id="resep_0" placeholder="Cari Obat" autocomplete="off">
-                                <div id="dropdown-resep_0" class="dropdown-menu"
-                                    style="display: none; position: absolute; z-index: 1000; cursor: pointer; width: 30%">
+                                <div class="input-wrapper">
+                                    <div class="multi-select-wrapper form-control" data-input-id="modal-resep_0">
+                                        <div class="selected-tags" id="modal-resep_0_tags"></div>
+                                        <input type="text" class="autocomplete-input multi-select-input"
+                                            id="modal-resep_0" placeholder="Cari Obat" autocomplete="off"
+                                            data-url="{{ url('/resep-autocomplete') }}"
+                                            data-dropdown="modal-dropdown-resep_0">
+                                    </div>
+                                    <input type="hidden" name="soap_p[0][resep][]" id="modal-resep_0_hidden">
+                                    <div id="modal-dropdown-resep_0" class="dropdown-menu autocomplete-dropdown">
+                                    </div>
+                                    <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                        *Bisa memilih lebih dari 1 obat
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Jenis Obat -->
+                            <div class="input-row" id="modal-jenisObatContainer">
+                                <label for="modal-jenis_obat_0" style="min-width: 100px;">Jenis Obat</label>
+                                <span>:</span>
+                                <div class="input-wrapper">
+                                    <div class="multi-select-wrapper form-control" data-input-id="modal-jenis_obat_0">
+                                        <div class="selected-tags" id="modal-jenis_obat_0_tags"></div>
+                                        <input type="text" class="autocomplete-input multi-select-input"
+                                            id="modal-jenis_obat_0" placeholder="Cari Jenis Obat" autocomplete="off"
+                                            data-url="{{ url('jenis-autocomplete') }}"
+                                            data-dropdown="modal-dropdown-jenis_obat_0">
+                                    </div>
+                                    <input type="hidden" name="soap_p[0][jenisobat][]"
+                                        id="modal-jenis_obat_0_hidden">
+                                    <div id="modal-dropdown-jenis_obat_0" class="dropdown-menu autocomplete-dropdown">
+                                    </div>
+
+                                    <!-- catatan dipindah ke sini -->
+                                    <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                        *Bisa memilih lebih dari 1 jenis obat
+                                    </p>
                                 </div>
                             </div>
 
-                            <!-- Jenis Obat -->
-                            <div class="input-row" id="jenisObatContainer"
-                                style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                <label for="jenisObat" style="min-width: 100px;">Jenis Obat</label>
+                            <!-- Aturan Pakai -->
+                            <div class="input-row" id="modal-aturanContainer">
+                                <label for="modal-aturan_0" style="min-width: 100px">Aturan Pakai</label>
                                 <span>:</span>
-                                <select name="soap_p[0][jenisobat]" id="jenis_obat_0" class="form-control">
-                                    <option value="">--Pilih Jenis Obat--</option>
-                                    <option value="Tablet">Tablet</option>
-                                    <option value="Kapsul">Kapsul</option>
-                                    <option value="Sirup">Sirup</option>
-                                    <option value="Salep">Salep</option>
-                                    <option value="Krim">Krim</option>
-                                    <option value="Fls">Fls</option>
-                                    <option value="Ampul">Ampul</option>
-                                    <option value="Vial">Vial</option>
-                                    <option value="Pulveres">Pulveres</option>
-                                    <option value="Pulvis">Pulvis</option>
-                                </select>
-                            </div>
+                                <div class="input-wrapper">
+                                    <div class="multi-select-wrapper form-control" data-input-id="modal-aturan_0">
+                                        <div class="selected-tags" id="modal-aturan_0_tags"></div>
+                                        <input type="text" class="autocomplete-input multi-select-input"
+                                            id="modal-aturan_0" placeholder="Cari Aturan Pakai" autocomplete="off"
+                                            data-url="{{ url('aturan-autocomplete') }}"
+                                            data-dropdown="modal-dropdown-aturan_0">
+                                    </div>
+                                    <input type="hidden" name="soap_p[0][aturan][]" id="modal-aturan_0_hidden">
+                                    <div id="modal-dropdown-aturan_0" class="dropdown-menu autocomplete-dropdown">
+                                    </div>
 
-                            <!-- Aturan Minum Perhari -->
-                            <div class="input-row" id="aturanMinumContainer"
-                                style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                <label for="aturan" style="min-width: 100px">Aturan Minum Perhari</label>
-                                <span>:</span>
-                                <select class="form-control" name="soap_p[0][aturan]" id="aturan_0">
-                                    <option value="">--Pilih Aturan Minum--</option>
-                                    <option value="1x1 SENDOK">1x1 SENDOK</option>
-                                    <option value="1x1/2 SENDOK">1x1/2 SENDOK</option>
-                                    <option value="1x3/4 SENDOK">1x3/4 SENDOK</option>
-                                    <option value="1x1 1/2 SENDOK">1x1 1/2 SENDOK</option>
-                                    <option value="2x1 SENDOK">2x1 SENDOK</option>
-                                    <option value="2x1/2 SENDOK">2x1/2 SENDOK</option>
-                                    <option value="2x3/4 SENDOK">2x3/4 SENDOK</option>
-                                    <option value="3x1 SENDOK">3x1 SENDOK</option>
-                                    <option value="3x1/2 SENDOK">3x1/2 SENDOK</option>
-                                    <option value="3x3/4 SENDOK">3x3/4 SENDOK</option>
-                                    <option value="3x1 1/2 SENDOK">3x1 1/2 SENDOK</option>
-                                    <option value="4x1 SENDOK">4x1 SENDOK</option>
-                                    <option value="4x1 1/2 SENDOK">4x1 1/2 SENDOK</option>
-                                    <option value="4x1/2 SENDOK">4x1/2 SENDOK</option>
-                                    <option value="4x3/4 SENDOK">4x3/4 SENDOK</option>
-                                    <option value="3x SEHARI OLES TIPIS-TIPIS">3x SEHARI OLES TIPIS-TIPIS</option>
-                                    <option value="2x SEHARI OLES TIPIS-TIPIS">2x SEHARI OLES TIPIS-TIPIS</option>
-                                    <option value="1x1 TABLET">1x1 TABLET</option>
-                                    <option value="2x1 TABLET">2x1 TABLET</option>
-                                    <option value="3x1 TABLET">3x1 TABLET</option>
-                                    <option value="3x1 BUNGKUS">3x1 BUNGKUS</option>
-                                    <option value="3x2 TETES">3x2 TETES</option>
-                                    <option value="3x1 TETES">3x1 TETES</option>
-                                    <option value="4x2 TETES">4x2 TETES</option>
-                                    <option value="INJEKSI 1 ml">INJEKSI 1 ml</option>
-                                    <option value="INJEKSI 2 ml">INJEKSI 2 ml</option>
-                                    <option value="INJEKSI 3 ml">INJEKSI 3 ml</option>
-                                    <option value="NEBUL 1 ampul">NEBUL 1 ampul</option>
-                                </select>
+                                    <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                        *Bisa memilih lebih dari 1 aturan pakai
+                                    </p>
+                                </div>
                             </div>
-
                             <!-- Anjuran Minum -->
-                            <div class="input-row" id="anjuranMinumContainer"
-                                style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                <label for="anjuran" style="min-width: 100px">Anjuran Minum</label>
+                            <div class="input-row" id="modal-anjuranMinumContainer">
+                                <label for="modal-anjuran_0" style="min-width: 100px">Anjuran Minum</label>
                                 <span>:</span>
-                                <select name="soap_p[0][anjuran]" id="anjuran_0" class="form-control">
-                                    <option value="">--Pilih Anjuran Minum--</option>
-                                    <option value="AC">AC</option>
-                                    <option value="AD">AD</option>
-                                    <option value="AS">AS</option>
-                                    <option value="C">C</option>
-                                    <option value="CTH">CTH</option>
-                                    <option value="DC">DC</option>
-                                    <option value="PC">PC</option>
-                                    <option value="OD">OD</option>
-                                    <option value="OS">OS</option>
-                                    <option value="ODS">ODS</option>
-                                    <option value="PRN">PRN</option>
-                                    <option value="UE">UE</option>
-                                    <option value="PIM">PIM</option>
-                                    <option value="IV">IV</option>
-                                    <option value="IA">IA</option>
-                                    <option value="IM">IM</option>
-                                </select>
-                            </div>
+                                <div class="input-wrapper">
+                                    <div class="multi-select-wrapper form-control" data-input-id="modal-anjuran_0">
+                                        <div class="selected-tags" id="modal-anjuran_0_tags"></div>
+                                        <input type="text" class="autocomplete-input multi-select-input"
+                                            id="modal-anjuran_0" placeholder="Cari Anjuran Minum" autocomplete="off"
+                                            data-url="{{ url('anjuran-autocomplete') }}"
+                                            data-dropdown="modal-dropdown-anjuran_0">
+                                    </div>
+                                    <input type="hidden" name="soap_p[0][anjuran][]" id="modal-anjuran_0_hidden">
+                                    <div id="modal-dropdown-anjuran_0" class="dropdown-menu autocomplete-dropdown">
+                                    </div>
 
+                                    <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                        *Bisa memilih lebih dari 1 anjuran minum
+                                    </p>
+                                </div>
+                            </div>
                             <!-- Jumlah Masing-masing Obat -->
-                            <div class="input-row" id="jumlahObatContainer"
-                                style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                <label for="jumlah" style="min-width: 100px">Jumlah</label>
+                            <div class="input-row" id="modal-jumlahObatContainer">
+                                <label for="modal-jumlah_0" style="min-width: 100px">Jumlah</label>
                                 <span>:</span>
-                                <input type="number" name="soap_p[0][jumlah]" class="form-control"
-                                    placeholder="Masukkan Jumlah Obat">
+                                <div class="input-wrapper">
+                                    <div class="multi-select-wrapper form-control" data-input-id="modal-jumlah_0">
+                                        <div class="selected-tags" id="modal-jumlah_0_tags"></div>
+                                        <input type="number" class="multi-select-input jumlah-input"
+                                            id="modal-jumlah_0" placeholder="Masukkan Jumlah" min="1">
+                                    </div>
+                                    <input type="hidden" name="soap_p[0][jumlah][]" id="modal-jumlah_0_hidden">
+                                    <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                        *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                                    </p>
+                                </div>
                             </div>
                         </div>
-
-                        <button type="button" class="btn btn-outline-primary"
-                            onclick="addColumn('jumlahObatContainer')" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                            data-bs-placement="top" data-bs-html="true"
+                        <button type="button" class="btn btn-outline-primary" onclick="modalAddColumn()"
+                            data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
+                            data-bs-html="true"
                             data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
                             <i class="fa-solid fa-pills"></i>
                         </button>
-
-                        {{-- RESEP RACIKAN --}}
                         <label for=""
                             style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; width: 100%; cursor: pointer"
                             onclick="toggleRacikanContainer()">Resep Racikan</label>
-
-                        <div class="racikan" id="resepRacikan">
-                            <textarea name="ObatRacikan" id="ObatRacikan" cols="30" rows="5" class="form-control mb-2 mt-2"></textarea>
+                        <div class="racikan" id="modal-resepRacikan">
+                            <textarea name="ObatRacikan" id="modal-ObatRacikan" cols="30" rows="5" class="form-control mb-2 mt-2"></textarea>
                         </div>
-
                     </div>
                     <div class="form-group">
                         <label for="edukasi" style="font-weight: bold">Edukasi</label>
@@ -672,9 +678,6 @@
 </div>
 
 @push('style')
-    <!-- CSS Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
     <style>
         /* RESEP */
         .resep {
@@ -689,30 +692,27 @@
             margin-top: 0;
         }
 
-        #resep {
+        #modal-resep,
+        #modal-resepRacikan {
             display: block;
-            /* Menampilkan elemen secara default */
-        }
-
-        #racikan {
-            display: block;
-            /* Menampilkan elemen secara default */
         }
 
         .input-row {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
             overflow-x: auto;
             white-space: nowrap;
             max-width: 100%;
+            margin-bottom: 10px;
         }
 
         .input-row label {
             width: 150px;
             margin-right: 20px;
-            /* font-weight: bold; */
             flex-shrink: 0;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
         }
 
         .input-row span {
@@ -728,34 +728,105 @@
             margin-left: 5px;
         }
 
-        .input-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .input-group input {
+        .input-wrapper {
+            position: relative;
             flex-grow: 1;
         }
 
-        .input-group .input-group-append {
-            display: flex;
-            align-items: center;
+        .input-wrapper p.text-warning {
+            margin-top: 5px;
+            /* beri jarak dengan input */
+            margin-bottom: 0;
+            /* rapatkan ke bawah */
         }
 
-        .input-group .input-group-text {
-            background-color: rgb(228, 228, 228);
+        /* Multi-select wrapper */
+        .multi-select-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: start;
+            padding: 2px;
+            min-height: 38px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            flex-grow: 1;
+            padding: 2px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin: 2px;
+            font-size: 14px;
+            cursor: pointer;
+            /* Tambah cursor pointer untuk menunjukkan bisa diklik */
+        }
+
+        .tag:hover {
+            background-color: #dc3545;
+            /* Warna merah saat hover untuk indikasi hapus */
+            color: white;
+        }
+
+        .tag .remove-tag {
+            margin-left: 5px;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .tag:hover .remove-tag {
+            color: white;
+            /* Ubah warna × saat hover */
+        }
+
+        .multi-select-input {
+            border: none !important;
+            outline: none !important;
+            flex-grow: 1;
+            min-width: 100px;
+            height: 30px;
+            padding: 0 5px;
+            margin: 2px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+            cursor: pointer;
+            width: 100%;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
         }
     </style>
 @endpush
 
 @push('script')
-    <!-- JS Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet">
     <script src="{{ asset('assets/js/script.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     <script>
         // DIAGNOSA
@@ -829,206 +900,335 @@
                     dropdownDiagnosaSekunder.style.display = 'none';
                 }
             });
+
+            // toggle
+            window.toggleObatContainer = function() {
+                var resepContainer = document.getElementById('modal-resep');
+                if (!resepContainer) return;
+                resepContainer.style.display =
+                    (resepContainer.style.display === 'none' || resepContainer.style.display === '') ?
+                    'block' :
+                    'none';
+            };
+
+            window.toggleRacikanContainer = function() {
+                var resepRacikanContainer = document.getElementById('modal-resepRacikan');
+                if (!resepRacikanContainer) return;
+                resepRacikanContainer.style.display =
+                    (resepRacikanContainer.style.display === 'none' || resepRacikanContainer.style.display ===
+                        '') ?
+                    'block' :
+                    'none';
+            };
         });
 
         // RESEP
         $(document).ready(function() {
-            // Fungsi untuk pencarian obat
-            function searchObat(inputId, dropdownId) {
-                $(`#${inputId}`).on('input', function() {
-                    const query = $(this).val();
-                    if (query) {
+            console.log('[document.ready] Script autocomplete dan jumlah dimuat untuk modal.');
+
+            // Fungsi untuk menginisialisasi autocomplete pada satu input
+            function initializeAutocomplete($input) {
+                const url = $input.data('url');
+                const dropdownId = $input.data('dropdown');
+                const $dropdown = $(`#${dropdownId}`);
+                const inputId = $input.attr('id');
+                const $wrapper = $input.closest('.multi-select-wrapper');
+                const $tagsContainer = $wrapper.find('.selected-tags');
+                const $hiddenInput = $(`#${inputId}_hidden`);
+
+                if (!$input.length || !$dropdown.length) {
+                    console.error(
+                        `[initializeAutocomplete] Elemen input (${inputId}) atau dropdown (${dropdownId}) tidak ditemukan`
+                    );
+                    return;
+                }
+
+                console.log(
+                    `[initializeAutocomplete] Menginisialisasi autocomplete untuk ${inputId} dengan URL: ${url}`
+                );
+
+                // Simpan item terpilih dalam array (ID, bukan teks)
+                let selectedItems = [];
+
+                // Fungsi untuk memperbarui input tersembunyi
+                function updateHiddenInput() {
+                    $hiddenInput.val(selectedItems.join(','));
+                }
+
+                // Fungsi untuk menambahkan tag
+                function addTag(text, value) {
+                    selectedItems.push(value);
+                    const tagHtml = `
+                <span class="tag" data-value="${value}" data-text="${text}">
+                    ${text}
+                    <span class="remove-tag">×</span>
+                </span>`;
+                    $tagsContainer.append(tagHtml);
+                    updateHiddenInput();
+                    $input.val(''); // Kosongkan input pencarian
+                }
+
+                // Fungsi untuk menghapus tag
+                function removeTag(value, index) {
+                    // Menghapus item berdasarkan nilai dan indeks (untuk mendukung duplikasi)
+                    selectedItems.splice(index, 1);
+                    $tagsContainer.find(`.tag[data-value="${value}"]:eq(${index})`).remove();
+                    updateHiddenInput();
+                }
+
+                // Event input untuk pencarian autocomplete
+                $input.off('input').on('input', function() {
+                    const query = $(this).val().trim();
+                    console.log(`[initializeAutocomplete] Input: ${inputId}, Value: "${query}"`);
+                    if (query.length >= 2) {
                         $.ajax({
-                            url: '{{ url('/resep-autocomplete') }}',
+                            url: url,
                             data: {
                                 term: query
                             },
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
-                                // Kosongkan dropdown sebelum menambah item baru
-                                $(`#${dropdownId}`).empty().show();
+                                console.log(
+                                    `[initializeAutocomplete] Data diterima untuk ${inputId}:`,
+                                    data);
+                                $dropdown.empty().show();
                                 if (data.length) {
                                     data.forEach(item => {
-                                        // Gunakan item.id untuk data-value
-                                        $(`#${dropdownId}`).append(
-                                            `<div class="dropdown-item" data-value="${item.id}">${item.text}</div>`
+                                        $dropdown.append(
+                                            `<div class="dropdown-item" data-value="${item.id}" data-text="${item.text}">${item.text}</div>`
                                         );
                                     });
                                 } else {
-                                    $(`#${dropdownId}`).append(
+                                    $dropdown.append(
                                         '<div class="dropdown-item">Tidak ada saran</div>');
+                                    console.warn(
+                                        `[initializeAutocomplete] Tidak ada data untuk ${inputId} dengan query "${query}"`
+                                    );
                                 }
                             },
-                            error: function() {
-                                console.log("Error fetching data");
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error(
+                                    `[initializeAutocomplete] Error fetching data untuk ${inputId}:`,
+                                    textStatus, errorThrown);
+                                $dropdown.empty().show().append(
+                                    `<div class="dropdown-item">Error: ${textStatus}</div>`);
                             }
                         });
                     } else {
-                        $(`#${dropdownId}`).hide();
+                        $dropdown.hide();
                     }
                 });
 
-                // Event untuk memilih item dari dropdown
-                $(document).on('click', `#${dropdownId} .dropdown-item`, function() {
-                    const value = $(this).data('value'); // Akses data-value
-                    console.log("Selected Value:", value); // Debugging
-                    $(`#${inputId}`).val($(this).text()); // Isi input dengan nama obat
-                    $(`#${dropdownId}`).hide(); // Sembunyikan dropdown
+                // Event click untuk memilih item dari dropdown
+                $dropdown.off('click').on('click', '.dropdown-item', function() {
+                    const text = $(this).data('text');
+                    const value = $(this).data('value');
+                    if (text !== 'Tidak ada saran' && !text.startsWith('Error:') && value) {
+                        addTag(text, value);
+                        $dropdown.hide();
+                    }
+                });
+
+                // Event click untuk menghapus tag
+                $tagsContainer.off('click').on('click', '.tag', function() {
+                    const value = $(this).data('value');
+                    const index = $tagsContainer.find('.tag').index(this);
+                    removeTag(value, index);
                 });
             }
 
-            // Panggil fungsi pencarian dengan ID input dan dropdown yang sesuai
-            searchObat('resep_0', 'dropdown-resep_0');
+            // Fungsi untuk menginisialisasi input jumlah
+            function initializeJumlahInput($input) {
+                const inputId = $input.attr('id');
+                const $wrapper = $input.closest('.multi-select-wrapper');
+                const $tagsContainer = $wrapper.find('.selected-tags');
+                const $hiddenInput = $(`#${inputId}_hidden`);
 
-            let kolomIndex = 1; // Inisialisasi indeks untuk kolom baru
+                if (!$input.length || !$tagsContainer.length || !$hiddenInput.length) {
+                    console.error(
+                        `[initializeJumlahInput] Elemen input (${inputId}), tags container, atau hidden input tidak ditemukan`
+                    );
+                    return;
+                }
 
-            // Tambahkan kolom baru
-            window.addColumn = function() {
+                console.log(`[initializeJumlahInput] Menginisialisasi input jumlah untuk ${inputId}`);
+
+                // Simpan item terpilih dalam array
+                let selectedItems = [];
+
+                // Fungsi untuk memperbarui input tersembunyi
+                function updateHiddenInput() {
+                    $hiddenInput.val(selectedItems.join(','));
+                }
+
+                // Fungsi untuk menambahkan tag
+                function addTag(value) {
+                    if (value && !isNaN(value) && value > 0) {
+                        selectedItems.push(value.toString());
+                        const tagHtml = `
+                    <span class="tag" data-value="${value}" data-text="${value}">
+                        ${value}
+                        <span class="remove-tag">×</span>
+                    </span>`;
+                        $tagsContainer.append(tagHtml);
+                        updateHiddenInput();
+                        $input.val(''); // Kosongkan input
+                    }
+                }
+
+                // Fungsi untuk menghapus tag
+                function removeTag(text, index) {
+                    selectedItems.splice(index, 1);
+                    $tagsContainer.find(`.tag[data-text="${text}"]:eq(${index})`).remove();
+                    updateHiddenInput();
+                }
+
+                // Event keypress untuk menambahkan jumlah saat tekan Enter
+                $input.off('keypress').on('keypress', function(e) {
+                    if (e.which === 13) { // Enter key
+                        e.preventDefault();
+                        const value = $(this).val().trim();
+                        if (value && !isNaN(value) && value > 0) {
+                            addTag(value);
+                        } else {
+                            console.warn(
+                                `[initializeJumlahInput] Input tidak valid untuk ${inputId}: ${value}`);
+                        }
+                    }
+                });
+
+                // Event click untuk menghapus tag
+                $tagsContainer.off('click').on('click', '.tag', function() {
+                    const text = $(this).data('text');
+                    const index = $tagsContainer.find('.tag').index(this);
+                    removeTag(text, index);
+                });
+            }
+
+            // Inisialisasi semua input autocomplete dan jumlah
+            function initializeAllInputs() {
+                $('.autocomplete-input').each(function() {
+                    initializeAutocomplete($(this));
+                });
+                $('.jumlah-input').each(function() {
+                    initializeJumlahInput($(this));
+                });
+            }
+
+            // Panggil inisialisasi untuk input awal
+            initializeAllInputs();
+
+            // Sembunyikan dropdown saat klik di luar
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest(
+                        '.autocomplete-input, .autocomplete-dropdown, .multi-select-wrapper, .jumlah-input')
+                    .length) {
+                    $('.autocomplete-dropdown').hide();
+                }
+            });
+
+            let kolomIndex = 1;
+
+            // Tambahkan kolom baru untuk modal
+            window.modalAddColumn = function() {
+                console.log(`[modalAddColumn] Menambahkan kolom baru dengan indeks: ${kolomIndex}`);
+
                 let newElement = `
-                <div class="input-package new-package" id="package_${kolomIndex}" style="display: contents; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
-                    <label for="soap_p_0" style="font-weight: bold; margin-top: 20px;">Pilih Obat Baru (P)</label>
-                    
-                    <!-- Nama Obat -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="resep_${kolomIndex}" style="min-width: 100px;">Nama Obat</label>
-                        <span>:</span>
-                        <input type="text" class="form-control soap_p" name="soap_p[${kolomIndex}][resep]" id="resep_${kolomIndex}" placeholder="Cari Obat" autocomplete="off">
-                        <div id="dropdown-resep_${kolomIndex}" class="dropdown-menu" style="display: none; position: absolute; z-index: 1000; cursor: pointer;"></div>
-                    </div>
-                    
-                    <!-- Jenis Obat -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="jenis_obat_${kolomIndex}" style="min-width: 100px;">Jenis Obat</label>
-                        <span>:</span>
-                        <select name="soap_p[${kolomIndex}][jenisobat]" id="jenis_obat_${kolomIndex}" class="form-control" required>
-                            <option value="">--Pilih Jenis Obat--</option>
-                            <option value="Tablet">Tablet</option>
-                            <option value="Kapsul">Kapsul</option>
-                            <option value="Sirup">Sirup</option>
-                            <option value="Salep">Salep</option>
-                            <option value="Krim">Krim</option>
-                            <option value="Fls">Fls</option>
-                            <option value="Ampul">Ampul</option>
-                            <option value="Vial">Vial</option>
-                            <option value="Pulveres">Pulveres</option>
-                            <option value="Pulvis">Pulvis</option>
-                        </select>
-                    </div>
-
-                    <!-- Aturan Minum Perhari -->
-                    <div class="input-row" id="aturanMinumContainer_${kolomIndex}" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                    <label for="aturan_${kolomIndex}" style="min-width: 100px;">Aturan Minum Perhari</label>
+            <div class="input-package new-package" id="modal-package_${kolomIndex}">
+                <label for="modal-soap_p_${kolomIndex}" style="font-weight: bold; margin-top: 20px;">Pilih Obat Baru (P)</label>
+                <div class="input-row">
+                    <label for="modal-resep_${kolomIndex}" style="min-width: 100px;">Nama Obat</label>
                     <span>:</span>
-                    <select class="form-control" name="soap_p[${kolomIndex}][aturan]" id="aturan_${kolomIndex}" required>
-                        <option value="">--Pilih Aturan Minum--</option>
-                        <option value="1x1 SENDOK">1x1 SENDOK</option>
-                        <option value="1x1/2 SENDOK">1x1/2 SENDOK</option>
-                        <option value="1x3/4 SENDOK">1x3/4 SENDOK</option>
-                        <option value="1x1 1/2 SENDOK">1x1 1/2 SENDOK</option>
-                        <option value="2x1 SENDOK">2x1 SENDOK</option>
-                        <option value="2x1/2 SENDOK">2x1/2 SENDOK</option>
-                        <option value="2x3/4 SENDOK">2x3/4 SENDOK</option>
-                        <option value="3x1 SENDOK">3x1 SENDOK</option>
-                        <option value="3x1/2 SENDOK">3x1/2 SENDOK</option>
-                        <option value="3x3/4 SENDOK">3x3/4 SENDOK</option>
-                        <option value="3x1 1/2 SENDOK">3x1 1/2 SENDOK</option>
-                        <option value="4x1 SENDOK">4x1 SENDOK</option>
-                        <option value="4x1 1/2 SENDOK">4x1 1/2 SENDOK</option>
-                        <option value="4x1/2 SENDOK">4x1/2 SENDOK</option>
-                        <option value="4x3/4 SENDOK">4x3/4 SENDOK</option>
-                        <option value="3x SEHARI OLES TIPIS-TIPIS">3x SEHARI OLES TIPIS-TIPIS</option>
-                        <option value="2x SEHARI OLES TIPIS-TIPIS">2x SEHARI OLES TIPIS-TIPIS</option>
-                        <option value="1x1 TABLET">1x1 TABLET</option>
-                        <option value="2x1 TABLET">2x1 TABLET</option>
-                        <option value="3x1 TABLET">3x1 TABLET</option>
-                        <option value="3x1 BUNGKUS">3x1 BUNGKUS</option>
-                        <option value="3x2 TETES">3x2 TETES</option>
-                        <option value="3x1 TETES">3x1 TETES</option>
-                        <option value="4x2 TETES">4x2 TETES</option>
-                        <option value="INJEKSI 1 ml">INJEKSI 1 ml</option>
-                        <option value="INJEKSI 2 ml">INJEKSI 2 ml</option>
-                        <option value="INJEKSI 3 ml">INJEKSI 3 ml</option>
-                        <option value="NEBUL 1 ampul">NEBUL 1 ampul</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="modal-resep_${kolomIndex}">
+                            <div class="selected-tags" id="modal-resep_${kolomIndex}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="modal-resep_${kolomIndex}" placeholder="Cari Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}" data-dropdown="modal-dropdown-resep_${kolomIndex}">
+                        </div>
+                        <input type="hidden" name="soap_p[${kolomIndex}][resep][]" id="modal-resep_${kolomIndex}_hidden">
+                        <div id="modal-dropdown-resep_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 nama obat
+                        </p>
+                    </div>
                 </div>
-
-                    <!-- Anjuran Minum -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="anjuran_${kolomIndex}" style="min-width: 100px;">Anjuran Minum</label>
-                        <span>:</span>
-                        <select name="soap_p[${kolomIndex}][anjuran]" id="anjuran_${kolomIndex}" class="form-control" required>
-                            <option value="">--Pilih Anjuran Minum--</option>
-                            <option value="AC">AC</option>
-                            <option value="AD">AD</option>
-                            <option value="AS">AS</option>
-                            <option value="C">C</option>
-                            <option value="CTH">CTH</option>
-                            <option value="DC">DC</option>
-                            <option value="PC">PC</option>
-                            <option value="OD">OD</option>
-                            <option value="OS">OS</option>
-                            <option value="ODS">ODS</option>
-                            <option value="PRN">PRN</option>
-                            <option value="UE">UE</option>
-                            <option value="PIM">PIM</option>
-                            <option value="IV">IV</option>
-                            <option value="IA">IA</option>
-                            <option value="IM">IM</option>
-                        </select>
+                <div class="input-row">
+                    <label for="modal-jenis_obat_${kolomIndex}" style="min-width: 100px;">Jenis Obat</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="modal-jenis_obat_${kolomIndex}">
+                            <div class="selected-tags" id="modal-jenis_obat_${kolomIndex}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="modal-jenis_obat_${kolomIndex}" placeholder="Cari Jenis Obat" autocomplete="off" data-url="{{ url('jenis-autocomplete') }}" data-dropdown="modal-dropdown-jenis_obat_${kolomIndex}">
+                        </div>
+                        <input type="hidden" name="soap_p[${kolomIndex}][jenisobat][]" id="modal-jenis_obat_${kolomIndex}_hidden">
+                        <div id="modal-dropdown-jenis_obat_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 jenis obat
+                        </p>
                     </div>
-
-                    <!-- Jumlah Masing-masing Obat -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="jumlah_${kolomIndex}" style="min-width: 100px;">Jumlah</label>
-                        <span>:</span>
-                        <input type="number" name="soap_p[${kolomIndex}][jumlah]" id="jumlah_${kolomIndex}" class="form-control" placeholder="Masukkan Jumlah Obat" required>
+                </div>
+                <div class="input-row">
+                    <label for="modal-aturan_${kolomIndex}" style="min-width: 100px;">Aturan Pakai</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="modal-aturan_${kolomIndex}">
+                            <div class="selected-tags" id="modal-aturan_${kolomIndex}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="modal-aturan_${kolomIndex}" placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('aturan-autocomplete') }}" data-dropdown="modal-dropdown-aturan_${kolomIndex}">
+                        </div>
+                        <input type="hidden" name="soap_p[${kolomIndex}][aturan][]" id="modal-aturan_${kolomIndex}_hidden">
+                        <div id="modal-dropdown-aturan_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 aturan pakai
+                        </p>
                     </div>
+                </div>
+                <div class="input-row">
+                    <label for="modal-anjuran_${kolomIndex}" style="min-width: 100px;">Anjuran Minum</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="modal-anjuran_${kolomIndex}">
+                            <div class="selected-tags" id="modal-anjuran_${kolomIndex}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="modal-anjuran_${kolomIndex}" placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}" data-dropdown="modal-dropdown-anjuran_${kolomIndex}">
+                        </div>
+                        <input type="hidden" name="soap_p[${kolomIndex}][anjuran][]" id="modal-anjuran_${kolomIndex}_hidden">
+                        <div id="modal-dropdown-anjuran_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 anjuran minum
+                        </p>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <label for="modal-jumlah_${kolomIndex}" style="min-width: 100px;">Jumlah</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="modal-jumlah_${kolomIndex}">
+                            <div class="selected-tags" id="modal-jumlah_${kolomIndex}_tags"></div>
+                            <input type="number" class="multi-select-input jumlah-input" id="modal-jumlah_${kolomIndex}" placeholder="Masukkan Jumlah" min="1">
+                        </div>
+                        <input type="hidden" name="soap_p[${kolomIndex}][jumlah][]" id="modal-jumlah_${kolomIndex}_hidden">
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger btn-wide" style="width: 50px; padding: 5px 10px; margin-bottom: 5px" onclick="$(this).closest('.input-package').remove()">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>`;
 
-                    <!-- Tombol Hapus -->
-                    <button type="button" class="btn btn-danger btn-wide" style="width: 50px; padding: 5px 10px; margin-bottom: 5px" onclick="$(this).closest('.input-package').remove()">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>`;
+                $('#modal-resep').append(newElement);
+                console.log(`[modalAddColumn] Elemen baru ditambahkan: modal-package_${kolomIndex}`);
 
-                // Tambahkan elemen baru ke dalam div "resep"
-                $('#resep').append(newElement);
+                // Inisialisasi autocomplete dan input jumlah untuk elemen baru
+                $(`#modal-package_${kolomIndex} .autocomplete-input`).each(function() {
+                    initializeAutocomplete($(this));
+                });
+                $(`#modal-package_${kolomIndex} .jumlah-input`).each(function() {
+                    initializeJumlahInput($(this));
+                });
 
-                // Panggil fungsi pencarian untuk kolom baru
-                searchObat(`resep_${kolomIndex}`, `dropdown-resep_${kolomIndex}`);
-
-                kolomIndex++; // Perbarui indeks setelah menambahkan kolom
+                kolomIndex++;
             };
         });
-
-        // RESEP
-        function toggleObatContainer() {
-            // Ambil elemen dengan id "resep"
-            var resepContainer = document.getElementById('resep');
-
-            // Cek status saat ini (apakah tersembunyi atau terlihat)
-            if (resepContainer.style.display === 'none' || resepContainer.style.display === '') {
-                // Jika tersembunyi, tampilkan
-                resepContainer.style.display = 'block';
-            } else {
-                // Jika terlihat, sembunyikan
-                resepContainer.style.display = 'none';
-            }
-        }
-
-        // RACIKAN
-        function toggleRacikanContainer() {
-            // Ambil elemen dengan id "resepRacikan"
-            var resepRacikanContainer = document.getElementById('resepRacikan');
-
-            // Cek status saat ini (apakah tersembunyi atau terlihat)
-            if (resepRacikanContainer.style.display === 'none' || resepRacikanContainer.style.display === '') {
-                // Jika tersembunyi, tampilkan
-                resepRacikanContainer.style.display = 'block';
-            } else {
-                // Jika terlihat, sembunyikan
-                resepRacikanContainer.style.display = 'none';
-            }
-        }
     </script>
 @endpush

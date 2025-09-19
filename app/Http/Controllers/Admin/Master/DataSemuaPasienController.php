@@ -134,6 +134,6 @@ class DataSemuaPasienController extends Controller
     {
         Pasien::destroy($id);
 
-        return redirect()->route('master.semuapasien')->with('toast_success', 'Data Berhasil dihapus');
+        return redirect()->route('master.semuadata')->with('toast_success', 'Data Berhasil dihapus');
     }
 }

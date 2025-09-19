@@ -69,6 +69,8 @@ class PerawatController extends Controller
         $periksa = $periksaQuery->orderBy('id', 'desc')->paginate($periksaEntries, ['*'], 'periksa_page', $periksaPage);
         $periksa->appends(['periksa_search' => $periksaSearch, 'periksa_entries' => $periksaEntries]);
 
+        // dd($periksa);
+
         $poli = Poli::all();
         $soap = Soap::with('pasien', 'rm', 'isian')->get();
         $ttd = TtdMedis::where('status', true)->get();
@@ -88,6 +90,140 @@ class PerawatController extends Controller
             ->whereDate('created_at', $today)
             ->count();
 
+        // PASIEN DILAYANI & BELUM
+        // Hitung pasien dilayani (status M) hari ini
+        $pasienDilayani = AntrianPerawat::where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+
+        // Hitung pasien belum dilayani (status D) hari ini
+        $pasienBelumDilayani = AntrianPerawat::where('status', 'D')
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+
+        // SHIFT PAGI POLI UMUM
+        // PASIEN BPJS
+        $countShiftPagiUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today()) // <-- tambah filter hari ini
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftPagiUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // SHIFT PAGI POLI GIGI
+        // PASIEN BPJS
+        $countShiftPagiGigiBPJS = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftPagiGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // SHIFT SIANG POLI UMUM
+        // PASIEN BPJS
+        $countShiftSiangUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftSiangUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // SHIFT SIANG POLI GIGI
+        // PASIEN UMUM
+        $countShiftSiangGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // PASIEN BPJS
+        $countShiftSiangGigiBpjs = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // dd($countShiftSiangUmumUmum, $countShiftSiangGigiBpjs, $countShiftSiangGigiUmum);
+
+        // TOTAL PASIEN SHIFT PAGI DAN SIANG
+        // POLI UMUM PASIEN UMUM
+        $totalPoliUmumPasienUmum = $countShiftPagiUmumUmum + $countShiftSiangUmumUmum;
+
+        // POLI UMUM PASIEN BPJS
+        $totalPoliUmumPasienBPJS = $countShiftPagiUmumBPJS + $countShiftSiangUmumBPJS;
+
+        // POLI GIGI PASIEN UMUM
+        $totalPoliGigiPasienUmum = $countShiftPagiGigiUmum + $countShiftSiangGigiUmum;
+
+        // POLI GIGI PASIEN BPJS
+        $totalPoliGigiPasienBPJS = $countShiftPagiGigiBPJS + $countShiftSiangGigiBpjs;
+
         // Hapus dd($pasien) untuk mengembalikan view
         return view('perawat.index', compact(
             'pasien',
@@ -105,7 +241,21 @@ class PerawatController extends Controller
             'periksaSearch',
             'periksaEntries',
             'perawat',
-            'periksa'
+            'periksa',
+            'pasienDilayani',
+            'pasienBelumDilayani',
+            'countShiftPagiUmumBPJS',
+            'countShiftPagiUmumUmum',
+            'countShiftPagiGigiBPJS',
+            'countShiftPagiGigiUmum',
+            'countShiftSiangUmumBPJS',
+            'countShiftSiangUmumUmum',
+            'countShiftSiangGigiBpjs',
+            'countShiftSiangGigiUmum',
+            'totalPoliUmumPasienUmum',
+            'totalPoliUmumPasienBPJS',
+            'totalPoliGigiPasienUmum',
+            'totalPoliGigiPasienBPJS',
         ));
     }
 

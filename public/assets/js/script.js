@@ -75,7 +75,12 @@ function poliA() {
     inputElement.classList.toggle('hidden-input');
   }
 
-  hideInputs();
+  function hideInputs() {
+      var inputs = document.querySelectorAll('.form-group');
+      inputs.forEach(function(input) {
+          input.classList.add('hidden-input');
+      });
+  }
 
   function toggleChange(elementId, radio) {
     var element = document.getElementById(elementId);

@@ -35,4 +35,9 @@ class Resep extends Model
 
         return null; // Nilai default jika margin atau harga_pokok tidak tersedia
     }
+
+    public function soap()
+    {
+        return $this->belongsToMany(Soap::class, 'soap_p_obats', 'obat_id', 'soap_id');
+    }
 }

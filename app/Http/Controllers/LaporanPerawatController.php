@@ -26,7 +26,8 @@ class LaporanPerawatController extends Controller
 
         // Query semua pasien
         $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
-            ->orderByRaw("CASE WHEN status = 'D' THEN 1 ELSE 2 END")
+            ->where('status', 'WB')
+            // ->orderByRaw("CASE WHEN status = 'D' THEN 1 ELSE 2 END")
             ->orderBy('urutan', 'asc') // Menambahkan pengurutan berdasarkan urutan
             ->orderBy('created_at', 'asc');
 
@@ -60,6 +61,7 @@ class LaporanPerawatController extends Controller
         // SHIFT PAGI POLI UMUM
         // PASIEN BPJS
         $countShiftPagiUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->whereDate('created_at', Carbon::today()) // <-- tambah filter hari ini
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'BPJS');
@@ -70,8 +72,8 @@ class LaporanPerawatController extends Controller
             ->count();
 
         // PASIEN UMUM
-        // Count untuk shift pagi berdasarkan jenis_pasien == 'Umum'
         $countShiftPagiUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'Umum');
@@ -84,6 +86,7 @@ class LaporanPerawatController extends Controller
         // SHIFT PAGI POLI GIGI
         // PASIEN BPJS
         $countShiftPagiGigiBPJS = AntrianPerawat::where('id_poli', 2)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'BPJS');
@@ -94,8 +97,8 @@ class LaporanPerawatController extends Controller
             ->count();
 
         // PASIEN UMUM
-        // Count untuk shift pagi berdasarkan jenis_pasien == 'Gigi'
         $countShiftPagiGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'Umum');
@@ -108,6 +111,7 @@ class LaporanPerawatController extends Controller
         // SHIFT SIANG POLI UMUM
         // PASIEN BPJS
         $countShiftSiangUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'BPJS');
@@ -119,6 +123,7 @@ class LaporanPerawatController extends Controller
 
         // PASIEN UMUM
         $countShiftSiangUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'Umum');
@@ -131,6 +136,7 @@ class LaporanPerawatController extends Controller
         // SHIFT SIANG POLI GIGI
         // PASIEN UMUM
         $countShiftSiangGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'Umum');
@@ -142,6 +148,7 @@ class LaporanPerawatController extends Controller
 
         // PASIEN BPJS
         $countShiftSiangGigiBpjs = AntrianPerawat::where('id_poli', 2)
+            ->whereDate('created_at', Carbon::today())
             ->whereHas('booking', function ($query) {
                 $query->whereHas('pasien', function ($query) {
                     $query->where('jenis_pasien', 'BPJS');

@@ -87,19 +87,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Pendaftaran Pasien
-                        Baru
-                    </h1>
+                        Baru</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="kategori" id="kategori_pasien">
                     <input type="hidden" name="status" id="status_pasien" value="baru">
-                    <!-- Karena modal ini untuk Pasien Baru -->
-                    <div style="font-size: 15px; background:  rgb(241, 241, 241); padding: 5px; border-radius: 5px">
-                        <span style="color: green;">Infomasi :</span>
+                    <div style="font-size: 15px; background: rgb(241, 241, 241); padding: 5px; border-radius: 5px">
+                        <span style="color: green;">Informasi:</span>
                         <ul style="margin-bottom: 0px">
-                            <li>Pasien yang baru mendaftar silahkan mengisi lengkap untuk melanjutkan pemeriksaan.</li>
-                            {{-- <li>Pasien yang sebelumnya pernah mendaftar, silahkan cari berdasarkan (Nama Pasien - Nama Kepala Keluaga - Alamat Asal).</li> --}}
+                            <li>Pasien yang baru mendaftar silakan mengisi lengkap untuk melanjutkan pemeriksaan.</li>
                         </ul>
                     </div>
                     <div class="text-center mt-3">
@@ -138,7 +135,7 @@
                         @enderror
                         <div class="invalid-feedback" id="nik-error" style="display: none;">NIK harus berisi 16 karakter
                             angka.</div>
-                        <div class="text mt-2 mb-2" id="nik-info" style="display: none">*NIK Tidak Wajib Diisi!</div>
+                        <div class="text mt-2 mb-2" id="nik-info" style="display: none;">*NIK Tidak Wajib Diisi!</div>
                     </div>
                     <div class="form-group">
                         <label for="nama_kk">Nama Kepala Keluarga</label>
@@ -165,7 +162,7 @@
                             dengan NIK.</div>
                     </div>
                     <div class="form-group">
-                        <label for="alamat">Alamat Asal</label>
+                        <label for="alamat_asal">Alamat Asal</label>
                         <input type="text" class="form-control mt-2 mb-2" name="alamat_asal" id="alamat_asal"
                             placeholder="Masukkan Alamat Asal" required>
                     </div>
@@ -177,7 +174,7 @@
                             <option value="Bpjs">Bpjs</option>
                         </select>
                     </div>
-                    <div class="form-group" id="nobpjs">
+                    <div class="form-group" id="nobpjs" style="display: none;">
                         <label for="norm">No. BPJS</label>
                         <div class="cari" style="display: flex; align-items: center">
                             <input type="text" class="form-control mt-2 mb-2" name="norm" id="norm"
@@ -191,18 +188,18 @@
                         <label for="pekerjaan">Pekerjaan</label>
                         <input type="text" class="form-control mt-2 mb-2" name="pekerjaan" id="pekerjaan"
                             placeholder="Masukkan Pekerjaan">
-                        <div class="text mt-2 mb-2" id="pekerjaan-info" style="display: none">*Pekerjaan Tidak Wajib
+                        <div class="text mt-2 mb-2" id="pekerjaan-info" style="display: none;">*Pekerjaan Tidak Wajib
                             Diisi!</div>
                     </div>
                     <div class="form-group">
-                        <label for="alamat">Alamat Domisili</label>
+                        <label for="domisili">Alamat Domisili</label>
                         <input type="text" class="form-control mt-2 mb-2" name="domisili" id="domisili"
                             placeholder="Masukkan Alamat Domisili" required>
                     </div>
                     <div class="form-group">
                         <label for="noHP">No. HP</label>
                         <input type="text" class="form-control mt-2 mb-2 @error('noHP') is-invalid @enderror"
-                            name="noHP" id="noHP" placeholder="Masukkan No. HP" required>
+                            name="noHP" id="noHP" placeholder="08123456789" required>
                         @error('noHP')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -210,24 +207,24 @@
                             13 karakter angka.</div>
                     </div>
                     <div class="form-group mt-2">
-                        <label for="no_rm">Poli</label>
+                        <label for="poli_umum">Poli</label>
                         <select name="poli" id="poli_umum" class="form-control mt-2 mb-2">
-                            <option value="#" disabled selected>Pilih Poli</option>
+                            <option value="" disabled selected>Pilih Poli</option>
                             @foreach ($poli as $item)
                                 <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="dokter">Dokter</label>
+                        <label for="dokter_umum">Dokter</label>
                         <select name="dokter" id="dokter_umum" class="form-control mt-2 mb-2" disabled>
-                            <option value="#">Pilih Dokter</option>
+                            <option value="">Pilih Dokter</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary" id="btnSimpan" onclick="saveData()">
+                    <button type="button" class="btn btn-primary" id="btnSimpan">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status"
                             aria-hidden="true"></span>
                         Simpan
@@ -417,90 +414,89 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Memuat JavaScript Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-e31aEKZt0+4v+CZRwZy1VvLuR1PnKxZUEItwG5mISof8sCQ6k55s/O6Tt7V+HtGl" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // BUTTON KATEGORI
-        document.getElementById('btnDewasa').addEventListener('click', function() {
-            document.getElementById('kategori_pasien').value = 'dewasa';
-            document.getElementById('msgDewasa').style.display = 'block';
-            document.getElementById('msgAnak').style.display = 'none';
-            document.getElementById('msgTanpaIdentitas').style.display = 'none';
-
-            // Aktifkan field NIK dan nama KK untuk dewasa
-            document.getElementById('nik').disabled = false;
-            document.getElementById('nama_kk').disabled = false;
-        });
-
-        document.getElementById('btnAnak').addEventListener('click', function() {
-            document.getElementById('kategori_pasien').value = 'anak';
-            document.getElementById('msgAnak').style.display = 'block';
-            document.getElementById('msgDewasa').style.display = 'none';
-            document.getElementById('msgTanpaIdentitas').style.display = 'none';
-
-            // Aktifkan field NIK dan nama KK untuk anak
-            document.getElementById('nik').disabled = false;
-            document.getElementById('nama_kk').disabled = false;
-        });
-
-        document.getElementById('btnTanpaIdentitas').addEventListener('click', function() {
-            document.getElementById('kategori_pasien').value = 'tanpa_identitas';
-            document.getElementById('msgTanpaIdentitas').style.display = 'block';
-            document.getElementById('msgDewasa').style.display = 'none';
-            document.getElementById('msgAnak').style.display = 'none';
-
-            // Nonaktifkan field NIK dan kosongkan nilainya
-            document.getElementById('nik').disabled = true;
-            document.getElementById('nik').value = '';
-
-            // Nonaktifkan nama KK dan set default
-            document.getElementById('nama_kk').disabled = true;
-            document.getElementById('nama_kk').value = 'TIDAK DIKETAHUI';
-        });
-
-        function showOptionalFields() {
-            document.getElementById("nik-info").style.display = "block";
-        }
-
-        function showOptionalFieldsForTanpaIdentitas() {
-            document.getElementById("nik-info").style.display = "block";
-        }
-
-        function hideOptionalFields() {
-            document.getElementById("nik-info").style.display = "none";
-
-            // Sembunyikan keterangan pekerjaan dan jadikan wajib isi kembali
-            document.getElementById("pekerjaan-info").style.display = "none";
-            document.getElementById("pekerjaan").setAttribute("required", "true");
-        }
-
-        function convertToDate(input) {
-            var parts = input.split('/');
-            return parts[2] + '-' + parts[1] + '-' + parts[0]; // Convert to yyyy-mm-dd
-        }
-
-        // Format tanggal dd/mm/yyyy
-        document.getElementById('tgllahir').addEventListener('input', function(e) {
-            var input = e.target.value;
-            var formattedInput = input.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
-
-            if (formattedInput !== input) {
-                e.target.value = formattedInput;
-            }
-        });
-
-        document.getElementById('tgllahir').addEventListener('blur', function(e) {
-            var input = e.target.value;
-            if (!/^\d{2}\/\d{2}\/\d{4}$/.test(input)) {
-                e.target.value = '';
-                alert('Format tanggal harus dd/mm/yyyy');
-            }
-        });
-
-        // No. RM Pasien
         document.addEventListener('DOMContentLoaded', function() {
+            // BUTTON KATEGORI
+            const btnDewasa = document.getElementById('btnDewasa');
+            const btnAnak = document.getElementById('btnAnak');
+            const btnTanpaIdentitas = document.getElementById('btnTanpaIdentitas');
+
+            if (btnDewasa) {
+                btnDewasa.addEventListener('click', function() {
+                    document.getElementById('kategori_pasien').value = 'dewasa';
+                    document.getElementById('msgDewasa').style.display = 'block';
+                    document.getElementById('msgAnak').style.display = 'none';
+                    document.getElementById('msgTanpaIdentitas').style.display = 'none';
+
+                    // Aktifkan field NIK dan nama KK untuk dewasa
+                    document.getElementById('nik').disabled = false;
+                    document.getElementById('nama_kk').disabled = false;
+                });
+            } else {
+                console.error('Elemen btnDewasa tidak ditemukan');
+            }
+
+            if (btnAnak) {
+                btnAnak.addEventListener('click', function() {
+                    document.getElementById('kategori_pasien').value = 'anak';
+                    document.getElementById('msgAnak').style.display = 'block';
+                    document.getElementById('msgDewasa').style.display = 'none';
+                    document.getElementById('msgTanpaIdentitas').style.display = 'none';
+
+                    // Aktifkan field NIK dan nama KK untuk anak
+                    document.getElementById('nik').disabled = false;
+                    document.getElementById('nama_kk').disabled = false;
+                });
+            } else {
+                console.error('Elemen btnAnak tidak ditemukan');
+            }
+
+            if (btnTanpaIdentitas) {
+                btnTanpaIdentitas.addEventListener('click', function() {
+                    document.getElementById('kategori_pasien').value = 'tanpa_identitas';
+                    document.getElementById('msgTanpaIdentitas').style.display = 'block';
+                    document.getElementById('msgDewasa').style.display = 'none';
+                    document.getElementById('msgAnak').style.display = 'none';
+
+                    // Nonaktifkan field NIK dan kosongkan nilainya
+                    document.getElementById('nik').disabled = true;
+                    document.getElementById('nik').value = '';
+
+                    // Nonaktifkan nama KK dan set default
+                    document.getElementById('nama_kk').disabled = true;
+                    document.getElementById('nama_kk').value = 'TIDAK DIKETAHUI';
+                });
+            } else {
+                console.error('Elemen btnTanpaIdentitas tidak ditemukan');
+            }
+
+            // Format tanggal dd/mm/yyyy
+            const tgllahirInput = document.getElementById('tgllahir');
+            if (tgllahirInput) {
+                tgllahirInput.addEventListener('input', function(e) {
+                    let input = e.target.value.replace(/[^0-9]/g, '');
+                    if (input.length >= 8) {
+                        const formattedInput = input.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
+                        e.target.value = formattedInput;
+                    } else {
+                        e.target.value = input;
+                    }
+                });
+
+                tgllahirInput.addEventListener('blur', function(e) {
+                    const input = e.target.value;
+                    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(input)) {
+                        e.target.value = '';
+                        alert('Format tanggal harus dd/mm/yyyy');
+                    }
+                });
+            } else {
+                console.error('Elemen tgllahir tidak ditemukan');
+            }
+
+            // No. RM Pasien
             fetch('/pasien/latest-no-rm')
                 .then(response => response.json())
                 .then(data => {
@@ -509,51 +505,13 @@
                 .catch(error => {
                     console.error('Error fetching the latest No. RM:', error);
                 });
-        });
 
-        // Validasi NIK
-        document.addEventListener('DOMContentLoaded', function() {
+            // Validasi NIK
             const nikInput = document.getElementById('nik');
             const nikError = document.getElementById('nik-error');
-
-            nikInput.addEventListener('input', function() {
-                const nik = nikInput.value;
-
-                // Validasi panjang NIK dan memastikan hanya angka
-                if (nik.length === 16 && /^\d+$/.test(nik)) {
-                    nikInput.classList.remove('is-invalid');
-                    nikError.style.display = 'none';
-                } else {
-                    nikInput.classList.add('is-invalid');
-                    nikError.style.display = 'block';
-                }
-            });
-        });
-
-        // Validasi Jenis Kelamin Berdasarkan NIK
-        document.addEventListener('DOMContentLoaded', function() {
-            const nikInput = document.getElementById('nik');
-            const jekelInput = document.getElementById('jekel');
-            const nikError = document.getElementById('nik-error');
-            const jekelError = document.getElementById('jekel-error');
-
-            nikInput.addEventListener('input', validateNIK);
-            jekelInput.addEventListener('change', validateNIK);
-
-            function validateNIK() {
-                const nik = nikInput.value;
-                const jekel = jekelInput.value;
-
-                if (nik.length > 0) {
-                    const dayPart = parseInt(nik.substr(6, 2));
-                    let genderFromNIK = '';
-                    if (dayPart < 40) {
-                        genderFromNIK = 'L';
-                    } else {
-                        genderFromNIK = 'P';
-                    }
-
-                    // Validasi panjang NIK dan memastikan hanya angka
+            if (nikInput && nikError) {
+                nikInput.addEventListener('input', function() {
+                    const nik = nikInput.value;
                     if (nik.length === 16 && /^\d+$/.test(nik)) {
                         nikInput.classList.remove('is-invalid');
                         nikError.style.display = 'none';
@@ -561,93 +519,160 @@
                         nikInput.classList.add('is-invalid');
                         nikError.style.display = 'block';
                     }
+                });
+            } else {
+                console.error('Elemen nik atau nik-error tidak ditemukan');
+            }
 
-                    // Validasi jenis kelamin berdasarkan NIK
-                    if (jekel === genderFromNIK) {
-                        jekelInput.classList.remove('is-invalid');
-                        jekelError.style.display = 'none';
-                    } else {
-                        jekelInput.classList.add('is-invalid');
-                        jekelError.style.display = 'block';
-                    }
-                } else {
-                    // Jika NIK kosong, tidak perlu menampilkan error
-                    nikInput.classList.remove('is-invalid');
-                    nikError.style.display = 'none';
+            // Validasi Jenis Kelamin Berdasarkan NIK
+            const jekelInput = document.getElementById('jekel');
+            const jekelError = document.getElementById('jekel-error');
+            if (nikInput && jekelInput && nikError && jekelError) {
+                nikInput.addEventListener('input', validateNIK);
+                jekelInput.addEventListener('change', validateNIK);
 
-                    // Validasi jenis kelamin tanpa memperhitungkan NIK
-                    if (jekel) {
-                        jekelInput.classList.remove('is-invalid');
-                        jekelError.style.display = 'none';
+                function validateNIK() {
+                    const nik = nikInput.value;
+                    const jekel = jekelInput.value;
+
+                    if (nik.length > 0) {
+                        const dayPart = parseInt(nik.substr(6, 2));
+                        let genderFromNIK = '';
+                        if (dayPart < 40) {
+                            genderFromNIK = 'L';
+                        } else {
+                            genderFromNIK = 'P';
+                        }
+
+                        if (nik.length === 16 && /^\d+$/.test(nik)) {
+                            nikInput.classList.remove('is-invalid');
+                            nikError.style.display = 'none';
+                        } else {
+                            nikInput.classList.add('is-invalid');
+                            nikError.style.display = 'block';
+                        }
+
+                        if (jekel === genderFromNIK) {
+                            jekelInput.classList.remove('is-invalid');
+                            jekelError.style.display = 'none';
+                        } else {
+                            jekelInput.classList.add('is-invalid');
+                            jekelError.style.display = 'block';
+                        }
                     } else {
-                        jekelInput.classList.add('is-invalid');
-                        jekelError.style.display = 'block';
+                        nikInput.classList.remove('is-invalid');
+                        nikError.style.display = 'none';
+                        if (jekel) {
+                            jekelInput.classList.remove('is-invalid');
+                            jekelError.style.display = 'none';
+                        } else {
+                            jekelInput.classList.add('is-invalid');
+                            jekelError.style.display = 'block';
+                        }
                     }
                 }
+            } else {
+                console.error('Elemen untuk validasi NIK atau jenis kelamin tidak ditemukan');
             }
-        });
 
-        // Jenis pasien Bpjs
-        document.addEventListener('DOMContentLoaded', function() {
+            // Jenis pasien Bpjs
             const jenisPasienSelect = document.getElementById('jenis_pasien');
             const nobpjs = document.getElementById('nobpjs');
             const normInput = document.getElementById('norm');
             const nobpjsError = document.getElementById('nobpjsError');
+            if (jenisPasienSelect && nobpjs && normInput && nobpjsError) {
+                console.log('Elemen jenis_pasien ditemukan, menambahkan event listener');
+                jenisPasienSelect.addEventListener('change', function() {
+                    console.log('Jenis pasien dipilih:', this.value);
+                    if (this.value === 'Bpjs') {
+                        console.log('Menampilkan field No. BPJS');
+                        nobpjs.style.display = 'block';
+                    } else {
+                        console.log('Menyembunyikan field No. BPJS');
+                        nobpjs.style.display = 'none';
+                        nobpjsError.style.display = 'none';
+                        normInput.classList.remove('is-invalid');
+                    }
+                });
 
-            jenisPasienSelect.addEventListener('change', function() {
-                if (this.value === 'Bpjs') {
-                    nobpjs.style.display = 'block';
-                } else {
-                    nobpjs.style.display = 'none';
-                    nobpjsError.style.display = 'none'; // Hide error message if the field is hidden
-                    normInput.classList.remove('is-invalid'); // Remove invalid class if the field is hidden
-                }
-            });
+                nobpjs.style.display = 'none';
 
-            // Hide the No. BPJS field by default
-            nobpjs.style.display = 'none';
+                normInput.addEventListener('input', function() {
+                    const bpjs = normInput.value;
+                    if (bpjs.length === 13 && /^\d+$/.test(bpjs)) {
+                        nobpjsError.style.display = 'none';
+                        normInput.classList.remove('is-invalid');
+                    } else {
+                        nobpjsError.style.display = 'block';
+                        normInput.classList.add('is-invalid');
+                    }
+                });
+            } else {
+                console.error('Elemen jenis_pasien, nobpjs, norm, atau nobpjsError tidak ditemukan');
+            }
 
-            normInput.addEventListener('input', function() {
-                if (normInput.value.length === 13) {
-                    nobpjsError.style.display = 'none';
-                    normInput.classList.remove('is-invalid');
-                } else {
-                    nobpjsError.style.display = 'block';
-                    normInput.classList.add('is-invalid');
-                }
-            });
-        });
-
-        // Validasi No. Hp
-        document.addEventListener('DOMContentLoaded', function() {
+            // Validasi No. HP
             const noHPInput = document.getElementById('noHP');
             const noHPError = document.getElementById('noHP-error');
+            if (noHPInput && noHPError) {
+                noHPInput.addEventListener('input', function() {
+                    const noHP = noHPInput.value;
+                    if ((noHP.length >= 10 && noHP.length <= 13) && /^\d+$/.test(noHP)) {
+                        noHPInput.classList.remove('is-invalid');
+                        noHPError.style.display = 'none';
+                    } else {
+                        noHPInput.classList.add('is-invalid');
+                        noHPError.style.display = 'block';
+                    }
+                });
+            } else {
+                console.error('Elemen noHP atau noHP-error tidak ditemukan');
+            }
 
-            noHPInput.addEventListener('input', function() {
-                const noHP = noHPInput.value;
-
-                // Validasi panjang no. hp dan memastikan hanya angka
-                if ((noHP.length === 10 || noHP.length === 11 || noHP.length === 12 || noHP.length ===
-                        13) && /^\d+$/.test(noHP)) {
-                    noHPInput.classList.remove('is-invalid');
-                    noHPError.style.display = 'none';
-                } else {
-                    noHPInput.classList.add('is-invalid');
-                    noHPError.style.display = 'block';
-                }
-            });
-        });
-
-        // On the redirected page, use JavaScript to show the alert
-        $(document).ready(function() {
-            var successMessage = '{{ session('success') }}';
-            if (successMessage) {
-                alert(successMessage); // Or use a more user-friendly alert system
+            // Event listener untuk tombol Simpan
+            const btnSimpan = document.getElementById('btnSimpan');
+            if (btnSimpan) {
+                btnSimpan.addEventListener('click', function() {
+                    console.log('Tombol Simpan diklik');
+                    saveData();
+                });
+            } else {
+                console.error('Elemen btnSimpan tidak ditemukan');
             }
         });
 
-        // Fungsi untuk memperbarui token CSRF
+        function showOptionalFields() {
+            const nikInfo = document.getElementById('nik-info');
+            if (nikInfo) nikInfo.style.display = 'block';
+        }
+
+        function showOptionalFieldsForTanpaIdentitas() {
+            const nikInfo = document.getElementById('nik-info');
+            if (nikInfo) nikInfo.style.display = 'block';
+        }
+
+        function hideOptionalFields() {
+            const nikInfo = document.getElementById('nik-info');
+            const pekerjaanInfo = document.getElementById('pekerjaan-info');
+            const pekerjaan = document.getElementById('pekerjaan');
+            if (nikInfo) nikInfo.style.display = 'none';
+            if (pekerjaanInfo && pekerjaan) {
+                pekerjaanInfo.style.display = 'none';
+                pekerjaan.setAttribute('required', 'true');
+            }
+        }
+
+        function convertToDate(input) {
+            const parts = input.split('/');
+            return parts[2] + '-' + parts[1] + '-' + parts[0]; // Convert to yyyy-mm-dd
+        }
+
         function refreshCsrfToken(callback) {
+            if (!window.jQuery) {
+                console.error('jQuery tidak dimuat');
+                alert('Terjadi kesalahan: jQuery tidak dimuat.');
+                return;
+            }
             $.ajax({
                 url: '/refresh-csrf',
                 method: 'GET',
@@ -670,8 +695,11 @@
             });
         }
 
-        // Fungsi untuk menjaga sesi tetap aktif
         function keepSessionAlive() {
+            if (!window.jQuery) {
+                console.error('jQuery tidak dimuat');
+                return;
+            }
             setInterval(function() {
                 $.ajax({
                     url: '/keep-alive',
@@ -683,245 +711,185 @@
                         console.error('Gagal menjaga sesi:', xhr.responseText);
                     }
                 });
-            }, 15 * 60 * 1000); // Setiap 15 menit
+            }, 15 * 60 * 1000);
         }
 
-        // Fungsi untuk menangani sesi kadaluarsa
         function handleSessionExpired() {
             alert('Sesi telah berakhir. Anda akan diarahkan ke halaman login.');
             window.location.href = '/login';
         }
 
         $(document).ready(function() {
-            // Setup CSRF token sekali saja
+            if (!window.jQuery) {
+                console.error('jQuery tidak dimuat');
+                alert('Terjadi kesalahan: jQuery tidak dimuat.');
+                return;
+            }
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
-            // Mulai keep-alive
             keepSessionAlive();
 
-            // Alert Pasien Daftar
-            $.ajax({
-                url: 'pasien/index',
-                method: 'POST',
-                data: {},
-                success: function(response) {
-                    if (response.redirect) {
-                        window.location.href = response.redirect;
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.status === 419) {
-                        refreshCsrfToken(function() {
-                            $.ajax(this);
+            const poliBpjs = document.getElementById('poli_bpjs');
+            if (poliBpjs) {
+                poliBpjs.addEventListener('change', function() {
+                    const poli_id = this.value;
+                    if (poli_id) {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                            success: function(res) {
+                                const dokterBpjs = document.getElementById('dokter_bpjs');
+                                if (dokterBpjs) {
+                                    dokterBpjs.innerHTML =
+                                        '<option value="">Pilih Dokter</option>';
+                                    if (res) {
+                                        $.each(res, function(key, value) {
+                                            dokterBpjs.insertAdjacentHTML('beforeend',
+                                                '<option value="' + key + '">' +
+                                                value + '</option>');
+                                        });
+                                    }
+                                }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    refreshCsrfToken(function() {
+                                        $.ajax(this);
+                                    });
+                                } else if (xhr.status === 401) {
+                                    handleSessionExpired();
+                                } else {
+                                    console.error('Error:', xhr.responseText);
+                                    const dokterBpjs = document.getElementById('dokter_bpjs');
+                                    if (dokterBpjs) dokterBpjs.innerHTML =
+                                        '<option value="">Pilih Dokter</option>';
+                                }
+                            }
                         });
-                    } else if (xhr.status === 401) {
-                        handleSessionExpired();
                     } else {
-                        console.error('Error:', xhr.responseText);
+                        const dokterBpjs = document.getElementById('dokter_bpjs');
+                        if (dokterBpjs) dokterBpjs.innerHTML = '<option value="">Pilih Dokter</option>';
                     }
-                }
-            });
+                });
+            }
 
-            // PASIEN BPJS Poli Untuk Dokter
-            $('#poli_bpjs').change(function() {
-                var poli_id = $(this).val();
-                if (poli_id) {
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                        success: function(res) {
-                            $("#dokter_bpjs").empty();
-                            if (res) {
-                                $.each(res, function(key, value) {
-                                    $("#dokter_bpjs").append('<option value="' + key +
-                                        '">' + value + '</option>');
-                                });
+            const poliUmum = document.getElementById('poli_umum');
+            if (poliUmum) {
+                poliUmum.addEventListener('change', function() {
+                    const poli_id = this.value;
+                    if (poli_id) {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                            success: function(res) {
+                                const dokterUmum = document.getElementById('dokter_umum');
+                                if (dokterUmum) {
+                                    dokterUmum.innerHTML =
+                                        '<option value="">Pilih Dokter</option>';
+                                    dokterUmum.disabled = false;
+                                    if (res) {
+                                        $.each(res, function(key, value) {
+                                            dokterUmum.insertAdjacentHTML('beforeend',
+                                                '<option value="' + key + '">' +
+                                                value + '</option>');
+                                        });
+                                    }
+                                }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    refreshCsrfToken(function() {
+                                        $.ajax(this);
+                                    });
+                                } else if (xhr.status === 401) {
+                                    handleSessionExpired();
+                                } else {
+                                    console.error('Error:', xhr.responseText);
+                                    const dokterUmum = document.getElementById('dokter_umum');
+                                    if (dokterUmum) {
+                                        dokterUmum.innerHTML =
+                                            '<option value="">Pilih Dokter</option>';
+                                        dokterUmum.disabled = true;
+                                    }
+                                }
                             }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 419) {
-                                refreshCsrfToken(function() {
-                                    $.ajax(this);
-                                });
-                            } else if (xhr.status === 401) {
-                                handleSessionExpired();
-                            } else {
-                                console.error('Error:', xhr.responseText);
-                                $("#dokter_bpjs").empty();
-                            }
-                        }
-                    });
-                } else {
-                    $("#dokter_bpjs").empty();
-                }
-            });
-
-            // PASIEN BARU Poli Untuk Dokter
-            $('#poli_umum').change(function() {
-                var poli_id = $(this).val();
-                if (poli_id) {
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                        success: function(res) {
-                            $("#dokter_umum").empty();
-                            if (res) {
-                                $.each(res, function(key, value) {
-                                    $("#dokter_umum").append('<option value="' + key +
-                                        '">' + value + '</option>');
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 419) {
-                                refreshCsrfToken(function() {
-                                    $.ajax(this);
-                                });
-                            } else if (xhr.status === 401) {
-                                handleSessionExpired();
-                            } else {
-                                console.error('Error:', xhr.responseText);
-                                $("#dokter_umum").empty();
-                            }
-                        }
-                    });
-                } else {
-                    $("#dokter_umum").empty();
-                }
-            });
-
-            // Pencarian Pasien BPJS
-            $('#searchBtn').on('click', function(event) {
-                event.preventDefault();
-                var identifier = $('#id_bpjs').val().trim();
-                console.log("Nilai input:", identifier);
-
-                if (!identifier) {
-                    alert("Harap masukkan No. RM, No. BPJS, NIK, atau Nama Pasien.");
-                    return;
-                }
-
-                $('#loading').show();
-                $(this).children('i').hide();
-
-                $.ajax({
-                    url: '/search_pasien_bpjs',
-                    method: 'GET',
-                    data: {
-                        nama: identifier
-                    },
-                    success: function(response) {
-                        $('#loading').hide();
-                        $('#searchBtn i').show();
-
-                        if (response.error) {
-                            alert(response.error);
-                            $('#infoPasien').hide();
-                        } else {
-                            $('#noRM').val(response.no_rm);
-                            $('#namaPasien').val(response.nama_pasien);
-                            $('#nikPasien').val(response.nik || '');
-                            $('#tgllahirPasien').val(response.tgllahir);
-                            $('#jekelPasien').val(response.jekel);
-                            $('#namaKK').val(response.nama_kk);
-                            $('#alamatPasien').val(response.alamat_asal);
-                            $('#pekerjaanPasien').val(response.pekerjaan);
-                            $('#hpPasien').val(response.noHP);
-                            $('#alamatDomisili').val(response.domisili);
-                            $('#jenisPasien').val(response.jenis_pasien);
-                            $('#bpjsPasien').val(response.bpjs || '');
-                            $('#infoPasien').show();
-                        }
-                    },
-                    error: function(xhr) {
-                        $('#loading').hide();
-                        $('#searchBtn i').show();
-                        if (xhr.status === 419) {
-                            refreshCsrfToken(function() {
-                                $.ajax(this);
-                            });
-                        } else if (xhr.status === 401) {
-                            handleSessionExpired();
-                        } else {
-                            console.error("Error:", xhr.responseText);
-                            alert('Terjadi kesalahan. Silakan coba lagi.');
+                        });
+                    } else {
+                        const dokterUmum = document.getElementById('dokter_umum');
+                        if (dokterUmum) {
+                            dokterUmum.innerHTML = '<option value="">Pilih Dokter</option>';
+                            dokterUmum.disabled = true;
                         }
                     }
                 });
-            });
+            }
 
-            // Autocomplete Pasien BPJS
-            $('#identifier').autocomplete({
-                source: function(request, response) {
+            const searchBtn = document.getElementById('searchBtn');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const identifier = document.getElementById('id_bpjs') ? document.getElementById(
+                        'id_bpjs').value.trim() : '';
+                    console.log("Nilai input:", identifier);
+
+                    if (!identifier) {
+                        alert("Harap masukkan No. RM, No. BPJS, NIK, atau Nama Pasien.");
+                        return;
+                    }
+
+                    const loading = document.getElementById('loading');
+                    if (loading) loading.style.display = 'block';
+                    this.querySelector('i').style.display = 'none';
+
                     $.ajax({
                         url: '/search_pasien_bpjs',
                         method: 'GET',
                         data: {
-                            identifier: request.term
-                        },
-                        success: function(data) {
-                            if (data.error) {
-                                alert(data.error);
-                                response([]);
-                            } else {
-                                response($.map(data, function(item) {
-                                    return {
-                                        label: item.nama_pasien + ' - ' + item
-                                            .bpjs + ' - ' + item.nik,
-                                        value: item.no_rm
-                                    };
-                                }));
-                            }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 419) {
-                                refreshCsrfToken(function() {
-                                    $.ajax(this);
-                                });
-                            } else if (xhr.status === 401) {
-                                handleSessionExpired();
-                            } else {
-                                console.error("Error:", xhr.responseText);
-                                response([]);
-                            }
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#identifier').val(ui.item.label.split(' - ')[0]);
-                    var selected_no_rm = ui.item.value;
-
-                    $.ajax({
-                        url: '/get_pasien_bpjs',
-                        method: 'GET',
-                        data: {
-                            no_rm: selected_no_rm
+                            nama: identifier
                         },
                         success: function(response) {
+                            if (loading) loading.style.display = 'none';
+                            const searchBtnIcon = document.querySelector('#searchBtn i');
+                            if (searchBtnIcon) searchBtnIcon.style.display = 'inline';
+
                             if (response.error) {
                                 alert(response.error);
+                                const infoPasien = document.getElementById('infoPasien');
+                                if (infoPasien) infoPasien.style.display = 'none';
                             } else {
-                                $('#noRM').val(response.no_rm);
-                                $('#namaPasien').val(response.nama_pasien);
-                                $('#nikPasien').val(response.nik);
-                                $('#tgllahirPasien').val(response.tgllahir);
-                                $('#jekelPasien').val(response.jekel);
-                                $('#namaKK').val(response.nama_kk);
-                                $('#alamatPasien').val(response.alamat_asal);
-                                $('#pekerjaanPasien').val(response.pekerjaan);
-                                $('#hpPasien').val(response.noHP);
-                                $('#alamatDomisili').val(response.domisili);
-                                $('#jenisPasien').val(response.jenis_pasien);
-                                $('#bpjsPasien').val(response.bpjs);
-                                $('#infoPasien').show();
+                                const fields = {
+                                    noRM: 'no_rm',
+                                    namaPasien: 'nama_pasien',
+                                    nikPasien: 'nik',
+                                    tgllahirPasien: 'tgllahir',
+                                    jekelPasien: 'jekel',
+                                    namaKK: 'nama_kk',
+                                    alamatPasien: 'alamat_asal',
+                                    pekerjaanPasien: 'pekerjaan',
+                                    hpPasien: 'noHP',
+                                    alamatDomisili: 'domisili',
+                                    jenisPasien: 'jenis_pasien',
+                                    bpjsPasien: 'bpjs'
+                                };
+                                Object.keys(fields).forEach(id => {
+                                    const element = document.getElementById(id);
+                                    if (element) {
+                                        element.value = response[fields[id]] || '';
+                                    }
+                                });
+                                const infoPasien = document.getElementById('infoPasien');
+                                if (infoPasien) infoPasien.style.display = 'block';
                             }
                         },
                         error: function(xhr) {
+                            if (loading) loading.style.display = 'none';
+                            const searchBtnIcon = document.querySelector('#searchBtn i');
+                            if (searchBtnIcon) searchBtnIcon.style.display = 'inline';
                             if (xhr.status === 419) {
                                 refreshCsrfToken(function() {
                                     $.ajax(this);
@@ -930,40 +898,145 @@
                                 handleSessionExpired();
                             } else {
                                 console.error("Error:", xhr.responseText);
+                                alert('Terjadi kesalahan. Silakan coba lagi.');
                             }
                         }
                     });
-                    return false;
-                },
-                appendTo: "#autocompletebpjs-results"
-            });
+                });
+            }
+
+            if (jQuery().autocomplete) {
+                $('#identifier').autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            url: '/search_pasien_bpjs',
+                            method: 'GET',
+                            data: {
+                                identifier: request.term
+                            },
+                            success: function(data) {
+                                if (data.error) {
+                                    alert(data.error);
+                                    response([]);
+                                } else {
+                                    response($.map(data, function(item) {
+                                        return {
+                                            label: item.nama_pasien + ' - ' + (
+                                                item.bpjs || '') + ' - ' + (
+                                                item.nik || ''),
+                                            value: item.no_rm
+                                        };
+                                    }));
+                                }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    refreshCsrfToken(function() {
+                                        $.ajax(this);
+                                    });
+                                } else if (xhr.status === 401) {
+                                    handleSessionExpired();
+                                } else {
+                                    console.error("Error:", xhr.responseText);
+                                    response([]);
+                                }
+                            }
+                        });
+                    },
+                    minLength: 2,
+                    select: function(event, ui) {
+                        $('#identifier').val(ui.item.label.split(' - ')[0]);
+                        const selected_no_rm = ui.item.value;
+
+                        $.ajax({
+                            url: '/get_pasien_bpjs',
+                            method: 'GET',
+                            data: {
+                                no_rm: selected_no_rm
+                            },
+                            success: function(response) {
+                                if (response.error) {
+                                    alert(response.error);
+                                } else {
+                                    const fields = {
+                                        noRM: 'no_rm',
+                                        namaPasien: 'nama_pasien',
+                                        nikPasien: 'nik',
+                                        tgllahirPasien: 'tgllahir',
+                                        jekelPasien: 'jekel',
+                                        namaKK: 'nama_kk',
+                                        alamatPasien: 'alamat_asal',
+                                        pekerjaanPasien: 'pekerjaan',
+                                        hpPasien: 'noHP',
+                                        alamatDomisili: 'domisili',
+                                        jenisPasien: 'jenis_pasien',
+                                        bpjsPasien: 'bpjs'
+                                    };
+                                    Object.keys(fields).forEach(id => {
+                                        const element = document.getElementById(id);
+                                        if (element) {
+                                            element.value = response[fields[id]] ||
+                                                '';
+                                        }
+                                    });
+                                    const infoPasien = document.getElementById(
+                                    'infoPasien');
+                                    if (infoPasien) infoPasien.style.display = 'block';
+                                }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    refreshCsrfToken(function() {
+                                        $.ajax(this);
+                                    });
+                                } else if (xhr.status === 401) {
+                                    handleSessionExpired();
+                                } else {
+                                    console.error("Error:", xhr.responseText);
+                                }
+                            }
+                        });
+                        return false;
+                    },
+                    appendTo: "#autocompletebpjs-results"
+                });
+            } else {
+                console.error('jQuery UI Autocomplete tidak dimuat');
+            }
         });
 
-        // Fungsi Simpan Data Pasien Lama
         function saveDataBpjs() {
-            $('#loadingSpinnerLama').removeClass('d-none');
-            $('#simpanBpjs').prop('disabled', true);
+            const loadingSpinnerLama = document.getElementById('loadingSpinnerLama');
+            const simpanBpjs = document.getElementById('simpanBpjs');
+            if (loadingSpinnerLama) loadingSpinnerLama.classList.remove('d-none');
+            if (simpanBpjs) simpanBpjs.disabled = true;
 
             function attemptSave() {
-                var formData = {
-                    no_rm: $('#noRM').val(),
-                    nama_pasien: $('#namaPasien').val(),
-                    nik: $('#nikPasien').val(),
-                    nama_kk: $('#namaKK').val(),
-                    tgllahir: $('#tgllahirPasien').val(),
-                    jekel: $('#jekelPasien').val(),
-                    alamat_asal: $('#alamatPasien').val(),
-                    noHP: $('#hpPasien').val(),
-                    domisili: $('#alamatDomisili').val(),
-                    jenis_pasien: $('#jenisPasien').val(),
-                    pekerjaan: $('#pekerjaanPasien').val(),
-                    bpjs: $('#bpjsPasien').val(),
-                    poli: $('#poli_bpjs').val(),
-                    dokter: $('#dokter_bpjs').val(),
+                const formData = {
+                    no_rm: document.getElementById('noRM') ? document.getElementById('noRM').value : '',
+                    nama_pasien: document.getElementById('namaPasien') ? document.getElementById('namaPasien').value :
+                        '',
+                    nik: document.getElementById('nikPasien') ? document.getElementById('nikPasien').value : '',
+                    nama_kk: document.getElementById('namaKK') ? document.getElementById('namaKK').value : '',
+                    tgllahir: document.getElementById('tgllahirPasien') ? document.getElementById('tgllahirPasien')
+                        .value : '',
+                    jekel: document.getElementById('jekelPasien') ? document.getElementById('jekelPasien').value : '',
+                    alamat_asal: document.getElementById('alamatPasien') ? document.getElementById('alamatPasien')
+                        .value : '',
+                    noHP: document.getElementById('hpPasien') ? document.getElementById('hpPasien').value : '',
+                    domisili: document.getElementById('alamatDomisili') ? document.getElementById('alamatDomisili')
+                        .value : '',
+                    jenis_pasien: document.getElementById('jenisPasien') ? document.getElementById('jenisPasien')
+                        .value : '',
+                    pekerjaan: document.getElementById('pekerjaanPasien') ? document.getElementById('pekerjaanPasien')
+                        .value : '',
+                    bpjs: document.getElementById('bpjsPasien') ? document.getElementById('bpjsPasien').value : '',
+                    poli: document.getElementById('poli_bpjs') ? document.getElementById('poli_bpjs').value : '',
+                    dokter: document.getElementById('dokter_bpjs') ? document.getElementById('dokter_bpjs').value : '',
                     _token: $('meta[name="csrf-token"]').attr('content')
                 };
 
-                var errorMessages = [];
+                const errorMessages = [];
                 if (!formData.no_rm) errorMessages.push("No RM harus diisi.");
                 if (!formData.nama_pasien) errorMessages.push("Nama pasien harus diisi.");
                 if (formData.nik && (formData.nik.length !== 16 || !/^\d+$/.test(formData.nik))) {
@@ -985,8 +1058,8 @@
                 if (!formData.dokter) errorMessages.push("Dokter harus diisi.");
 
                 if (errorMessages.length > 0) {
-                    $('#loadingSpinnerLama').addClass('d-none');
-                    $('#simpanBpjs').prop('disabled', false);
+                    if (loadingSpinnerLama) loadingSpinnerLama.classList.add('d-none');
+                    if (simpanBpjs) simpanBpjs.disabled = false;
                     alert("Validasi Gagal:\n" + errorMessages.join("\n"));
                     return;
                 }
@@ -996,8 +1069,8 @@
                     method: 'POST',
                     data: formData,
                     success: function(response) {
-                        $('#loadingSpinnerLama').addClass('d-none');
-                        $('#simpanBpjs').prop('disabled', false);
+                        if (loadingSpinnerLama) loadingSpinnerLama.classList.add('d-none');
+                        if (simpanBpjs) simpanBpjs.disabled = false;
 
                         if (response.redirect) {
                             alert("Data tersimpan! Data pasien berhasil disimpan.");
@@ -1010,8 +1083,8 @@
                         }
                     },
                     error: function(xhr) {
-                        $('#loadingSpinnerLama').addClass('d-none');
-                        $('#simpanBpjs').prop('disabled', false);
+                        if (loadingSpinnerLama) loadingSpinnerLama.classList.add('d-none');
+                        if (simpanBpjs) simpanBpjs.disabled = false;
 
                         if (xhr.status === 419) {
                             console.warn('CSRF token kadaluarsa, memperbarui token...');
@@ -1034,39 +1107,49 @@
             attemptSave();
         }
 
-        // Fungsi Simpan Data Pasien Baru
         function saveData() {
-            $('#loadingSpinner').removeClass('d-none');
-            $('#btnSimpan').prop('disabled', true);
+            console.log('Fungsi saveData dipanggil');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const btnSimpan = document.getElementById('btnSimpan');
+            if (loadingSpinner) loadingSpinner.classList.remove('d-none');
+            if (btnSimpan) btnSimpan.disabled = true;
 
             function attemptSave() {
-                var kategoriPasien = document.getElementById('kategori_pasien').value || 'dewasa';
-                document.getElementById('kategori_pasien').value = kategoriPasien;
+                const kategoriPasien = document.getElementById('kategori_pasien') ? document.getElementById(
+                    'kategori_pasien').value || 'dewasa' : 'dewasa';
+                if (document.getElementById('kategori_pasien')) {
+                    document.getElementById('kategori_pasien').value = kategoriPasien;
+                }
 
-                var tgllahirInput = document.getElementById('tgllahir').value;
-                var tgllahirFormatted = convertToDate(tgllahirInput);
+                const tgllahirInput = document.getElementById('tgllahir') ? document.getElementById('tgllahir').value : '';
+                const tgllahirFormatted = tgllahirInput ? convertToDate(tgllahirInput) : '';
 
-                var formData = {
-                    poli: document.getElementById('poli_umum').value,
-                    dokter: document.getElementById('dokter_umum').value,
-                    nama_pasien: document.getElementById('search_pasien').value,
-                    no_rm: document.getElementById('no_rm').value,
-                    nik: document.getElementById('nik').value || '',
-                    nama_kk: document.getElementById('nama_kk').value,
-                    pekerjaan: document.getElementById('pekerjaan').value || '',
+                const formData = {
+                    poli: document.getElementById('poli_umum') ? document.getElementById('poli_umum').value : '',
+                    dokter: document.getElementById('dokter_umum') ? document.getElementById('dokter_umum').value : '',
+                    nama_pasien: document.getElementById('search_pasien') ? document.getElementById('search_pasien')
+                        .value : '',
+                    no_rm: document.getElementById('no_rm') ? document.getElementById('no_rm').value : '',
+                    nik: document.getElementById('nik') ? document.getElementById('nik').value || '' : '',
+                    nama_kk: document.getElementById('nama_kk') ? document.getElementById('nama_kk').value : '',
+                    pekerjaan: document.getElementById('pekerjaan') ? document.getElementById('pekerjaan').value || '' :
+                        '',
                     tgllahir: tgllahirFormatted,
-                    jekel: document.getElementById('jekel').value,
-                    alamat_asal: document.getElementById('alamat_asal').value,
-                    jenis_pasien: document.getElementById('jenis_pasien').value,
-                    bpjs: document.getElementById('norm').value,
-                    domisili: document.getElementById('domisili').value,
-                    noHP: document.getElementById('noHP').value,
+                    jekel: document.getElementById('jekel') ? document.getElementById('jekel').value : '',
+                    alamat_asal: document.getElementById('alamat_asal') ? document.getElementById('alamat_asal').value :
+                        '',
+                    jenis_pasien: document.getElementById('jenis_pasien') ? document.getElementById('jenis_pasien')
+                        .value : '',
+                    bpjs: document.getElementById('norm') ? document.getElementById('norm').value : '',
+                    domisili: document.getElementById('domisili') ? document.getElementById('domisili').value : '',
+                    noHP: document.getElementById('noHP') ? document.getElementById('noHP').value : '',
                     kategori: kategoriPasien,
-                    status: document.getElementById('status_pasien').value,
+                    status: document.getElementById('status_pasien') ? document.getElementById('status_pasien').value :
+                        'baru',
                     _token: $('meta[name="csrf-token"]').attr('content')
                 };
 
-                var errorMessages = [];
+                const errorMessages = [];
                 if (!formData.poli) errorMessages.push("- Poli harus dipilih.");
                 if (!formData.dokter) errorMessages.push("- Dokter harus dipilih.");
                 if (!formData.nama_pasien) errorMessages.push("- Nama Pasien harus diisi.");
@@ -1077,34 +1160,45 @@
                 if (!formData.domisili) errorMessages.push("- Alamat Domisili harus diisi.");
                 if (!formData.jenis_pasien) errorMessages.push("- Jenis Pasien harus diisi.");
                 if (!formData.noHP) errorMessages.push("- No. HP harus diisi.");
+                if (formData.jenis_pasien === 'Bpjs' && (!formData.bpjs || formData.bpjs.length !== 13 || !/^\d+$/.test(
+                        formData.bpjs))) {
+                    errorMessages.push("- No. BPJS harus berisi 13 digit angka.");
+                }
 
                 if (errorMessages.length > 0) {
-                    $('#loadingSpinner').addClass('d-none');
-                    $('#btnSimpan').prop('disabled', false);
+                    if (loadingSpinner) loadingSpinner.classList.add('d-none');
+                    if (btnSimpan) btnSimpan.disabled = false;
                     alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
                     return;
                 }
 
-                console.log('Form Data:', formData);
+                console.log('Mengirim data:', formData);
 
                 $.ajax({
                     url: '/pasien/store-umum',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        $('#loadingSpinner').addClass('d-none');
-                        $('#btnSimpan').prop('disabled', false);
+                        console.log('Sukses menyimpan data:', response);
+                        if (loadingSpinner) loadingSpinner.classList.add('d-none');
+                        if (btnSimpan) btnSimpan.disabled = false;
 
                         if (response.redirect) {
+                            alert("Data tersimpan! Data pasien berhasil disimpan.");
                             window.open(response.redirect, '_blank');
                             window.location.href = "{{ route('perawat.index') }}";
+                        } else if (response.error) {
+                            console.error('Gagal menyimpan:', response.error);
+                            alert("Gagal menyimpan: " + response.error);
                         } else {
                             console.error('No redirect URL provided.');
+                            alert("Gagal menyimpan: Tidak ada URL redirect.");
                         }
                     },
-                    error: function(xhr, status, error) {
-                        $('#loadingSpinner').addClass('d-none');
-                        $('#btnSimpan').prop('disabled', false);
+                    error: function(xhr) {
+                        console.error('Error AJAX:', xhr.responseText);
+                        if (loadingSpinner) loadingSpinner.classList.add('d-none');
+                        if (btnSimpan) btnSimpan.disabled = false;
 
                         if (xhr.status === 419) {
                             console.warn('CSRF token kadaluarsa, memperbarui token...');
@@ -1114,7 +1208,7 @@
                         } else if (xhr.status === 401) {
                             handleSessionExpired();
                         } else if (xhr.status === 422) {
-                            var errors = xhr.responseJSON;
+                            const errors = xhr.responseJSON;
                             if (errors.error === 'Pasien ini sudah mendaftar hari ini.') {
                                 alert("Pasien ini telah mendaftar hari ini.");
                             } else if (errors.error === 'Pasien dengan NIK ini sudah terdaftar.') {
@@ -1125,8 +1219,7 @@
                                 alert("Validasi gagal: " + errors.error);
                             }
                         } else {
-                            console.error('Error:', xhr.responseText);
-                            alert("Terjadi kesalahan: Gagal menyimpan data pasien.");
+                            alert("Terjadi kesalahan: Gagal menyimpan data pasien. Status: " + xhr.status);
                         }
                     }
                 });

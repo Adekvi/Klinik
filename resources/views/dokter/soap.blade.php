@@ -112,7 +112,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <table class="table" style="width: 50%; margin-top: -30px; border-collapse: separate">
+                            <table class="table" style="width: 50%; border-collapse: separate">
                                 <tbody>
                                     <tr>
                                         <th scope="row" style="padding: 4px; text-align: left;">No RM</th>
@@ -347,7 +347,6 @@
     @include('dokter.umum.tubuh')
     @include('dokter.umum.edittubuh')
     @include('dokter.umum.riwayat')
-
 
     {{-- DOKTER GIGI --}}
     @include('dokter.gigi.editgigi')

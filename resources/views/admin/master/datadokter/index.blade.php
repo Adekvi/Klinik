@@ -152,6 +152,10 @@
             font-weight: bold;
             color: #333;
         }
+
+        .swal2-container {
+            z-index: 9999 !important;
+        }
     </style>
 @endpush
 @push('script')

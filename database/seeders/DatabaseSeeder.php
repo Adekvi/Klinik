@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             MarginSeeder::class,
             PajakSeeder::class,
             ShiftSeeder::class,
+            AturanSeeder::class,
+            AnjuranSeeder::class,
+            JenisObatSeeder::class,
         ]);
     }
 }

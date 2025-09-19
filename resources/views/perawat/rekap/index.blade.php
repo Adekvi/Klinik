@@ -202,7 +202,7 @@
                                         </tr>
                                     @else
                                         @foreach ($pasien as $item)
-                                            @if ($item->status == 'M')
+                                            @if ($item->status == 'WB')
                                                 <tr id="row_{{ $item->id }}" class="text-center">
                                                     <td>{{ $pasien->firstItem() + $loop->index }}</td>
                                                     <td>{{ $item->booking->pasien->no_rm }}</td>

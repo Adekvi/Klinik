@@ -83,22 +83,17 @@ class CreateSoapTable extends Migration
                         $table->text('soap_a_sekunder')->nullable();
 
                         // Resep
-                        $table->text('soap_p');
-                        $table->text('soap_p_jenisobat')->nullable();
+                        $table->text('soap_p')->nullable();
+                        $table->text('soap_p_jenis')->nullable();
                         $table->text('soap_p_aturan')->nullable();
                         $table->text('soap_p_anjuran')->nullable();
                         $table->text('soap_p_jumlah')->nullable();
 
                         $table->string('satuan')->nullable();
-                        $table->text('obat_Ro');
+                        $table->text('obat_Ro')->nullable();
+
                         // Resep Racikan
                         $table->text('ObatRacikan')->nullable();
-                        // $table->text('soap_r');
-                        // $table->text('soap_r_jenisObatRacikan')->nullable();
-                        // $table->text('soap_r_minumRacikan')->nullable();
-                        // $table->text('soap_r_minum')->nullable();
-                        // $table->text('soap_r_takaran')->nullable();
-                        // $table->text('soap_r_jumlahObatRacikan')->nullable();
 
                         $table->string('edukasi')->nullable();
                         $table->string('rujuk')->default('-')->nullable();

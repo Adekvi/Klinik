@@ -29,12 +29,15 @@
         'datapoli' => 'Data Poli',
         'datadokter' => 'Data Tenaga Medis',
         'user' => 'Data Akses User',
-        'master-ttd' => 'TTD Tenaga Medis',
+        'master-ttd' => 'Ttd Tenaga Medis',
         'semuapasien' => 'Data Semua Pasien',
         'pasienumum' => 'Data Pasien Umum',
         'pasienbpjs' => 'Data Pasien BPJS',
         'diagnosa' => 'Data Diagnosa',
         'obat' => 'Data Obat',
+        'master-jenis' => 'Data Jenis Obat',
+        'master-anjuran' => 'Data Anjuran Minum',
+        'master-aturan' => 'Data Aturan Minum',
         'master-margin' => 'Setting Margin',
         'master-shift' => 'Data Shift',
         'tindakan' => 'Data Tindakan Dokter',
@@ -349,6 +352,13 @@
                         class="menu-link {{ Request::is('apoteker/masterObat') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-folder"></i>
                         <div data-i18n="Analytics">Data Master Obat</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('apoteker/master-anjuran') ? 'active' : '' }}">
+                    <a href="{{ url('apoteker/master-anjuran') }}"
+                        class="menu-link {{ Request::is('apoteker/master-anjuran') ? 'active' : '' }}">
+                        <i class="menu-icon tf-icons fa-solid fa-file"></i>
+                        <div data-i18n="Analytics">Data Master Anjuran Minum</div>
                     </a>
                 </li>
 

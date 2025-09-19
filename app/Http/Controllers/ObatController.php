@@ -46,7 +46,7 @@ class ObatController extends Controller
         $antrianObat = $query->paginate($entries, ['*'], 'page', $page);
         $antrianObat->appends(['search' => $search, 'entries' => $entries]);
 
-        // dd($antrianObat);
+        dd($antrianObat);
 
         $reseps = Resep::all();
 

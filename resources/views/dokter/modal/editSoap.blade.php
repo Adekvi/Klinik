@@ -1,7 +1,7 @@
 @if ($soapTerbaru)
     <div class="modal fade" id="editSoap{{ $soapTerbaru->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color:rgb(0, 0, 0)e;">Ubah Tindakan
@@ -30,6 +30,14 @@
                                     <label for="">Nama Pasien</label>
                                     <input type="text" name="nama_pasien" id="nama_pasien" class="form-control mt-2"
                                         value="{{ $soapTerbaru->pasien->nama_pasien }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="">Umur</label>
+                                    <input type="text" class="form-control mt-2"
+                                        value="{{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun' }}"
+                                        readonly>
                                 </div>
                             </div>
                         </div>
@@ -562,258 +570,352 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- resources/views/dokter/modal/editSoap.blade.php -->
                         <div class="form-group mt-3 mb-2">
                             <label for="soap_p_0"
-                                style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;">
+                                style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
+                                onclick="toggleObatContainer()">
                                 Pilih Obat (P)
                             </label>
-                            <div class="resep" id="resep">
-                                @if (!empty($resep))
-                                    @foreach ($resep as $index => $obat)
-                                        <!-- Nama Obat -->
-                                        <div class="input-row" id="namaObatContainer_{{ $index }}"
-                                            style="display: flex; align-items: center; gap: 5px; overflow: visible !important;">
-                                            <label for="namaobat" style="min-width: 100px;">Nama Obat</label>
-                                            <span>:</span>
-                                            <div class="input-wrapper" style="position: relative; flex-grow: 1;">
-                                                <input type="text" class="form-control soap_p"
-                                                    name="soap_p[{{ $index }}][resep]"
-                                                    id="resep_{{ $index }}" value="{{ $obat }}"
-                                                    placeholder="Cari Obat" autocomplete="off">
-                                                <!-- Dropdown dipindahkan ke sini -->
-                                                <ul id="dropdown-resep_{{ $index }}"
-                                                    class="dropdown-menu-autocomplete"
-                                                    style="cursor: pointer; display: none;">
-                                                    <!-- Item akan di-append di sini -->
-                                                </ul>
-                                            </div>
-                                        </div>
+                            <div class="resep" id="edit-resep">
+                                @if (!empty($resep) || !empty($resepJenis) || !empty($resepAturan) || !empty($resepAnjuran) || !empty($resepJumlah))
+                                    @php
+                                        $entryCount = count($resepJumlah); // 2 entri
+                                        $resepArray = is_array($resep)
+                                            ? array_chunk($resep, ceil(count($resep) / $entryCount))
+                                            : [];
+                                        $resepJenisArray = is_array($resepJenis)
+                                            ? array_chunk($resepJenis, ceil(count($resepJenis) / $entryCount))
+                                            : [];
+                                        $resepAturanArray = is_array($resepAturan)
+                                            ? array_chunk($resepAturan, ceil(count($resepAturan) / $entryCount))
+                                            : [];
+                                        $resepAnjuranArray = is_array($resepAnjuran)
+                                            ? array_chunk($resepAnjuran, ceil(count($resepAnjuran) / $entryCount))
+                                            : [];
+                                    @endphp
+                                    @for ($index = 0; $index < $entryCount; $index++)
+                                        <div class="entry-group" id="edit-entry_{{ $index }}">
+                                            @for ($subIndex = 0; $subIndex < (isset($resepJumlah[$index]) ? count($resepJumlah[$index]) : 0); $subIndex++)
+                                                <!-- Nama Obat -->
+                                                <div class="input-row"
+                                                    id="edit-namaObatContainer_{{ $index }}_{{ $subIndex }}"
+                                                    style="display: flex; align-items: center; gap: 5px;">
+                                                    <label for="edit-resep_{{ $index }}_{{ $subIndex }}"
+                                                        style="min-width: 100px;">Nama Obat</label>
+                                                    <span>:</span>
+                                                    <div class="input-wrapper">
+                                                        <div class="multi-select-wrapper form-control"
+                                                            data-input-id="edit-resep_{{ $index }}_{{ $subIndex }}">
+                                                            <div class="selected-tags"
+                                                                id="edit-resep_{{ $index }}_{{ $subIndex }}_tags">
+                                                                @if (isset($resepArray[$index][$subIndex]))
+                                                                    <span class="tag"
+                                                                        data-value="{{ $resepArray[$index][$subIndex] }}">{{ $resepArray[$index][$subIndex] }}
+                                                                        <i class="fas fa-times remove-tag"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <input type="text"
+                                                                class="autocomplete-input multi-select-input"
+                                                                id="edit-resep_{{ $index }}_{{ $subIndex }}"
+                                                                placeholder="Cari Obat" autocomplete="off"
+                                                                data-url="{{ url('/resep-autocomplete') }}"
+                                                                data-dropdown="edit-dropdown-resep_{{ $index }}_{{ $subIndex }}">
+                                                        </div>
+                                                        <input type="hidden"
+                                                            name="soap_p[{{ $index }}][resep][]"
+                                                            id="edit-resep_{{ $index }}_{{ $subIndex }}_hidden"
+                                                            value="{{ isset($resepArray[$index][$subIndex]) ? $resepArray[$index][$subIndex] : '' }}">
+                                                        <div id="edit-dropdown-resep_{{ $index }}_{{ $subIndex }}"
+                                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                                        <p class="text-warning"
+                                                            style="font-style: italic; font-size: 12px">
+                                                            *Bisa memilih lebih dari 1 obat
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Jenis Obat -->
-                                        <div class="input-row" id="jenisObatContainer_{{ $index }}"
-                                            style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                            <label for="jenisObat" style="min-width: 100px;">Jenis Obat</label>
-                                            <span>:</span>
-                                            <select name="soap_p[{{ $index }}][jenisobat]"
-                                                id="jenis_obat_{{ $index }}" class="form-control">
-                                                <option value="">--Pilih Jenis Obat--</option>
-                                                <option value="Tablet"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Tablet' ? 'selected' : '' }}>
-                                                    Tablet</option>
-                                                <option value="Kapsul"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Kapsul' ? 'selected' : '' }}>
-                                                    Kapsul</option>
-                                                <option value="Bungkus"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Bungkus' ? 'selected' : '' }}>
-                                                    Bungkus</option>
-                                                <option value="Salep"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Salep' ? 'selected' : '' }}>
-                                                    Salep</option>
-                                                <option value="Sirup"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Sirup' ? 'selected' : '' }}>
-                                                    Sirup</option>
-                                                <option value="Mililiter"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Mililiter' ? 'selected' : '' }}>
-                                                    Mililiter</option>
-                                                <option value="Sendok Teh"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Sendok Teh' ? 'selected' : '' }}>
-                                                    Sendok Teh</option>
-                                                <option value="Sendok Makan"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Sendok Makan' ? 'selected' : '' }}>
-                                                    Sendok Makan</option>
-                                                <option value="Tetes"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Tetes' ? 'selected' : '' }}>
-                                                    Tetes</option>
-                                                <option value="Puyer/Racikan"
-                                                    {{ isset($resepJenis[$index]) && $resepJenis[$index] == 'Puyer/Racikan' ? 'selected' : '' }}>
-                                                    Puyer/Racikan</option>
-                                            </select>
-                                        </div>
+                                                <!-- Jenis Obat -->
+                                                <div class="input-row"
+                                                    id="edit-jenisObatContainer_{{ $index }}_{{ $subIndex }}"
+                                                    style="display: flex; align-items: center; gap: 5px;">
+                                                    <label
+                                                        for="edit-jenis_obat_{{ $index }}_{{ $subIndex }}"
+                                                        style="min-width: 100px;">Jenis Obat</label>
+                                                    <span>:</span>
+                                                    <div class="input-wrapper">
+                                                        <div class="multi-select-wrapper form-control"
+                                                            data-input-id="edit-jenis_obat_{{ $index }}_{{ $subIndex }}">
+                                                            <div class="selected-tags"
+                                                                id="edit-jenis_obat_{{ $index }}_{{ $subIndex }}_tags">
+                                                                @if (isset($resepJenisArray[$index][$subIndex]))
+                                                                    <span class="tag"
+                                                                        data-value="{{ $resepJenisArray[$index][$subIndex] }}">{{ $resepJenisArray[$index][$subIndex] }}
+                                                                        <i class="fas fa-times remove-tag"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <input type="text"
+                                                                class="autocomplete-input multi-select-input"
+                                                                id="edit-jenis_obat_{{ $index }}_{{ $subIndex }}"
+                                                                placeholder="Cari Jenis Obat" autocomplete="off"
+                                                                data-url="{{ url('jenis-autocomplete') }}"
+                                                                data-dropdown="edit-dropdown-jenis_obat_{{ $index }}_{{ $subIndex }}">
+                                                        </div>
+                                                        <input type="hidden"
+                                                            name="soap_p[{{ $index }}][jenisobat][]"
+                                                            id="edit-jenis_obat_{{ $index }}_{{ $subIndex }}_hidden"
+                                                            value="{{ isset($resepJenisArray[$index][$subIndex]) ? $resepJenisArray[$index][$subIndex] : '' }}">
+                                                        <div id="edit-dropdown-jenis_obat_{{ $index }}_{{ $subIndex }}"
+                                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                                        <p class="text-warning"
+                                                            style="font-style: italic; font-size: 12px">
+                                                            *Bisa memilih lebih dari 1 jenis obat
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Aturan Minum Perhari -->
-                                        <div class="input-row" id="aturanMinumContainer_{{ $index }}"
-                                            style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                            <label for="aturan" style="min-width: 100px">Aturan Minum
-                                                Perhari</label>
-                                            <span>:</span>
-                                            <select class="form-control" name="soap_p[{{ $index }}][aturan]"
-                                                id="aturan_{{ $index }}">
-                                                <option value="">--Pilih Aturan Minum--</option>
-                                                <option value="1x1 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1 SENDOK' ? 'selected' : '' }}>
-                                                    1x1 SENDOK</option>
-                                                <option value="1x1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1/2 SENDOK' ? 'selected' : '' }}>
-                                                    1x1/2 SENDOK</option>
-                                                <option value="1x3/4 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x3/4 SENDOK' ? 'selected' : '' }}>
-                                                    1x3/4 SENDOK</option>
-                                                <option value="1x1 1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1 1/2 SENDOK' ? 'selected' : '' }}>
-                                                    1x1 1/2 SENDOK</option>
-                                                <option value="2x1 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1 SENDOK' ? 'selected' : '' }}>
-                                                    2x1 SENDOK</option>
-                                                <option value="2x1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1/2 SENDOK' ? 'selected' : '' }}>
-                                                    2x1/2 SENDOK</option>
-                                                <option value="2x3/4 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x3/4 SENDOK' ? 'selected' : '' }}>
-                                                    2x3/4 SENDOK</option>
-                                                <option value="3x1 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 SENDOK' ? 'selected' : '' }}>
-                                                    3x1 SENDOK</option>
-                                                <option value="3x1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1/2 SENDOK' ? 'selected' : '' }}>
-                                                    3x1/2 SENDOK</option>
-                                                <option value="3x3/4 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x3/4 SENDOK' ? 'selected' : '' }}>
-                                                    3x3/4 SENDOK</option>
-                                                <option value="3x1 1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 1/2 SENDOK' ? 'selected' : '' }}>
-                                                    3x1 1/2 SENDOK</option>
-                                                <option value="4x1 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x1 SENDOK' ? 'selected' : '' }}>
-                                                    4x1 SENDOK</option>
-                                                <option value="4x1 1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x1 1/2 SENDOK' ? 'selected' : '' }}>
-                                                    4x1 1/2 SENDOK</option>
-                                                <option value="4x1/2 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x1/2 SENDOK' ? 'selected' : '' }}>
-                                                    4x1/2 SENDOK</option>
-                                                <option value="4x3/4 SENDOK"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x3/4 SENDOK' ? 'selected' : '' }}>
-                                                    4x3/4 SENDOK</option>
-                                                <option value="3x SEHARI OLES TIPIS-TIPIS"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
-                                                    3x SEHARI OLES TIPIS-TIPIS
-                                                </option>
-                                                <option value="2x SEHARI OLES TIPIS-TIPIS"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
-                                                    2x SEHARI OLES TIPIS-TIPIS
-                                                </option>
-                                                <option value="1x1 TABLET"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '1x1 TABLET' ? 'selected' : '' }}>
-                                                    1x1 TABLET</option>
-                                                <option value="2x1 TABLET"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '2x1 TABLET' ? 'selected' : '' }}>
-                                                    2x1 TABLET</option>
-                                                <option value="3x1 TABLET"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 TABLET' ? 'selected' : '' }}>
-                                                    3x1 TABLET</option>
-                                                <option value="3x1 BUNGKUS"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 BUNGKUS' ? 'selected' : '' }}>
-                                                    3x1 BUNGKUS</option>
-                                                <option value="3x2 TETES"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x2 TETES' ? 'selected' : '' }}>
-                                                    3x2 TETES</option>
-                                                <option value="3x1 TETES"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '3x1 TETES' ? 'selected' : '' }}>
-                                                    3x1 TETES</option>
-                                                <option value="4x2 TETES"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == '4x2 TETES' ? 'selected' : '' }}>
-                                                    4x2 TETES</option>
-                                                <option value="INJEKSI 1 ml"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'INJEKSI 1 ml' ? 'selected' : '' }}>
-                                                    INJEKSI 1 ml</option>
-                                                <option value="INJEKSI 2 ml"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'INJEKSI 2 ml' ? 'selected' : '' }}>
-                                                    INJEKSI 2 ml</option>
-                                                <option value="INJEKSI 3 ml"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'INJEKSI 3 ml' ? 'selected' : '' }}>
-                                                    INJEKSI 3 ml</option>
-                                                <option value="NEBUL 1 ampul"
-                                                    {{ isset($resepAturan[$index]) && $resepAturan[$index] == 'NEBUL 1 ampul' ? 'selected' : '' }}>
-                                                    NEBUL 1 ampul</option>
-                                            </select>
-                                        </div>
+                                                <!-- Aturan Pakai -->
+                                                <div class="input-row"
+                                                    id="edit-aturanContainer_{{ $index }}_{{ $subIndex }}"
+                                                    style="display: flex; align-items: center; gap: 5px;">
+                                                    <label
+                                                        for="edit-aturan_{{ $index }}_{{ $subIndex }}"
+                                                        style="min-width: 100px">Aturan Pakai</label>
+                                                    <span>:</span>
+                                                    <div class="input-wrapper">
+                                                        <div class="multi-select-wrapper form-control"
+                                                            data-input-id="edit-aturan_{{ $index }}_{{ $subIndex }}">
+                                                            <div class="selected-tags"
+                                                                id="edit-aturan_{{ $index }}_{{ $subIndex }}_tags">
+                                                                @if (isset($resepAturanArray[$index][$subIndex]))
+                                                                    <span class="tag"
+                                                                        data-value="{{ $resepAturanArray[$index][$subIndex] }}">{{ $resepAturanArray[$index][$subIndex] }}
+                                                                        <i class="fas fa-times remove-tag"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <input type="text"
+                                                                class="autocomplete-input multi-select-input"
+                                                                id="edit-aturan_{{ $index }}_{{ $subIndex }}"
+                                                                placeholder="Cari Aturan Pakai" autocomplete="off"
+                                                                data-url="{{ url('aturan-autocomplete') }}"
+                                                                data-dropdown="edit-dropdown-aturan_{{ $index }}_{{ $subIndex }}">
+                                                        </div>
+                                                        <input type="hidden"
+                                                            name="soap_p[{{ $index }}][aturan][]"
+                                                            id="edit-aturan_{{ $index }}_{{ $subIndex }}_hidden"
+                                                            value="{{ isset($resepAturanArray[$index][$subIndex]) ? $resepAturanArray[$index][$subIndex] : '' }}">
+                                                        <div id="edit-dropdown-aturan_{{ $index }}_{{ $subIndex }}"
+                                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                                        <p class="text-warning"
+                                                            style="font-style: italic; font-size: 12px">
+                                                            *Bisa memilih lebih dari 1 aturan pakai
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Anjuran Minum -->
-                                        <div class="input-row" id="anjuranMinumContainer_{{ $index }}"
-                                            style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                            <label for="anjuran" style="min-width: 100px">Anjuran Minum</label>
-                                            <span>:</span>
-                                            <select name="soap_p[{{ $index }}][anjuran]"
-                                                id="anjuran_{{ $index }}" class="form-control">
-                                                <option value="">--Pilih Anjuran Minum--</option>
-                                                <option value="AC"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'AC' ? 'selected' : '' }}>
-                                                    AC</option>
-                                                <option value="AD"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'AD' ? 'selected' : '' }}>
-                                                    AD</option>
-                                                <option value="AS"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'AS' ? 'selected' : '' }}>
-                                                    AS</option>
-                                                <option value="C"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'C' ? 'selected' : '' }}>
-                                                    C</option>
-                                                <option value="CTH"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'CTH' ? 'selected' : '' }}>
-                                                    CTH</option>
-                                                <option value="DC"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'DC' ? 'selected' : '' }}>
-                                                    DC</option>
-                                                <option value="PC"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'PC' ? 'selected' : '' }}>
-                                                    PC</option>
-                                                <option value="OD"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'OD' ? 'selected' : '' }}>
-                                                    OD</option>
-                                                <option value="OS"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'OS' ? 'selected' : '' }}>
-                                                    OS</option>
-                                                <option value="ODS"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'ODS' ? 'selected' : '' }}>
-                                                    ODS</option>
-                                                <option value="PRM"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'PRM' ? 'selected' : '' }}>
-                                                    PRM</option>
-                                                <option value="UE"
-                                                    {{ isset($resepAnjuran[$index]) && $resepAnjuran[$index] == 'UE' ? 'selected' : '' }}>
-                                                    UE</option>
-                                                <!-- Opsi lainnya -->
-                                            </select>
-                                        </div>
+                                                <!-- Anjuran Minum -->
+                                                <div class="input-row"
+                                                    id="edit-anjuranMinumContainer_{{ $index }}_{{ $subIndex }}"
+                                                    style="display: flex; align-items: center; gap: 5px;">
+                                                    <label
+                                                        for="edit-anjuran_{{ $index }}_{{ $subIndex }}"
+                                                        style="min-width: 100px">Anjuran Minum</label>
+                                                    <span>:</span>
+                                                    <div class="input-wrapper">
+                                                        <div class="multi-select-wrapper form-control"
+                                                            data-input-id="edit-anjuran_{{ $index }}_{{ $subIndex }}">
+                                                            <div class="selected-tags"
+                                                                id="edit-anjuran_{{ $index }}_{{ $subIndex }}_tags">
+                                                                @if (isset($resepAnjuranArray[$index][$subIndex]))
+                                                                    <span class="tag"
+                                                                        data-value="{{ $resepAnjuranArray[$index][$subIndex] }}">{{ $resepAnjuranArray[$index][$subIndex] }}
+                                                                        <i class="fas fa-times remove-tag"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <input type="text"
+                                                                class="autocomplete-input multi-select-input"
+                                                                id="edit-anjuran_{{ $index }}_{{ $subIndex }}"
+                                                                placeholder="Cari Anjuran Minum" autocomplete="off"
+                                                                data-url="{{ url('anjuran-autocomplete') }}"
+                                                                data-dropdown="edit-dropdown-anjuran_{{ $index }}_{{ $subIndex }}">
+                                                        </div>
+                                                        <input type="hidden"
+                                                            name="soap_p[{{ $index }}][anjuran][]"
+                                                            id="edit-anjuran_{{ $index }}_{{ $subIndex }}_hidden"
+                                                            value="{{ isset($resepAnjuranArray[$index][$subIndex]) ? $resepAnjuranArray[$index][$subIndex] : '' }}">
+                                                        <div id="edit-dropdown-anjuran_{{ $index }}_{{ $subIndex }}"
+                                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                                        <p class="text-warning"
+                                                            style="font-style: italic; font-size: 12px">
+                                                            *Bisa memilih lebih dari 1 anjuran minum
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Jumlah Masing-masing Obat -->
-                                        <div class="input-row" id="jumlahObatContainer_{{ $index }}"
-                                            style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                                            <label for="jumlah" style="min-width: 100px">Jumlah</label>
-                                            <span>:</span>
-                                            <input type="number" name="soap_p[{{ $index }}][jumlah]"
-                                                class="form-control" value="{{ $resepJumlah[$index] ?? '' }}"
-                                                placeholder="Masukkan Jumlah Obat">
+                                                <!-- Jumlah Masing-masing Obat -->
+                                                <div class="input-row"
+                                                    id="edit-jumlahObatContainer_{{ $index }}_{{ $subIndex }}"
+                                                    style="display: flex; align-items: center; gap: 5px;">
+                                                    <label
+                                                        for="edit-jumlah_{{ $index }}_{{ $subIndex }}"
+                                                        style="min-width: 100px">Jumlah</label>
+                                                    <span>:</span>
+                                                    <div class="input-wrapper">
+                                                        <div class="multi-select-wrapper form-control"
+                                                            data-input-id="edit-jumlah_{{ $index }}_{{ $subIndex }}">
+                                                            <div class="selected-tags"
+                                                                id="edit-jumlah_{{ $index }}_{{ $subIndex }}_tags">
+                                                                @if (isset($resepJumlah[$index][$subIndex]))
+                                                                    <span class="tag"
+                                                                        data-value="{{ $resepJumlah[$index][$subIndex] }}">{{ $resepJumlah[$index][$subIndex] }}
+                                                                        <i class="fas fa-times remove-tag"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <input type="number"
+                                                                class="multi-select-input jumlah-input"
+                                                                id="edit-jumlah_{{ $index }}_{{ $subIndex }}"
+                                                                placeholder="Masukkan Jumlah" min="1">
+                                                        </div>
+                                                        <input type="hidden"
+                                                            name="soap_p[{{ $index }}][jumlah][]"
+                                                            id="edit-jumlah_{{ $index }}_{{ $subIndex }}_hidden"
+                                                            value="{{ isset($resepJumlah[$index][$subIndex]) ? $resepJumlah[$index][$subIndex] : '' }}">
+                                                        <p class="text-warning"
+                                                            style="font-style: italic; font-size: 12px">
+                                                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk
+                                                            menambah)
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            @endfor
                                         </div>
-
-                                        <hr>
-                                    @endforeach
+                                    @endfor
                                 @else
-                                    <!-- Untuk form kosong (jika tidak ada resep) -->
-                                    <div class="input-row" id="namaObatContainer_0"
+                                    <!-- Form kosong jika tidak ada data -->
+                                    <div class="input-row" id="edit-namaObatContainer_0_0"
                                         style="display: flex; align-items: center; gap: 5px;">
-                                        <label for="namaobat" style="min-width: 100px;">Nama Obat</label>
+                                        <label for="edit-resep_0_0" style="min-width: 100px;">Nama Obat</label>
                                         <span>:</span>
-                                        <div class="input-wrapper" style="position: relative; flex-grow: 1;">
-                                            <input type="text" class="form-control soap_p" name="soap_p[0][resep]"
-                                                id="resep_0" placeholder="Cari Obat" autocomplete="off">
-                                            <ul id="dropdown-resep_0" class="dropdown-menu-autocomplete"
-                                                style="cursor: pointer; display: none;">
-                                                <!-- Item akan di-append di sini -->
-                                            </ul>
+                                        <div class="input-wrapper">
+                                            <div class="multi-select-wrapper form-control"
+                                                data-input-id="edit-resep_0_0">
+                                                <div class="selected-tags" id="edit-resep_0_0_tags"></div>
+                                                <input type="text" class="autocomplete-input multi-select-input"
+                                                    id="edit-resep_0_0" placeholder="Cari Obat" autocomplete="off"
+                                                    data-url="{{ url('/resep-autocomplete') }}"
+                                                    data-dropdown="edit-dropdown-resep_0_0">
+                                            </div>
+                                            <input type="hidden" name="soap_p[0][resep][]"
+                                                id="edit-resep_0_0_hidden">
+                                            <div id="edit-dropdown-resep_0_0"
+                                                class="dropdown-menu autocomplete-dropdown"></div>
+                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                *Bisa memilih lebih dari 1 obat
+                                            </p>
                                         </div>
                                     </div>
-                                    <!-- Lanjutkan dengan field lainnya -->
+                                    <div class="input-row" id="edit-jenisObatContainer_0_0"
+                                        style="display: flex; align-items: center; gap: 5px;">
+                                        <label for="edit-jenis_obat_0_0" style="min-width: 100px;">Jenis Obat</label>
+                                        <span>:</span>
+                                        <div class="input-wrapper">
+                                            <div class="multi-select-wrapper form-control"
+                                                data-input-id="edit-jenis_obat_0_0">
+                                                <div class="selected-tags" id="edit-jenis_obat_0_0_tags"></div>
+                                                <input type="text" class="autocomplete-input multi-select-input"
+                                                    id="edit-jenis_obat_0_0" placeholder="Cari Jenis Obat"
+                                                    autocomplete="off" data-url="{{ url('jenis-autocomplete') }}"
+                                                    data-dropdown="edit-dropdown-jenis_obat_0_0">
+                                            </div>
+                                            <input type="hidden" name="soap_p[0][jenisobat][]"
+                                                id="edit-jenis_obat_0_0_hidden">
+                                            <div id="edit-dropdown-jenis_obat_0_0"
+                                                class="dropdown-menu autocomplete-dropdown"></div>
+                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                *Bisa memilih lebih dari 1 jenis obat
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="input-row" id="edit-aturanContainer_0_0"
+                                        style="display: flex; align-items: center; gap: 5px;">
+                                        <label for="edit-aturan_0_0" style="min-width: 100px">Aturan Pakai</label>
+                                        <span>:</span>
+                                        <div class="input-wrapper">
+                                            <div class="multi-select-wrapper form-control"
+                                                data-input-id="edit-aturan_0_0">
+                                                <div class="selected-tags" id="edit-aturan_0_0_tags"></div>
+                                                <input type="text" class="autocomplete-input multi-select-input"
+                                                    id="edit-aturan_0_0" placeholder="Cari Aturan Pakai"
+                                                    autocomplete="off" data-url="{{ url('aturan-autocomplete') }}"
+                                                    data-dropdown="edit-dropdown-aturan_0_0">
+                                            </div>
+                                            <input type="hidden" name="soap_p[0][aturan][]"
+                                                id="edit-aturan_0_0_hidden">
+                                            <div id="edit-dropdown-aturan_0_0"
+                                                class="dropdown-menu autocomplete-dropdown"></div>
+                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                *Bisa memilih lebih dari 1 aturan pakai
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="input-row" id="edit-anjuranMinumContainer_0_0"
+                                        style="display: flex; align-items: center; gap: 5px;">
+                                        <label for="edit-anjuran_0_0" style="min-width: 100px">Anjuran Minum</label>
+                                        <span>:</span>
+                                        <div class="input-wrapper">
+                                            <div class="multi-select-wrapper form-control"
+                                                data-input-id="edit-anjuran_0_0">
+                                                <div class="selected-tags" id="edit-anjuran_0_0_tags"></div>
+                                                <input type="text" class="autocomplete-input multi-select-input"
+                                                    id="edit-anjuran_0_0" placeholder="Cari Anjuran Minum"
+                                                    autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}"
+                                                    data-dropdown="edit-dropdown-anjuran_0_0">
+                                            </div>
+                                            <input type="hidden" name="soap_p[0][anjuran][]"
+                                                id="edit-anjuran_0_0_hidden">
+                                            <div id="edit-dropdown-anjuran_0_0"
+                                                class="dropdown-menu autocomplete-dropdown"></div>
+                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                *Bisa memilih lebih dari 1 anjuran minum
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="input-row" id="edit-jumlahObatContainer_0_0"
+                                        style="display: flex; align-items: center; gap: 5px;">
+                                        <label for="edit-jumlah_0_0" style="min-width: 100px">Jumlah</label>
+                                        <span>:</span>
+                                        <div class="input-wrapper">
+                                            <div class="multi-select-wrapper form-control"
+                                                data-input-id="edit-jumlah_0_0">
+                                                <div class="selected-tags" id="edit-jumlah_0_0_tags"></div>
+                                                <input type="number" class="multi-select-input jumlah-input"
+                                                    id="edit-jumlah_0_0" placeholder="Masukkan Jumlah"
+                                                    min="1">
+                                            </div>
+                                            <input type="hidden" name="soap_p[0][jumlah][]"
+                                                id="edit-jumlah_0_0_hidden">
+                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                                            </p>
+                                        </div>
+                                    </div>
                                 @endif
-                            </div>
 
-                            <button type="button" class="btn btn-outline-primary"
-                                onclick="addColumn('jumlahObatContainer')" data-bs-toggle="tooltip"
-                                data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                                data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                                <i class="fa-solid fa-pills"></i>
-                            </button>
+                                <button type="button" class="btn btn-outline-primary" onclick="editAddColumn()"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
+                                    data-bs-html="true"
+                                    data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
+                                    <i class="fa-solid fa-pills"></i>
+                                </button>
+
+                                <label for=""
+                                    style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; width: 100%; cursor: pointer"
+                                    onclick="toggleRacikanContainer()">Resep Racikan</label>
+                                <div class="racikan" id="edit-resepRacikan">
+                                    <textarea name="ObatRacikan" id="edit-ObatRacikan" cols="30" rows="5" class="form-control mb-2 mt-2">{{ $soapTerbaru->ObatRacikan ?? '' }}</textarea>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="edukasi" style="font-weight: bold">Edukasi</label>
@@ -843,11 +945,8 @@
 @endif
 
 @push('style')
-    <!-- CSS Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
     <style>
-        #resep,
+        #edit-resep,
         .input-wrapper {
             overflow: visible !important;
             position: relative;
@@ -889,7 +988,7 @@
             margin-top: 0;
         }
 
-        #racikan {
+        #edit-racikan {
             display: block;
             /* Menampilkan elemen secara default */
         }
@@ -936,12 +1035,8 @@
 
 @push('script')
     <!-- JS Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet">
     <script src="{{ asset('assets/js/script.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     <script>
         // DIAGNOSA - Versi yang diperbaiki
@@ -1012,342 +1107,217 @@
         });
 
         // RESEP OBAT
-        $(document).ready(function() {
-            function initObatAutocomplete(inputElement) {
-                const inputId = inputElement.attr('id');
-                const dropdownId = `dropdown-${inputId}`;
+        // resources/js/editSoap.js
+        document.addEventListener('DOMContentLoaded', function() {
+            function initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues = []) {
+                const input = document.getElementById(inputId);
+                const hiddenInput = document.getElementById(hiddenInputId);
+                const dropdown = document.getElementById(dropdownId);
+                const tagsContainer = document.getElementById(`${inputId}_tags`);
+                let selectedValues = existingValues.length ? existingValues : hiddenInput.value ? hiddenInput.value
+                    .split(',') : [];
 
-                console.log(`Initializing autocomplete for ${inputId}`); // Debug
-
-                // Cari dropdown yang terkait dengan input
-                let dropdownElement = $(`#${dropdownId}`);
-
-                // Minimalkan manipulasi DOM - jangan mengubah struktur yang sudah ada
-                if (!dropdownElement.length) {
-                    console.log(`Creating new dropdown for ${inputId}`); // Debug
-
-                    // Cek apakah input sudah dalam wrapper
-                    if (!inputElement.parent().hasClass('input-wrapper')) {
-                        // Buat wrapper baru jika belum ada
-                        const parent = inputElement.parent();
-                        const inputWrapper = $(
-                            '<div class="input-wrapper" style="position: relative; flex-grow: 1;"></div>');
-                        inputElement.wrap(inputWrapper);
+                // Tampilkan nilai default sebagai tag
+                selectedValues.forEach(value => {
+                    if (value) {
+                        const tag = document.createElement('span');
+                        tag.className = 'tag';
+                        tag.dataset.value = value;
+                        tag.innerHTML = `${value} <i class="fas fa-times remove-tag"></i>`;
+                        tagsContainer.appendChild(tag);
                     }
+                });
 
-                    // Buat dropdown baru
-                    dropdownElement = $(
-                        `<ul id="${dropdownId}" class="dropdown-menu-autocomplete" style="cursor: pointer; display: none;"></ul>`
-                    );
-                    inputElement.after(dropdownElement);
-                } else {
-                    console.log(`Dropdown exists for ${inputId}`); // Debug
-
-                    // Pastikan dropdown menggunakan kelas yang benar
-                    dropdownElement.removeClass('dropdown-menu').addClass('dropdown-menu-autocomplete');
-
-                    // Pastikan dropdown terletak setelah input dalam DOM
-                    const currentParent = dropdownElement.parent();
-                    if (!currentParent.is(inputElement.parent())) {
-                        inputElement.after(dropdownElement);
-                    }
+                // Update hidden input
+                function updateHiddenInput() {
+                    hiddenInput.value = selectedValues.join(',');
                 }
 
-                // Event handler untuk input - tangkap input dengan debounce
-                let debounceTimer;
-                inputElement.off('input').on('input', function() {
-                    const query = $(this).val().trim();
-
-                    // Clear debounce timer
-                    clearTimeout(debounceTimer);
-
+                // Event listener untuk input autocomplete
+                input.addEventListener('input', function() {
+                    const query = input.value;
                     if (query.length < 2) {
-                        dropdownElement.hide().removeClass('show');
+                        dropdown.style.display = 'none';
                         return;
                     }
 
-                    // Set debounce timer untuk mengurangi jumlah request
-                    debounceTimer = setTimeout(function() {
-                        console.log(`Searching for: ${query}`); // Debug
-
-                        $.ajax({
-                            url: '/resep-autocomplete',
-                            data: {
-                                term: query
-                            },
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function(data) {
-                                console.log(
-                                    `Received ${data.length} results for ${inputId}`
-                                ); // Debug
-
-                                dropdownElement.empty();
-                                if (data.length > 0) {
-                                    data.forEach(item => {
-                                        dropdownElement.append(
-                                            `<li class="dropdown-item">${item.text}</li>`
-                                        );
-                                    });
-                                    // Menampilkan dropdown dengan animasi
-                                    dropdownElement.show().addClass('show');
-
-                                    // Pastikan dropdown tidak melebihi batas layar
-                                    positionDropdown(inputElement, dropdownElement);
-                                } else {
-                                    dropdownElement.append(
-                                        '<li class="dropdown-item disabled">Tidak ada hasil</li>'
-                                    );
-                                    // Menampilkan dropdown dengan animasi
-                                    dropdownElement.show().addClass('show');
-
-                                    // Pastikan dropdown tidak melebihi batas layar
-                                    positionDropdown(inputElement, dropdownElement);
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.log(`Error in autocomplete: ${error}`); // Debug
-                                dropdownElement.hide().removeClass('show');
-                            }
+                    fetch(`${url}?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            dropdown.innerHTML = '';
+                            data.forEach(item => {
+                                const li = document.createElement('li');
+                                li.textContent = item
+                                    .value; // Sesuaikan dengan struktur data dari endpoint
+                                li.addEventListener('click', () => {
+                                    if (!selectedValues.includes(item.value)) {
+                                        selectedValues.push(item.value);
+                                        const tag = document.createElement('span');
+                                        tag.className = 'tag';
+                                        tag.dataset.value = item.value;
+                                        tag.innerHTML =
+                                            `${item.value} <i class="fas fa-times remove-tag"></i>`;
+                                        tagsContainer.appendChild(tag);
+                                        updateHiddenInput();
+                                    }
+                                    input.value = '';
+                                    dropdown.style.display = 'none';
+                                });
+                                dropdown.appendChild(li);
+                            });
+                            dropdown.style.display = data.length ? 'block' : 'none';
                         });
-                    }, 300); // 300ms debounce
                 });
 
-                // Pilih item dropdown - perhatikan selector yang digunakan
-                dropdownElement.off('click').on('click', '.dropdown-item:not(.disabled)', function() {
-                    const selectedValue = $(this).text();
-                    console.log(`Selected: ${selectedValue} for ${inputId}`); // Debug
-                    inputElement.val(selectedValue);
-                    dropdownElement.hide().removeClass('show');
-                });
-
-                // Sembunyikan saat klik di luar
-                $(document).off('click.autocomplete').on('click.autocomplete', function(e) {
-                    if (!inputElement.is(e.target) && !dropdownElement.is(e.target) &&
-                        dropdownElement.has(e.target).length === 0) {
-                        dropdownElement.hide().removeClass('show');
+                // Event listener untuk menghapus tag
+                tagsContainer.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('remove-tag')) {
+                        const tag = e.target.parentElement;
+                        const value = tag.dataset.value;
+                        selectedValues = selectedValues.filter(val => val !== value);
+                        tag.remove();
+                        updateHiddenInput();
                     }
                 });
 
-                // Tangkap event focus untuk menunjukkan dropdown jika ada pencarian sebelumnya
-                inputElement.off('focus').on('focus', function() {
-                    const query = $(this).val().trim();
-                    if (query.length >= 2) {
-                        // Trigger input event untuk menampilkan dropdown
-                        inputElement.trigger('input');
-                    }
-                });
-            }
-
-            // Fungsi untuk memposisikan dropdown secara optimal
-            function positionDropdown(inputElement, dropdownElement) {
-                const inputRect = inputElement[0].getBoundingClientRect();
-                const windowHeight = $(window).height();
-                const dropdownHeight = dropdownElement.outerHeight();
-
-                // Hitung posisi top dan left
-                const left = 0; // Relatif terhadap parent
-                const top = inputElement.outerHeight() + 2; // 2px margin dari input
-
-                // Cek apakah ada cukup ruang di bawah input
-                const spaceBelow = windowHeight - (inputRect.top + inputRect.height);
-
-                if (spaceBelow < dropdownHeight && inputRect.top > dropdownHeight) {
-                    // Jika tidak cukup ruang di bawah tapi cukup di atas, tampilkan di atas
-                    dropdownElement.css({
-                        top: 'auto',
-                        bottom: '100%',
-                        marginBottom: '5px',
-                        marginTop: '0'
-                    });
-                } else {
-                    // Tampilkan di bawah (default)
-                    dropdownElement.css({
-                        top: top + 'px',
-                        bottom: 'auto',
-                        left: left + 'px',
-                        width: '100%'
+                // Event listener untuk jumlah (tekan Enter)
+                if (input.type === 'number') {
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter' && input.value) {
+                            selectedValues.push(input.value);
+                            const tag = document.createElement('span');
+                            tag.className = 'tag';
+                            tag.dataset.value = input.value;
+                            tag.innerHTML = `${input.value} <i class="fas fa-times remove-tag"></i>`;
+                            tagsContainer.appendChild(tag);
+                            updateHiddenInput();
+                            input.value = '';
+                        }
                     });
                 }
             }
 
-            // Inisialisasi autocomplete untuk semua input awal - dengan delay untuk memastikan DOM sudah siap
-            setTimeout(function() {
-                console.log('Initializing all existing autocomplete fields'); // Debug
-                $('input[id^="resep_"]').each(function() {
-                    // Pastikan nilai input dipertahankan
-                    const currentValue = $(this).val();
+            // Inisialisasi multi-select untuk setiap entri
+            document.querySelectorAll('.multi-select-wrapper').forEach(wrapper => {
+                const inputId = wrapper.dataset.inputId;
+                const hiddenInputId = `${inputId}_hidden`;
+                const dropdownId = wrapper.dataset.dropdown ||
+                    `edit-dropdown-${inputId.split('_').slice(1).join('_')}`;
+                const url = wrapper.querySelector('.autocomplete-input')?.dataset.url || '';
+                const existingValues = wrapper.querySelector('.selected-tags').children.length ?
+                    Array.from(wrapper.querySelector('.selected-tags').children).map(tag => tag.dataset
+                        .value) : [];
+                initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues);
+            });
 
-                    // Pastikan input berada di dalam container yang benar
-                    const inputId = $(this).attr('id');
-                    const container = $(this).closest('.input-row');
-
-                    // Jika tidak berada dalam struktur yang benar, sesuaikan struktur
-                    if (!$(this).parent().hasClass('input-wrapper')) {
-                        // Bungkus dalam input-wrapper dengan posisi relative
-                        $(this).wrap(
-                            '<div class="input-wrapper" style="position: relative; flex-grow: 1;"></div>'
-                        );
-
-                        // Periksa apakah dropdown sudah ada
-                        const dropdownId = `dropdown-${inputId}`;
-                        let dropdownElement = $(`#${dropdownId}`);
-
-                        if (!dropdownElement.length) {
-                            // Buat dropdown baru jika belum ada
-                            dropdownElement = $(
-                                `<ul id="${dropdownId}" class="dropdown-menu-autocomplete" style="cursor: pointer; display: none;"></ul>`
-                            );
-                            $(this).after(dropdownElement);
-                        } else {
-                            // Pastikan dropdown berada di posisi yang benar
-                            $(this).after(dropdownElement);
-                        }
-                    }
-
-                    // Inisialisasi autocomplete
-                    initObatAutocomplete($(this));
-
-                    // Kembalikan nilai setelah inisialisasi
-                    if (currentValue) $(this).val(currentValue);
-                });
-            }, 500);
-
-            // Tambah kolom baru dengan autocomplete
-            let kolomIndex = {{ !empty($resep) ? count($resep) : 1 }};
-            window.addColumn = function() {
-                const newElement = `
-                <div class="input-package new-package" id="package_${kolomIndex}" style="display: contents; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
-                    <label for="soap_p_${kolomIndex}" style="font-weight: bold; margin-top: 20px;">Pilih Obat Baru (P)</label>
-
-                    <!-- Nama Obat -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="resep_${kolomIndex}" style="min-width: 100px;">Nama Obat</label>
-                        <span>:</span>
-                        <div class="input-wrapper" style="position: relative; flex-grow: 1;">
-                            <input type="text" class="form-control soap_p" name="soap_p[${kolomIndex}][resep]" id="resep_${kolomIndex}" placeholder="Cari Obat" autocomplete="off">
-                            <ul id="dropdown-resep_${kolomIndex}" class="dropdown-menu-autocomplete" style="cursor: pointer; display: none;"></ul>
+            // Fungsi untuk menambah kolom baru
+            window.editAddColumn = function() {
+                const container = document.getElementById('edit-resep');
+                const index = container.querySelectorAll('.input-row[id*="edit-namaObatContainer"]').length;
+                const newRow = `
+                        <div class="input-row" id="edit-namaObatContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-resep_${index}" style="min-width: 100px;">Nama Obat</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-resep_${index}">
+                                    <div class="selected-tags" id="edit-resep_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-resep_${index}"
+                                        placeholder="Cari Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-resep_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][resep][]" id="edit-resep_${index}_hidden">
+                                <div id="edit-dropdown-resep_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 obat
+                                </p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Jenis Obat -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="jenis_obat_${kolomIndex}" style="min-width: 100px;">Jenis Obat</label>
-                        <span>:</span>
-                        <select name="soap_p[${kolomIndex}][jenisobat]" id="jenis_obat_${kolomIndex}" class="form-control" required>
-                            <option value="">--Pilih Jenis Obat--</option>
-                            <option value="Tablet">Tablet</option>
-                            <option value="Kapsul">Kapsul</option>
-                            <option value="Bungkus">Bungkus</option>
-                            <option value="Salep">Salep</option>
-                            <option value="Sirup">Sirup</option>
-                            <option value="Mililiter">Mililiter</option>
-                            <option value="Sendok Teh">Sendok Teh</option>
-                            <option value="Sendok Makan">Sendok Makan</option>
-                            <option value="Tetes">Tetes</option>
-                            <option value="Puyer/Racikan">Puyer/Racikan</option>
-                        </select>
-                    </div>
-
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="aturan_${kolomIndex}" style="min-width: 100px;">Aturan Minum Perhari</label>
-                        <span>:</span>
-                        <select class="form-control" name="soap_p[${kolomIndex}][aturan]" id="aturan_${kolomIndex}" required>
-                            <option value="">--Pilih Aturan Minum--</option>
-                            <option value="1x1 SENDOK">1x1 SENDOK</option>
-                            <option value="1x1/2 SENDOK">1x1/2 SENDOK</option>
-                            <option value="1x3/4 SENDOK">1x3/4 SENDOK</option>
-                            <option value="1x1 1/2 SENDOK">1x1 1/2 SENDOK</option>
-                            <option value="2x1 SENDOK">2x1 SENDOK</option>
-                            <option value="2x1/2 SENDOK">2x1/2 SENDOK</option>
-                            <option value="2x3/4 SENDOK">2x3/4 SENDOK</option>
-                            <option value="3x1 SENDOK">3x1 SENDOK</option>
-                            <option value="3x1/2 SENDOK">3x1/2 SENDOK</option>
-                            <option value="3x3/4 SENDOK">3x3/4 SENDOK</option>
-                            <option value="3x1 1/2 SENDOK">3x1 1/2 SENDOK</option>
-                            <option value="4x1 SENDOK">4x1 SENDOK</option>
-                            <option value="4x1 1/2 SENDOK">4x1 1/2 SENDOK</option>
-                            <option value="4x1/2 SENDOK">4x1/2 SENDOK</option>
-                            <option value="4x3/4 SENDOK">4x3/4 SENDOK</option>
-                            <option value="3x SEHARI OLES TIPIS-TIPIS">3x SEHARI OLES TIPIS-TIPIS</option>
-                            <option value="2x SEHARI OLES TIPIS-TIPIS">2x SEHARI OLES TIPIS-TIPIS</option>
-                            <option value="1x1 TABLET">1x1 TABLET</option>
-                            <option value="2x1 TABLET">2x1 TABLET</option>
-                            <option value="3x1 TABLET">3x1 TABLET</option>
-                            <option value="3x1 BUNGKUS">3x1 BUNGKUS</option>
-                            <option value="3x2 TETES">3x2 TETES</option>
-                            <option value="3x1 TETES">3x1 TETES</option>
-                            <option value="4x2 TETES">4x2 TETES</option>
-                            <option value="INJEKSI 1 ml">INJEKSI 1 ml</option>
-                            <option value="INJEKSI 2 ml">INJEKSI 2 ml</option>
-                            <option value="INJEKSI 3 ml">INJEKSI 3 ml</option>
-                            <option value="NEBUL 1 ampul">NEBUL 1 ampul</option>
-                        </select>
-                    </div>
-
-                    <!-- Anjuran Minum -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="anjuran_${kolomIndex}" style="min-width: 100px;">Anjuran Minum</label>
-                        <span>:</span>
-                        <select name="soap_p[${kolomIndex}][anjuran]" id="anjuran_${kolomIndex}" class="form-control" required>
-                            <option value="">--Pilih Anjuran Minum--</option>
-                            <option value="AC">AC</option>
-                            <option value="AD">AD</option>
-                            <option value="AS">AS</option>
-                            <option value="C">C</option>
-                            <option value="CTH">CTH</option>
-                            <option value="DC">DC</option>
-                            <option value="PC">PC</option>
-                            <option value="OD">OD</option>
-                            <option value="OS">OS</option>
-                            <option value="ODS">ODS</option>
-                            <option value="PRM">PRM</option>
-                            <option value="UE">UE</option>
-                        </select>
-                    </div>
-
-                    <!-- Jumlah Masing-masing Obat -->
-                    <div class="input-row" style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <label for="jumlah_${kolomIndex}" style="min-width: 100px;">Jumlah</label>
-                        <span>:</span>
-                        <input type="number" name="soap_p[${kolomIndex}][jumlah]" id="jumlah_${kolomIndex}" class="form-control" placeholder="Masukkan Jumlah Obat" required>
-                    </div>
-
-                    <!-- Tombol Hapus -->
-                    <button type="button" class="btn btn-danger btn-wide" style="width: 50px; padding: 5px 10px; margin-bottom: 5px" onclick="$(this).closest('.input-package').remove()">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>`;
-
-                $('#resep').append(newElement);
-                // Tunggu sebentar untuk memastikan DOM sudah diperbarui
-                setTimeout(function() {
-                    console.log(
-                        `Initializing autocomplete for new field: resep_${kolomIndex}`); // Debug
-                    initObatAutocomplete($(`#resep_${kolomIndex}`));
-                    kolomIndex++;
-                }, 100);
-            }
-
-            // Tambahkan fungsi troubleshooting untuk memudahkan debugging
-            window.checkAutocomplete = function() {
-                $('input[id^="resep_"]').each(function() {
-                    const inputId = $(this).attr('id');
-                    const dropdownId = `dropdown-${inputId}`;
-                    console.log(
-                        `Input: ${inputId}, Value: "${$(this).val()}", Dropdown exists: ${$(`#${dropdownId}`).length > 0}`
-                    );
-                });
-            }
-
-            // Panggil fungsi pengecekan setelah halaman dimuat
-            setTimeout(checkAutocomplete, 1000);
+                        <div class="input-row" id="edit-jenisObatContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-jenis_obat_${index}" style="min-width: 100px;">Jenis Obat</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_${index}">
+                                    <div class="selected-tags" id="edit-jenis_obat_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-jenis_obat_${index}"
+                                        placeholder="Cari Jenis Obat" autocomplete="off" data-url="{{ url('jenis-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-jenis_obat_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][jenisobat][]" id="edit-jenis_obat_${index}_hidden">
+                                <div id="edit-dropdown-jenis_obat_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 jenis obat
+                                </p>
+                            </div>
+                        </div>
+                        <div class="input-row" id="edit-aturanContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-aturan_${index}" style="min-width: 100px">Aturan Pakai</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_${index}">
+                                    <div class="selected-tags" id="edit-aturan_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-aturan_${index}"
+                                        placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('aturan-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-aturan_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][aturan][]" id="edit-aturan_${index}_hidden">
+                                <div id="edit-dropdown-aturan_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 aturan pakai
+                                </p>
+                            </div>
+                        </div>
+                        <div class="input-row" id="edit-anjuranMinumContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-anjuran_${index}" style="min-width: 100px">Anjuran Minum</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_${index}">
+                                    <div class="selected-tags" id="edit-anjuran_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-anjuran_${index}"
+                                        placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-anjuran_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][anjuran][]" id="edit-anjuran_${index}_hidden">
+                                <div id="edit-dropdown-anjuran_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 anjuran minum
+                                </p>
+                            </div>
+                        </div>
+                        <div class="input-row" id="edit-jumlahObatContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-jumlah_${index}" style="min-width: 100px">Jumlah</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_${index}">
+                                    <div class="selected-tags" id="edit-jumlah_${index}_tags"></div>
+                                    <input type="number" class="multi-select-input jumlah-input" id="edit-jumlah_${index}"
+                                        placeholder="Masukkan Jumlah" min="1">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][jumlah][]" id="edit-jumlah_${index}_hidden">
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                    `;
+                container.insertAdjacentHTML('beforeend', newRow);
+                initializeMultiSelect(`edit-resep_${index}`, `edit-resep_${index}_hidden`,
+                    `edit-dropdown-resep_${index}`, '{{ url('/resep-autocomplete') }}');
+                initializeMultiSelect(`edit-jenis_obat_${index}`, `edit-jenis_obat_${index}_hidden`,
+                    `edit-dropdown-jenis_obat_${index}`, '{{ url('/jenis-autocomplete') }}');
+                initializeMultiSelect(`edit-aturan_${index}`, `edit-aturan_${index}_hidden`,
+                    `edit-dropdown-aturan_${index}`, '{{ url('/aturan-autocomplete') }}');
+                initializeMultiSelect(`edit-anjuran_${index}`, `edit-anjuran_${index}_hidden`,
+                    `edit-dropdown-anjuran_${index}`, '{{ url('/anjuran-autocomplete') }}');
+                initializeMultiSelect(`edit-jumlah_${index}`, `edit-jumlah_${index}_hidden`,
+                    `edit-jumlah_${index}`, '');
+            };
         });
 
         // RESEP
         function toggleObatContainer() {
             // Ambil elemen dengan id "resep"
-            var resepContainer = document.getElementById('resep');
+            var resepContainer = document.getElementById('edit-resep');
 
             // Cek status saat ini (apakah tersembunyi atau terlihat)
             if (resepContainer.style.display === 'none' || resepContainer.style.display === '') {
@@ -1362,7 +1332,7 @@
         // RACIKAN
         function toggleRacikanContainer() {
             // Ambil elemen dengan id "resepRacikan"
-            var resepRacikanContainer = document.getElementById('resepRacikan');
+            var resepRacikanContainer = document.getElementById('edit-resepRacikan');
 
             // Cek status saat ini (apakah tersembunyi atau terlihat)
             if (resepRacikanContainer.style.display === 'none' || resepRacikanContainer.style.display === '') {

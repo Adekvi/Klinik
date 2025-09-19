@@ -1,6 +1,6 @@
 <div class="modal fade" id="Sehat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="pasienbaru" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: rgb(0, 0, 0)">Kunjungan Sehat</h1>
@@ -26,18 +26,35 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label for="">No. Kartu BPJS</label>
+                                <label for="">No. BPJS</label>
                                 <input type="text" class="form-control mt-2 mb-2" name="noKartu" id="noKartu"
-                                    required>
+                                    placeholder="No. BPJS">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="norm">No. RM</label>
+                                <input type="text" class="form-control mt-2 mb-2" name="norm" id="norm"
+                                    placeholder="No. RM">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="nama_pasien">Nama Pasien</label>
-                                <input type="text" class="form-control mt-2 mb-2" name="nama_pasien"
-                                    id="nama_pasien">
+                                <input type="text" class="form-control mt-2 mb-2" name="nama_pasien" id="nama_pasien"
+                                    placeholder="Nama Pasien">
                             </div>
                         </div>
+                        {{-- <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="jenis_pasien">Jenis Pasien</label>
+                                <select class="form-control mt-2 mb-2" name="jenis_pasien" id="jenis_pasien">
+                                    <option value="">-- Pilih Jenis Pasien --</option>
+                                    <option value="Umum">Umum</option>
+                                    <option value="Bpjs">Bpjs</option>
+                                </select>
+                            </div>
+                        </div> --}}
                     </div>
                     <div class="form-group">
                         <label for="kegiatan">Kegiatan</label>

@@ -5,6 +5,9 @@
 'use strict';
 
 (function () {
+  let pasienSehatData = []; 
+  let pasienUmumData = []; 
+  let pasienBpjsData = []; 
   let cardColor, headingColor, axisColor, shadeColor, borderColor;
 
   cardColor = config.colors.white;

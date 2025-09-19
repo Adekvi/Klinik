@@ -5,8 +5,11 @@ use App\Http\Controllers\Admin\Akun\ProfileController;
 use App\Http\Controllers\Admin\Kunjungan\BookingController;
 use App\Http\Controllers\Admin\Kunjungan\SehatController;
 use App\Http\Controllers\Admin\Master\AksesController;
+use App\Http\Controllers\Admin\Master\DataAnjuranController;
+use App\Http\Controllers\Admin\Master\DataAturanController;
 use App\Http\Controllers\Admin\Master\DataDiagnosaController;
 use App\Http\Controllers\Admin\Master\DataDokterController;
+use App\Http\Controllers\Admin\Master\DataJenisObatController;
 use App\Http\Controllers\Admin\Master\DataMarginController;
 use App\Http\Controllers\Admin\Master\DataObatController;
 use App\Http\Controllers\Admin\Master\DataPasienController;
@@ -32,9 +35,15 @@ use App\Http\Controllers\Admin\Rekapan\RekapPasienController;
 use App\Http\Controllers\Admin\Rekapan\RujukanController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\Apoteker\Master\MasterAnjuranController;
+use App\Http\Controllers\Apoteker\Master\MasterAturanController;
 use App\Http\Controllers\ApotekerObatController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DataVideController;
+use App\Http\Controllers\Dokter\DokterGigiController;
+use App\Http\Controllers\Dokter\DokterUmumController;
+use App\Http\Controllers\Dokter\Gambar\GambarDokterController;
+use App\Http\Controllers\Dokter\Soap\DokterController as SoapDokterController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KasirController;
@@ -194,26 +203,29 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
     Route::post('dokter/lewati/{id}', [DokterController::class, 'lewatiAntrianDokter'])->name('dokter.lewati');
     // dokter
     Route::get('dokter/index', [DokterController::class, 'index'])->name('dokter.index');
-    Route::get('dokter/soap/{id}', [DokterController::class, 'soap'])->name('dokter.soap');
-    Route::post('dokter/store/{id}', [DokterController::class, 'store'])->name('dokter.store');
-    Route::put('soap/update/{id}', [DokterController::class, 'updateSoap'])->name('soap.update');
+    Route::get('dokter/soap/{id}', [SoapDokterController::class, 'soap'])->name('dokter.soap');
+    Route::post('dokter/store/{id}', [SoapDokterController::class, 'store'])->name('dokter.store');
+    Route::put('soap/update/{id}', [SoapDokterController::class, 'updateSoap'])->name('soap.update');
 
     // datapasien telah diperiksa
     Route::get('dokter/periksa', [BerandaDokterController::class, 'periksa'])->name('dokter.periksa');
 
     // Dokter Umum
-    Route::get('dokter/tubuh/{id}', [DokterController::class, 'dokterUmum'])->name('dokter.tubuh');
+    Route::get('dokter/tubuh/{id}', [DokterUmumController::class, 'dokterUmum'])->name('dokter.tubuh');
 
     // Dokter Gigi
-    Route::get('dokter/odontogram/{id}', [DokterController::class, 'dokterGigi'])->name('dokter.odontogram');
+    Route::get('dokter/odontogram/{id}', [DokterGigiController::class, 'dokterGigi'])->name('dokter.odontogram');
 
     // tambah gambar dokter
-    Route::post('dokter/tambah/{id}', [DokterController::class, 'tambah'])->name('dokter.tambah');
+    Route::post('dokter/tambah/{id}', [GambarDokterController::class, 'tambah'])->name('dokter.tambah');
 
-    Route::put('dokter/edit-fisik/{id}', [DokterController::class, 'editUmumGigi'])->name('dokter.editUmumGigi');
+    Route::put('dokter/edit-fisik/{id}', [GambarDokterController::class, 'editUmumGigi'])->name('dokter.editUmumGigi');
 
     Route::get('/search-diagnosa', [DokterController::class, 'searchDiagnosa']);
     Route::get('/resep-autocomplete', [DokterController::class, 'autocomplete']);
+    Route::get('/jenis-autocomplete', [DokterController::class, 'jenisobat']);
+    Route::get('/aturan-autocomplete', [DokterController::class, 'aturan']);
+    Route::get('/anjuran-autocomplete', [DokterController::class, 'anjuran']);
 });
 
 Route::group(['middleware' => ['auth', 'apoteker']], function () {
@@ -238,6 +250,20 @@ Route::group(['middleware' => ['auth', 'apoteker']], function () {
     Route::put('apoteker/dataobat-edit/{id}', [ApotekerObatController::class, 'edit'])->name('apoteker.edit');
     Route::delete('apoteker/dataobat-hapus/{id}', [ApotekerObatController::class, 'hapus'])->name('apoteker.hapus');
     Route::get('apoteker/master/obat/cari', [ApotekerObatController::class, 'search'])->name('apoteker.obat.cari');
+
+    // MASTER ANJURAN MINUM
+    Route::get('apoteker/master-anjuran', [MasterAnjuranController::class, 'index'])->name('apoteker.master-anjuran');
+    Route::post('apoteker/master/anjuran-tambah', [MasterAnjuranController::class, 'tambah'])->name('apoteker.master.anjuran-store');
+    Route::put('apoteker/master/anjuran-edit/{id}', [MasterAnjuranController::class, 'edit'])->name('apoteker.edit.anjuran');
+    Route::delete('apoteker/master/anjuran-hapus/{id}', [MasterAnjuranController::class, 'hapus'])->name('apoteker.hapus.anjuran');
+    Route::post('updateStatus-anjuran', [MasterAnjuranController::class, 'updateStatus'])->name('anjuran.Status');
+
+    // MASTER ATURAN MINUM
+    Route::get('apoteker/master-aturan', [MasterAturanController::class, 'index'])->name('apoteker.master-aturan');
+    Route::post('apoteker/master/aturan-tambah', [MasterAturanController::class, 'tambah'])->name('apoteker.master.aturan-store');
+    Route::put('apoteker/master/aturan-edit/{id}', [MasterAturanController::class, 'edit'])->name('apoteker.edit.aturan');
+    Route::delete('apoteker/master/aturan-hapus/{id}', [MasterAturanController::class, 'hapus'])->name('apoteker.hapus.aturan');
+    Route::post('updateStatus-aturan', [MasterAturanController::class, 'updateStatus'])->name('aturan.Status');
 
     // UPLOUD OBAT
     Route::post('/apoteker/import', [ApotekerObatController::class, 'uploudObat'])->name('resep.import');
@@ -355,6 +381,27 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('admin/master/margin-tambah', [DataMarginController::class, 'tambah'])->name('master.margin-store');
     Route::put('admin/master/margin-edit/{id}', [DataMarginController::class, 'edit'])->name('edit.margin');
     Route::delete('admin/master/margin-hapus/{id}', [DataMarginController::class, 'hapus'])->name('hapus.margin');
+
+    // master data jenis
+    Route::get('admin/master/master-jenis', [DataJenisObatController::class, 'index'])->name('master-jenis');
+    Route::post('admin/master/jenis-tambah', [DataJenisObatController::class, 'tambah'])->name('master.jenis-store');
+    Route::put('admin/master/jenis-edit/{id}', [DataJenisObatController::class, 'edit'])->name('edit.jenis');
+    Route::delete('admin/master/jenis-hapus/{id}', [DataJenisObatController::class, 'hapus'])->name('hapus.jenis');
+    Route::post('updateStatus-jenis', [DataJenisObatController::class, 'updateStatus'])->name('jenisStatus');
+
+    // master data aturan
+    Route::get('admin/master/master-aturan', [DataAturanController::class, 'index'])->name('master-aturan');
+    Route::post('admin/master/aturan-tambah', [DataAturanController::class, 'tambah'])->name('master.aturan-store');
+    Route::put('admin/master/aturan-edit/{id}', [DataAturanController::class, 'edit'])->name('edit.aturan');
+    Route::delete('admin/master/aturan-hapus/{id}', [DataAturanController::class, 'hapus'])->name('hapus.aturan');
+    Route::post('updateStatus-aturan', [DataAturanController::class, 'updateStatus'])->name('aturanStatus');
+
+    // master data anjuran
+    Route::get('admin/master/master-anjuran', [DataAnjuranController::class, 'index'])->name('master-anjuran');
+    Route::post('admin/master/anjuran-tambah', [DataAnjuranController::class, 'tambah'])->name('master.anjuran-store');
+    Route::put('admin/master/anjuran-edit/{id}', [DataAnjuranController::class, 'edit'])->name('edit.anjuran');
+    Route::delete('admin/master/anjuran-hapus/{id}', [DataAnjuranController::class, 'hapus'])->name('hapus.anjuran');
+    Route::post('updateStatus-anjuran', [DataAnjuranController::class, 'updateStatus'])->name('anjuranStatus');
 
     // master shift
     Route::get('admin/master/master-shift', [ShiftController::class, 'index'])->name('master-shift');

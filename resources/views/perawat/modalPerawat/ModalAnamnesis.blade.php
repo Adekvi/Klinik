@@ -1,7 +1,7 @@
  <!-- Modal PERIKSA -->
  <div class="modal fade" id="periksa{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="periksa" aria-hidden="true">
-     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+     <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
              <form id="myForm1" action="{{ url('perawat/store/' . $item->id) }}" method="POST"
                  enctype="multipart/form-data">
@@ -85,6 +85,14 @@
                                  </strong>
                              </p>
                          </div>
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="">Umur</label>
+                                 <p>
+                                     {{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }} Tahun
+                                 </p>
+                             </div>
+                         </div>
 
                          <div class="form-isian" style="margin-bottom: 30px">
                              <h5 style="font-size: 20px; text-align: center"><strong>Form Isian</strong></h5>
@@ -141,7 +149,7 @@
                                          </div>
                                      </div>
                                      <div class="col-6">
-                                         <label for="tensi">RR</label>
+                                         <label for="rr">RR</label>
                                          <div class="input-group">
                                              <input type="text" name="rr"
                                                  value="{{ $item->isian->p_rr ?? '' }}" class="form-control"
@@ -159,7 +167,7 @@
                              <div class="col-lg-12 mb-2">
                                  <div class="row">
                                      <div class="col-6">
-                                         <label for="tensi">Nadi</label>
+                                         <label for="nadi">Nadi</label>
                                          <div class="input-group">
                                              <input type="text" name="nadi"
                                                  value="{{ $item->isian->p_nadi ?? '' }}" class="form-control"
@@ -191,7 +199,7 @@
                              <div class="col-lg-12 mb-2">
                                  <div class="row">
                                      <div class="col-6">
-                                         <label for="tensi">Suhu</label>
+                                         <label for="suhu">Suhu</label>
                                          <div class="input-group">
                                              <input type="text" name="suhu"
                                                  value="{{ $item->isian->p_suhu ?? '' }}" class="form-control"
@@ -205,7 +213,7 @@
                                          </div>
                                      </div>
                                      <div class="col-6">
-                                         <label for="tensi">Tinggi Badan</label>
+                                         <label for="tb">Tinggi Badan</label>
                                          <div class="input-group">
                                              <input type="number" name="tb" id="tb"
                                                  value="{{ $item->isian->p_tb ?? '' }}" class="form-control"
@@ -223,7 +231,7 @@
                              <div class="col-lg-12 mb-2">
                                  <div class="row">
                                      <div class="col-6">
-                                         <label for="tensi">Berat Badan</label>
+                                         <label for="bb">Berat Badan</label>
                                          <div class="input-group">
                                              <input type="number" name="bb" id="bb"
                                                  value="{{ $item->isian->p_bb ?? '' }}" class="form-control"
@@ -237,7 +245,7 @@
                                          </div>
                                      </div>
                                      <div class="col-6">
-                                         <label for="tensi">IMT</label>
+                                         <label for="imt">IMT</label>
                                          <div class="input-group">
                                              <input type="text" name="p_imt" id="l_imt"
                                                  value="{{ $item->isian->p_imt ?? '' }}" class="form-control"
@@ -255,11 +263,12 @@
                              <div class="col-lg-12 mb-2">
                                  <div class="row">
                                      <div class="col-6">
-                                         <label for="tensi">Lingkar Kepala Anak</label>
+                                         <label for="lka">Lingkar Kepala Anak</label>
                                          <div class="input-group">
-                                             <input type="number" name="bb" id="bb"
-                                                 value="{{ $item->isian->p_bb ?? '' }}" class="form-control"
-                                                 aria-describedby="basic-addon2">
+                                             <input type="number" name="p_lngkr_kepala_anak"
+                                                 id="p_lngkr_kepala_anak"
+                                                 value="{{ $item->isian->p_lngkr_kepala_anak ?? '' }}"
+                                                 class="form-control" aria-describedby="basic-addon2">
                                              <div class="input-group-append">
                                                  <span class="input-group-text" id="basic-addon2"
                                                      style="background: rgb(228, 228, 228)">
@@ -269,11 +278,11 @@
                                          </div>
                                      </div>
                                      <div class="col-6">
-                                         <label for="tensi">Lingkar Lengan</label>
+                                         <label for="ll">Lingkar Lengan</label>
                                          <div class="input-group">
-                                             <input type="text" name="p_imt" id="l_imt"
-                                                 value="{{ $item->isian->p_imt ?? '' }}" class="form-control"
-                                                 aria-describedby="basic-addon2">
+                                             <input type="text" name="p_lngkr_lengan_anc" id="p_lngkr_lengan_anc"
+                                                 value="{{ $item->isian->p_lngkr_lengan_anc ?? '' }}"
+                                                 class="form-control" aria-describedby="basic-addon2">
                                              <div class="input-group-append">
                                                  <span class="input-group-text" id="basic-addon2"
                                                      style="background: rgb(228, 228, 228)">
@@ -287,38 +296,50 @@
                          </div>
                          <div class="form-group">
                              <h5 for="ak_nama_perawat_bidan"
-                                 style="margin-top: 30px; text-align: center; font-size: 20px"><strong>Tanda Tangan
-                                     Perawat</strong></h5>
+                                 style="margin-top: 30px; text-align: center; font-size: 20px">
+                                 <strong>Tanda Tangan Perawat</strong>
+                             </h5>
                              <select type="text" name="ak_nama_perawat_bidan" id="ak_nama_perawat_bidan"
                                  class="form-control mt-2 mb-2">
                                  <option value="">Nama Perawat</option>
                                  <!-- Iterate through your perawat data to populate the dropdown -->
                                  @foreach ($ttd as $item)
                                      <option value="{{ $item->id }}"
-                                         data-image="{{ Storage::url($item->foto) }}">{{ $item->nama }}
-                                     </option>
+                                         data-image="{{ Storage::url($item->foto) }}">{{ $item->nama }}</option>
                                  @endforeach
                              </select>
+                             <!-- Tambahkan elemen img untuk menampilkan tanda tangan -->
+                             <img id="ttd_perawat_image" src="" alt="Tanda Tangan Perawat">
                          </div>
                      @else
                          <div id="formAsesmen{{ $item->id }}">
                              <input type="hidden" name="id_pasien" value="{{ $item->booking->id_pasien }}">
-                             <div class="col-md-6">
-                                 <div class="form-group">
-                                     <label for="">Nama Pasien</label>
-                                     <input type="text" name="nama_pasien" id="nama_pasien"
-                                         class="form-control mt-2 mb-2"
-                                         value="{{ $item->booking->pasien->nama_pasien }}">
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label for="">Nama Pasien</label>
+                                         <input type="text" name="nama_pasien" id="nama_pasien"
+                                             class="form-control mt-2 mb-2"
+                                             value="{{ $item->booking->pasien->nama_pasien }}">
+                                     </div>
+                                     <p class="text-danger">
+                                         <span style="font-style: italic">
+                                             <strong>
+                                                 <i class="fa-solid fa-circle-exclamation"></i> *Cek ulang Nama Pasien
+                                             </strong>
+                                         </span>
+                                     </p>
                                  </div>
-                                 <p class="text-danger">
-                                     <span style="font-style: italic">
-                                         <strong>
-                                             <i class="fa-solid fa-circle-exclamation"></i> *Cek ulang Nama Pasien
-                                         </strong>
-                                     </span>
-                                 </p>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label for="">Umur</label>
+                                         <input type="text"
+                                             value="{{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age . ' Tahun' }}"
+                                             class="form-control mt-2 mb-2" readonly>
+                                     </div>
+                                 </div>
+                                 <hr style="border: none; height: 1px">
                              </div>
-                             <hr style="border: none; height: 2px">
 
                              <div class="form-isian" style="margin-bottom: 30px; margin-top: 20px">
                                  <h5 style="text-align: center; font-size: 20px"><strong>Form Isian</strong></h5>
@@ -418,7 +439,7 @@
                                              </div>
                                          </div>
                                          <div class="col-6">
-                                             <label for="tensi">RR</label>
+                                             <label for="rr">RR</label>
                                              <div class="input-group">
                                                  <input type="text" name="rr"
                                                      value="{{ $item->isian->p_rr ?? '' }}" class="form-control"
@@ -436,7 +457,7 @@
                                  <div class="col-lg-12 mb-2">
                                      <div class="row">
                                          <div class="col-6">
-                                             <label for="tensi">Nadi</label>
+                                             <label for="nadi">Nadi</label>
                                              <div class="input-group">
                                                  <input type="text" name="nadi"
                                                      value="{{ $item->isian->p_nadi ?? '' }}" class="form-control"
@@ -468,7 +489,7 @@
                                  <div class="col-lg-12 mb-2">
                                      <div class="row">
                                          <div class="col-6">
-                                             <label for="tensi">Suhu</label>
+                                             <label for="suhu">Suhu</label>
                                              <div class="input-group">
                                                  <input type="text" name="suhu"
                                                      value="{{ $item->isian->p_suhu ?? '' }}" class="form-control"
@@ -482,7 +503,7 @@
                                              </div>
                                          </div>
                                          <div class="col-6">
-                                             <label for="tensi">Tinggi Badan</label>
+                                             <label for="tb">Tinggi Badan</label>
                                              <div class="input-group">
                                                  <input type="number" name="tb" id="p_tb"
                                                      value="{{ $item->isian->p_tb ?? '' }}" class="form-control"
@@ -500,7 +521,7 @@
                                  <div class="col-lg-12 mb-2">
                                      <div class="row">
                                          <div class="col-6">
-                                             <label for="tensi">Berat Badan</label>
+                                             <label for="bb">Berat Badan</label>
                                              <div class="input-group">
                                                  <input type="number" name="bb" id="p_bb"
                                                      value="{{ $item->isian->p_bb ?? '' }}" class="form-control"
@@ -514,7 +535,7 @@
                                              </div>
                                          </div>
                                          <div class="col-6">
-                                             <label for="tensi">IMT</label>
+                                             <label for="imt">IMT</label>
                                              <div class="input-group">
                                                  <input type="text" name="p_imt" id="p_imt"
                                                      value="{{ $item->isian->p_imt ?? '' }}" class="form-control"
@@ -532,7 +553,7 @@
                                  <div class="col-lg-12 mb-2">
                                      <div class="row">
                                          <div class="col-6">
-                                             <label for="linkar-kepala-anak">Lingkar Kepala Anak</label>
+                                             <label for="lingkar-kepala-anak">Lingkar Kepala Anak</label>
                                              <div class="input-group">
                                                  <input type="number" name="p_lngkr_kepala_anak"
                                                      id="p_lngkr_kepala_anak"
