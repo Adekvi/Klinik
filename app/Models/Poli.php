@@ -42,4 +42,8 @@ class Poli extends Model
     {
         return $this->hasMany(Obat::class, 'id');
     }
+    public function kunjungan()
+    {
+        return $this->hasMany(Kunjpasien::class, 'id');
+    }
 }

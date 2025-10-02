@@ -11,7 +11,7 @@
                 <form action="<?php echo e(url('dokter/store/' . $id)); ?>" method="post" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="profesi" style="font-weight: bold">Dokter Penanggung Jawab Pasien</label>
                                 <input type="text" style="font-weight: bold"
@@ -19,7 +19,8 @@
                                     disabled>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="row">
                         <div class="col-md-6 mt-2">
                             <div class="form-group">
                                 <label for="">Nama Pasien</label>
@@ -86,7 +87,8 @@
                         <div id="alasan-isian-soap"
                             style="<?php echo e($antrianDokter->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'display: block;' : 'display: none;'); ?>">
                             <input type="text" id="isian_alasan" name="isian_alasan" class="form-control mt-2 mb-2"
-                                placeholder="Alasan" value="<?php echo e($antrianDokter->isian->p_form_isian_pilihan_uraian); ?>">
+                                placeholder="Alasan"
+                                value="<?php echo e($antrianDokter->isian->p_form_isian_pilihan_uraian); ?>">
                         </div>
                     </div>
                     <div class="form-group mt-3 mb-2">

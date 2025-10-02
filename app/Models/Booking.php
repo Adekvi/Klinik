@@ -34,10 +34,7 @@ class Booking extends Model
     {
         return $this->hasMany(AntrianDokter::class, 'id');
     }
-    // public function soap()
-    // {
-    //     return $this->hasMany(Soap::class, 'id');
-    // }
+
     public function obat()
     {
         return $this->hasMany(Obat::class, 'id');
@@ -50,5 +47,10 @@ class Booking extends Model
     public function fisik()
     {
         return $this->hasMany(Fisik::class, 'id_booking', 'id');
+    }
+
+    public function kunjungan()
+    {
+        return $this->hasMany(Kunjpasien::class, 'id_booking', 'id');
     }
 }

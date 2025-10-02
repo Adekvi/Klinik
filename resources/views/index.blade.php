@@ -921,7 +921,7 @@
                 }
             });
 
-            // PASIEN BPJS Poli Untuk Dokter
+            // PASIEN BPJS Poli
             $('#poli_bpjs').change(function() {
                 var poli_id = $(this).val();
                 if (poli_id) {
@@ -955,7 +955,7 @@
                 }
             });
 
-            // PASIEN BARU Poli Untuk Dokter
+            // PASIEN BARU Poli
             $('#poli_umum').change(function() {
                 var poli_id = $(this).val();
                 if (poli_id) {
@@ -1291,11 +1291,13 @@
                         $('#btnSimpan').prop('disabled', false);
 
                         if (response.redirect) {
+                            // Buka bukti pendaftaran di tab baru
                             window.open(response.redirect, '_blank');
-                            window.location.href = "{{ route('perawat.index') }}";
-                        } else {
-                            console.error('No redirect URL provided.');
+
+                            // Kalau mau refresh halaman lama biar form kosong lagi:
+                            location.reload();
                         }
+
                     },
                     error: function(xhr, status, error) {
                         $('#loadingSpinner').addClass('d-none');

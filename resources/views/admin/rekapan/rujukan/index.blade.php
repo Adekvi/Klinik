@@ -57,8 +57,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="table mt-2 mb-2 table-striped table-bordered"
-                                    style="width:100%">
+                                <table id="example" class="table mt-2 mb-2 table-striped table-bordered">
                                     <thead class="table-primary">
                                         <tr>
                                             <th class="custom-th">No.</th>
@@ -73,7 +72,7 @@
                                             <th class="custom-th">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="text-center">
                                         @php $all = []; @endphp
                                         @foreach ($rujukan as $item)
                                             @php
@@ -102,41 +101,40 @@
                                         @php
                                             $counter = 1;
                                         @endphp
-                                        @foreach ($rujukan as $item)
-                                            @if ($item->pasien->jenis_pasien == 'Bpjs')
-                                                @php
-                                                    $pasienId = $item->pasien->id;
-                                                    $statusPasien = $pasienCounts[$pasienId] > 1 ? 'Lama' : 'Baru';
-                                                @endphp
+                                        @if ($rujukan->count() > 0)
+                                            @foreach ($rujukan as $item)
                                                 <tr>
                                                     <td>{{ $counter++ }}</td>
-                                                    <td>{{ date_format(date_create($item->created_at), 'd/m/Y') }}</td>
-                                                    <td>{{ date_format(date_create($item->created_at), 'H:i:s') }}</td>
-                                                    <td>{{ date_format(date_create($item->created_at), 'H:i:s') }}</td>
-                                                    <td>{{ $item->pasien->nomor_bpjs }}</td>
-                                                    <td>{{ $item->pasien->nama_pasien }}</td>
-                                                    <td>{{ $item->pasien->jekel }}</td>
+                                                    <td>{{ $item->no_rm }}</td>
+                                                    <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+                                                    <td>{{ $item->pasien->nomor_bpjs ?? '-' }}</td>
+                                                    <td>{{ $item->pasien->nama_pasien ?? '-' }}</td>
+                                                    <td>{{ $item->pasien->jenis_kelamin ?? '-' }}</td>
                                                     <td>
                                                         @php
-                                                            $diagnosa = json_decode($item->soap_a_primer, true);
+                                                            $soapData = json_decode($item->soap_p, true);
+                                                            $diagnosa = isset($soapData['Diagnosa'])
+                                                                ? $soapData['Diagnosa']
+                                                                : '-';
                                                         @endphp
-                                                        @foreach ($diagnosa as $diagno)
-                                                            - {{ $diagno }} <br>
-                                                        @endforeach
+                                                        {{ $diagnosa }}
                                                     </td>
-                                                    @if ($item->rujuk != null)
-                                                        <td>{{ $item->rujuk }}</td>
-                                                    @else
-                                                        <td style="text-align: center">-</td>
-                                                    @endif
+                                                    <td style="text-align: center;">
+                                                        {{ $item->rujuk_rumahsakit ?? ' - ' }}
+                                                    </td>
                                                     <td>
                                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                            data-bs-target="#hapuspoli{{ $item['id'] }}">
+                                                            data-bs-target="#hapuspoli{{ $item->id }}">
                                                             <i class="fas fa-trash"></i> Hapus</button>
                                                     </td>
                                                 </tr>
-                                            @endif
-                                        @endforeach
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="10" class="text-center">Belum Ada Data</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -174,7 +172,6 @@
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
 
     <script>
-        new DataTable('#example');
         document.addEventListener('DOMContentLoaded', function() {
             const tanggalInput = document.getElementById('tanggal');
             const monthSelect = document.getElementById('month');

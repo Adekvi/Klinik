@@ -47,4 +47,9 @@ class DataDokter extends Model
     {
         return $this->hasMany(Fisik::class, 'id_dokter', 'id');
     }
+
+    public function kunjungan()
+    {
+        return $this->hasMany(Kunjpasien::class, 'id_dokter', 'id');
+    }
 }

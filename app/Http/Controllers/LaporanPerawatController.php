@@ -26,7 +26,7 @@ class LaporanPerawatController extends Controller
 
         // Query semua pasien
         $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
-            ->where('status', 'WB')
+            ->where('status', 'M')
             // ->orderByRaw("CASE WHEN status = 'D' THEN 1 ELSE 2 END")
             ->orderBy('urutan', 'asc') // Menambahkan pengurutan berdasarkan urutan
             ->orderBy('created_at', 'asc');

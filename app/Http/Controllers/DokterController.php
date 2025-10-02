@@ -50,6 +50,7 @@ class DokterController extends Controller
             });
         }
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $antrianDokter */
         $antrianDokter = $query->paginate($entries, ['*'], 'page', $page);
         $antrianDokter->appends(['search' => $search, 'entries' => $entries]);
 

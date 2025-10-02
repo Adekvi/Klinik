@@ -15,7 +15,7 @@
                         <?php echo csrf_field(); ?>
                         <?php echo method_field('PUT'); ?>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="profesi" style="font-weight: bold">Dokter Penanggung Jawab
                                         Pasien</label>
@@ -24,7 +24,8 @@
                                         disabled>
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="row">
                             <div class="col-md-6 mt-2">
                                 <div class="form-group">
                                     <label for="">Nama Pasien</label>
@@ -74,26 +75,27 @@
                             </div>
                         </div>
                         <div class="form-group mt-3">
-                            <label for="isian" style="font-weight: bold; margin-bottom: 10px">Isian Pilihan</label>
-                            <div id="isian mt-3 mb-2">
-                                <label for="isian-ya">
-                                    <input type="radio" name="isian" checked id="isian-ya"
+                            <label for="isian_edit" style="font-weight: bold; margin-bottom: 10px">Isian Pilihan</label>
+                            <div id="isian_edit mt-3 mb-2">
+                                <label for="isian-ya_edit">
+                                    <input type="radio" name="isian" checked id="isian-ya_edit"
                                         style="transform: scale(1.5); margin-right: 10px" value="auto-anamnesis"
-                                        onclick="toggleChangeSoap('alasan-isian-soap', this)"
+                                        onclick="toggleChangeSoapEdit('alasan-isian-soap_edit', this)"
                                         <?php echo e($soapTerbaru->isian->p_form_isian_pilihan === 'auto-anamnesis' ? 'checked' : ''); ?>>
                                     Auto Anamnesis
                                 </label>
-                                <label for="isian-tidak">
-                                    <input type="radio" name="isian" id="isian-tidak"
+                                <label for="isian-tidak_edit">
+                                    <input type="radio" name="isian" id="isian-tidak_edit"
                                         style="transform: scale(1.5); margin-right: 10px; margin-left: 30px"
-                                        value="Aloanamnesis" onclick="toggleChangeSoap('alasan-isian-soap', this)"
+                                        value="Aloanamnesis"
+                                        onclick="toggleChangeSoapEdit('alasan-isian-soap_edit', this)"
                                         <?php echo e($soapTerbaru->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'checked' : ''); ?>>
                                     Aloanamnesis
                                 </label>
                             </div>
-                            <div id="alasan-isian-soap"
+                            <div id="alasan-isian-soap_edit"
                                 style="<?php echo e($soapTerbaru->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="isian_alasan" name="isian_alasan"
+                                <input type="text" id="isian_alasan_edit" name="isian_alasan"
                                     class="form-control mt-2 mb-2" placeholder="Alasan"
                                     value="<?php echo e($soapTerbaru->isian->p_form_isian_pilihan_uraian); ?>">
                             </div>
@@ -102,9 +104,10 @@
                             <label for="pf" style="font-weight: bold; text-align: center">Pemeriksaan
                                 Fisik</label>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="kesadaran" style="width: 30%">1. Kesadaran</label> :
-                                <select name="kesadaran" id="kesadaran" class="form-control" style="width: 40%">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="kesadaran_edit" style="width: 30%">1. Kesadaran</label> :
+                                <select name="kesadaran" id="kesadaran_edit" class="form-control"
+                                    style="width: 40%">
                                     <option value="Compos Mentis">Compos Mentis</option>
                                     <option value="Somnolence">Somnolence</option>
                                     <option value="Sopor">Sopor</option>
@@ -112,31 +115,31 @@
                                 </select>
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="gcs" style="width: 30%">2. GCS</label> :
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="gcs_edit" style="width: 30%">2. GCS</label> :
                                 <div class="input-group d-flex mt-3" style="width: 40%">
-                                    <input type="text" name="gcs_e" id="gcs_e"
+                                    <input type="text" name="gcs_e" id="gcs_e_edit"
                                         value="<?php echo e($soapTerbaru->isian->gcs_e); ?>" class="form-control"
-                                        aria-describedby="basic-addon2" placeholder="E">
-                                    <input type="text" name="gcs_m" id="gcs_m"
+                                        aria-describedby="basic-addon2_edit" placeholder="E">
+                                    <input type="text" name="gcs_m" id="gcs_m_edit"
                                         value="<?php echo e($soapTerbaru->isian->gcs_m); ?>" class="form-control"
-                                        aria-describedby="basic-addon2" placeholder="M">
-                                    <input type="text" name="gcs_v" id="gcs_v"
+                                        aria-describedby="basic-addon2_edit" placeholder="M">
+                                    <input type="text" name="gcs_v" id="gcs_v_edit"
                                         value="<?php echo e($soapTerbaru->isian->gcs_v); ?>" class="form-control"
-                                        aria-describedby="basic-addon2" placeholder="V">
+                                        aria-describedby="basic-addon2_edit" placeholder="V">
                                     <div class="input-group-append">
-                                        <span class="input-group-text" id="basic-addon2"
+                                        <span class="input-group-text" id="basic-addon2_edit"
                                             style="background: rgb(228, 228, 228)">
-                                            <span id="gcs_total"> <b>0</b></span>
+                                            <span id="gcs_total_edit"><b>0</b></span>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="kepala" style="width: 30%">3. Kepala</label> :
-                                <select name="kepala" id="kepala" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-kepala_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="kepala_edit" style="width: 30%">3. Kepala</label> :
+                                <select name="kepala" id="kepala_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-kepala_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_kepala === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -145,18 +148,18 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-kepala_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-kepala_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_kepala === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-kepala_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-kepala_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-kepala" class="form-control mt-2 mb-2"
                                     value="<?php echo e($soapTerbaru->rm->o_kepala_uraian); ?>"
                                     placeholder="Alasan Kepala Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="mata" style="width: 30%">4. Mata</label> :
-                                <select name="mata" id="mata" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-mata_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="mata_edit" style="width: 30%">4. Mata</label> :
+                                <select name="mata" id="mata_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-mata_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_mata === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -165,17 +168,17 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-mata_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-mata_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_mata === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-mata_<?php echo e($soapTerbaru->rm->id); ?>" name="alasan-mata"
-                                    value="<?php echo e($soapTerbaru->rm->o_mata_uraian); ?>" class="form-control mt-2 mb-2"
-                                    placeholder="Alasan Mata Abnormal">
+                                <input type="text" id="alasan-mata_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-mata" value="<?php echo e($soapTerbaru->rm->o_mata_uraian); ?>"
+                                    class="form-control mt-2 mb-2" placeholder="Alasan Mata Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="leher" style="width: 30%">5. Leher</label> :
-                                <select name="leher" id="leher" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-leher_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="leher_edit" style="width: 30%">5. Leher</label> :
+                                <select name="leher" id="leher_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-leher_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option value="Normal"
                                         <?php echo e($soapTerbaru->rm->o_leher === 'Normal' ? 'selected' : ''); ?>>
                                         Normal
@@ -185,17 +188,17 @@
                                     </option>
                                 </select>
                             </div>
-                            <div id="alasan-leher_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-leher_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_leher === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-leher_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-leher_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-leher" value="<?php echo e($soapTerbaru->rm->o_leher_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Leher Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="tht" style="width: 30%">6. THT</label> :
-                                <select name="tht" id="tht" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-tht_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="tht_edit" style="width: 30%">6. THT</label> :
+                                <select name="tht" id="tht_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-tht_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option value="Normal"
                                         <?php echo e($soapTerbaru->rm->o_tht === 'Normal' ? 'selected' : ''); ?>>
                                         Normal</option>
@@ -205,17 +208,17 @@
                                     </option>
                                 </select>
                             </div>
-                            <div id="alasan-tht_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-tht_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-tht_<?php echo e($soapTerbaru->rm->id); ?>" name="alasan-tht"
-                                    value="<?php echo e($soapTerbaru->rm->o_tht_uraian); ?>" class="form-control mt-2 mb-2"
-                                    placeholder="Alasan THT Abnormal">
+                                <input type="text" id="alasan-tht_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-tht" value="<?php echo e($soapTerbaru->rm->o_tht_uraian); ?>"
+                                    class="form-control mt-2 mb-2" placeholder="Alasan THT Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="thorax" style="width: 30%">7. Thorax</label> :
-                                <select name="thorax" id="thorax" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-thorax_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="thorax_edit" style="width: 30%">7. Thorax</label> :
+                                <select name="thorax" id="thorax_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-thorax_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_thorax === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -224,17 +227,17 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-thorax_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-thorax_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-thorax_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-thorax_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-thorax" value="<?php echo e($soapTerbaru->rm->o_thorax_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Thorax Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="paru" style="width: 30%">8. Paru</label> :
-                                <select name="paru" id="paru" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-paru_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="paru_edit" style="width: 30%">8. Paru</label> :
+                                <select name="paru" id="paru_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-paru_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_paru === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -243,17 +246,18 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-paru_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-paru_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_paru === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-paru_<?php echo e($soapTerbaru->rm->id); ?>" name="alasan-paru"
-                                    class="form-control mt-2 mb-2" value="<?php echo e($soapTerbaru->rm->o_paru_uraian); ?>"
-                                    placeholder="Alasan Paru Abnormal">
+                                <input type="text" id="alasan-paru_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-paru" class="form-control mt-2 mb-2"
+                                    value="<?php echo e($soapTerbaru->rm->o_paru_uraian); ?>" placeholder="Alasan Paru Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="jantung" style="width: 30%">9. Jantung</label> :
-                                <select name="jantung" id="jantung" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-jantung_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="jantung_edit" style="width: 30%">9. Jantung</label> :
+                                <select name="jantung" id="jantung_edit" class="form-control mt-3"
+                                    style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-jantung_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_jantung === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -262,17 +266,18 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-jantung_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-jantung_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_jantung === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-jantung_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-jantung_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-jantung" value="<?php echo e($soapTerbaru->rm->o_jantung_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Jantung Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="abdomen" style="width: 30%">10. Abdomen</label> :
-                                <select name="abdomen" id="abdomen" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-abdomen_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="abdomen_edit" style="width: 30%">10. Abdomen</label> :
+                                <select name="abdomen" id="abdomen_edit" class="form-control mt-3"
+                                    style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-abdomen_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_abdomen === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -281,18 +286,18 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-abdomen_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-abdomen_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_abdomen === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-abdomen_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-abdomen_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     value="<?php echo e($soapTerbaru->rm->o_abdomen_uraian); ?>" name="alasan-abdomen"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Abdomen Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="ekstremitas" style="width: 30%">11. Ekstremitas</label> :
-                                <select name="ekstremitas" id="ekstremitas" class="form-control mt-3"
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="ekstremitas_edit" style="width: 30%">11. Ekstremitas</label> :
+                                <select name="ekstremitas" id="ekstremitas_edit" class="form-control mt-3"
                                     style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-ekstremitas_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    onclick="toggleChangeSoap('alasan-ekstremitas_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_ekstremitas === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -301,17 +306,17 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-ekstremitas_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-ekstremitas_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_ekstremitas === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-ekstremitas_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-ekstremitas_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-ekstremitas" value="<?php echo e($soapTerbaru->rm->o_ekstremitas_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Ekstremitas Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
-                                <label for="kulit" style="width: 30%">12. Kulit</label> :
-                                <select name="kulit" id="kulit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-kulit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
+                                <label for="kulit_edit" style="width: 30%">12. Kulit</label> :
+                                <select name="kulit" id="kulit_edit" class="form-control mt-3" style="width: 40%"
+                                    onclick="toggleChangeSoap('alasan-kulit_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option <?php echo e($soapTerbaru->rm->o_kulit === 'Normal' ? 'selected' : ''); ?>
 
                                         id="jawaban-normal" value="Normal">Normal</option>
@@ -320,14 +325,14 @@
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-kulit_<?php echo e($soapTerbaru->rm->id); ?>"
+                            <div id="alasan-kulit_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                 style="<?php echo e($soapTerbaru->rm->o_kulit === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
-                                <input type="text" id="alasan-kulit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                <input type="text" id="alasan-kulit_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     value="<?php echo e($soapTerbaru->rm->o_kulit_uraian); ?>" name="alasan-kulit"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Kulit Abnormal">
                             </div>
                             <div class="form"
-                                style="display: flex; align-soapTerbarus: baseline; justify-content: space-between">
+                                style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="lain-lain" style="width: 30%">13. Lain-lain</label> :
                                 <input type="text" id="lain" name="lain"
                                     value="<?php echo e($soapTerbaru->rm->lain_lain); ?>" class="form-control mt-3 mb-2"
@@ -432,9 +437,9 @@
                                     <!-- Tinggi Badan -->
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="tb">Tinggi Badan</label>
+                                            <label for="tb_edit">Tinggi Badan</label>
                                             <div class="input-group">
-                                                <input type="number" name="tb" id="tb"
+                                                <input type="number" name="tb" id="tb_edit"
                                                     value="<?php echo e($soapTerbaru->isian->p_tb); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
@@ -450,9 +455,9 @@
                                     <!-- Berat Badan -->
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="bb">Berat Badan</label>
+                                            <label for="bb_edit">Berat Badan</label>
                                             <div class="input-group">
-                                                <input type="number" name="bb" id="bb"
+                                                <input type="number" name="bb" id="bb_edit"
                                                     value="<?php echo e($soapTerbaru->isian->p_bb); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
@@ -468,9 +473,9 @@
                                     <!-- IMT -->
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="imt">IMT</label>
+                                            <label for="imt_edit">IMT</label>
                                             <div class="input-group">
-                                                <input type="text" name="p_imt" id="p_imt"
+                                                <input type="text" name="p_imt" id="p_imt_edit"
                                                     value="<?php echo e($soapTerbaru->isian->p_imt); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2"
                                                     readonly>
@@ -544,20 +549,25 @@
                                     <div class="col-6">
                                         <label>Diagnosa Primer</label>
                                         <?php $__empty_1 = true; $__currentLoopData = $diagnosaPrimer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $diag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                            <input type="text" id="soap_a_<?php echo e($index); ?>"
-                                                name="soap_a[<?php echo e($index); ?>][diagnosa_primer]"
-                                                class="soap_a form-control mt-2 mb-2" value="<?php echo e($diag); ?>"
-                                                placeholder="Cari Diagnosa">
-                                            <div id="dropdown-diagnosa-primer-<?php echo e($index); ?>"
-                                                class="dropdown-menu diagnosa-dropdown"
-                                                style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 50%;">
+                                            <div class="position-relative mb-2">
+                                                <input type="text" id="soap_a_<?php echo e($index); ?>"
+                                                    name="soap_a[<?php echo e($index); ?>][diagnosa_primer]"
+                                                    class="soap_a form-control" value="<?php echo e($diag); ?>"
+                                                    placeholder="Cari Diagnosa">
+                                                <div id="dropdown-diagnosa-primer-<?php echo e($index); ?>"
+                                                    class="dropdown-menu diagnosa-dropdown"
+                                                    style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; cursor: pointer; width: 100%; max-height: 200px; overflow-y: auto;">
+                                                </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                            <input type="text" id="soap_a_0" name="soap_a[0][diagnosa_primer]"
-                                                class="soap_a form-control mt-2 mb-2" placeholder="Cari Diagnosa">
-                                            <div id="dropdown-diagnosa-primer-0"
-                                                class="dropdown-menu diagnosa-dropdown"
-                                                style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 50%;">
+                                            <div class="position-relative mb-2">
+                                                <input type="text" id="soap_a_0"
+                                                    name="soap_a[0][diagnosa_primer]" class="soap_a form-control"
+                                                    placeholder="Cari Diagnosa">
+                                                <div id="dropdown-diagnosa-primer-0"
+                                                    class="dropdown-menu diagnosa-dropdown"
+                                                    style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; cursor: pointer; width: 100%; max-height: 200px; overflow-y: auto;">
+                                                </div>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -565,370 +575,394 @@
                                     <div class="col-6">
                                         <label>Diagnosa Sekunder</label>
                                         <?php $__empty_1 = true; $__currentLoopData = $diagnosaSekunder; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $diag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                            <input type="text" id="soap_a_b_<?php echo e($index); ?>"
-                                                name="soap_a_b[<?php echo e($index); ?>][diagnosa_sekunder]"
-                                                class="soap_a_b form-control mt-2 mb-2" value="<?php echo e($diag); ?>"
-                                                placeholder="Cari Diagnosa">
-                                            <div id="dropdown-diagnosa-sekunder-<?php echo e($index); ?>"
-                                                class="dropdown-menu diagnosa-dropdown"
-                                                style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 50%;">
+                                            <div class="position-relative mb-2">
+                                                <input type="text" id="soap_a_b_<?php echo e($index); ?>"
+                                                    name="soap_a_b[<?php echo e($index); ?>][diagnosa_sekunder]"
+                                                    class="soap_a_b form-control" value="<?php echo e($diag); ?>"
+                                                    placeholder="Cari Diagnosa">
+                                                <div id="dropdown-diagnosa-sekunder-<?php echo e($index); ?>"
+                                                    class="dropdown-menu diagnosa-dropdown"
+                                                    style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; cursor: pointer; width: 100%; max-height: 200px; overflow-y: auto;">
+                                                </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                            <input type="text" id="soap_a_b_0"
-                                                name="soap_a_b[0][diagnosa_sekunder]"
-                                                class="soap_a_b form-control mt-2 mb-2" placeholder="Cari Diagnosa">
-                                            <div id="dropdown-diagnosa-sekunder-0"
-                                                class="dropdown-menu diagnosa-dropdown"
-                                                style="position: absolute; z-index: 1000; display: none; cursor: pointer; width: 50%;">
+                                            <div class="position-relative mb-2">
+                                                <input type="text" id="soap_a_b_0"
+                                                    name="soap_a_b[0][diagnosa_sekunder]"
+                                                    class="soap_a_b form-control" placeholder="Cari Diagnosa">
+                                                <div id="dropdown-diagnosa-sekunder-0" <!-- Perbaikan ID di sini -->
+                                                    class="dropdown-menu diagnosa-dropdown"
+                                                    style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; cursor: pointer; width: 100%; max-height: 200px; overflow-y: auto;">
+                                                </div>
                                             </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- resources/views/dokter/modal/editSoap.blade.php -->
                         <div class="form-group mt-3 mb-2">
-                            <label for="soap_p_0"
-                                style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
-                                onclick="toggleObatContainer()">
-                                Pilih Obat (P)
-                            </label>
                             <div class="resep" id="edit-resep">
                                 <?php if(!empty($resep) || !empty($resepJenis) || !empty($resepAturan) || !empty($resepAnjuran) || !empty($resepJumlah)): ?>
                                     <?php
-                                        $entryCount = count($resepJumlah); // 2 entri
-                                        $resepArray = is_array($resep)
-                                            ? array_chunk($resep, ceil(count($resep) / $entryCount))
-                                            : [];
-                                        $resepJenisArray = is_array($resepJenis)
-                                            ? array_chunk($resepJenis, ceil(count($resepJenis) / $entryCount))
-                                            : [];
-                                        $resepAturanArray = is_array($resepAturan)
-                                            ? array_chunk($resepAturan, ceil(count($resepAturan) / $entryCount))
-                                            : [];
-                                        $resepAnjuranArray = is_array($resepAnjuran)
-                                            ? array_chunk($resepAnjuran, ceil(count($resepAnjuran) / $entryCount))
-                                            : [];
+                                        $entryCount = 1; // Hanya satu entri untuk menggabungkan semua data
+                                        // Gabungkan semua data ke array tunggal, tanpa unique untuk mempertahankan duplikat
+                                        $allResep = is_array($resep) ? array_filter($resep) : [];
+                                        $allJenis = is_array($resepJenis) ? array_filter($resepJenis) : [];
+                                        $allAturan = is_array($resepAturan) ? array_filter($resepAturan) : [];
+                                        $allAnjuran = is_array($resepAnjuran) ? array_filter($resepAnjuran) : [];
+                                        // Khusus jumlah: gabungkan semua sub-array
+                                        $allJumlah = [];
+                                        if (is_array($resepJumlah)) {
+                                            foreach ($resepJumlah as $j) {
+                                                if (is_array($j)) {
+                                                    $allJumlah = array_merge($allJumlah, array_filter($j));
+                                                } elseif (!empty($j)) {
+                                                    $allJumlah[] = $j;
+                                                }
+                                            }
+                                        }
                                     ?>
+
                                     <?php for($index = 0; $index < $entryCount; $index++): ?>
+                                        <label for="soap_p_<?php echo e($index); ?>"
+                                            style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
+                                            onclick="toggleObatContainer()">
+                                            Pilih Obat (P)
+                                        </label>
+
                                         <div class="entry-group" id="edit-entry_<?php echo e($index); ?>">
-                                            <?php for($subIndex = 0; $subIndex < (isset($resepJumlah[$index]) ? count($resepJumlah[$index]) : 0); $subIndex++): ?>
-                                                <!-- Nama Obat -->
-                                                <div class="input-row"
-                                                    id="edit-namaObatContainer_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                    style="display: flex; align-items: center; gap: 5px;">
-                                                    <label for="edit-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                        style="min-width: 100px;">Nama Obat</label>
-                                                    <span>:</span>
-                                                    <div class="input-wrapper">
-                                                        <div class="multi-select-wrapper form-control"
-                                                            data-input-id="edit-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
-                                                            <div class="selected-tags"
-                                                                id="edit-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_tags">
-                                                                <?php if(isset($resepArray[$index][$subIndex])): ?>
-                                                                    <span class="tag"
-                                                                        data-value="<?php echo e($resepArray[$index][$subIndex]); ?>"><?php echo e($resepArray[$index][$subIndex]); ?>
 
-                                                                        <i class="fas fa-times remove-tag"></i></span>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                            <input type="text"
-                                                                class="autocomplete-input multi-select-input"
-                                                                id="edit-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                                placeholder="Cari Obat" autocomplete="off"
-                                                                data-url="<?php echo e(url('/resep-autocomplete')); ?>"
-                                                                data-dropdown="edit-dropdown-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
+                                            <!-- Nama Obat -->
+                                            <div class="input-row"
+                                                style="display: flex; align-items: center; gap: 5px;">
+                                                <label for="edit-resep_<?php echo e($index); ?>"
+                                                    style="min-width: 100px;">Nama Obat</label>
+                                                <span>:</span>
+                                                <div class="input-wrapper">
+                                                    <div class="multi-select-wrapper form-control"
+                                                        data-input-id="edit-resep_<?php echo e($index); ?>">
+                                                        <div class="selected-tags"
+                                                            id="edit-resep_<?php echo e($index); ?>_tags">
+                                                            <?php $__currentLoopData = $allResep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $obat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <span class="tag"
+                                                                    data-value="<?php echo e($obat); ?>"><?php echo e($obat); ?>
+
+                                                                    <i class="fas fa-times remove-tag"></i>
+                                                                </span>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </div>
-                                                        <input type="hidden"
-                                                            name="soap_p[<?php echo e($index); ?>][resep][]"
-                                                            id="edit-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_hidden"
-                                                            value="<?php echo e(isset($resepArray[$index][$subIndex]) ? $resepArray[$index][$subIndex] : ''); ?>">
-                                                        <div id="edit-dropdown-resep_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                            class="dropdown-menu autocomplete-dropdown"></div>
-                                                        <p class="text-warning"
-                                                            style="font-style: italic; font-size: 12px">
-                                                            *Bisa memilih lebih dari 1 obat
-                                                        </p>
+                                                        <input type="text"
+                                                            class="autocomplete-input multi-select-input"
+                                                            id="edit-resep_<?php echo e($index); ?>"
+                                                            placeholder="Cari Obat" autocomplete="off"
+                                                            data-url="<?php echo e(url('/resep-autocomplete')); ?>"
+                                                            data-dropdown="edit-dropdown-resep_<?php echo e($index); ?>">
                                                     </div>
+                                                    <input type="hidden" name="soap_p[<?php echo e($index); ?>][resep]"
+                                                        id="edit-resep_<?php echo e($index); ?>_hidden"
+                                                        value="<?php echo e(implode(',', $allResep)); ?>">
+                                                    <div id="edit-dropdown-resep_<?php echo e($index); ?>"
+                                                        class="dropdown-menu autocomplete-dropdown"></div>
+                                                    <p class="text-warning"
+                                                        style="font-style: italic; font-size: 12px">
+                                                        *Bisa memilih lebih dari 1 obat
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                <!-- Jenis Obat -->
-                                                <div class="input-row"
-                                                    id="edit-jenisObatContainer_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                    style="display: flex; align-items: center; gap: 5px;">
-                                                    <label
-                                                        for="edit-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                        style="min-width: 100px;">Jenis Obat</label>
-                                                    <span>:</span>
-                                                    <div class="input-wrapper">
-                                                        <div class="multi-select-wrapper form-control"
-                                                            data-input-id="edit-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
-                                                            <div class="selected-tags"
-                                                                id="edit-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_tags">
-                                                                <?php if(isset($resepJenisArray[$index][$subIndex])): ?>
-                                                                    <span class="tag"
-                                                                        data-value="<?php echo e($resepJenisArray[$index][$subIndex]); ?>"><?php echo e($resepJenisArray[$index][$subIndex]); ?>
+                                            <!-- Jenis Obat -->
+                                            <div class="input-row"
+                                                style="display: flex; align-items: center; gap: 5px;">
+                                                <label for="edit-jenis_obat_<?php echo e($index); ?>"
+                                                    style="min-width: 100px;">Jenis Obat</label>
+                                                <span>:</span>
+                                                <div class="input-wrapper">
+                                                    <div class="multi-select-wrapper form-control"
+                                                        data-input-id="edit-jenis_obat_<?php echo e($index); ?>">
+                                                        <div class="selected-tags"
+                                                            id="edit-jenis_obat_<?php echo e($index); ?>_tags">
+                                                            <?php $__currentLoopData = $allJenis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jenis): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <span class="tag"
+                                                                    data-value="<?php echo e($jenis); ?>"><?php echo e($jenis); ?>
 
-                                                                        <i class="fas fa-times remove-tag"></i></span>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                            <input type="text"
-                                                                class="autocomplete-input multi-select-input"
-                                                                id="edit-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                                placeholder="Cari Jenis Obat" autocomplete="off"
-                                                                data-url="<?php echo e(url('jenis-autocomplete')); ?>"
-                                                                data-dropdown="edit-dropdown-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
+                                                                    <i class="fas fa-times remove-tag"></i>
+                                                                </span>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </div>
-                                                        <input type="hidden"
-                                                            name="soap_p[<?php echo e($index); ?>][jenisobat][]"
-                                                            id="edit-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_hidden"
-                                                            value="<?php echo e(isset($resepJenisArray[$index][$subIndex]) ? $resepJenisArray[$index][$subIndex] : ''); ?>">
-                                                        <div id="edit-dropdown-jenis_obat_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                            class="dropdown-menu autocomplete-dropdown"></div>
-                                                        <p class="text-warning"
-                                                            style="font-style: italic; font-size: 12px">
-                                                            *Bisa memilih lebih dari 1 jenis obat
-                                                        </p>
+                                                        <input type="text"
+                                                            class="autocomplete-input multi-select-input"
+                                                            id="edit-jenis_obat_<?php echo e($index); ?>"
+                                                            placeholder="Cari Jenis Obat" autocomplete="off"
+                                                            data-url="<?php echo e(url('jenis-autocomplete')); ?>"
+                                                            data-dropdown="edit-dropdown-jenis_obat_<?php echo e($index); ?>">
                                                     </div>
+                                                    <input type="hidden"
+                                                        name="soap_p[<?php echo e($index); ?>][jenisobat]"
+                                                        id="edit-jenis_obat_<?php echo e($index); ?>_hidden"
+                                                        value="<?php echo e(implode(',', $allJenis)); ?>">
+                                                    <div id="edit-dropdown-jenis_obat_<?php echo e($index); ?>"
+                                                        class="dropdown-menu autocomplete-dropdown"></div>
+                                                    <p class="text-warning"
+                                                        style="font-style: italic; font-size: 12px">
+                                                        *Bisa memilih lebih dari 1 jenis obat
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                <!-- Aturan Pakai -->
-                                                <div class="input-row"
-                                                    id="edit-aturanContainer_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                    style="display: flex; align-items: center; gap: 5px;">
-                                                    <label
-                                                        for="edit-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                        style="min-width: 100px">Aturan Pakai</label>
-                                                    <span>:</span>
-                                                    <div class="input-wrapper">
-                                                        <div class="multi-select-wrapper form-control"
-                                                            data-input-id="edit-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
-                                                            <div class="selected-tags"
-                                                                id="edit-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_tags">
-                                                                <?php if(isset($resepAturanArray[$index][$subIndex])): ?>
-                                                                    <span class="tag"
-                                                                        data-value="<?php echo e($resepAturanArray[$index][$subIndex]); ?>"><?php echo e($resepAturanArray[$index][$subIndex]); ?>
+                                            <!-- Aturan Pakai -->
+                                            <div class="input-row"
+                                                style="display: flex; align-items: center; gap: 5px;">
+                                                <label for="edit-aturan_<?php echo e($index); ?>"
+                                                    style="min-width: 100px">Aturan Pakai</label>
+                                                <span>:</span>
+                                                <div class="input-wrapper">
+                                                    <div class="multi-select-wrapper form-control"
+                                                        data-input-id="edit-aturan_<?php echo e($index); ?>">
+                                                        <div class="selected-tags"
+                                                            id="edit-aturan_<?php echo e($index); ?>_tags">
+                                                            <?php $__currentLoopData = $allAturan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aturan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <span class="tag"
+                                                                    data-value="<?php echo e($aturan); ?>"><?php echo e($aturan); ?>
 
-                                                                        <i class="fas fa-times remove-tag"></i></span>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                            <input type="text"
-                                                                class="autocomplete-input multi-select-input"
-                                                                id="edit-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                                placeholder="Cari Aturan Pakai" autocomplete="off"
-                                                                data-url="<?php echo e(url('aturan-autocomplete')); ?>"
-                                                                data-dropdown="edit-dropdown-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
+                                                                    <i class="fas fa-times remove-tag"></i>
+                                                                </span>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </div>
-                                                        <input type="hidden"
-                                                            name="soap_p[<?php echo e($index); ?>][aturan][]"
-                                                            id="edit-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_hidden"
-                                                            value="<?php echo e(isset($resepAturanArray[$index][$subIndex]) ? $resepAturanArray[$index][$subIndex] : ''); ?>">
-                                                        <div id="edit-dropdown-aturan_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                            class="dropdown-menu autocomplete-dropdown"></div>
-                                                        <p class="text-warning"
-                                                            style="font-style: italic; font-size: 12px">
-                                                            *Bisa memilih lebih dari 1 aturan pakai
-                                                        </p>
+                                                        <input type="text"
+                                                            class="autocomplete-input multi-select-input"
+                                                            id="edit-aturan_<?php echo e($index); ?>"
+                                                            placeholder="Cari Aturan Pakai" autocomplete="off"
+                                                            data-url="<?php echo e(url('aturan-autocomplete')); ?>"
+                                                            data-dropdown="edit-dropdown-aturan_<?php echo e($index); ?>">
                                                     </div>
+                                                    <input type="hidden" name="soap_p[<?php echo e($index); ?>][aturan]"
+                                                        id="edit-aturan_<?php echo e($index); ?>_hidden"
+                                                        value="<?php echo e(implode(',', $allAturan)); ?>">
+                                                    <div id="edit-dropdown-aturan_<?php echo e($index); ?>"
+                                                        class="dropdown-menu autocomplete-dropdown"></div>
+                                                    <p class="text-warning"
+                                                        style="font-style: italic; font-size: 12px">
+                                                        *Bisa memilih lebih dari 1 aturan pakai
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                <!-- Anjuran Minum -->
-                                                <div class="input-row"
-                                                    id="edit-anjuranMinumContainer_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                    style="display: flex; align-items: center; gap: 5px;">
-                                                    <label
-                                                        for="edit-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                        style="min-width: 100px">Anjuran Minum</label>
-                                                    <span>:</span>
-                                                    <div class="input-wrapper">
-                                                        <div class="multi-select-wrapper form-control"
-                                                            data-input-id="edit-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
-                                                            <div class="selected-tags"
-                                                                id="edit-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_tags">
-                                                                <?php if(isset($resepAnjuranArray[$index][$subIndex])): ?>
-                                                                    <span class="tag"
-                                                                        data-value="<?php echo e($resepAnjuranArray[$index][$subIndex]); ?>"><?php echo e($resepAnjuranArray[$index][$subIndex]); ?>
+                                            <!-- Anjuran Minum -->
+                                            <div class="input-row"
+                                                style="display: flex; align-items: center; gap: 5px;">
+                                                <label for="edit-anjuran_<?php echo e($index); ?>"
+                                                    style="min-width: 100px">Anjuran Minum</label>
+                                                <span>:</span>
+                                                <div class="input-wrapper">
+                                                    <div class="multi-select-wrapper form-control"
+                                                        data-input-id="edit-anjuran_<?php echo e($index); ?>">
+                                                        <div class="selected-tags"
+                                                            id="edit-anjuran_<?php echo e($index); ?>_tags">
+                                                            <?php $__currentLoopData = $allAnjuran; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $anjuran): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <span class="tag"
+                                                                    data-value="<?php echo e($anjuran); ?>"><?php echo e($anjuran); ?>
 
-                                                                        <i class="fas fa-times remove-tag"></i></span>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                            <input type="text"
-                                                                class="autocomplete-input multi-select-input"
-                                                                id="edit-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                                placeholder="Cari Anjuran Minum" autocomplete="off"
-                                                                data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
-                                                                data-dropdown="edit-dropdown-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
+                                                                    <i class="fas fa-times remove-tag"></i>
+                                                                </span>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </div>
-                                                        <input type="hidden"
-                                                            name="soap_p[<?php echo e($index); ?>][anjuran][]"
-                                                            id="edit-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_hidden"
-                                                            value="<?php echo e(isset($resepAnjuranArray[$index][$subIndex]) ? $resepAnjuranArray[$index][$subIndex] : ''); ?>">
-                                                        <div id="edit-dropdown-anjuran_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                            class="dropdown-menu autocomplete-dropdown"></div>
-                                                        <p class="text-warning"
-                                                            style="font-style: italic; font-size: 12px">
-                                                            *Bisa memilih lebih dari 1 anjuran minum
-                                                        </p>
+                                                        <input type="text"
+                                                            class="autocomplete-input multi-select-input"
+                                                            id="edit-anjuran_<?php echo e($index); ?>"
+                                                            placeholder="Cari Anjuran Minum" autocomplete="off"
+                                                            data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
+                                                            data-dropdown="edit-dropdown-anjuran_<?php echo e($index); ?>">
                                                     </div>
+                                                    <input type="hidden"
+                                                        name="soap_p[<?php echo e($index); ?>][anjuran]"
+                                                        id="edit-anjuran_<?php echo e($index); ?>_hidden"
+                                                        value="<?php echo e(implode(',', $allAnjuran)); ?>">
+                                                    <div id="edit-dropdown-anjuran_<?php echo e($index); ?>"
+                                                        class="dropdown-menu autocomplete-dropdown"></div>
+                                                    <p class="text-warning"
+                                                        style="font-style: italic; font-size: 12px">
+                                                        *Bisa memilih lebih dari 1 anjuran minum
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                <!-- Jumlah Masing-masing Obat -->
-                                                <div class="input-row"
-                                                    id="edit-jumlahObatContainer_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                    style="display: flex; align-items: center; gap: 5px;">
-                                                    <label
-                                                        for="edit-jumlah_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                        style="min-width: 100px">Jumlah</label>
-                                                    <span>:</span>
-                                                    <div class="input-wrapper">
-                                                        <div class="multi-select-wrapper form-control"
-                                                            data-input-id="edit-jumlah_<?php echo e($index); ?>_<?php echo e($subIndex); ?>">
-                                                            <div class="selected-tags"
-                                                                id="edit-jumlah_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_tags">
-                                                                <?php if(isset($resepJumlah[$index][$subIndex])): ?>
-                                                                    <span class="tag"
-                                                                        data-value="<?php echo e($resepJumlah[$index][$subIndex]); ?>"><?php echo e($resepJumlah[$index][$subIndex]); ?>
+                                            <!-- Jumlah -->
+                                            <div class="input-row"
+                                                style="display: flex; align-items: center; gap: 5px;">
+                                                <label for="edit-jumlah_<?php echo e($index); ?>"
+                                                    style="min-width: 100px">Jumlah</label>
+                                                <span>:</span>
+                                                <div class="input-wrapper">
+                                                    <div class="multi-select-wrapper form-control"
+                                                        data-input-id="edit-jumlah_<?php echo e($index); ?>">
+                                                        <div class="selected-tags"
+                                                            id="edit-jumlah_<?php echo e($index); ?>_tags">
+                                                            <?php $__currentLoopData = $allJumlah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jml): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <span class="tag"
+                                                                    data-value="<?php echo e($jml); ?>"><?php echo e($jml); ?>
 
-                                                                        <i class="fas fa-times remove-tag"></i></span>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                            <input type="number"
-                                                                class="multi-select-input jumlah-input"
-                                                                id="edit-jumlah_<?php echo e($index); ?>_<?php echo e($subIndex); ?>"
-                                                                placeholder="Masukkan Jumlah" min="1">
+                                                                    <i class="fas fa-times remove-tag"></i>
+                                                                </span>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </div>
-                                                        <input type="hidden"
-                                                            name="soap_p[<?php echo e($index); ?>][jumlah][]"
-                                                            id="edit-jumlah_<?php echo e($index); ?>_<?php echo e($subIndex); ?>_hidden"
-                                                            value="<?php echo e(isset($resepJumlah[$index][$subIndex]) ? $resepJumlah[$index][$subIndex] : ''); ?>">
-                                                        <p class="text-warning"
-                                                            style="font-style: italic; font-size: 12px">
-                                                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk
-                                                            menambah)
-                                                        </p>
+                                                        <input type="number" class="multi-select-input jumlah-input"
+                                                            id="edit-jumlah_<?php echo e($index); ?>"
+                                                            placeholder="Masukkan Jumlah" min="1">
                                                     </div>
+                                                    <input type="hidden" name="soap_p[<?php echo e($index); ?>][jumlah]"
+                                                        id="edit-jumlah_<?php echo e($index); ?>_hidden"
+                                                        value="<?php echo e(implode(',', $allJumlah)); ?>">
+                                                    <p class="text-warning"
+                                                        style="font-style: italic; font-size: 12px">
+                                                        *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk
+                                                        menambah)
+                                                    </p>
                                                 </div>
-                                                <hr>
-                                            <?php endfor; ?>
+                                            </div>
+
                                         </div>
                                     <?php endfor; ?>
-                                <?php else: ?>
-                                    <!-- Form kosong jika tidak ada data -->
-                                    <div class="input-row" id="edit-namaObatContainer_0_0"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <label for="edit-resep_0_0" style="min-width: 100px;">Nama Obat</label>
-                                        <span>:</span>
-                                        <div class="input-wrapper">
-                                            <div class="multi-select-wrapper form-control"
-                                                data-input-id="edit-resep_0_0">
-                                                <div class="selected-tags" id="edit-resep_0_0_tags"></div>
-                                                <input type="text" class="autocomplete-input multi-select-input"
-                                                    id="edit-resep_0_0" placeholder="Cari Obat" autocomplete="off"
-                                                    data-url="<?php echo e(url('/resep-autocomplete')); ?>"
-                                                    data-dropdown="edit-dropdown-resep_0_0">
-                                            </div>
-                                            <input type="hidden" name="soap_p[0][resep][]"
-                                                id="edit-resep_0_0_hidden">
-                                            <div id="edit-dropdown-resep_0_0"
-                                                class="dropdown-menu autocomplete-dropdown"></div>
-                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                *Bisa memilih lebih dari 1 obat
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="input-row" id="edit-jenisObatContainer_0_0"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <label for="edit-jenis_obat_0_0" style="min-width: 100px;">Jenis Obat</label>
-                                        <span>:</span>
-                                        <div class="input-wrapper">
-                                            <div class="multi-select-wrapper form-control"
-                                                data-input-id="edit-jenis_obat_0_0">
-                                                <div class="selected-tags" id="edit-jenis_obat_0_0_tags"></div>
-                                                <input type="text" class="autocomplete-input multi-select-input"
-                                                    id="edit-jenis_obat_0_0" placeholder="Cari Jenis Obat"
-                                                    autocomplete="off" data-url="<?php echo e(url('jenis-autocomplete')); ?>"
-                                                    data-dropdown="edit-dropdown-jenis_obat_0_0">
-                                            </div>
-                                            <input type="hidden" name="soap_p[0][jenisobat][]"
-                                                id="edit-jenis_obat_0_0_hidden">
-                                            <div id="edit-dropdown-jenis_obat_0_0"
-                                                class="dropdown-menu autocomplete-dropdown"></div>
-                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                *Bisa memilih lebih dari 1 jenis obat
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="input-row" id="edit-aturanContainer_0_0"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <label for="edit-aturan_0_0" style="min-width: 100px">Aturan Pakai</label>
-                                        <span>:</span>
-                                        <div class="input-wrapper">
-                                            <div class="multi-select-wrapper form-control"
-                                                data-input-id="edit-aturan_0_0">
-                                                <div class="selected-tags" id="edit-aturan_0_0_tags"></div>
-                                                <input type="text" class="autocomplete-input multi-select-input"
-                                                    id="edit-aturan_0_0" placeholder="Cari Aturan Pakai"
-                                                    autocomplete="off" data-url="<?php echo e(url('aturan-autocomplete')); ?>"
-                                                    data-dropdown="edit-dropdown-aturan_0_0">
-                                            </div>
-                                            <input type="hidden" name="soap_p[0][aturan][]"
-                                                id="edit-aturan_0_0_hidden">
-                                            <div id="edit-dropdown-aturan_0_0"
-                                                class="dropdown-menu autocomplete-dropdown"></div>
-                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                *Bisa memilih lebih dari 1 aturan pakai
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="input-row" id="edit-anjuranMinumContainer_0_0"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <label for="edit-anjuran_0_0" style="min-width: 100px">Anjuran Minum</label>
-                                        <span>:</span>
-                                        <div class="input-wrapper">
-                                            <div class="multi-select-wrapper form-control"
-                                                data-input-id="edit-anjuran_0_0">
-                                                <div class="selected-tags" id="edit-anjuran_0_0_tags"></div>
-                                                <input type="text" class="autocomplete-input multi-select-input"
-                                                    id="edit-anjuran_0_0" placeholder="Cari Anjuran Minum"
-                                                    autocomplete="off" data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
-                                                    data-dropdown="edit-dropdown-anjuran_0_0">
-                                            </div>
-                                            <input type="hidden" name="soap_p[0][anjuran][]"
-                                                id="edit-anjuran_0_0_hidden">
-                                            <div id="edit-dropdown-anjuran_0_0"
-                                                class="dropdown-menu autocomplete-dropdown"></div>
-                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                *Bisa memilih lebih dari 1 anjuran minum
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="input-row" id="edit-jumlahObatContainer_0_0"
-                                        style="display: flex; align-items: center; gap: 5px;">
-                                        <label for="edit-jumlah_0_0" style="min-width: 100px">Jumlah</label>
-                                        <span>:</span>
-                                        <div class="input-wrapper">
-                                            <div class="multi-select-wrapper form-control"
-                                                data-input-id="edit-jumlah_0_0">
-                                                <div class="selected-tags" id="edit-jumlah_0_0_tags"></div>
-                                                <input type="number" class="multi-select-input jumlah-input"
-                                                    id="edit-jumlah_0_0" placeholder="Masukkan Jumlah"
-                                                    min="1">
-                                            </div>
-                                            <input type="hidden" name="soap_p[0][jumlah][]"
-                                                id="edit-jumlah_0_0_hidden">
-                                            <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
-                                            </p>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
 
-                                <button type="button" class="btn btn-outline-primary" onclick="editAddColumn()"
-                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
-                                    data-bs-html="true"
-                                    data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                                    <i class="fa-solid fa-pills"></i>
-                                </button>
+                                    <div class="d-fle gap-2 mt-2">
+                                        <!-- Tombol Tambah Obat dipindahkan ke sini, tepat di bawah entri obat -->
+                                        <button type="button" class="btn btn-outline-primary"
+                                            onclick="editAddColumn()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                            data-bs-placement="top" data-bs-html="true"
+                                            data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
+                                            <i class="fa-solid fa-pills"></i>
+                                        </button>
+                                    </div>
+                                <?php else: ?>
+                                    <label for="soap_p_0"
+                                        style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
+                                        onclick="toggleObatContainer()">
+                                        Pilih Obat (P)
+                                    </label>
+                                    <div class="entry-group" id="edit-entry_0"
+                                        style="margin-bottom: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+                                        <div class="input-row" id="edit-namaObatContainer_0"
+                                            style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-resep_0" style="min-width: 100px;">Nama Obat</label>
+                                            <span>:</span>
+                                            <div class="input-wrapper">
+                                                <div class="multi-select-wrapper form-control"
+                                                    data-input-id="edit-resep_0">
+                                                    <div class="selected-tags" id="edit-resep_0_tags"></div>
+                                                    <input type="text"
+                                                        class="autocomplete-input multi-select-input"
+                                                        id="edit-resep_0" placeholder="Cari Obat" autocomplete="off"
+                                                        data-url="<?php echo e(url('/resep-autocomplete')); ?>"
+                                                        data-dropdown="edit-dropdown-resep_0">
+                                                </div>
+                                                <input type="hidden" name="soap_p[0][resep]"
+                                                    id="edit-resep_0_hidden">
+                                                <div id="edit-dropdown-resep_0"
+                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                    *Bisa memilih lebih dari 1 obat
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="input-row" id="edit-jenisObatContainer_0"
+                                            style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-jenis_obat_0" style="min-width: 100px;">Jenis
+                                                Obat</label>
+                                            <span>:</span>
+                                            <div class="input-wrapper">
+                                                <div class="multi-select-wrapper form-control"
+                                                    data-input-id="edit-jenis_obat_0">
+                                                    <div class="selected-tags" id="edit-jenis_obat_0_tags"></div>
+                                                    <input type="text"
+                                                        class="autocomplete-input multi-select-input"
+                                                        id="edit-jenis_obat_0" placeholder="Cari Jenis Obat"
+                                                        autocomplete="off"
+                                                        data-url="<?php echo e(url('jenis-autocomplete')); ?>"
+                                                        data-dropdown="edit-dropdown-jenis_obat_0">
+                                                </div>
+                                                <input type="hidden" name="soap_p[0][jenisobat]"
+                                                    id="edit-jenis_obat_0_hidden">
+                                                <div id="edit-dropdown-jenis_obat_0"
+                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                    *Bisa memilih lebih dari 1 jenis obat
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="input-row" id="edit-aturanContainer_0"
+                                            style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-aturan_0" style="min-width: 100px">Aturan Pakai</label>
+                                            <span>:</span>
+                                            <div class="input-wrapper">
+                                                <div class="multi-select-wrapper form-control"
+                                                    data-input-id="edit-aturan_0">
+                                                    <div class="selected-tags" id="edit-aturan_0_tags"></div>
+                                                    <input type="text"
+                                                        class="autocomplete-input multi-select-input"
+                                                        id="edit-aturan_0" placeholder="Cari Aturan Pakai"
+                                                        autocomplete="off"
+                                                        data-url="<?php echo e(url('aturan-autocomplete')); ?>"
+                                                        data-dropdown="edit-dropdown-aturan_0">
+                                                </div>
+                                                <input type="hidden" name="soap_p[0][aturan]"
+                                                    id="edit-aturan_0_hidden">
+                                                <div id="edit-dropdown-aturan_0"
+                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                    *Bisa memilih lebih dari 1 aturan pakai
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="input-row" id="edit-anjuranMinumContainer_0"
+                                            style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-anjuran_0" style="min-width: 100px">Anjuran Minum</label>
+                                            <span>:</span>
+                                            <div class="input-wrapper">
+                                                <div class="multi-select-wrapper form-control"
+                                                    data-input-id="edit-anjuran_0">
+                                                    <div class="selected-tags" id="edit-anjuran_0_tags"></div>
+                                                    <input type="text"
+                                                        class="autocomplete-input multi-select-input"
+                                                        id="edit-anjuran_0" placeholder="Cari Anjuran Minum"
+                                                        autocomplete="off"
+                                                        data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
+                                                        data-dropdown="edit-dropdown-anjuran_0">
+                                                </div>
+                                                <input type="hidden" name="soap_p[0][anjuran]"
+                                                    id="edit-anjuran_0_hidden">
+                                                <div id="edit-dropdown-anjuran_0"
+                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                    *Bisa memilih lebih dari 1 anjuran minum
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="input-row" id="edit-jumlahObatContainer_0"
+                                            style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-jumlah_0" style="min-width: 100px">Jumlah</label>
+                                            <span>:</span>
+                                            <div class="input-wrapper">
+                                                <div class="multi-select-wrapper form-control"
+                                                    data-input-id="edit-jumlah_0">
+                                                    <div class="selected-tags" id="edit-jumlah_0_tags"></div>
+                                                    <input type="number" class="multi-select-input jumlah-input"
+                                                        id="edit-jumlah_0" placeholder="Masukkan Jumlah"
+                                                        min="1">
+                                                </div>
+                                                <input type="hidden" name="soap_p[0][jumlah]"
+                                                    id="edit-jumlah_0_hidden">
+                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                                    *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary" onclick="editAddColumn()"
+                                        data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
+                                        data-bs-html="true"
+                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
+                                        <i class="fa-solid fa-pills"></i>
+                                    </button>
+                                <?php endif; ?>
 
                                 <label for=""
                                     style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; width: 100%; cursor: pointer"
@@ -1057,9 +1091,162 @@
 <?php $__env->startPush('script'); ?>
     <!-- JS Select2 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
+    
 
     <script>
+        // Fungsi toggle untuk form editSoap
+        function toggleChangeSoapEdit(elementId, radio) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                console.warn(`[EditSoap] Element not found: ${elementId}`);
+                return;
+            }
+
+            // Tampilkan hanya jika nilai adalah "Aloanamnesis"
+            element.style.display = (radio.value === 'Aloanamnesis') ? 'block' : 'none';
+            console.log(`[EditSoap] Toggle ${elementId} with value: ${radio.value}, display: ${element.style.display}`);
+        }
+
+        // Inisialisasi dan perhitungan GCS serta IMT untuk editSoap
+        function initializeEditSoap() {
+            // GCS Calculation
+            const gcs_e = document.getElementById('gcs_e_edit');
+            const gcs_m = document.getElementById('gcs_m_edit');
+            const gcs_v = document.getElementById('gcs_v_edit');
+            const gcs_total = document.getElementById('gcs_total_edit');
+
+            if (!gcs_e || !gcs_m || !gcs_v || !gcs_total) {
+                console.error('[EditSoap] One or more GCS elements not found:', {
+                    gcs_e,
+                    gcs_m,
+                    gcs_v,
+                    gcs_total
+                });
+                return;
+            }
+
+            function calculateTotal() {
+                let e = parseFloat(gcs_e.value) || 0;
+                let m = parseFloat(gcs_m.value) || 0;
+                let v = parseFloat(gcs_v.value) || 0;
+                let totalInput = e + m + v;
+
+                console.log('[EditSoap] GCS Input values:', {
+                    e,
+                    m,
+                    v,
+                    totalInput
+                });
+
+                if (e === 0 || m === 0 || v === 0) {
+                    gcs_total.textContent = isNaN(totalInput) ? '0' : totalInput.toString();
+                } else {
+                    if (totalInput !== 15) {
+                        const ratio = 15 / totalInput;
+                        e = Math.round(e * ratio);
+                        m = Math.round(m * ratio);
+                        v = Math.round(v * ratio);
+                        totalInput = 15;
+                    }
+                    gcs_total.textContent = '15';
+                }
+                console.log('[EditSoap] GCS Calculated total:', gcs_total.textContent);
+            }
+
+            [gcs_e, gcs_m, gcs_v].forEach(input => {
+                input.addEventListener('input', calculateTotal);
+            });
+
+            calculateTotal();
+
+            // IMT Calculation
+            const tbInput = document.getElementById('tb_edit');
+            const bbInput = document.getElementById('bb_edit');
+            const imtInput = document.getElementById('p_imt_edit');
+
+            if (!tbInput || !bbInput || !imtInput) {
+                console.error('[EditSoap] One or more IMT elements not found:', {
+                    tbInput,
+                    bbInput,
+                    imtInput
+                });
+                return;
+            }
+
+            function hitungIMT() {
+                var tb = parseFloat(tbInput.value);
+                var bb = parseFloat(bbInput.value);
+
+                if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
+                    var imt = bb / ((tb / 100) * (tb / 100));
+                    imtInput.value = imt.toFixed(2);
+                } else {
+                    imtInput.value = '';
+                }
+                console.log('[EditSoap] IMT Calculated:', imtInput.value);
+            }
+
+            [tbInput, bbInput].forEach(input => {
+                input.addEventListener('input', hitungIMT);
+            });
+
+            hitungIMT();
+        }
+
+        // Inisialisasi saat DOM siap untuk editSoap
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEditSoap();
+
+            // Ambil RM ID dengan fallback (handle null di PHP: <?php if($soapTerbaru && $soapTerbaru->rm): ?> <?php echo e($soapTerbaru->rm->id); ?> <?php else: ?> 0 <?php endif; ?>
+            const rmId = <?php echo e($soapTerbaru && $soapTerbaru->rm ? $soapTerbaru->rm->id : 'null'); ?>;
+
+            // Tambahkan event listener untuk semua select yang memicu toggle
+            const selects = document.querySelectorAll(
+                '#kepala_edit, #mata_edit, #leher_edit, #tht_edit, #thorax_edit, #paru_edit, #jantung_edit, #abdomen_edit, #ekstremitas_edit, #kulit_edit'
+            );
+
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    // Gunakan rmId jika ada, atau fallback ke string kosong
+                    const elementId = rmId ? (this.id.replace('_edit', '') + '_edit_' + rmId) : (
+                        this.id.replace('_edit', '') + '_edit');
+                    toggleChangeSoapEdit(elementId, this);
+                });
+            });
+
+            // Tambahkan event listener untuk radio isian dan set status awal
+            const isianRadios = document.querySelectorAll('#isian-ya_edit, #isian-tidak_edit');
+            isianRadios.forEach(radio => {
+                radio.addEventListener('change', () => toggleChangeSoapEdit('alasan-isian-soap_edit',
+                    radio));
+
+                // Set status awal berdasarkan radio yang sudah checked
+                if (radio.checked) {
+                    toggleChangeSoapEdit('alasan-isian-soap_edit', radio);
+                }
+            });
+
+            // Pastikan status awal sesuai dengan data awal
+            const initialValue = document.querySelector('input[name="isian"]:checked');
+            if (initialValue && initialValue.value.toLowerCase() === 'aloanamnesis') {
+                toggleChangeSoapEdit('alasan-isian-soap_edit', initialValue);
+            }
+
+            // Jika soapTerbaru null, nonaktifkan atau sembunyikan elemen edit sementara
+            if (!rmId) {
+                // Contoh: Sembunyikan form edit atau alert
+                console.log('Tidak ada data SOAP terbaru, form dalam mode create baru.');
+            }
+        });
+
+        // Fungsi tambahan untuk toggle section (jika diperlukan, sesuaikan dengan kebutuhan)
+        function toggleSectionEdit(sectionClass) {
+            const inputs = document.querySelectorAll(`.${sectionClass} .form-group`);
+            inputs.forEach(input => {
+                input.classList.toggle('hidden-input');
+            });
+        }
+
         // DIAGNOSA - Versi yang diperbaiki
         document.addEventListener('DOMContentLoaded', function() {
             function showDiagnosaDropdown(inputElement, dropdownElement, results) {
@@ -1075,60 +1262,103 @@
                     option.textContent = result.text;
                     option.dataset.id = result.id;
                     option.style.cursor = 'pointer';
+                    option.style.padding = '8px 12px';
 
                     option.addEventListener('click', function() {
                         inputElement.value = result.text;
                         dropdownElement.style.display = 'none';
+                        console.log(`[Diagnosa] Dipilih: ${result.text} (ID: ${result.id})`);
                     });
 
                     dropdownElement.appendChild(option);
                 });
 
                 dropdownElement.style.display = 'block';
+                console.log(`[Diagnosa] Menampilkan ${results.length} hasil saran`);
             }
 
             function searchDiagnosa(term, callback) {
-                if (term.length < 3) {
+                if (term.length < 1) {
                     callback([]);
                     return;
                 }
 
+                console.log(`[Diagnosa] Mencari: "${term}"`);
+
                 fetch(`/search-diagnosa?term=${encodeURIComponent(term)}`)
-                    .then(response => response.json())
-                    .then(data => callback(data))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(`[Diagnosa] Data diterima:`, data);
+                        callback(data);
+                    })
                     .catch(error => {
-                        console.error('Error fetching diagnosa:', error);
+                        console.error('[Diagnosa] Error fetching data:', error);
                         callback([]);
                     });
             }
 
             function initDiagnosaAutocomplete(prefix, dropdownPrefix) {
-                document.querySelectorAll(`[id^="${prefix}"]`).forEach(input => {
+                const inputs = document.querySelectorAll(`[id^="${prefix}"]`);
+                inputs.forEach(input => {
                     const index = input.id.replace(prefix, '');
                     const dropdownElement = document.getElementById(`${dropdownPrefix}${index}`);
 
-                    if (dropdownElement) {
+                    if (!dropdownElement) {
+                        console.warn(`[Diagnosa] Dropdown tidak ditemukan untuk input: ${input.id}`);
+                        return; // Lewati jika dropdown tidak ada
+                    }
+
+                    // Hanya tambahkan event listener jika belum ada
+                    if (!input.dataset.autocompleteInitialized) {
                         input.addEventListener('input', function() {
                             searchDiagnosa(this.value, function(results) {
                                 showDiagnosaDropdown(input, dropdownElement, results);
                             });
                         });
 
-                        document.addEventListener('click', function(e) {
-                            if (!input.contains(e.target) && !dropdownElement.contains(e.target)) {
-                                dropdownElement.style.display = 'none';
+                        input.addEventListener('focus', function() {
+                            if (this.value.length >= 1) {
+                                searchDiagnosa(this.value, function(results) {
+                                    showDiagnosaDropdown(input, dropdownElement, results);
+                                });
                             }
                         });
+
+                        input.dataset.autocompleteInitialized = 'true'; // Tandai sebagai diinisialisasi
+                        console.log(`[Diagnosa] Diinisialisasi input: ${input.id}`);
                     }
                 });
             }
 
+            // Inisialisasi untuk primer dan sekunder
             initDiagnosaAutocomplete('soap_a_', 'dropdown-diagnosa-primer-');
             initDiagnosaAutocomplete('soap_a_b_', 'dropdown-diagnosa-sekunder-');
+
+            // Satu event listener global untuk sembunyikan dropdown saat klik di luar
+            document.addEventListener('click', function(e) {
+                const allInputs = document.querySelectorAll('.soap_a, .soap_a_b');
+                const allDropdowns = document.querySelectorAll('.diagnosa-dropdown');
+                let clickedInside = false;
+
+                allInputs.forEach(input => {
+                    if (input.contains(e.target)) clickedInside = true;
+                });
+                allDropdowns.forEach(dropdown => {
+                    if (dropdown.contains(e.target)) clickedInside = true;
+                });
+
+                if (!clickedInside) {
+                    allDropdowns.forEach(dropdown => dropdown.style.display = 'none');
+                }
+            });
         });
 
         // RESEP OBAT
-        // resources/js/editSoap.js
         document.addEventListener('DOMContentLoaded', function() {
             function initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues = []) {
                 const input = document.getElementById(inputId);
@@ -1138,21 +1368,16 @@
                 let selectedValues = existingValues.length ? existingValues : hiddenInput.value ? hiddenInput.value
                     .split(',') : [];
 
-                // Tampilkan nilai default sebagai tag
-                selectedValues.forEach(value => {
-                    if (value) {
-                        const tag = document.createElement('span');
-                        tag.className = 'tag';
-                        tag.dataset.value = value;
-                        tag.innerHTML = `${value} <i class="fas fa-times remove-tag"></i>`;
-                        tagsContainer.appendChild(tag);
-                    }
-                });
+                // Sinkronisasi selectedValues dengan tag yang ada di HTML
+                selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value =>
+                    value);
 
-                // Update hidden input
+                // Update hidden input berdasarkan selectedValues awal
                 function updateHiddenInput() {
                     hiddenInput.value = selectedValues.join(',');
                 }
+
+                updateHiddenInput();
 
                 // Event listener untuk input autocomplete
                 input.addEventListener('input', function() {
@@ -1171,7 +1396,9 @@
                                 li.textContent = item
                                     .value; // Sesuaikan dengan struktur data dari endpoint
                                 li.addEventListener('click', () => {
-                                    if (!selectedValues.includes(item.value)) {
+                                    if (!selectedValues.includes(item
+                                            .value
+                                        )) { // Cek duplikat hanya untuk autocomplete
                                         selectedValues.push(item.value);
                                         const tag = document.createElement('span');
                                         tag.className = 'tag';
@@ -1202,9 +1429,10 @@
                 });
 
                 // Event listener untuk jumlah (tekan Enter)
-                if (input.type === 'number') {
+                if (input.type === 'number' && inputId.startsWith('edit-jumlah_')) { // Khusus untuk "Jumlah"
                     input.addEventListener('keypress', function(e) {
                         if (e.key === 'Enter' && input.value) {
+                            // Izinkan nilai yang sama untuk "Jumlah"
                             selectedValues.push(input.value);
                             const tag = document.createElement('span');
                             tag.className = 'tag';
@@ -1212,6 +1440,21 @@
                             tag.innerHTML = `${input.value} <i class="fas fa-times remove-tag"></i>`;
                             tagsContainer.appendChild(tag);
                             updateHiddenInput();
+                            input.value = '';
+                        }
+                    });
+                } else if (input.type === 'number') { // Untuk kasus lain (jika ada)
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter' && input.value) {
+                            if (!selectedValues.includes(input.value)) {
+                                selectedValues.push(input.value);
+                                const tag = document.createElement('span');
+                                tag.className = 'tag';
+                                tag.dataset.value = input.value;
+                                tag.innerHTML = `${input.value} <i class="fas fa-times remove-tag"></i>`;
+                                tagsContainer.appendChild(tag);
+                                updateHiddenInput();
+                            }
                             input.value = '';
                         }
                     });
@@ -1225,145 +1468,147 @@
                 const dropdownId = wrapper.dataset.dropdown ||
                     `edit-dropdown-${inputId.split('_').slice(1).join('_')}`;
                 const url = wrapper.querySelector('.autocomplete-input')?.dataset.url || '';
-                const existingValues = wrapper.querySelector('.selected-tags').children.length ?
-                    Array.from(wrapper.querySelector('.selected-tags').children).map(tag => tag.dataset
-                        .value) : [];
+                const existingValues = Array.from(wrapper.querySelector('.selected-tags').children).map(
+                    tag => tag.dataset.value);
                 initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues);
             });
 
             // Fungsi untuk menambah kolom baru
             window.editAddColumn = function() {
                 const container = document.getElementById('edit-resep');
-                const index = container.querySelectorAll('.input-row[id*="edit-namaObatContainer"]').length;
-                const newRow = `
-                        <div class="input-row" id="edit-namaObatContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-resep_${index}" style="min-width: 100px;">Nama Obat</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-resep_${index}">
-                                    <div class="selected-tags" id="edit-resep_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-resep_${index}"
-                                        placeholder="Cari Obat" autocomplete="off" data-url="<?php echo e(url('/resep-autocomplete')); ?>"
-                                        data-dropdown="edit-dropdown-resep_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][resep][]" id="edit-resep_${index}_hidden">
-                                <div id="edit-dropdown-resep_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 obat
-                                </p>
-                            </div>
+                const addButton = container.querySelector('button[onclick="editAddColumn()"]');
+                const index = container.querySelectorAll('.entry-group').length;
+                const newGroup = `
+            <label for="soap_p_${index}" style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;" onclick="toggleObatContainer()">
+                Pilih Obat Baru (P)
+            </label>
+            <div class="entry-group" id="edit-entry_${index}">
+                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                    <label for="edit-resep_${index}" style="min-width: 100px;">Nama Obat</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="edit-resep_${index}">
+                            <div class="selected-tags" id="edit-resep_${index}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="edit-resep_${index}"
+                                placeholder="Cari Obat" autocomplete="off" data-url="<?php echo e(url('/resep-autocomplete')); ?>"
+                                data-dropdown="edit-dropdown-resep_${index}">
                         </div>
-                        <div class="input-row" id="edit-jenisObatContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-jenis_obat_${index}" style="min-width: 100px;">Jenis Obat</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_${index}">
-                                    <div class="selected-tags" id="edit-jenis_obat_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-jenis_obat_${index}"
-                                        placeholder="Cari Jenis Obat" autocomplete="off" data-url="<?php echo e(url('jenis-autocomplete')); ?>"
-                                        data-dropdown="edit-dropdown-jenis_obat_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][jenisobat][]" id="edit-jenis_obat_${index}_hidden">
-                                <div id="edit-dropdown-jenis_obat_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 jenis obat
-                                </p>
-                            </div>
+                        <input type="hidden" name="soap_p[${index}][resep]" id="edit-resep_${index}_hidden">
+                        <div id="edit-dropdown-resep_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 obat
+                        </p>
+                    </div>
+                </div>
+                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                    <label for="edit-jenis_obat_${index}" style="min-width: 100px;">Jenis Obat</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_${index}">
+                            <div class="selected-tags" id="edit-jenis_obat_${index}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="edit-jenis_obat_${index}"
+                                placeholder="Cari Jenis Obat" autocomplete="off" data-url="<?php echo e(url('jenis-autocomplete')); ?>"
+                                data-dropdown="edit-dropdown-jenis_obat_${index}">
                         </div>
-                        <div class="input-row" id="edit-aturanContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-aturan_${index}" style="min-width: 100px">Aturan Pakai</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_${index}">
-                                    <div class="selected-tags" id="edit-aturan_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-aturan_${index}"
-                                        placeholder="Cari Aturan Pakai" autocomplete="off" data-url="<?php echo e(url('aturan-autocomplete')); ?>"
-                                        data-dropdown="edit-dropdown-aturan_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][aturan][]" id="edit-aturan_${index}_hidden">
-                                <div id="edit-dropdown-aturan_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 aturan pakai
-                                </p>
-                            </div>
+                        <input type="hidden" name="soap_p[${index}][jenisobat]" id="edit-jenis_obat_${index}_hidden">
+                        <div id="edit-dropdown-jenis_obat_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 jenis obat
+                        </p>
+                    </div>
+                </div>
+                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                    <label for="edit-aturan_${index}" style="min-width: 100px">Aturan Pakai</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_${index}">
+                            <div class="selected-tags" id="edit-aturan_${index}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="edit-aturan_${index}"
+                                placeholder="Cari Aturan Pakai" autocomplete="off" data-url="<?php echo e(url('aturan-autocomplete')); ?>"
+                                data-dropdown="edit-dropdown-aturan_${index}">
                         </div>
-                        <div class="input-row" id="edit-anjuranMinumContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-anjuran_${index}" style="min-width: 100px">Anjuran Minum</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_${index}">
-                                    <div class="selected-tags" id="edit-anjuran_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-anjuran_${index}"
-                                        placeholder="Cari Anjuran Minum" autocomplete="off" data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
-                                        data-dropdown="edit-dropdown-anjuran_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][anjuran][]" id="edit-anjuran_${index}_hidden">
-                                <div id="edit-dropdown-anjuran_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 anjuran minum
-                                </p>
-                            </div>
+                        <input type="hidden" name="soap_p[${index}][aturan]" id="edit-aturan_${index}_hidden">
+                        <div id="edit-dropdown-aturan_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 aturan pakai
+                        </p>
+                    </div>
+                </div>
+                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                    <label for="edit-anjuran_${index}" style="min-width: 100px">Anjuran Minum</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_${index}">
+                            <div class="selected-tags" id="edit-anjuran_${index}_tags"></div>
+                            <input type="text" class="autocomplete-input multi-select-input" id="edit-anjuran_${index}"
+                                placeholder="Cari Anjuran Minum" autocomplete="off" data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
+                                data-dropdown="edit-dropdown-anjuran_${index}">
                         </div>
-                        <div class="input-row" id="edit-jumlahObatContainer_${index}" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-jumlah_${index}" style="min-width: 100px">Jumlah</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_${index}">
-                                    <div class="selected-tags" id="edit-jumlah_${index}_tags"></div>
-                                    <input type="number" class="multi-select-input jumlah-input" id="edit-jumlah_${index}"
-                                        placeholder="Masukkan Jumlah" min="1">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][jumlah][]" id="edit-jumlah_${index}_hidden">
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
-                                </p>
-                            </div>
+                        <input type="hidden" name="soap_p[${index}][anjuran]" id="edit-anjuran_${index}_hidden">
+                        <div id="edit-dropdown-anjuran_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memilih lebih dari 1 anjuran minum
+                        </p>
+                    </div>
+                </div>
+                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                    <label for="edit-jumlah_${index}" style="min-width: 100px">Jumlah</label>
+                    <span>:</span>
+                    <div class="input-wrapper">
+                        <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_${index}">
+                            <div class="selected-tags" id="edit-jumlah_${index}_tags"></div>
+                            <input type="number" class="multi-select-input jumlah-input" id="edit-jumlah_${index}"
+                                placeholder="Masukkan Jumlah" min="1">
                         </div>
-                        <hr>
-                    `;
-                container.insertAdjacentHTML('beforeend', newRow);
+                        <input type="hidden" name="soap_p[${index}][jumlah]" id="edit-jumlah_${index}_hidden">
+                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tombol Hapus Kolom untuk group baru -->
+                <div class="d-flex gap-2 mt-2">
+                    <button type="button" class="btn btn-outline-primary"
+                        onclick="editAddColumn()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="top" data-bs-html="true"
+                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
+                        <i class="fa-solid fa-pills"></i>
+                    </button>
+
+                    <button type="button" class="btn btn-outline-danger btn-wide" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Hapus Obat</span>" onclick="editRemoveColumn(this)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+                // Tambahkan grup baru tepat setelah tombol
+                addButton.insertAdjacentHTML('afterend', newGroup);
+
+                // Inisialisasi multi-select untuk group baru
                 initializeMultiSelect(`edit-resep_${index}`, `edit-resep_${index}_hidden`,
                     `edit-dropdown-resep_${index}`, '<?php echo e(url('/resep-autocomplete')); ?>');
                 initializeMultiSelect(`edit-jenis_obat_${index}`, `edit-jenis_obat_${index}_hidden`,
-                    `edit-dropdown-jenis_obat_${index}`, '<?php echo e(url('/jenis-autocomplete')); ?>');
+                    `edit-dropdown-jenis_obat_${index}`, '<?php echo e(url('jenis-autocomplete')); ?>');
                 initializeMultiSelect(`edit-aturan_${index}`, `edit-aturan_${index}_hidden`,
-                    `edit-dropdown-aturan_${index}`, '<?php echo e(url('/aturan-autocomplete')); ?>');
+                    `edit-dropdown-aturan_${index}`, '<?php echo e(url('aturan-autocomplete')); ?>');
                 initializeMultiSelect(`edit-anjuran_${index}`, `edit-anjuran_${index}_hidden`,
-                    `edit-dropdown-anjuran_${index}`, '<?php echo e(url('/anjuran-autocomplete')); ?>');
+                    `edit-dropdown-anjuran_${index}`, '<?php echo e(url('anjuran-autocomplete')); ?>');
                 initializeMultiSelect(`edit-jumlah_${index}`, `edit-jumlah_${index}_hidden`,
-                    `edit-jumlah_${index}`, '');
+                    `edit-jumlah_${index}`, ''); // Tidak perlu URL untuk jumlah
+            };
+
+            // Fungsi untuk menghapus kolom
+            window.editRemoveColumn = function(button) {
+                const group = button.closest('.entry-group');
+                const label = group.previousElementSibling;
+                if (label && label.tagName === 'LABEL' && label.getAttribute('for').startsWith('soap_p_')) {
+                    label.remove();
+                }
+                group.remove();
             };
         });
-
-        // RESEP
-        function toggleObatContainer() {
-            // Ambil elemen dengan id "resep"
-            var resepContainer = document.getElementById('edit-resep');
-
-            // Cek status saat ini (apakah tersembunyi atau terlihat)
-            if (resepContainer.style.display === 'none' || resepContainer.style.display === '') {
-                // Jika tersembunyi, tampilkan
-                resepContainer.style.display = 'block';
-            } else {
-                // Jika terlihat, sembunyikan
-                resepContainer.style.display = 'none';
-            }
-        }
-
-        // RACIKAN
-        function toggleRacikanContainer() {
-            // Ambil elemen dengan id "resepRacikan"
-            var resepRacikanContainer = document.getElementById('edit-resepRacikan');
-
-            // Cek status saat ini (apakah tersembunyi atau terlihat)
-            if (resepRacikanContainer.style.display === 'none' || resepRacikanContainer.style.display === '') {
-                // Jika tersembunyi, tampilkan
-                resepRacikanContainer.style.display = 'block';
-            } else {
-                // Jika terlihat, sembunyikan
-                resepRacikanContainer.style.display = 'none';
-            }
-        }
     </script>
 <?php $__env->stopPush(); ?>
 <?php /**PATH E:\xampp\htdocs\Job_Rs_Master\resources\views/dokter/modal/editSoap.blade.php ENDPATH**/ ?>

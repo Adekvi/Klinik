@@ -232,7 +232,7 @@
                                                         @endif
                                                     @endif
                                                 </td>
-                                                <td>{{ date_format(date_create($item['created_at']), 'Y-m-d/H:i:s') }}
+                                                <td>{{ date_format(date_create($item['created_at']), 'Y-m-d/H:i') }}
                                                 </td>
                                                 <td>{{ $item['nama_dokter'] }}</td>
                                                 <td style="text-align: left">
@@ -247,18 +247,56 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td>{{ $item['keluhan_utama'] ?? '-' }}</td>
                                                                 <td>
-                                                                    <ul>
-                                                                        <li>Tensi : {{ $item['p_tensi'] ?? '-' }} /
-                                                                            mmHg</li>
-                                                                        <li>RR : {{ $item['p_rr'] ?? '-' }} / minute
+                                                                    <li>{{ $item['keluhan_utama'] ?? '-' }}</li>
+                                                                </td>
+                                                                <td>
+                                                                    <ul style="padding-left: 20px; margin: 0;">
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>Tensi</span><span>:
+                                                                                    {{ $item['p_tensi'] ?? '-' }} /
+                                                                                    mmHg</span>
+                                                                            </div>
                                                                         </li>
-                                                                        <li>Nadi : {{ $item['p_nadi'] ?? '-' }} /
-                                                                            minute</li>
-                                                                        <li>Suhu : {{ $item['p_suhu'] ?? '-' }} °c</li>
-                                                                        <li>TB : {{ $item['p_tb'] ?? '-' }} / cm</li>
-                                                                        <li>BB : {{ $item['p_bb'] ?? '-' }} / kg</li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>RR</span><span>:
+                                                                                    {{ $item['p_rr'] ?? '-' }} /
+                                                                                    minute</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>Nadi</span><span>:
+                                                                                    {{ $item['p_nadi'] ?? '-' }} /
+                                                                                    minute</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>Suhu</span><span>:
+                                                                                    {{ $item['p_suhu'] ?? '-' }} °c</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>TB</span><span>:
+                                                                                    {{ $item['p_tb'] ?? '-' }} / cm</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>BB</span><span>:
+                                                                                    {{ $item['p_bb'] ?? '-' }} / kg</span>
+                                                                            </div>
+                                                                        </li>
                                                                     </ul>
                                                                 </td>
                                                                 <td>
@@ -297,7 +335,8 @@
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
                                                                         Resep :</p>
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
-                                                                        - Non Racikan</p>
+                                                                        - Non Racikan
+                                                                    </p>
                                                                     @php
                                                                         $resep = json_decode(
                                                                             $item['soap_p'] ?? '[]',
@@ -314,13 +353,28 @@
                                                                                 $aturanMinum = $aturan[$obat] ?? '-';
                                                                             @endphp
                                                                             <ul>
-                                                                                <li>{{ $namaObat ?? '-' }} |
-                                                                                    {{ $aturanMinum }}</li>
+                                                                                <li>
+                                                                                    <div
+                                                                                        style="display: grid; grid-template-columns: 200px 20px auto; gap: 5px;">
+                                                                                        <span>{{ $namaObat ?? '-' }}</span>
+                                                                                        <span>-</span>
+                                                                                        <span>{{ $aturanMinum ?? '-' }}</span>
+                                                                                    </div>
+                                                                                </li>
                                                                             </ul>
                                                                         @endforeach
                                                                     @else
                                                                         <p>-</p>
                                                                     @endif
+                                                                    <p style="font-weight: bold; margin-bottom: -0px">
+                                                                        - Racikan
+                                                                    </p>
+                                                                    <ul>
+                                                                        <li>
+                                                                            {{ $item['ObatRacikan'] ?? '-' }}
+
+                                                                        </li>
+                                                                    </ul>
                                                                 </td>
                                                             </tr>
                                                         </tbody>

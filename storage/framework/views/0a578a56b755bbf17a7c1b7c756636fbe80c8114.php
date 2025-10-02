@@ -232,7 +232,7 @@
                                                         <?php endif; ?>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td><?php echo e(date_format(date_create($item['created_at']), 'Y-m-d/H:i:s')); ?>
+                                                <td><?php echo e(date_format(date_create($item['created_at']), 'Y-m-d/H:i')); ?>
 
                                                 </td>
                                                 <td><?php echo e($item['nama_dokter']); ?></td>
@@ -248,18 +248,56 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td><?php echo e($item['keluhan_utama'] ?? '-'); ?></td>
                                                                 <td>
-                                                                    <ul>
-                                                                        <li>Tensi : <?php echo e($item['p_tensi'] ?? '-'); ?> /
-                                                                            mmHg</li>
-                                                                        <li>RR : <?php echo e($item['p_rr'] ?? '-'); ?> / minute
+                                                                    <li><?php echo e($item['keluhan_utama'] ?? '-'); ?></li>
+                                                                </td>
+                                                                <td>
+                                                                    <ul style="padding-left: 20px; margin: 0;">
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>Tensi</span><span>:
+                                                                                    <?php echo e($item['p_tensi'] ?? '-'); ?> /
+                                                                                    mmHg</span>
+                                                                            </div>
                                                                         </li>
-                                                                        <li>Nadi : <?php echo e($item['p_nadi'] ?? '-'); ?> /
-                                                                            minute</li>
-                                                                        <li>Suhu : <?php echo e($item['p_suhu'] ?? '-'); ?> °c</li>
-                                                                        <li>TB : <?php echo e($item['p_tb'] ?? '-'); ?> / cm</li>
-                                                                        <li>BB : <?php echo e($item['p_bb'] ?? '-'); ?> / kg</li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>RR</span><span>:
+                                                                                    <?php echo e($item['p_rr'] ?? '-'); ?> /
+                                                                                    minute</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>Nadi</span><span>:
+                                                                                    <?php echo e($item['p_nadi'] ?? '-'); ?> /
+                                                                                    minute</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>Suhu</span><span>:
+                                                                                    <?php echo e($item['p_suhu'] ?? '-'); ?> °c</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>TB</span><span>:
+                                                                                    <?php echo e($item['p_tb'] ?? '-'); ?> / cm</span>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div
+                                                                                style="display: grid; grid-template-columns: 80px auto;">
+                                                                                <span>BB</span><span>:
+                                                                                    <?php echo e($item['p_bb'] ?? '-'); ?> / kg</span>
+                                                                            </div>
+                                                                        </li>
                                                                     </ul>
                                                                 </td>
                                                                 <td>
@@ -298,7 +336,8 @@
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
                                                                         Resep :</p>
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
-                                                                        - Non Racikan</p>
+                                                                        - Non Racikan
+                                                                    </p>
                                                                     <?php
                                                                         $resep = json_decode(
                                                                             $item['soap_p'] ?? '[]',
@@ -315,13 +354,29 @@
                                                                                 $aturanMinum = $aturan[$obat] ?? '-';
                                                                             ?>
                                                                             <ul>
-                                                                                <li><?php echo e($namaObat ?? '-'); ?> |
-                                                                                    <?php echo e($aturanMinum); ?></li>
+                                                                                <li>
+                                                                                    <div
+                                                                                        style="display: grid; grid-template-columns: 200px 20px auto; gap: 5px;">
+                                                                                        <span><?php echo e($namaObat ?? '-'); ?></span>
+                                                                                        <span>-</span>
+                                                                                        <span><?php echo e($aturanMinum ?? '-'); ?></span>
+                                                                                    </div>
+                                                                                </li>
                                                                             </ul>
                                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                     <?php else: ?>
                                                                         <p>-</p>
                                                                     <?php endif; ?>
+                                                                    <p style="font-weight: bold; margin-bottom: -0px">
+                                                                        - Racikan
+                                                                    </p>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <?php echo e($item['ObatRacikan'] ?? '-'); ?>
+
+
+                                                                        </li>
+                                                                    </ul>
                                                                 </td>
                                                             </tr>
                                                         </tbody>

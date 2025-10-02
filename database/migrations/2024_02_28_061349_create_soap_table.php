@@ -96,7 +96,8 @@ class CreateSoapTable extends Migration
                         $table->text('ObatRacikan')->nullable();
 
                         $table->string('edukasi')->nullable();
-                        $table->string('rujuk')->default('-')->nullable();
+                        $table->string('rujuk')->nullable();
+                        $table->string('rujuk_rumahsakit')->nullable();
                         $table->integer('harga_obat')->nullable();
                         $table->timestamps();
                 });

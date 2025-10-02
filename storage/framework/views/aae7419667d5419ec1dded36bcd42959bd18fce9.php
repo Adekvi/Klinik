@@ -154,7 +154,7 @@
                                         <th>Jenis Pasien</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody class="text-center" style="text-transform: uppercase">
                                     <?php if(count($antrianDokter) === 0): ?>
                                         <tr>
                                             <td colspan="9" style="text-align: center; font-size: bold">Tidak ada data
@@ -168,6 +168,14 @@
 
                                                 </td>
                                                 <td>
+                                                    <span data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                        data-bs-placement="top" data-bs-html="true"
+                                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Panggil Pasien</span>">
+                                                        <button data-nomor-antrian="<?php echo e($item->kode_antrian); ?>"
+                                                            class="btn btn-success btn-panggil">
+                                                            <i class="fas fa-bell"></i>
+                                                        </button>
+                                                    </span>
                                                     <a href="<?php echo e(url('dokter/soap/' . $item->id)); ?>"
                                                         class="btn btn-primary" data-bs-toggle="tooltip"
                                                         data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
@@ -195,12 +203,6 @@
                                                 </td>
                                                 <td style="font-size: 24px">
                                                     <strong><?php echo e($item->kode_antrian); ?></strong> <br>
-                                                    <button data-nomor-antrian="<?php echo e($item->kode_antrian); ?>"
-                                                        class="btn btn-success btn-panggil" data-bs-toggle="tooltip"
-                                                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Panggil Pasien</span>">
-                                                        <i class="fas fa-bell"></i>
-                                                    </button>
                                                 </td>
                                                 <td><?php echo e($item->booking->pasien->no_rm); ?></td>
                                                 <td><?php echo e($item->booking->pasien->nama_pasien); ?></td>

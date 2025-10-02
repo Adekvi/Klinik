@@ -114,14 +114,15 @@ class PasienController extends Controller
             session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
             if (!Auth::check()) {
                 // Pengguna belum login (pendaftaran mandiri)
-                return response()->json(['redirect' => route('/')]);
+                // return response()->json(['redirect' => route('/')]);
+                return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);;
             } else {
                 // Pengguna sudah login
                 return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);
             }
         });
     }
-
+    
     public function storeBpjs(Request $request)
     {
         // Validasi input
