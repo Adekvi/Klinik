@@ -43,7 +43,7 @@ class PasienImport implements ToModel, WithHeadingRow
             foreach ($expectedHeaders as $header) {
                 if (!array_key_exists($header, $row)) {
                     Log::error("Header '$header' tidak ditemukan!");
-                    throw new \Exception("Header '$header' tidak ditemukan! Header yang ada: " . implode(', ', array_keys($row)));
+                    throw new \Exception("Kesalahan: Kolom header '$header' tidak ditemukan. Harap sesuaikan file dengan kolom: " . implode(', ', $expectedHeaders));
                 }
             }
             $this->headerChecked = true;

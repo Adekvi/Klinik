@@ -574,7 +574,7 @@
                                                 <input type="text" id="soap_a_b_0"
                                                     name="soap_a_b[0][diagnosa_sekunder]"
                                                     class="soap_a_b form-control" placeholder="Cari Diagnosa">
-                                                <div id="dropdown-diagnosa-sekunder-0" <!-- Perbaikan ID di sini -->
+                                                <div id="dropdown-diagnosa-sekunder-0"
                                                     class="dropdown-menu diagnosa-dropdown"
                                                     style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; cursor: pointer; width: 100%; max-height: 200px; overflow-y: auto;">
                                                 </div>
@@ -1345,22 +1345,24 @@
                 const dropdown = document.getElementById(dropdownId);
                 const tagsContainer = document.getElementById(`${inputId}_tags`);
                 let selectedValues = existingValues.length ? existingValues : hiddenInput.value ? hiddenInput.value
-                    .split(',') : [];
+                    .split(',').filter(v => v.trim()) : [];
 
                 // Sinkronisasi selectedValues dengan tag yang ada di HTML
                 selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value =>
                     value);
 
-                // Update hidden input berdasarkan selectedValues awal
+                // Update hidden input berdasarkan selectedValues
                 function updateHiddenInput() {
-                    hiddenInput.value = selectedValues.join(',');
+                    // Simpan sebagai string koma untuk kompatibilitas dengan form
+                    hiddenInput.value = selectedValues.length ? selectedValues.join(',') : '';
+                    console.log(`Updated hidden input ${hiddenInputId}: ${hiddenInput.value}`); // Debugging
                 }
 
                 updateHiddenInput();
 
                 // Event listener untuk input autocomplete
                 input.addEventListener('input', function() {
-                    const query = input.value;
+                    const query = input.value.trim();
                     if (query.length < 2) {
                         dropdown.style.display = 'none';
                         return;
@@ -1372,12 +1374,9 @@
                             dropdown.innerHTML = '';
                             data.forEach(item => {
                                 const li = document.createElement('li');
-                                li.textContent = item
-                                    .value; // Sesuaikan dengan struktur data dari endpoint
+                                li.textContent = item.value;
                                 li.addEventListener('click', () => {
-                                    if (!selectedValues.includes(item
-                                            .value
-                                        )) { // Cek duplikat hanya untuk autocomplete
+                                    if (!selectedValues.includes(item.value)) {
                                         selectedValues.push(item.value);
                                         const tag = document.createElement('span');
                                         tag.className = 'tag';
@@ -1404,37 +1403,30 @@
                         selectedValues = selectedValues.filter(val => val !== value);
                         tag.remove();
                         updateHiddenInput();
+                        console.log(
+                            `Removed tag ${value} from ${inputId}, new values: ${selectedValues}`
+                        ); // Debugging
                     }
                 });
 
                 // Event listener untuk jumlah (tekan Enter)
-                if (input.type === 'number' && inputId.startsWith('edit-jumlah_')) { // Khusus untuk "Jumlah"
+                if (input.type === 'number' && inputId.startsWith('edit-jumlah_')) {
                     input.addEventListener('keypress', function(e) {
                         if (e.key === 'Enter' && input.value) {
-                            // Izinkan nilai yang sama untuk "Jumlah"
-                            selectedValues.push(input.value);
-                            const tag = document.createElement('span');
-                            tag.className = 'tag';
-                            tag.dataset.value = input.value;
-                            tag.innerHTML = `${input.value} <i class="fas fa-times remove-tag"></i>`;
-                            tagsContainer.appendChild(tag);
-                            updateHiddenInput();
-                            input.value = '';
-                        }
-                    });
-                } else if (input.type === 'number') { // Untuk kasus lain (jika ada)
-                    input.addEventListener('keypress', function(e) {
-                        if (e.key === 'Enter' && input.value) {
-                            if (!selectedValues.includes(input.value)) {
-                                selectedValues.push(input.value);
+                            const value = input.value.trim();
+                            if (!selectedValues.includes(value)) {
+                                selectedValues.push(value);
                                 const tag = document.createElement('span');
                                 tag.className = 'tag';
-                                tag.dataset.value = input.value;
-                                tag.innerHTML = `${input.value} <i class="fas fa-times remove-tag"></i>`;
+                                tag.dataset.value = value;
+                                tag.innerHTML = `${value} <i class="fas fa-times remove-tag"></i>`;
                                 tagsContainer.appendChild(tag);
                                 updateHiddenInput();
                             }
                             input.value = '';
+                            console.log(
+                                `Added jumlah ${value} to ${inputId}, new values: ${selectedValues}`
+                            ); // Debugging
                         }
                     });
                 }
@@ -1458,114 +1450,110 @@
                 const addButton = container.querySelector('button[onclick="editAddColumn()"]');
                 const index = container.querySelectorAll('.entry-group').length;
                 const newGroup = `
-            <label for="soap_p_${index}" style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;" onclick="toggleObatContainer()">
-                Pilih Obat Baru (P)
-            </label>
-            <div class="entry-group" id="edit-entry_${index}">
-                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                    <label for="edit-resep_${index}" style="min-width: 100px;">Nama Obat</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="edit-resep_${index}">
-                            <div class="selected-tags" id="edit-resep_${index}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="edit-resep_${index}"
-                                placeholder="Cari Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}"
-                                data-dropdown="edit-dropdown-resep_${index}">
+                    <label for="soap_p_${index}" style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;" onclick="toggleObatContainer()">
+                        Pilih Obat Baru (P)
+                    </label>
+                    <div class="entry-group" id="edit-entry_${index}">
+                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-resep_${index}" style="min-width: 100px;">Nama Obat</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-resep_${index}">
+                                    <div class="selected-tags" id="edit-resep_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-resep_${index}"
+                                        placeholder="Cari Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-resep_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][resep]" id="edit-resep_${index}_hidden">
+                                <div id="edit-dropdown-resep_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 obat
+                                </p>
+                            </div>
                         </div>
-                        <input type="hidden" name="soap_p[${index}][resep]" id="edit-resep_${index}_hidden">
-                        <div id="edit-dropdown-resep_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 obat
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                    <label for="edit-jenis_obat_${index}" style="min-width: 100px;">Jenis Obat</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_${index}">
-                            <div class="selected-tags" id="edit-jenis_obat_${index}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="edit-jenis_obat_${index}"
-                                placeholder="Cari Jenis Obat" autocomplete="off" data-url="{{ url('jenis-autocomplete') }}"
-                                data-dropdown="edit-dropdown-jenis_obat_${index}">
+                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-jenis_obat_${index}" style="min-width: 100px;">Jenis Obat</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_${index}">
+                                    <div class="selected-tags" id="edit-jenis_obat_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-jenis_obat_${index}"
+                                        placeholder="Cari Jenis Obat" autocomplete="off" data-url="{{ url('jenis-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-jenis_obat_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][jenisobat]" id="edit-jenis_obat_${index}_hidden">
+                                <div id="edit-dropdown-jenis_obat_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 jenis obat
+                                </p>
+                            </div>
                         </div>
-                        <input type="hidden" name="soap_p[${index}][jenisobat]" id="edit-jenis_obat_${index}_hidden">
-                        <div id="edit-dropdown-jenis_obat_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 jenis obat
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                    <label for="edit-aturan_${index}" style="min-width: 100px">Aturan Pakai</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_${index}">
-                            <div class="selected-tags" id="edit-aturan_${index}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="edit-aturan_${index}"
-                                placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('aturan-autocomplete') }}"
-                                data-dropdown="edit-dropdown-aturan_${index}">
+                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-aturan_${index}" style="min-width: 100px">Aturan Pakai</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_${index}">
+                                    <div class="selected-tags" id="edit-aturan_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-aturan_${index}"
+                                        placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('aturan-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-aturan_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][aturan]" id="edit-aturan_${index}_hidden">
+                                <div id="edit-dropdown-aturan_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 aturan pakai
+                                </p>
+                            </div>
                         </div>
-                        <input type="hidden" name="soap_p[${index}][aturan]" id="edit-aturan_${index}_hidden">
-                        <div id="edit-dropdown-aturan_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 aturan pakai
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                    <label for="edit-anjuran_${index}" style="min-width: 100px">Anjuran Minum</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_${index}">
-                            <div class="selected-tags" id="edit-anjuran_${index}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="edit-anjuran_${index}"
-                                placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}"
-                                data-dropdown="edit-dropdown-anjuran_${index}">
+                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-anjuran_${index}" style="min-width: 100px">Anjuran Minum</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_${index}">
+                                    <div class="selected-tags" id="edit-anjuran_${index}_tags"></div>
+                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-anjuran_${index}"
+                                        placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}"
+                                        data-dropdown="edit-dropdown-anjuran_${index}">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][anjuran]" id="edit-anjuran_${index}_hidden">
+                                <div id="edit-dropdown-anjuran_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memilih lebih dari 1 anjuran minum
+                                </p>
+                            </div>
                         </div>
-                        <input type="hidden" name="soap_p[${index}][anjuran]" id="edit-anjuran_${index}_hidden">
-                        <div id="edit-dropdown-anjuran_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 anjuran minum
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                    <label for="edit-jumlah_${index}" style="min-width: 100px">Jumlah</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_${index}">
-                            <div class="selected-tags" id="edit-jumlah_${index}_tags"></div>
-                            <input type="number" class="multi-select-input jumlah-input" id="edit-jumlah_${index}"
-                                placeholder="Masukkan Jumlah" min="1">
+                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                            <label for="edit-jumlah_${index}" style="min-width: 100px">Jumlah</label>
+                            <span>:</span>
+                            <div class="input-wrapper">
+                                <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_${index}">
+                                    <div class="selected-tags" id="edit-jumlah_${index}_tags"></div>
+                                    <input type="number" class="multi-select-input jumlah-input" id="edit-jumlah_${index}"
+                                        placeholder="Masukkan Jumlah" min="1">
+                                </div>
+                                <input type="hidden" name="soap_p[${index}][jumlah]" id="edit-jumlah_${index}_hidden">
+                                <div id="edit-dropdown-jumlah_${index}" class="dropdown-menu autocomplete-dropdown"></div>
+                                <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                    *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                                </p>
+                            </div>
                         </div>
-                        <input type="hidden" name="soap_p[${index}][jumlah]" id="edit-jumlah_${index}_hidden">
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
-                        </p>
+                        <div class="d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-outline-primary"
+                                onclick="editAddColumn()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                data-bs-placement="top" data-bs-html="true"
+                                data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
+                                <i class="fa-solid fa-pills"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-wide" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Hapus Obat</span>" onclick="editRemoveColumn(this)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                `;
 
-                <!-- Tombol Hapus Kolom untuk group baru -->
-                <div class="d-flex gap-2 mt-2">
-                    <button type="button" class="btn btn-outline-primary"
-                        onclick="editAddColumn()" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                        data-bs-placement="top" data-bs-html="true"
-                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                        <i class="fa-solid fa-pills"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-outline-danger btn-wide" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Hapus Obat</span>" onclick="editRemoveColumn(this)">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-
-                // Tambahkan grup baru tepat setelah tombol
                 addButton.insertAdjacentHTML('afterend', newGroup);
 
-                // Inisialisasi multi-select untuk group baru
                 initializeMultiSelect(`edit-resep_${index}`, `edit-resep_${index}_hidden`,
                     `edit-dropdown-resep_${index}`, '{{ url('/resep-autocomplete') }}');
                 initializeMultiSelect(`edit-jenis_obat_${index}`, `edit-jenis_obat_${index}_hidden`,
@@ -1575,10 +1563,9 @@
                 initializeMultiSelect(`edit-anjuran_${index}`, `edit-anjuran_${index}_hidden`,
                     `edit-dropdown-anjuran_${index}`, '{{ url('anjuran-autocomplete') }}');
                 initializeMultiSelect(`edit-jumlah_${index}`, `edit-jumlah_${index}_hidden`,
-                    `edit-jumlah_${index}`, ''); // Tidak perlu URL untuk jumlah
+                    `edit-dropdown-jumlah_${index}`, '');
             };
 
-            // Fungsi untuk menghapus kolom
             window.editRemoveColumn = function(button) {
                 const group = button.closest('.entry-group');
                 const label = group.previousElementSibling;
@@ -1587,6 +1574,22 @@
                 }
                 group.remove();
             };
+
+            // Tambahkan event listener untuk form submission
+            document.querySelector('form').addEventListener('submit', function(e) {
+                // Pastikan semua input hidden diperbarui sebelum pengiriman
+                document.querySelectorAll('.multi-select-wrapper').forEach(wrapper => {
+                    const inputId = wrapper.dataset.inputId;
+                    const hiddenInputId = `${inputId}_hidden`;
+                    const tagsContainer = document.getElementById(`${inputId}_tags`);
+                    const hiddenInput = document.getElementById(hiddenInputId);
+                    const selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset
+                        .value).filter(value => value);
+                    hiddenInput.value = selectedValues.join(',');
+                    console.log(`Form submit: ${hiddenInputId} = ${hiddenInput.value}`);
+                });
+            });
         });
+    
     </script>
 @endpush

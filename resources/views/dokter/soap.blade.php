@@ -195,7 +195,7 @@
                                         @foreach ($soap as $item)
                                             <tr>
                                                 <td>
-                                                    @if ($soapTerbaru)
+                                                    @if ($soapTerbaru && $item['id'] == $soapTerbaru->id)
                                                         <span data-bs-toggle="tooltip" data-bs-placement="top"
                                                             data-bs-offset="0,4" data-bs-html="true"
                                                             data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Edit SOAP</span>">
@@ -347,7 +347,25 @@
                                                                             true,
                                                                         );
                                                                     @endphp
-                                                                    @if (is_array($resep) && is_array($aturan) && count($resep) == count($aturan))
+                                                                    @if (is_array($resep) && is_array($aturan))
+                                                                        @foreach ($resep as $obat => $namaObat)
+                                                                            @php
+                                                                                // Ambil aturan dengan index sama, atau '-'
+                                                                                $aturanMinum = $aturan[$obat] ?? '-';
+                                                                            @endphp
+                                                                            <ul>
+                                                                                <li>
+                                                                                    <div
+                                                                                        style="display: grid; grid-template-columns: 200px 20px auto; gap: 5px;">
+                                                                                        <span>{{ $namaObat ?? '-' }}</span>
+                                                                                        <span>-</span>
+                                                                                        <span>{{ $aturanMinum }}</span>
+                                                                                    </div>
+                                                                                </li>
+                                                                            </ul>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    {{-- @if (is_array($resep) && is_array($aturan) && count($resep) == count($aturan))
                                                                         @foreach ($resep as $obat => $namaObat)
                                                                             @php
                                                                                 $aturanMinum = $aturan[$obat] ?? '-';
@@ -364,15 +382,16 @@
                                                                             </ul>
                                                                         @endforeach
                                                                     @else
-                                                                        <p>-</p>
-                                                                    @endif
+                                                                        <ul>
+                                                                            <li>Tidak Ada Resep Non Racikan</li>
+                                                                        </ul>
+                                                                    @endif --}}
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
                                                                         - Racikan
                                                                     </p>
                                                                     <ul>
                                                                         <li>
                                                                             {{ $item['ObatRacikan'] ?? '-' }}
-
                                                                         </li>
                                                                     </ul>
                                                                 </td>

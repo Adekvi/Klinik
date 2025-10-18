@@ -195,7 +195,7 @@
                                         <?php $__currentLoopData = $soap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
                                                 <td>
-                                                    <?php if($soapTerbaru): ?>
+                                                    <?php if($soapTerbaru && $item['id'] == $soapTerbaru->id): ?>
                                                         <span data-bs-toggle="tooltip" data-bs-placement="top"
                                                             data-bs-offset="0,4" data-bs-html="true"
                                                             data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Edit SOAP</span>">
@@ -348,9 +348,10 @@
                                                                             true,
                                                                         );
                                                                     ?>
-                                                                    <?php if(is_array($resep) && is_array($aturan) && count($resep) == count($aturan)): ?>
+                                                                    <?php if(is_array($resep) && is_array($aturan)): ?>
                                                                         <?php $__currentLoopData = $resep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $obat => $namaObat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                             <?php
+                                                                                // Ambil aturan dengan index sama, atau '-'
                                                                                 $aturanMinum = $aturan[$obat] ?? '-';
                                                                             ?>
                                                                             <ul>
@@ -359,21 +360,19 @@
                                                                                         style="display: grid; grid-template-columns: 200px 20px auto; gap: 5px;">
                                                                                         <span><?php echo e($namaObat ?? '-'); ?></span>
                                                                                         <span>-</span>
-                                                                                        <span><?php echo e($aturanMinum ?? '-'); ?></span>
+                                                                                        <span><?php echo e($aturanMinum); ?></span>
                                                                                     </div>
                                                                                 </li>
                                                                             </ul>
                                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                                    <?php else: ?>
-                                                                        <p>-</p>
                                                                     <?php endif; ?>
+                                                                    
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
                                                                         - Racikan
                                                                     </p>
                                                                     <ul>
                                                                         <li>
                                                                             <?php echo e($item['ObatRacikan'] ?? '-'); ?>
-
 
                                                                         </li>
                                                                     </ul>

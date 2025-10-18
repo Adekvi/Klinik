@@ -83,7 +83,9 @@ class DataSemuaPasienController extends Controller
             return redirect()->route('master.semuadata')->with('success', "Data pasien berhasil diunggah! ($uploadedCount data baru ditambahkan)");
         } catch (\Exception $e) {
             Log::error('Import Error: ' . $e->getMessage());
-            return redirect()->back()->with('import_error', $e->getMessage());
+
+            // Langsung kembalikan pesan error dari exception
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
