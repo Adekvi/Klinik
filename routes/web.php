@@ -202,8 +202,8 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
 
     Route::post('dokter/lewati/{id}', [DokterController::class, 'lewatiAntrianDokter'])->name('dokter.lewati');
     // dokter
-    Route::get('dokter/index', [DokterController::class, 'index'])->name('dokter.index');
-    Route::get('dokter/soap/{id}', [SoapDokterController::class, 'soap'])->name('dokter.soap');
+    Route::get('dokter/index/tampil', [DokterController::class, 'index'])->name('dokter.index');
+    Route::get('dokter/index/soap/{id}', [SoapDokterController::class, 'soap'])->name('dokter.soap');
     Route::post('dokter/store/{id}', [SoapDokterController::class, 'store'])->name('dokter.store');
     Route::put('soap/update/{id}', [SoapDokterController::class, 'updateSoap'])->name('soap.update');
 

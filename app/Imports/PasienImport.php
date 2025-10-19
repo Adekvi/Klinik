@@ -41,9 +41,13 @@ class PasienImport implements ToModel, WithHeadingRow
             Log::info('Header yang ditemukan:', array_keys($row));
 
             foreach ($expectedHeaders as $header) {
+                // if (!array_key_exists($header, $row)) {
+                //     Log::error("Header '$header' tidak ditemukan!");
+                //     throw new Exception("Kesalahan: Kolom header '$header' tidak ditemukan. Harap sesuaikan file dengan kolom: " . implode(', ', $expectedHeaders));
+                // }
                 if (!array_key_exists($header, $row)) {
                     Log::error("Header '$header' tidak ditemukan!");
-                    throw new \Exception("Kesalahan: Kolom header '$header' tidak ditemukan. Harap sesuaikan file dengan kolom: " . implode(', ', $expectedHeaders));
+                    throw new Exception("Ada kesalahan pada kolom anda. Silahkan cek kembali!");
                 }
             }
             $this->headerChecked = true;
@@ -62,7 +66,7 @@ class PasienImport implements ToModel, WithHeadingRow
                     Log::error("Format tanggal tidak dikenali: " . $row['tgllahir']);
                     $tanggal_lahir = '1900-01-01';
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error("Kesalahan saat mengonversi tgllahir: " . $e->getMessage());
                 $tanggal_lahir = '1900-01-01';
             }

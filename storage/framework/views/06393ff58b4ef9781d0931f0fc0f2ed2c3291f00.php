@@ -305,8 +305,8 @@
                 </li>
 
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Menu</li>
-                <li class="menu-item <?php echo e(Request::is('dokter/index') ? 'active' : ''); ?>">
-                    <a href="<?php echo e(url('dokter/index')); ?>"
+                <li class="menu-item <?php echo e(Request::is('dokter/index*') ? 'active' : ''); ?>">
+                    <a href="<?php echo e(url('dokter/index/tampil')); ?>"
                         class="menu-link <?php echo e(Request::is('dokter/index') ? 'active' : ''); ?>">
                         <i class="menu-icon tf-icons fa-solid fa-user-doctor"></i>
                         <div data-i18n="Analytics">Dokter</div>
@@ -424,8 +424,6 @@
             <?php endif; ?>
         <?php endif; ?>
     </ul>
-
-    
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

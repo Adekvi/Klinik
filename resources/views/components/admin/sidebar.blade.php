@@ -305,8 +305,8 @@
                 </li>
 
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Menu</li>
-                <li class="menu-item {{ Request::is('dokter/index') ? 'active' : '' }}">
-                    <a href="{{ url('dokter/index') }}"
+                <li class="menu-item {{ Request::is('dokter/index*') ? 'active' : '' }}">
+                    <a href="{{ url('dokter/index/tampil') }}"
                         class="menu-link {{ Request::is('dokter/index') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-user-doctor"></i>
                         <div data-i18n="Analytics">Dokter</div>
@@ -431,14 +431,6 @@
             @endif
         @endif
     </ul>
-
-    {{-- <div class="kembali" style="justify-content: last baseline">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url('perawat/index') }}">
-                <span class="menu-title">Kembali</span>
-            </a>
-        </li>
-    </div> --}}
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

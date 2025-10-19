@@ -176,7 +176,7 @@
                                                             <i class="fas fa-bell"></i>
                                                         </button>
                                                     </span>
-                                                    <a href="{{ url('dokter/soap/' . $item->id) }}"
+                                                    <a href="{{ url('dokter/index/soap/' . $item->id) }}"
                                                         class="btn btn-primary" data-bs-toggle="tooltip"
                                                         data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                                                         data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Asesmen</span>">

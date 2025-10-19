@@ -602,367 +602,206 @@
                         </div>
                         <div class="form-group mt-3 mb-2">
                             <div class="resep" id="edit-resep">
-                                <?php if(!empty($resep) || !empty($resepJenis) || !empty($resepAturan) || !empty($resepAnjuran) || !empty($resepJumlah)): ?>
-                                    <?php
-                                        $entryCount = 1; // Hanya satu entri untuk menggabungkan semua data
-                                        // Gabungkan semua data ke array tunggal, tanpa unique untuk mempertahankan duplikat
-                                        $allResep = is_array($resep) ? array_filter($resep) : [];
-                                        $allJenis = is_array($resepJenis) ? array_filter($resepJenis) : [];
-                                        $allAturan = is_array($resepAturan) ? array_filter($resepAturan) : [];
-                                        $allAnjuran = is_array($resepAnjuran) ? array_filter($resepAnjuran) : [];
-                                        // Khusus jumlah: gabungkan semua sub-array
-                                        $allJumlah = [];
-                                        if (is_array($resepJumlah)) {
-                                            foreach ($resepJumlah as $j) {
-                                                if (is_array($j)) {
-                                                    $allJumlah = array_merge($allJumlah, array_filter($j));
-                                                } elseif (!empty($j)) {
-                                                    $allJumlah[] = $j;
-                                                }
-                                            }
-                                        }
-                                    ?>
+                                <?php
+                                    $allResep = is_array($resep) ? array_filter($resep) : [];
+                                    $allJenis = is_array($resepJenis) ? array_filter($resepJenis) : [];
+                                    $allAturan = is_array($resepAturan) ? array_filter($resepAturan) : [];
+                                    $allAnjuran = is_array($resepAnjuran) ? array_filter($resepAnjuran) : [];
+                                    $allJumlah = is_array($resepJumlah) ? array_filter($resepJumlah) : [];
+                                    $entryCount = max(
+                                        count($allResep),
+                                        count($allJenis),
+                                        count($allAturan),
+                                        count($allAnjuran),
+                                        count($allJumlah)
+                                    );
+                                    $entryCount = max($entryCount, 1);
+                                ?>
 
-                                    <?php for($index = 0; $index < $entryCount; $index++): ?>
-                                        <label for="soap_p_<?php echo e($index); ?>"
-                                            style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
-                                            onclick="toggleObatContainer()">
-                                            Pilih Obat (P)
-                                        </label>
-
-                                        <div class="entry-group" id="edit-entry_<?php echo e($index); ?>">
-
-                                            <!-- Nama Obat -->
-                                            <div class="input-row"
-                                                style="display: flex; align-items: center; gap: 5px;">
-                                                <label for="edit-resep_<?php echo e($index); ?>"
-                                                    style="min-width: 100px;">Nama Obat</label>
-                                                <span>:</span>
-                                                <div class="input-wrapper">
-                                                    <div class="multi-select-wrapper form-control"
-                                                        data-input-id="edit-resep_<?php echo e($index); ?>">
-                                                        <div class="selected-tags"
-                                                            id="edit-resep_<?php echo e($index); ?>_tags">
-                                                            <?php $__currentLoopData = $allResep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $obat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <span class="tag"
-                                                                    data-value="<?php echo e($obat); ?>"><?php echo e($obat); ?>
-
-                                                                    <i class="fas fa-times remove-tag"></i>
-                                                                </span>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        </div>
-                                                        <input type="text"
-                                                            class="autocomplete-input multi-select-input"
-                                                            id="edit-resep_<?php echo e($index); ?>"
-                                                            placeholder="Cari Obat" autocomplete="off"
-                                                            data-url="<?php echo e(url('/resep-autocomplete')); ?>"
-                                                            data-dropdown="edit-dropdown-resep_<?php echo e($index); ?>">
-                                                    </div>
-                                                    <input type="hidden" name="soap_p[<?php echo e($index); ?>][resep]"
-                                                        id="edit-resep_<?php echo e($index); ?>_hidden"
-                                                        value="<?php echo e(implode(',', $allResep)); ?>">
-                                                    <div id="edit-dropdown-resep_<?php echo e($index); ?>"
-                                                        class="dropdown-menu autocomplete-dropdown"></div>
-                                                    <p class="text-warning"
-                                                        style="font-style: italic; font-size: 12px">
-                                                        *Bisa memilih lebih dari 1 obat
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Jenis Obat -->
-                                            <div class="input-row"
-                                                style="display: flex; align-items: center; gap: 5px;">
-                                                <label for="edit-jenis_obat_<?php echo e($index); ?>"
-                                                    style="min-width: 100px;">Jenis Obat</label>
-                                                <span>:</span>
-                                                <div class="input-wrapper">
-                                                    <div class="multi-select-wrapper form-control"
-                                                        data-input-id="edit-jenis_obat_<?php echo e($index); ?>">
-                                                        <div class="selected-tags"
-                                                            id="edit-jenis_obat_<?php echo e($index); ?>_tags">
-                                                            <?php $__currentLoopData = $allJenis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jenis): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <span class="tag"
-                                                                    data-value="<?php echo e($jenis); ?>"><?php echo e($jenis); ?>
-
-                                                                    <i class="fas fa-times remove-tag"></i>
-                                                                </span>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        </div>
-                                                        <input type="text"
-                                                            class="autocomplete-input multi-select-input"
-                                                            id="edit-jenis_obat_<?php echo e($index); ?>"
-                                                            placeholder="Cari Jenis Obat" autocomplete="off"
-                                                            data-url="<?php echo e(url('jenis-autocomplete')); ?>"
-                                                            data-dropdown="edit-dropdown-jenis_obat_<?php echo e($index); ?>">
-                                                    </div>
-                                                    <input type="hidden"
-                                                        name="soap_p[<?php echo e($index); ?>][jenisobat]"
-                                                        id="edit-jenis_obat_<?php echo e($index); ?>_hidden"
-                                                        value="<?php echo e(implode(',', $allJenis)); ?>">
-                                                    <div id="edit-dropdown-jenis_obat_<?php echo e($index); ?>"
-                                                        class="dropdown-menu autocomplete-dropdown"></div>
-                                                    <p class="text-warning"
-                                                        style="font-style: italic; font-size: 12px">
-                                                        *Bisa memilih lebih dari 1 jenis obat
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Aturan Pakai -->
-                                            <div class="input-row"
-                                                style="display: flex; align-items: center; gap: 5px;">
-                                                <label for="edit-aturan_<?php echo e($index); ?>"
-                                                    style="min-width: 100px">Aturan Pakai</label>
-                                                <span>:</span>
-                                                <div class="input-wrapper">
-                                                    <div class="multi-select-wrapper form-control"
-                                                        data-input-id="edit-aturan_<?php echo e($index); ?>">
-                                                        <div class="selected-tags"
-                                                            id="edit-aturan_<?php echo e($index); ?>_tags">
-                                                            <?php $__currentLoopData = $allAturan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aturan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <span class="tag"
-                                                                    data-value="<?php echo e($aturan); ?>"><?php echo e($aturan); ?>
-
-                                                                    <i class="fas fa-times remove-tag"></i>
-                                                                </span>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        </div>
-                                                        <input type="text"
-                                                            class="autocomplete-input multi-select-input"
-                                                            id="edit-aturan_<?php echo e($index); ?>"
-                                                            placeholder="Cari Aturan Pakai" autocomplete="off"
-                                                            data-url="<?php echo e(url('aturan-autocomplete')); ?>"
-                                                            data-dropdown="edit-dropdown-aturan_<?php echo e($index); ?>">
-                                                    </div>
-                                                    <input type="hidden" name="soap_p[<?php echo e($index); ?>][aturan]"
-                                                        id="edit-aturan_<?php echo e($index); ?>_hidden"
-                                                        value="<?php echo e(implode(',', $allAturan)); ?>">
-                                                    <div id="edit-dropdown-aturan_<?php echo e($index); ?>"
-                                                        class="dropdown-menu autocomplete-dropdown"></div>
-                                                    <p class="text-warning"
-                                                        style="font-style: italic; font-size: 12px">
-                                                        *Bisa memilih lebih dari 1 aturan pakai
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Anjuran Minum -->
-                                            <div class="input-row"
-                                                style="display: flex; align-items: center; gap: 5px;">
-                                                <label for="edit-anjuran_<?php echo e($index); ?>"
-                                                    style="min-width: 100px">Anjuran Minum</label>
-                                                <span>:</span>
-                                                <div class="input-wrapper">
-                                                    <div class="multi-select-wrapper form-control"
-                                                        data-input-id="edit-anjuran_<?php echo e($index); ?>">
-                                                        <div class="selected-tags"
-                                                            id="edit-anjuran_<?php echo e($index); ?>_tags">
-                                                            <?php $__currentLoopData = $allAnjuran; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $anjuran): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <span class="tag"
-                                                                    data-value="<?php echo e($anjuran); ?>"><?php echo e($anjuran); ?>
-
-                                                                    <i class="fas fa-times remove-tag"></i>
-                                                                </span>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        </div>
-                                                        <input type="text"
-                                                            class="autocomplete-input multi-select-input"
-                                                            id="edit-anjuran_<?php echo e($index); ?>"
-                                                            placeholder="Cari Anjuran Minum" autocomplete="off"
-                                                            data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
-                                                            data-dropdown="edit-dropdown-anjuran_<?php echo e($index); ?>">
-                                                    </div>
-                                                    <input type="hidden"
-                                                        name="soap_p[<?php echo e($index); ?>][anjuran]"
-                                                        id="edit-anjuran_<?php echo e($index); ?>_hidden"
-                                                        value="<?php echo e(implode(',', $allAnjuran)); ?>">
-                                                    <div id="edit-dropdown-anjuran_<?php echo e($index); ?>"
-                                                        class="dropdown-menu autocomplete-dropdown"></div>
-                                                    <p class="text-warning"
-                                                        style="font-style: italic; font-size: 12px">
-                                                        *Bisa memilih lebih dari 1 anjuran minum
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <!-- Jumlah -->
-                                            <div class="input-row"
-                                                style="display: flex; align-items: center; gap: 5px;">
-                                                <label for="edit-jumlah_<?php echo e($index); ?>"
-                                                    style="min-width: 100px">Jumlah</label>
-                                                <span>:</span>
-                                                <div class="input-wrapper">
-                                                    <div class="multi-select-wrapper form-control"
-                                                        data-input-id="edit-jumlah_<?php echo e($index); ?>">
-                                                        <div class="selected-tags"
-                                                            id="edit-jumlah_<?php echo e($index); ?>_tags">
-                                                            <?php $__currentLoopData = $allJumlah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jml): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <span class="tag"
-                                                                    data-value="<?php echo e($jml); ?>"><?php echo e($jml); ?>
-
-                                                                    <i class="fas fa-times remove-tag"></i>
-                                                                </span>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        </div>
-                                                        <input type="number" class="multi-select-input jumlah-input"
-                                                            id="edit-jumlah_<?php echo e($index); ?>"
-                                                            placeholder="Masukkan Jumlah" min="1">
-                                                    </div>
-                                                    <input type="hidden" name="soap_p[<?php echo e($index); ?>][jumlah]"
-                                                        id="edit-jumlah_<?php echo e($index); ?>_hidden"
-                                                        value="<?php echo e(implode(',', $allJumlah)); ?>">
-                                                    <p class="text-warning"
-                                                        style="font-style: italic; font-size: 12px">
-                                                        *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk
-                                                        menambah)
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    <?php endfor; ?>
-
-                                    <div class="d-fle gap-2 mt-2">
-                                        <!-- Tombol Tambah Obat dipindahkan ke sini, tepat di bawah entri obat -->
-                                        <button type="button" class="btn btn-outline-primary"
-                                            onclick="editAddColumn()" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                            data-bs-placement="top" data-bs-html="true"
-                                            data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                                            <i class="fa-solid fa-pills"></i>
-                                        </button>
-                                    </div>
-                                <?php else: ?>
-                                    <label for="soap_p_0"
+                                <?php for($index = 0; $index < $entryCount; $index++): ?>
+                                    <label for="soap_p_<?php echo e($index); ?>"
                                         style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
                                         onclick="toggleObatContainer()">
-                                        Pilih Obat (P)
+                                        Pilih Obat (P) <?php echo e($index + 1); ?>
+
                                     </label>
-                                    <div class="entry-group" id="edit-entry_0"
-                                        style="margin-bottom: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
-                                        <div class="input-row" id="edit-namaObatContainer_0"
-                                            style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-resep_0" style="min-width: 100px;">Nama Obat</label>
+
+                                    <div class="entry-group" id="edit-entry_<?php echo e($index); ?>">
+                                        <!-- Nama Obat -->
+                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-resep_<?php echo e($index); ?>" style="min-width: 100px;">Nama Obat</label>
                                             <span>:</span>
                                             <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control"
-                                                    data-input-id="edit-resep_0">
-                                                    <div class="selected-tags" id="edit-resep_0_tags"></div>
-                                                    <input type="text"
-                                                        class="autocomplete-input multi-select-input"
-                                                        id="edit-resep_0" placeholder="Cari Obat" autocomplete="off"
+                                                <div class="multi-select-wrapper form-control" data-input-id="edit-resep_<?php echo e($index); ?>">
+                                                    <div class="selected-tags" id="edit-resep_<?php echo e($index); ?>_tags">
+                                                        <?php if(isset($allResep[$index])): ?>
+                                                            <?php $__currentLoopData = explode(',', $allResep[$index]); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $obat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php if(!empty($obat)): ?>
+                                                                    <span class="tag" data-value="<?php echo e($obat); ?>">
+                                                                        <?php echo e($obat); ?>
+
+                                                                        <i class="fas fa-times remove-tag"></i>
+                                                                    </span>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <input type="text" class="autocomplete-input multi-select-input"
+                                                        id="edit-resep_<?php echo e($index); ?>" placeholder="Cari Obat" autocomplete="off"
                                                         data-url="<?php echo e(url('/resep-autocomplete')); ?>"
-                                                        data-dropdown="edit-dropdown-resep_0">
+                                                        data-dropdown="edit-dropdown-resep_<?php echo e($index); ?>">
                                                 </div>
-                                                <input type="hidden" name="soap_p[0][resep]"
-                                                    id="edit-resep_0_hidden">
-                                                <div id="edit-dropdown-resep_0"
-                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <input type="hidden" name="soap_p[<?php echo e($index); ?>][resep]"
+                                                    id="edit-resep_<?php echo e($index); ?>_hidden"
+                                                    value="<?php echo e($allResep[$index] ?? ''); ?>">
+                                                <div id="edit-dropdown-resep_<?php echo e($index); ?>" class="dropdown-menu autocomplete-dropdown"></div>
                                                 <p class="text-warning" style="font-style: italic; font-size: 12px">
                                                     *Bisa memilih lebih dari 1 obat
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="input-row" id="edit-jenisObatContainer_0"
-                                            style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-jenis_obat_0" style="min-width: 100px;">Jenis
-                                                Obat</label>
+
+                                        <!-- Jenis Obat -->
+                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-jenis_obat_<?php echo e($index); ?>" style="min-width: 100px;">Jenis Obat</label>
                                             <span>:</span>
                                             <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control"
-                                                    data-input-id="edit-jenis_obat_0">
-                                                    <div class="selected-tags" id="edit-jenis_obat_0_tags"></div>
-                                                    <input type="text"
-                                                        class="autocomplete-input multi-select-input"
-                                                        id="edit-jenis_obat_0" placeholder="Cari Jenis Obat"
-                                                        autocomplete="off"
+                                                <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_<?php echo e($index); ?>">
+                                                    <div class="selected-tags" id="edit-jenis_obat_<?php echo e($index); ?>_tags">
+                                                        <?php if(isset($allJenis[$index])): ?>
+                                                            <?php $__currentLoopData = explode(',', $allJenis[$index]); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jenis): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php if(!empty($jenis)): ?>
+                                                                    <span class="tag" data-value="<?php echo e($jenis); ?>">
+                                                                        <?php echo e($jenis); ?>
+
+                                                                        <i class="fas fa-times remove-tag"></i>
+                                                                    </span>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <input type="text" class="autocomplete-input multi-select-input"
+                                                        id="edit-jenis_obat_<?php echo e($index); ?>" placeholder="Cari Jenis Obat" autocomplete="off"
                                                         data-url="<?php echo e(url('jenis-autocomplete')); ?>"
-                                                        data-dropdown="edit-dropdown-jenis_obat_0">
+                                                        data-dropdown="edit-dropdown-jenis_obat_<?php echo e($index); ?>">
                                                 </div>
-                                                <input type="hidden" name="soap_p[0][jenisobat]"
-                                                    id="edit-jenis_obat_0_hidden">
-                                                <div id="edit-dropdown-jenis_obat_0"
-                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <input type="hidden" name="soap_p[<?php echo e($index); ?>][jenisobat]"
+                                                    id="edit-jenis_obat_<?php echo e($index); ?>_hidden"
+                                                    value="<?php echo e($allJenis[$index] ?? ''); ?>">
+                                                <div id="edit-dropdown-jenis_obat_<?php echo e($index); ?>" class="dropdown-menu autocomplete-dropdown"></div>
                                                 <p class="text-warning" style="font-style: italic; font-size: 12px">
                                                     *Bisa memilih lebih dari 1 jenis obat
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="input-row" id="edit-aturanContainer_0"
-                                            style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-aturan_0" style="min-width: 100px">Aturan Pakai</label>
+
+                                        <!-- Aturan Pakai -->
+                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-aturan_<?php echo e($index); ?>" style="min-width: 100px">Aturan Pakai</label>
                                             <span>:</span>
                                             <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control"
-                                                    data-input-id="edit-aturan_0">
-                                                    <div class="selected-tags" id="edit-aturan_0_tags"></div>
-                                                    <input type="text"
-                                                        class="autocomplete-input multi-select-input"
-                                                        id="edit-aturan_0" placeholder="Cari Aturan Pakai"
-                                                        autocomplete="off"
+                                                <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_<?php echo e($index); ?>">
+                                                    <div class="selected-tags" id="edit-aturan_<?php echo e($index); ?>_tags">
+                                                        <?php if(isset($allAturan[$index])): ?>
+                                                            <?php $__currentLoopData = explode(',', $allAturan[$index]); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aturan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php if(!empty($aturan)): ?>
+                                                                    <span class="tag" data-value="<?php echo e($aturan); ?>">
+                                                                        <?php echo e($aturan); ?>
+
+                                                                        <i class="fas fa-times remove-tag"></i>
+                                                                    </span>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <input type="text" class="autocomplete-input multi-select-input"
+                                                        id="edit-aturan_<?php echo e($index); ?>" placeholder="Cari Aturan Pakai" autocomplete="off"
                                                         data-url="<?php echo e(url('aturan-autocomplete')); ?>"
-                                                        data-dropdown="edit-dropdown-aturan_0">
+                                                        data-dropdown="edit-dropdown-aturan_<?php echo e($index); ?>">
                                                 </div>
-                                                <input type="hidden" name="soap_p[0][aturan]"
-                                                    id="edit-aturan_0_hidden">
-                                                <div id="edit-dropdown-aturan_0"
-                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <input type="hidden" name="soap_p[<?php echo e($index); ?>][aturan]"
+                                                    id="edit-aturan_<?php echo e($index); ?>_hidden"
+                                                    value="<?php echo e($allAturan[$index] ?? ''); ?>">
+                                                <div id="edit-dropdown-aturan_<?php echo e($index); ?>" class="dropdown-menu autocomplete-dropdown"></div>
                                                 <p class="text-warning" style="font-style: italic; font-size: 12px">
                                                     *Bisa memilih lebih dari 1 aturan pakai
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="input-row" id="edit-anjuranMinumContainer_0"
-                                            style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-anjuran_0" style="min-width: 100px">Anjuran Minum</label>
+
+                                        <!-- Anjuran Minum -->
+                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-anjuran_<?php echo e($index); ?>" style="min-width: 100px">Anjuran Minum</label>
                                             <span>:</span>
                                             <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control"
-                                                    data-input-id="edit-anjuran_0">
-                                                    <div class="selected-tags" id="edit-anjuran_0_tags"></div>
-                                                    <input type="text"
-                                                        class="autocomplete-input multi-select-input"
-                                                        id="edit-anjuran_0" placeholder="Cari Anjuran Minum"
-                                                        autocomplete="off"
+                                                <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_<?php echo e($index); ?>">
+                                                    <div class="selected-tags" id="edit-anjuran_<?php echo e($index); ?>_tags">
+                                                        <?php if(isset($allAnjuran[$index])): ?>
+                                                            <?php $__currentLoopData = explode(',', $allAnjuran[$index]); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $anjuran): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php if(!empty($anjuran)): ?>
+                                                                    <span class="tag" data-value="<?php echo e($anjuran); ?>">
+                                                                        <?php echo e($anjuran); ?>
+
+                                                                        <i class="fas fa-times remove-tag"></i>
+                                                                    </span>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <input type="text" class="autocomplete-input multi-select-input"
+                                                        id="edit-anjuran_<?php echo e($index); ?>" placeholder="Cari Anjuran Minum" autocomplete="off"
                                                         data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
-                                                        data-dropdown="edit-dropdown-anjuran_0">
+                                                        data-dropdown="edit-dropdown-anjuran_<?php echo e($index); ?>">
                                                 </div>
-                                                <input type="hidden" name="soap_p[0][anjuran]"
-                                                    id="edit-anjuran_0_hidden">
-                                                <div id="edit-dropdown-anjuran_0"
-                                                    class="dropdown-menu autocomplete-dropdown"></div>
+                                                <input type="hidden" name="soap_p[<?php echo e($index); ?>][anjuran]"
+                                                    id="edit-anjuran_<?php echo e($index); ?>_hidden"
+                                                    value="<?php echo e($allAnjuran[$index] ?? ''); ?>">
+                                                <div id="edit-dropdown-anjuran_<?php echo e($index); ?>" class="dropdown-menu autocomplete-dropdown"></div>
                                                 <p class="text-warning" style="font-style: italic; font-size: 12px">
                                                     *Bisa memilih lebih dari 1 anjuran minum
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="input-row" id="edit-jumlahObatContainer_0"
-                                            style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-jumlah_0" style="min-width: 100px">Jumlah</label>
+
+                                        <!-- Jumlah -->
+                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
+                                            <label for="edit-jumlah_<?php echo e($index); ?>" style="min-width: 100px">Jumlah</label>
                                             <span>:</span>
                                             <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control"
-                                                    data-input-id="edit-jumlah_0">
-                                                    <div class="selected-tags" id="edit-jumlah_0_tags"></div>
+                                                <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_<?php echo e($index); ?>">
+                                                    <div class="selected-tags" id="edit-jumlah_<?php echo e($index); ?>_tags">
+                                                        <?php if(isset($allJumlah[$index])): ?>
+                                                            <?php $__currentLoopData = explode(',', $allJumlah[$index]); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jml): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php if(!empty($jml)): ?>
+                                                                    <span class="tag" data-value="<?php echo e($jml); ?>">
+                                                                        <?php echo e($jml); ?>
+
+                                                                        <i class="fas fa-times remove-tag"></i>
+                                                                    </span>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    </div>
                                                     <input type="number" class="multi-select-input jumlah-input"
-                                                        id="edit-jumlah_0" placeholder="Masukkan Jumlah"
-                                                        min="1">
+                                                        id="edit-jumlah_<?php echo e($index); ?>" placeholder="Masukkan Jumlah" min="1">
                                                 </div>
-                                                <input type="hidden" name="soap_p[0][jumlah]"
-                                                    id="edit-jumlah_0_hidden">
+                                                <input type="hidden" name="soap_p[<?php echo e($index); ?>][jumlah]"
+                                                    id="edit-jumlah_<?php echo e($index); ?>_hidden"
+                                                    value="<?php echo e($allJumlah[$index] ?? ''); ?>">
                                                 <p class="text-warning" style="font-style: italic; font-size: 12px">
                                                     *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
                                                 </p>
                                             </div>
                                         </div>
+                                        <!-- Tombol Hapus Entri -->
+                                        <?php if($index > 0): ?>
+                                            <button type="button" onclick="editRemoveColumn(this)" class="btn btn-danger mt-2">Hapus Obat</button>
+                                        <?php endif; ?>
                                     </div>
-                                    <button type="button" class="btn btn-outline-primary" onclick="editAddColumn()"
-                                        data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
-                                        data-bs-html="true"
-                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                                        <i class="fa-solid fa-pills"></i>
-                                    </button>
-                                <?php endif; ?>
+                                <?php endfor; ?>
+
+                                <!-- Tombol Tambah Kolom -->
+                                <button type="button" onclick="editAddColumn()" class="btn btn-primary mt-2">Tambah Obat</button>
 
                                 <label for=""
                                     style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; width: 100%; cursor: pointer"
@@ -1365,56 +1204,54 @@
                 const hiddenInput = document.getElementById(hiddenInputId);
                 const dropdown = document.getElementById(dropdownId);
                 const tagsContainer = document.getElementById(`${inputId}_tags`);
-                let selectedValues = existingValues.length ? existingValues : hiddenInput.value ? hiddenInput.value
-                    .split(',').filter(v => v.trim()) : [];
+                let selectedValues = existingValues.length ? existingValues : hiddenInput.value ? hiddenInput.value.split(',').filter(v => v.trim()) : [];
 
                 // Sinkronisasi selectedValues dengan tag yang ada di HTML
-                selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value =>
-                    value);
+                selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value => value);
 
                 // Update hidden input berdasarkan selectedValues
                 function updateHiddenInput() {
-                    // Simpan sebagai string koma untuk kompatibilitas dengan form
                     hiddenInput.value = selectedValues.length ? selectedValues.join(',') : '';
-                    console.log(`Updated hidden input ${hiddenInputId}: ${hiddenInput.value}`); // Debugging
+                    console.log(`Updated hidden input ${hiddenInputId}: ${hiddenInput.value}`);
                 }
 
                 updateHiddenInput();
 
                 // Event listener untuk input autocomplete
-                input.addEventListener('input', function() {
-                    const query = input.value.trim();
-                    if (query.length < 2) {
-                        dropdown.style.display = 'none';
-                        return;
-                    }
+                if (url) {
+                    input.addEventListener('input', function() {
+                        const query = input.value.trim();
+                        if (query.length < 2) {
+                            dropdown.style.display = 'none';
+                            return;
+                        }
 
-                    fetch(`${url}?query=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            dropdown.innerHTML = '';
-                            data.forEach(item => {
-                                const li = document.createElement('li');
-                                li.textContent = item.value;
-                                li.addEventListener('click', () => {
-                                    if (!selectedValues.includes(item.value)) {
-                                        selectedValues.push(item.value);
-                                        const tag = document.createElement('span');
-                                        tag.className = 'tag';
-                                        tag.dataset.value = item.value;
-                                        tag.innerHTML =
-                                            `${item.value} <i class="fas fa-times remove-tag"></i>`;
-                                        tagsContainer.appendChild(tag);
-                                        updateHiddenInput();
-                                    }
-                                    input.value = '';
-                                    dropdown.style.display = 'none';
+                        fetch(`${url}?query=${encodeURIComponent(query)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                dropdown.innerHTML = '';
+                                data.forEach(item => {
+                                    const li = document.createElement('li');
+                                    li.textContent = item.value;
+                                    li.addEventListener('click', () => {
+                                        if (!selectedValues.includes(item.value)) {
+                                            selectedValues.push(item.value);
+                                            const tag = document.createElement('span');
+                                            tag.className = 'tag';
+                                            tag.dataset.value = item.value;
+                                            tag.innerHTML = `${item.value} <i class="fas fa-times remove-tag"></i>`;
+                                            tagsContainer.appendChild(tag);
+                                            updateHiddenInput();
+                                        }
+                                        input.value = '';
+                                        dropdown.style.display = 'none';
+                                    });
+                                    dropdown.appendChild(li);
                                 });
-                                dropdown.appendChild(li);
+                                dropdown.style.display = data.length ? 'block' : 'none';
                             });
-                            dropdown.style.display = data.length ? 'block' : 'none';
-                        });
-                });
+                    });
+                }
 
                 // Event listener untuk menghapus tag
                 tagsContainer.addEventListener('click', function(e) {
@@ -1424,9 +1261,6 @@
                         selectedValues = selectedValues.filter(val => val !== value);
                         tag.remove();
                         updateHiddenInput();
-                        console.log(
-                            `Removed tag ${value} from ${inputId}, new values: ${selectedValues}`
-                        ); // Debugging
                     }
                 });
 
@@ -1445,9 +1279,6 @@
                                 updateHiddenInput();
                             }
                             input.value = '';
-                            console.log(
-                                `Added jumlah ${value} to ${inputId}, new values: ${selectedValues}`
-                            ); // Debugging
                         }
                     });
                 }
@@ -1457,22 +1288,19 @@
             document.querySelectorAll('.multi-select-wrapper').forEach(wrapper => {
                 const inputId = wrapper.dataset.inputId;
                 const hiddenInputId = `${inputId}_hidden`;
-                const dropdownId = wrapper.dataset.dropdown ||
-                    `edit-dropdown-${inputId.split('_').slice(1).join('_')}`;
+                const dropdownId = wrapper.dataset.dropdown || `edit-dropdown-${inputId.split('_').slice(1).join('_')}`;
                 const url = wrapper.querySelector('.autocomplete-input')?.dataset.url || '';
-                const existingValues = Array.from(wrapper.querySelector('.selected-tags').children).map(
-                    tag => tag.dataset.value);
+                const existingValues = Array.from(wrapper.querySelector('.selected-tags').children).map(tag => tag.dataset.value);
                 initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues);
             });
 
             // Fungsi untuk menambah kolom baru
             window.editAddColumn = function() {
                 const container = document.getElementById('edit-resep');
-                const addButton = container.querySelector('button[onclick="editAddColumn()"]');
                 const index = container.querySelectorAll('.entry-group').length;
                 const newGroup = `
                     <label for="soap_p_${index}" style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;" onclick="toggleObatContainer()">
-                        Pilih Obat Baru (P)
+                        Pilih Obat (P) ${index + 1}
                     </label>
                     <div class="entry-group" id="edit-entry_${index}">
                         <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
@@ -1553,38 +1381,23 @@
                                         placeholder="Masukkan Jumlah" min="1">
                                 </div>
                                 <input type="hidden" name="soap_p[${index}][jumlah]" id="edit-jumlah_${index}_hidden">
-                                <div id="edit-dropdown-jumlah_${index}" class="dropdown-menu autocomplete-dropdown"></div>
                                 <p class="text-warning" style="font-style: italic; font-size: 12px">
                                     *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
                                 </p>
                             </div>
                         </div>
-                        <div class="d-flex gap-2 mt-2">
-                            <button type="button" class="btn btn-outline-primary"
-                                onclick="editAddColumn()" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                data-bs-placement="top" data-bs-html="true"
-                                data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                                <i class="fa-solid fa-pills"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-wide" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Hapus Obat</span>" onclick="editRemoveColumn(this)">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
+                        <button type="button" onclick="editRemoveColumn(this)" class="btn btn-danger mt-2">Hapus Obat</button>
                     </div>
                 `;
 
-                addButton.insertAdjacentHTML('afterend', newGroup);
+                container.insertAdjacentHTML('beforeend', newGroup);
 
-                initializeMultiSelect(`edit-resep_${index}`, `edit-resep_${index}_hidden`,
-                    `edit-dropdown-resep_${index}`, '<?php echo e(url('/resep-autocomplete')); ?>');
-                initializeMultiSelect(`edit-jenis_obat_${index}`, `edit-jenis_obat_${index}_hidden`,
-                    `edit-dropdown-jenis_obat_${index}`, '<?php echo e(url('jenis-autocomplete')); ?>');
-                initializeMultiSelect(`edit-aturan_${index}`, `edit-aturan_${index}_hidden`,
-                    `edit-dropdown-aturan_${index}`, '<?php echo e(url('aturan-autocomplete')); ?>');
-                initializeMultiSelect(`edit-anjuran_${index}`, `edit-anjuran_${index}_hidden`,
-                    `edit-dropdown-anjuran_${index}`, '<?php echo e(url('anjuran-autocomplete')); ?>');
-                initializeMultiSelect(`edit-jumlah_${index}`, `edit-jumlah_${index}_hidden`,
-                    `edit-dropdown-jumlah_${index}`, '');
+                // Inisialisasi multi-select untuk kolom baru
+                initializeMultiSelect(`edit-resep_${index}`, `edit-resep_${index}_hidden`, `edit-dropdown-resep_${index}`, '<?php echo e(url('/resep-autocomplete')); ?>');
+                initializeMultiSelect(`edit-jenis_obat_${index}`, `edit-jenis_obat_${index}_hidden`, `edit-dropdown-jenis_obat_${index}`, '<?php echo e(url('jenis-autocomplete')); ?>');
+                initializeMultiSelect(`edit-aturan_${index}`, `edit-aturan_${index}_hidden`, `edit-dropdown-aturan_${index}`, '<?php echo e(url('aturan-autocomplete')); ?>');
+                initializeMultiSelect(`edit-anjuran_${index}`, `edit-anjuran_${index}_hidden`, `edit-dropdown-anjuran_${index}`, '<?php echo e(url('anjuran-autocomplete')); ?>');
+                initializeMultiSelect(`edit-jumlah_${index}`, `edit-jumlah_${index}_hidden`, `edit-dropdown-jumlah_${index}`, '');
             };
 
             window.editRemoveColumn = function(button) {
@@ -1598,14 +1411,12 @@
 
             // Tambahkan event listener untuk form submission
             document.querySelector('form').addEventListener('submit', function(e) {
-                // Pastikan semua input hidden diperbarui sebelum pengiriman
                 document.querySelectorAll('.multi-select-wrapper').forEach(wrapper => {
                     const inputId = wrapper.dataset.inputId;
                     const hiddenInputId = `${inputId}_hidden`;
                     const tagsContainer = document.getElementById(`${inputId}_tags`);
                     const hiddenInput = document.getElementById(hiddenInputId);
-                    const selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset
-                        .value).filter(value => value);
+                    const selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value => value);
                     hiddenInput.value = selectedValues.join(',');
                     console.log(`Form submit: ${hiddenInputId} = ${hiddenInput.value}`);
                 });

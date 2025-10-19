@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             AturanSeeder::class,
             AnjuranSeeder::class,
             JenisObatSeeder::class,
+            // PasienSeeder::class,
+            // AsesPerawatSeeder::class,
         ]);
     }
 }
