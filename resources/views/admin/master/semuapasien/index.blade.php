@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Data Semua Pasien')
-@section('content')
+<x-admin.layout.terminal title="Admin | Data Semua Pasien">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -20,7 +18,8 @@
                                             *Silahkan donwload file excelnya untuk menyesuaikan kolomnya! <br>
                                             *Nomor RM diambil dari nomor RM terakhir!
                                         </p>
-                                        <input type="file" name="file" id="file" class="form-control" required>
+                                        <input type="file" name="file" id="file" class="form-control"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="ms-2">
@@ -55,9 +54,11 @@
                             <input type="hidden" name="recent_page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
                             <div class="d-flex align-items-center">
                                 <label for="recent_entries" class="me-2">Tampilkan:</label>
-                                <select name="recent_entries" id="recent_entries" class="form-select form-select-sm me-3"
-                                    style="width: 80px;" onchange="this.form.submit()">
-                                    <option value="10" {{ request('recent_entries', 10) == 10 ? 'selected' : '' }}>10
+                                <select name="recent_entries" id="recent_entries"
+                                    class="form-select form-select-sm me-3" style="width: 80px;"
+                                    onchange="this.form.submit()">
+                                    <option value="10" {{ request('recent_entries', 10) == 10 ? 'selected' : '' }}>
+                                        10
                                     </option>
                                     <option value="25" {{ request('recent_entries') == 25 ? 'selected' : '' }}>25
                                     </option>
@@ -147,7 +148,8 @@
 
                         <div class="d-flex align-items-center">
                             <input type="text" name="search" value="{{ $search }}"
-                                class="form-control form-control-sm me-2" style="width: 400px;" placeholder="Cari Nama/NIK">
+                                class="form-control form-control-sm me-2" style="width: 400px;"
+                                placeholder="Cari Nama/NIK">
                             <button type="submit" class="btn btn-sm btn-primary">Cari</button>
                         </div>
                     </form>
@@ -191,7 +193,8 @@
                                                 {{-- <button class="btn btn-primary"
                                                 data-bs-target="#editumum{{ $item->id }}" data-bs-toggle="modal"><i
                                                     class="fas fa-info"></i> Edit</button> --}}
-                                                <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-danger mx-2"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#hapusbpjs{{ $item->id }}">
                                                     <i class="fas fa-trash"></i> Hapus</button>
                                             </div>
@@ -214,35 +217,36 @@
     </div>
 
     @include('admin.master.semuapasien.modalhapus')
-@endsection
 
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+    @push('style')
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
 
-    <style>
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
+        <style>
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
-    <script>
-        document.getElementById('uploadForm').addEventListener('submit', function() {
-            // Nonaktifkan tombol upload agar tidak diklik berulang
-            document.getElementById('uploadButton').disabled = true;
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
+        <script>
+            document.getElementById('uploadForm').addEventListener('submit', function() {
+                // Nonaktifkan tombol upload agar tidak diklik berulang
+                document.getElementById('uploadButton').disabled = true;
 
-            // Tampilkan animasi loading
-            document.getElementById('loading').classList.remove('d-none');
-        });
+                // Tampilkan animasi loading
+                document.getElementById('loading').classList.remove('d-none');
+            });
 
-        // Simulasi notifikasi sukses setelah upload (Opsional)
-        setTimeout(() => {
-            document.getElementById('loading').classList.add('d-none');
-            document.getElementById('notifSuccess').classList.remove('d-none');
-        }, 5000); // Simulasi 5 detik setelah upload dimulai
-    </script>
-@endpush
+            // Simulasi notifikasi sukses setelah upload (Opsional)
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('d-none');
+                document.getElementById('notifSuccess').classList.remove('d-none');
+            }, 5000); // Simulasi 5 detik setelah upload dimulai
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

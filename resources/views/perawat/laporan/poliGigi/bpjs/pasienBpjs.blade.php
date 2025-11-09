@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Perawat | Laporan Kunjungan Poli Gigi')
-@section('content')
+<x-admin.layout.terminal title="Perawat | Laporan Kunjungan Poli Gigi">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -26,15 +24,15 @@
                             <h5>Filter Pencarian</h5>
                             <form id="filterForm" method="GET" action="{{ route('perawat.laporan.poliUmum.bpjs') }}">
                                 <div class="form-check mb-2" style="display: flex; align-items: baseline">
-                                    <input class="form-check-input" type="radio" name="filter_option" value="full_date"
-                                        id="filter_by_full_date">
+                                    <input class="form-check-input" type="radio" name="filter_option"
+                                        value="full_date" id="filter_by_full_date">
                                     <label class="form-check-label" for="filter_by_full_date"></label>
                                     <input type="date" name="tanggal" id="tanggal" class="form-control"
                                         style="width: 45%; margin-left: 20px">
                                 </div>
                                 <div class="form-check mb-2" style="display: flex; align-items: baseline">
-                                    <input class="form-check-input" type="radio" name="filter_option" value="month_year"
-                                        id="filter_by_month_year">
+                                    <input class="form-check-input" type="radio" name="filter_option"
+                                        value="month_year" id="filter_by_month_year">
                                     <label class="form-check-label" for="filter_by_month_year"></label>
                                     <div class="month_year" style="display: flex; margin-left: 20px">
                                         <select name="month" id="month" class="form-control" style="width: 50%">
@@ -83,7 +81,8 @@
                                             class="fas fa-search"></i> Cari</button>
                                 </div>
                                 <hr>
-                                <p style="font-size: 14px; margin-bottom: 0px"><span style="color: red">* </span>Pilih salah
+                                <p style="font-size: 14px; margin-bottom: 0px"><span style="color: red">* </span>Pilih
+                                    salah
                                     satu atau cetak semua data tanpa memilih</p>
                                 <div class="button"
                                     style="display: flex; align-items: baseline; justify-content: space-between">
@@ -102,7 +101,8 @@
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item"
-                                                href="{{ route('export-pasienBpjs-Umum', request()->query()) }}">Export to
+                                                href="{{ route('export-pasienBpjs-Umum', request()->query()) }}">Export
+                                                to
                                                 Excel</a>
                                             {{-- <a class="dropdown-item" href="#">Export to PDF</a>
                                             <a class="dropdown-item" href="#">Export to Word</a> --}}
@@ -126,8 +126,9 @@
                                         <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
                                         <div class="d-flex align-items-center">
                                             <label for="entries" class="me-2">Tampilkan:</label>
-                                            <select name="entries" id="entries" class="form-select form-select-sm me-3"
-                                                style="width: 80px;" onchange="this.form.submit()">
+                                            <select name="entries" id="entries"
+                                                class="form-select form-select-sm me-3" style="width: 80px;"
+                                                onchange="this.form.submit()">
                                                 <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
                                                 </option>
                                                 <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
@@ -172,7 +173,8 @@
                                             <th class="custom-th" colspan="7" style="text-align: center">
                                                 PEMERIKSAAN (O)
                                             </th>
-                                            <th class="custom-th" colspan="2" style="text-align: center">DIAGNOSA (A)
+                                            <th class="custom-th" colspan="2" style="text-align: center">DIAGNOSA
+                                                (A)
                                                 ICD X
                                             </th>
                                             <th class="custom-th" rowspan="14">TINDAKAN (P)</th>
@@ -243,8 +245,10 @@
                                                 @if ($item->pasien->jenis_pasien == 'Bpjs')
                                                     <tr>
                                                         <td>{{ $gigiBpjs->firstItem() + $index }}</td>
-                                                        <td>{{ date_format(date_create($item->created_at), 'd-m-Y') }}</td>
-                                                        <td>{{ date_format(date_create($item->created_at), 'H:i:s') }}</td>
+                                                        <td>{{ date_format(date_create($item->created_at), 'd-m-Y') }}
+                                                        </td>
+                                                        <td>{{ date_format(date_create($item->created_at), 'H:i:s') }}
+                                                        </td>
                                                         <td>{{ $item->pasien->no_rm }}</td>
                                                         <td>{{ $item->pasien->nama_pasien }}</td>
                                                         <td>{{ $item->pasien->status }}</td>
@@ -307,80 +311,80 @@
         </div>
     </div>
 
-@endsection
-
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-    <style>
-        .custom-th {
-            min-width: 80px;
-            /* Atur lebar minimum */
-            max-width: 200px;
-            /* Atur lebar maksimum */
-            white-space: nowrap;
-            /* Mencegah teks untuk melipat jika panjang */
-            overflow: hidden;
-            /* Menyembunyikan teks yang melebihi lebar maksimum */
-            text-overflow: ellipsis;
-            /* Menampilkan elipsis (...) jika teks melebihi lebar maksimum */
-        }
-
-        .filter-section {
-            margin-bottom: 20px;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
-@endpush
-
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
-    <script>
-        $(document).ready(function() {
-            // Sembunyikan input month dan tahun jika filter tanggal dipilih
-            $('input[name="filter_option"]').change(function() {
-                if ($('#filter_by_full_date').is(':checked')) {
-                    $('#tanggal').prop('disabled', false);
-                    $('.month_year select').prop('disabled', true);
-                } else if ($('#filter_by_month_year').is(':checked')) {
-                    $('#tanggal').prop('disabled', true);
-                    $('.month_year select').prop('disabled', false);
-                } else {
-                    $('#tanggal, .month_year select').prop('disabled', false);
-                }
-            });
-
-            // Set default state berdasarkan input yang ada
-            var filterOption = '{{ $filterOption ?? '' }}';
-            if (filterOption === 'full_date') {
-                $('#filter_by_full_date').prop('checked', true);
-                $('#tanggal').prop('disabled', false);
-                $('#tanggal').val('{{ $tanggal ?? '' }}');
-                $('.month_year select').prop('disabled', true);
-            } else if (filterOption === 'month_year') {
-                $('#filter_by_month_year').prop('checked', true);
-                $('#tanggal').prop('disabled', true);
-                $('.month_year select').prop('disabled', false);
-                var monthValue = '{{ $month ?? '' }}';
-                var yearValue = '{{ $tahun ?? '' }}';
-                if (monthValue) {
-                    $('#month').val(monthValue); // Set nilai berdasarkan $month
-                }
-                if (yearValue) {
-                    $('#tahun').val(yearValue); // Set nilai berdasarkan $tahun
-                }
-                // Verifikasi dan log untuk debugging
-                console.log('Month Value Set:', monthValue, 'Selected Text:', $('#month option:selected').text());
+    @push('style')
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+        <style>
+            .custom-th {
+                min-width: 80px;
+                /* Atur lebar minimum */
+                max-width: 200px;
+                /* Atur lebar maksimum */
+                white-space: nowrap;
+                /* Mencegah teks untuk melipat jika panjang */
+                overflow: hidden;
+                /* Menyembunyikan teks yang melebihi lebar maksimum */
+                text-overflow: ellipsis;
+                /* Menampilkan elipsis (...) jika teks melebihi lebar maksimum */
             }
 
-            // Handle tombol Cetak
-            $('#btnCetak').click(function() {
-                window.print();
+            .filter-section {
+                margin-bottom: 20px;
+            }
+
+            .hidden {
+                display: none;
+            }
+        </style>
+    @endpush
+
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+        <script>
+            $(document).ready(function() {
+                // Sembunyikan input month dan tahun jika filter tanggal dipilih
+                $('input[name="filter_option"]').change(function() {
+                    if ($('#filter_by_full_date').is(':checked')) {
+                        $('#tanggal').prop('disabled', false);
+                        $('.month_year select').prop('disabled', true);
+                    } else if ($('#filter_by_month_year').is(':checked')) {
+                        $('#tanggal').prop('disabled', true);
+                        $('.month_year select').prop('disabled', false);
+                    } else {
+                        $('#tanggal, .month_year select').prop('disabled', false);
+                    }
+                });
+
+                // Set default state berdasarkan input yang ada
+                var filterOption = '{{ $filterOption ?? '' }}';
+                if (filterOption === 'full_date') {
+                    $('#filter_by_full_date').prop('checked', true);
+                    $('#tanggal').prop('disabled', false);
+                    $('#tanggal').val('{{ $tanggal ?? '' }}');
+                    $('.month_year select').prop('disabled', true);
+                } else if (filterOption === 'month_year') {
+                    $('#filter_by_month_year').prop('checked', true);
+                    $('#tanggal').prop('disabled', true);
+                    $('.month_year select').prop('disabled', false);
+                    var monthValue = '{{ $month ?? '' }}';
+                    var yearValue = '{{ $tahun ?? '' }}';
+                    if (monthValue) {
+                        $('#month').val(monthValue); // Set nilai berdasarkan $month
+                    }
+                    if (yearValue) {
+                        $('#tahun').val(yearValue); // Set nilai berdasarkan $tahun
+                    }
+                    // Verifikasi dan log untuk debugging
+                    console.log('Month Value Set:', monthValue, 'Selected Text:', $('#month option:selected').text());
+                }
+
+                // Handle tombol Cetak
+                $('#btnCetak').click(function() {
+                    window.print();
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

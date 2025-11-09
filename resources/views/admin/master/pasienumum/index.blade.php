@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Data Pasien Umum')
-@section('content')
+<x-admin.layout.terminal title="Admin | Data Pasien Umum">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -72,11 +70,15 @@
                                         <td>
                                             <div class="aksi d-flex">
                                                 <button class="btn btn-primary"
-                                                    data-bs-target="#editumum{{ $item->id }}" data-bs-toggle="modal"><i
-                                                        class="fas fa-info"></i> Edit</button>
-                                                <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                                                    data-bs-target="#editumum{{ $item->id }}"
+                                                    data-bs-toggle="modal"><i class="fas fa-info"></i> Edit
+                                                </button>
+
+                                                <button type="button" class="btn btn-danger mx-2"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#hapusumum{{ $item->id }}">
-                                                    <i class="fas fa-trash"></i> Hapus</button>
+                                                    <i class="fas fa-trash"></i> Hapus
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -95,23 +97,25 @@
     @include('admin.master.pasienumum.modaltambah')
     @include('admin.master.pasienumum.modaledit')
     @include('admin.master.pasienumum.modalhapus')
-@endsection
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable({
-                "scrollY": "65vh", // Sesuaikan tinggi scroll sesuai kebutuhan Anda
-                "scrollCollapse": true,
-                "paging": true // Aktifkan paginasi
+
+    @push('style')
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+    @endpush
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#example').DataTable({
+                    "scrollY": "65vh", // Sesuaikan tinggi scroll sesuai kebutuhan Anda
+                    "scrollCollapse": true,
+                    "paging": true // Aktifkan paginasi
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

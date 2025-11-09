@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Rekap Kunjungan Harian')
-@section('content')
+<x-admin.layout.terminal title="Rekap Kunjungan Harian">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -11,7 +9,8 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <form method="GET" action="" class="d-flex justify-content-between align-items-center mb-3">
+                            <form method="GET" action=""
+                                class="d-flex justify-content-between align-items-center mb-3">
                                 <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
                                 <div class="d-flex align-items-center">
                                     <label for="entries" class="me-2">Tampilkan:</label>
@@ -70,7 +69,8 @@
                                             <th class="custom-th" colspan="7" style="text-align: center">
                                                 PEMERIKSAAN (O)
                                             </th>
-                                            <th class="custom-th" colspan="2" style="text-align: center">DIAGNOSA (A) ICD
+                                            <th class="custom-th" colspan="2" style="text-align: center">DIAGNOSA (A)
+                                                ICD
                                                 X
                                             </th>
                                             <th class="custom-th" rowspan="24">TINDAKAN (P)</th>
@@ -127,7 +127,8 @@
                                                         </td>
                                                         {{-- Lama Daftar --}}
                                                         <td>{{ date_format(date_create($item->booking->created_at), 'H:i:s') }}
-                                                            - {{ date_format(date_create($item->booking->rm), 'H:i:s') }}
+                                                            -
+                                                            {{ date_format(date_create($item->booking->rm), 'H:i:s') }}
                                                         </td>
                                                         {{-- Jam Periksa --}}
                                                         <td></td>
@@ -146,7 +147,8 @@
                                                         <td>-</td>
                                                         <td>-</td>
                                                         <td>
-                                                            <button type="button" class="btn btn-primaty">Aksi</button>
+                                                            <button type="button"
+                                                                class="btn btn-primaty">Aksi</button>
                                                         </td>
                                                     </tr>
                                                 @endif
@@ -166,4 +168,4 @@
         </div>
     </div>
 
-@endsection
+</x-admin.layout.terminal>

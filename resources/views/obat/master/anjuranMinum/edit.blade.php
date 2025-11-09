@@ -7,7 +7,7 @@
                     <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Edit Data</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('apoteker/master/anjuran-edit/' . $item->id) }}" method="post"
+                <form action="{{ url('apoteker/master-obat/anjuran-edit/' . $item->id) }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

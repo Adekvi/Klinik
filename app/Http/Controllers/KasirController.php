@@ -57,17 +57,6 @@ class KasirController extends Controller
 
     public function totalan($id)
     {
-        // NO TRANSAKSI
-        // Mengambil id kasir terakhir
-        // $lastKasir = Kasir::orderBy('id', 'desc')->first();
-
-        // // Membuat nomor transaksi baru dengan format 'TSX' diikuti 5 digit angka
-        // if ($lastKasir && $lastKasir->no_transaksi) {
-        //     $noTransaksi = 'TSX' . str_pad((int)substr($lastKasir->no_transaksi, 2) + 1, 5, '0', STR_PAD_LEFT); // Mengambil dari no_transaksi
-        // } else {
-        //     $noTransaksi = 'TSX' . str_pad(1, 5, '0', STR_PAD_LEFT); // Jika belum ada data, mulai dari TSX00001
-        // }
-
         // Mengambil antrian berdasarkan ID yang diberikan
         $antrianKasir = AntrianPerawat::with([
             'booking.pasien',
@@ -127,59 +116,65 @@ class KasirController extends Controller
 
     public function simpanTransaksi(Request $request, $id)
     {
-        try {
-            Log::info('Data yang diterima dari request:', $request->all());
+        Log::info('Data yang diterima dari request:', $request->all());
 
-            // Validasi data
-            $validated = $request->validate([
-                'nik_bpjs' => 'required',
+        try {
+            // === 1. AMBIL DATA DENGAN SUFFIX ID ===
+            $suffix = '-' . $id;
+            $total_hidden       = $this->cleanNumber($request->input('total_hidden' . $suffix));
+            $sub_total_rincian  = $this->cleanNumber($request->input('sub_total_rincian' . $suffix));
+            $administrasi       = $this->cleanNumber($request->input('administrasi' . $suffix) ?? 0);
+            $konsul_dokter      = $this->cleanNumber($request->input('konsul_dokter' . $suffix));
+            $embalase           = $this->cleanNumber($request->input('embalase' . $suffix));
+            $total_obat         = $this->cleanNumber($request->input('total_obat' . $suffix));
+            $ppn                = $this->cleanNumber($request->input('ppn' . $suffix));
+            $totalbayar_hidden  = $this->cleanNumber($request->input('totalbayar_hidden' . $suffix));
+            $bayar              = $this->cleanNumber($request->input('bayar' . $suffix));
+            $kembalian          = $this->cleanNumber($request->input('kembalian' . $suffix));
+
+            // === 2. VALIDASI ===
+            $request->validate([
+                'nik_bpjs' => 'required|string',
                 'tanggal' => 'required|date',
-                'nama_kasir' => 'required',
-                'total_hidden' => 'required|numeric',
-                'sub_total_rincian' => 'required|numeric',
-                'administrasi' => 'nullable|numeric',
-                'konsul_dokter' => 'required|numeric',
-                'embalase' => 'required|numeric',
-                'total_obat' => 'required|numeric',
-                'ppn' => 'required|numeric',
-                'totalbayar_hidden' => 'required|numeric',
-                'kembalian' => 'required|numeric',
-                'bayar' => 'required|numeric',
-                'no_transaksi' => 'required|string', // Validasi no_transaksi dari request
+                'nama_kasir' => 'required|string',
+                'no_transaksi' => 'required|string',
             ]);
 
-            // Ambil data antrian
+            // Validasi numerik (setelah sanitasi)
+            if ($total_hidden < 0 || $sub_total_rincian < 0 || $konsul_dokter < 0 || $embalase < 0 || $total_obat < 0 || $ppn < 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nilai numerik tidak valid.'
+                ], 422);
+            }
+
+            // === 3. AMBIL ANTRIAN ===
             $antrianDokter = AntrianPerawat::with(['booking.pasien', 'isian', 'rm', 'poli', 'obat.soap'])
                 ->where('id', $id)
                 ->firstOrFail();
 
             $idBooking = $antrianDokter->id_booking;
             $idPasien = $antrianDokter->booking->pasien->id;
+            $jenisPasien = $antrianDokter->booking->pasien->jenis_pasien;
 
-            // Hitung shift berdasarkan tabel shift
+            // === 4. CEK SHIFT ===
             $currentTime = Carbon::now()->format('H:i:s');
             $shift = Shift::whereTime('jam_mulai', '<=', $currentTime)
                 ->whereTime('jam_selesai', '>=', $currentTime)
                 ->first();
 
             if (!$shift) {
-                Log::warning('Shift tidak ditemukan untuk waktu saat ini', ['current_time' => $currentTime]);
                 return response()->json([
                     'success' => false,
                     'message' => 'Shift tidak ditemukan untuk waktu saat ini.'
                 ], 422);
             }
 
-            // Sanitasi input
-            $total = floatval(preg_replace('/[^0-9]/', '', $request->total_hidden));
-            $bayar = $antrianDokter->booking->pasien->jenis_pasien === 'bpjs'
-                ? 0
-                : floatval(preg_replace('/[^0-9]/', '', $request->bayar));
-            $kembalian = $antrianDokter->booking->pasien->jenis_pasien === 'bpjs'
-                ? 0
-                : floatval(preg_replace('/[^0-9]/', '', $request->kembalian));
+            // === 5. HITUNG BAYAR & KEMBALIAN ===
+            $bayar = $jenisPasien === 'bpjs' ? 0 : $bayar;
+            $kembalian = $jenisPasien === 'bpjs' ? 0 : $kembalian;
 
-            // Data transaksi
+            // === 6. DATA TRANSAKSI ===
             $dataTransaksi = [
                 'id_pasien' => $idPasien,
                 'id_booking' => $idBooking,
@@ -189,103 +184,93 @@ class KasirController extends Controller
                 'no_rm' => $antrianDokter->booking->pasien->no_rm,
                 'no_transaksi' => $request->no_transaksi,
                 'nama_pasien' => $antrianDokter->booking->pasien->nama_pasien,
-                'jenis_pasien' => $antrianDokter->booking->pasien->jenis_pasien,
+                'jenis_pasien' => $jenisPasien,
                 'nik_bpjs' => $request->nik_bpjs,
                 'tanggal' => Carbon::now(),
                 'nama_kasir' => Auth::user()->name,
-                'total' => $total,
-                'sub_total_rincian' => floatval(preg_replace('/[^0-9]/', '', $request->sub_total_rincian)),
-                'administrasi' => floatval(preg_replace('/[^0-9]/', '', $request->administrasi ?? 0)),
-                'konsul_dokter' => floatval(preg_replace('/[^0-9]/', '', $request->konsul_dokter)),
-                'embalase' => floatval(preg_replace('/[^0-9]/', '', $request->embalase)),
-                'total_obat' => floatval(preg_replace('/[^0-9]/', '', $request->total_obat)),
-                'ppn' => floatval(preg_replace('/[^0-9]/', '', $request->ppn)),
+                'total' => $total_hidden,
+                'sub_total_rincian' => $sub_total_rincian,
+                'administrasi' => $administrasi,
+                'konsul_dokter' => $konsul_dokter,
+                'embalase' => $embalase,
+                'total_obat' => $total_obat,
+                'ppn' => $ppn,
                 'bayar' => $bayar,
                 'kembalian' => $kembalian,
                 'status' => 'T',
                 'shift' => $shift->nama_shift,
             ];
 
-            // Cek apakah transaksi sudah ada
-            $existingTransaksi = Kasir::where('id_pasien', $idPasien)
-                ->where('id_booking', $idBooking)
-                ->first();
+            // === 7. TRANSAKSI DATABASE ===
+            $result = DB::transaction(function () use (
+                $dataTransaksi, $idPasien, $idBooking, $antrianDokter
+            ) {
+                // Cek transaksi existing
+                $existing = Kasir::where('id_pasien', $idPasien)
+                    ->where('id_booking', $idBooking)
+                    ->first();
 
-            // Simpan atau update transaksi
-            return DB::transaction(function () use ($request, $idBooking, $antrianDokter, $dataTransaksi, $existingTransaksi) {
-                Log::info('Memulai transaksi database');
-
-                $transaksiId = null;
-
-                if ($existingTransaksi && $existingTransaksi->status === 'O') {
-                    // Update transaksi yang ada dengan status O
-                    Log::info('Mengupdate transaksi yang ada', [
-                        'id_pasien' => $dataTransaksi['id_pasien'],
-                        'id_booking' => $dataTransaksi['id_booking'],
-                        'no_transaksi' => $dataTransaksi['no_transaksi']
-                    ]);
-                    $existingTransaksi->update($dataTransaksi);
-                    $transaksiId = $existingTransaksi->id;
-                } elseif ($existingTransaksi) {
-                    // Jika transaksi sudah ada tetapi status bukan O
-                    Log::info('Transaksi sudah ada dengan status bukan O', [
-                        'id_pasien' => $dataTransaksi['id_pasien'],
-                        'id_booking' => $dataTransaksi['id_booking'],
-                        'no_transaksi' => $existingTransaksi->no_transaksi,
-                        'status' => $existingTransaksi->status
-                    ]);
-                    return response()->json([
+                if ($existing && $existing->status === 'O') {
+                    $existing->update($dataTransaksi);
+                    $transaksiId = $existing->id;
+                } elseif ($existing) {
+                    return [
                         'success' => false,
-                        'message' => 'Transaksi untuk pasien dan booking ini sudah ada dengan status ' . $existingTransaksi->status . '.',
-                        'transaksi_id' => $existingTransaksi->id,
-                        'redirect' => route('kasir.cetakTransaksi', ['id' => $existingTransaksi->id]),
-                        'index_url' => route('kasir.index'),
-                    ], 422);
+                        'message' => 'Transaksi sudah ada dengan status ' . $existing->status,
+                        'transaksi_id' => $existing->id,
+                        'redirect' => route('kasir.cetakTransaksi', $existing->id),
+                        'index_url' => route('kasir.index')
+                    ];
                 } else {
-                    // Buat transaksi baru
-                    Log::info('Menyimpan kasir baru', ['no_transaksi' => $dataTransaksi['no_transaksi']]);
                     $kasir = Kasir::create($dataTransaksi);
                     $transaksiId = $kasir->id;
                 }
 
                 // Update antrian
-                Log::info('Mengupdate antrian', ['id' => $antrianDokter->id]);
-                $antrianDokter->update([
-                    'id_booking' => $idBooking,
-                    'status' => 'WB',
-                ]);
+                $antrianDokter->update(['status' => 'WB']);
 
-                Log::info('Transaksi selesai', ['transaksi_id' => $transaksiId]);
-
-                session(['transaksi' => $dataTransaksi]);
-                session()->flash('success', 'Transaksi berhasil disimpan!');
-
-                return response()->json([
+                return [
                     'success' => true,
-                    'message' => 'Transaksi berhasil disimpan.',
-                    'transaksi_id' => $transaksiId,
-                    'redirect' => route('kasir.cetakTransaksi', ['id' => $transaksiId]),
-                    'index_url' => route('kasir.index'),
-                ], 200);
+                    'transaksi_id' => $transaksiId ?? $existing->id,
+                    'redirect' => route('kasir.cetakTransaksi', $transaksiId ?? $existing->id),
+                    'index_url' => route('kasir.index')
+                ];
             });
+
+            // === 8. KEMBALIKAN HASIL DARI TRANSACTION ===
+            if (is_array($result)) {
+                return response()->json($result, $result['success'] ? 200 : 422);
+            }
+
+            // Jika tidak return array, error
+            throw new \Exception('Transaksi gagal diproses.');
+
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validasi gagal: ' . json_encode($e->errors()), [
-                'request' => $request->all(),
-                'id' => $id,
-            ]);
+            Log::error('Validasi gagal', ['errors' => $e->errors()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Validasi gagal: ' . implode(', ', array_merge(...array_values($e->errors()))),
-                'errors' => $e->errors(),
+                'message' => 'Data tidak valid.',
+                'errors' => $e->errors()
             ], 422);
+
         } catch (\Exception $e) {
-            Log::error('Error menyimpan transaksi: ' . $e->getMessage(), [
-                'request' => $request->all(),
-                'id' => $id,
-                'trace' => $e->getTraceAsString()
+            Log::error('Error simpan transaksi: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
             ]);
-            return response()->json(['success' => false, 'message' => 'Gagal menyimpan transaksi: ' . $e->getMessage()], 500);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan: ' . $e->getMessage()
+            ], 500);
         }
+    }
+
+    // === HELPER: Bersihkan angka dari titik, koma, dll ===
+    private function cleanNumber($value)
+    {
+        if ($value === null || $value === '') return 0;
+        return floatval(preg_replace('/[^0-9.-]/', '', $value));
     }
 
     public function cetakTransaksi($id)

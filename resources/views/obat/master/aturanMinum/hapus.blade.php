@@ -7,7 +7,7 @@
                     <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Hapus Data</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('apoteker/master/aturan-hapus/' . $item->id) }}" method="POST"
+                <form action="{{ url('apoteker/master-obat/aturan-hapus/' . $item->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('DELETE')

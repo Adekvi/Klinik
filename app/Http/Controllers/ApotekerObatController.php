@@ -59,7 +59,7 @@ class ApotekerObatController extends Controller
 
         $margen = Margin::latest()->first(); // Ambil margin terakhir
 
-        return view('obat.master.dataObatApoteker', compact('obat', 'apotek', 'lowStockObat', 'margen', 'search', 'entries', 'obatUploud', 'lastUploadTime', 'uploadStatus'));
+        return view('obat.master.dataobat.dataObatApoteker', compact('obat', 'apotek', 'lowStockObat', 'margen', 'search', 'entries', 'obatUploud', 'lastUploadTime', 'uploadStatus'));
     }
 
     public function uploudObat(Request $request)

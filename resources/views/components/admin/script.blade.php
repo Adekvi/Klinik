@@ -9,11 +9,15 @@
 <!-- Vendors JS -->
 <script src="{{ asset('aset/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 
+<!-- Helpers -->
+<script src="{{ asset('aset/vendor/js/helpers.js') }}"></script>
+
+<!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+<!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+{{-- <script src="{{ asset('aset/js/config.js') }}"></script> --}}
+
 <!-- Main JS -->
 <script src="{{ asset('aset/js/main.js') }}"></script>
-
-<!-- Page JS -->
-<script src="{{ asset('aset/js/dashboards-analytics.js') }}"></script>
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>

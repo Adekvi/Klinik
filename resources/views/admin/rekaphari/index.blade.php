@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Rekap Harian')
-@section('content')
+<x-admin.layout.terminal title="Admin | Rekap Harian">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Rekap/</span> Pasien Diperikas hari ini</h4>
@@ -54,13 +52,15 @@
                         <div class="mb-3 row">
                             <label for="html5-text-input" class="col-md-4 col-form-label">Pasien Umum</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" readonly value="{{ $totalpasienUmum ?? '0' }}" />
+                                <input class="form-control" type="text" readonly
+                                    value="{{ $totalpasienUmum ?? '0' }}" />
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="html5-text-input" class="col-md-4 col-form-label">Pasien Bpjs</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" readonly value="{{ $totalpasienBpjs ?? '0' }}" />
+                                <input class="form-control" type="text" readonly
+                                    value="{{ $totalpasienBpjs ?? '0' }}" />
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -73,7 +73,8 @@
                         <div class="mb-3 row">
                             <label for="html5-text-input" class="col-md-4 col-form-label">Total Diagnosa</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" readonly value="{{ $totaldiagnosa ?? '0' }}" />
+                                <input class="form-control" type="text" readonly
+                                    value="{{ $totaldiagnosa ?? '0' }}" />
                             </div>
                         </div>
                         {{-- <div class="row">
@@ -86,8 +87,8 @@
                 </div>
             </div>
         </div>
+    </div>
 
-    @endsection
     @push('style')
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
     @endpush
@@ -121,3 +122,5 @@
             updateClock();
         </script>
     @endpush
+
+</x-admin.layout.terminal>

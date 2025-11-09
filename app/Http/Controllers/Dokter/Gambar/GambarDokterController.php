@@ -13,6 +13,7 @@ class GambarDokterController extends Controller
 {
     public function tambah(Request $request, $id)
     {
+        // dd($request->all());
         // Ambil data dokter dan pasien dari $id
         $antrianDokter = AntrianPerawat::with(['booking.pasien', 'rm', 'isian', 'poli'])->find($id);
 
@@ -207,7 +208,7 @@ class GambarDokterController extends Controller
         $belakang = $request->input('belakang');
 
         $tgl_kunjungan = Carbon::now();
-        $alegi_gigi = $request->input('alegi_gigi');
+        $alergi_gigi = $request->input('alergi_gigi');
         $skala_nyeriGigi = $request->input('skala_nyeriGigi');
         $metode = $request->input('metode');
         $wongbaker = $request->input('wongbaker');
@@ -265,7 +266,7 @@ class GambarDokterController extends Controller
             'depan' => $depan,
             'belakang' => $belakang,
             'tgl_kunjungan' => $tgl_kunjungan,
-            'alegi_gigi' => $alegi_gigi,
+            'alergi_gigi' => $alergi_gigi,
             'skala_nyeriGigi' => $skala_nyeriGigi,
             'metode' => $metode,
             'wongbaker' => $wongbaker,

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Petunjuk')
-@section('content')
+<x-admin.layout.terminal title="Petunjuk">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="card-title">
@@ -19,7 +17,8 @@
                     <div class="col-md-6">
                         <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow">
                             <div class="accordion-item card">
-                                <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="accordionIconOne">
                                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                                         data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
                                         Login
@@ -37,7 +36,8 @@
                             </div>
 
                             <div class="accordion-item card">
-                                <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconTwo">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="accordionIconTwo">
                                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                                         data-bs-target="#accordionIcon-2" aria-controls="accordionIcon-2">
                                         Dashboard
@@ -158,8 +158,9 @@
                             <div class="accordion-item card">
                                 <h2 class="accordion-header text-body d-flex justify-content-between"
                                     id="accordionIconOne">
-                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-8">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#accordionIcon-1"
+                                        aria-controls="accordionIcon-8">
                                         Logout
                                     </button>
                                 </h2>
@@ -183,8 +184,9 @@
                             <div class="accordion-item card">
                                 <h2 class="accordion-header text-body d-flex justify-content-between"
                                     id="accordionIconOne">
-                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#accordionIcon-1"
+                                        aria-controls="accordionIcon-1">
                                         Login
                                     </button>
                                 </h2>
@@ -202,8 +204,9 @@
                             <div class="accordion-item card">
                                 <h2 class="accordion-header text-body d-flex justify-content-between"
                                     id="accordionIconTwo">
-                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#accordionIcon-2" aria-controls="accordionIcon-2">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#accordionIcon-2"
+                                        aria-controls="accordionIcon-2">
                                         Kredensial Akun
                                     </button>
                                 </h2>
@@ -304,4 +307,4 @@
         </div>
     </div>
 
-@endsection
+</x-admin.layout.terminal>

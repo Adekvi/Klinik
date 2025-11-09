@@ -50,8 +50,8 @@
             </div>
         </div>
         <hr class="border-black border-t-[1.5px] mb-2" />
-        <div class="flex flex-col sm:flex-row justify-between text-[10px] sm:text-[11px] mb-2 gap-2 sm:gap-0">
-            <!-- Kolom Kiri -->
+        <div class="flex flex-col sm:flex-row justify-between text-[10px] sm:text-[11px] mb-2 gap-2 sm:gap-0"
+            style="text-transform: uppercase">
             <div class="flex flex-col gap-[2px] w-full sm:w-1/2">
                 <div class="flex gap-1 flex-wrap">
                     <span class="font-bold w-28 min-w-[110px]">Nama Pasien</span>:
@@ -73,7 +73,7 @@
             <div class="flex flex-col gap-[2px] w-full sm:w-1/2">
                 <div class="flex gap-1 flex-wrap">
                     <span class="font-bold w-28 min-w-[110px]">Kasir</span>:
-                    <span class="font-normal">{{ Auth::user('username', 'kasir')->name ?? '' }}</span>
+                    <span class="font-normal">{{ Auth::user()->name ?? '' }}</span>
                 </div>
                 <div class="flex gap-1 flex-wrap">
                     <span class="font-bold w-28 min-w-[110px]">Tanggal</span>:
@@ -91,17 +91,17 @@
 
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-[9px] sm:text-[10px] border border-black min-w-[300px]">
+            <table class="w-full text-[9px] sm:text-[10px] border border-black min-w-[200px]">
                 <thead>
                     <tr>
                         {{-- <th class="border border-black px-1 py-0.5 text-center w-6">No</th> --}}
-                        <th class="border border-black px-1 py-0.5 text-center w-[180px]">
+                        <th class="border border-black px-1 py-0.5 text-center w-[120px]">
                             Nama Obat
                         </th>
+                        <th class="border border-black px-1 py-0.5 text-center w-10">Qty</th>
                         <th class="border border-black px-1 py-0.5 text-center w-14">
                             Satuan
                         </th>
-                        <th class="border border-black px-1 py-0.5 text-center w-10">Qty</th>
                         <th class="border border-black px-1 py-0.5 text-center w-14">
                             Harga
                         </th>
@@ -141,20 +141,20 @@
                             @endforeach
                         </td>
 
+                        {{-- SATUAN --}}
+                        <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
+                            @foreach ($jenisObat as $jenis)
+                                {{ $jenis }}<br>
+                                <hr>
+                            @endforeach
+                        </td>
+
                         {{-- QTY --}}
                         <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
                             @foreach ($jumlahObat as $jumlah)
                                 {{ $jumlah }}<br>
                                 <hr>
                                 @php $totalQty += $jumlah; @endphp
-                            @endforeach
-                        </td>
-
-                        {{-- SATUAN --}}
-                        <td class="border border-black px-1 py-0.5 align-top leading-tight text-center">
-                            @foreach ($jenisObat as $jenis)
-                                {{ $jenis }}<br>
-                                <hr>
                             @endforeach
                         </td>
 
@@ -184,8 +184,8 @@
                     {{-- BARIS TOTAL QTY & SUBTOTAL --}}
                     <tr>
                         <td class="px-1 py-0.5 text-center font-semibold">Keterangan</td>
-                        <td class="border border-black px-1 py-0.5 font-semibold  text-center">{{ $totalQty }}</td>
                         <td class="px-1 py-0.5"></td> {{-- kolom kosong untuk satuan --}}
+                        <td class="border border-black px-1 py-0.5 font-semibold  text-center">{{ $totalQty }}</td>
                         <td class="px-1 py-0.5"></td> {{-- kolom kosong untuk harga --}}
                         <td class="border border-black px-1 py-0.5 font-semibold text-center">
                             Rp {{ number_format($grandTotal, 0, ',', '.') }}

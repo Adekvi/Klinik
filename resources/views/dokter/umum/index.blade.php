@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Dokter | Periksa Tubuh')
-@section('content')
+<x-admin.layout.terminal title="Dokter | Periksa Tubuh">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
@@ -43,13 +41,15 @@
                                             <tr>
                                                 <th scope="row" style="padding: 4px; text-align: left;">No RM</th>
                                                 <td style="padding: 4px; width: 20px;">:</td>
-                                                <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->no_rm }}</td>
+                                                <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->no_rm }}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row" style="padding: 4px; text-align: left;">Nama Pasien
                                                 </th>
                                                 <td style="padding: 4px; width: 20px;">:</td>
-                                                <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->nama_pasien }}
+                                                <td style="padding: 4px;">
+                                                    {{ $antrianDokter->booking->pasien->nama_pasien }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -88,7 +88,8 @@
                                                 <th scope="row" style="padding: 4px; text-align: left;">Alamat
                                                     Domisili</th>
                                                 <td style="padding: 4px; width: 20px;">:</td>
-                                                <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->domisili }}
+                                                <td style="padding: 4px;">
+                                                    {{ $antrianDokter->booking->pasien->domisili }}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -120,7 +121,8 @@
                                 </div>
 
                                 <div class="col-md-6 text-center">
-                                    <p style="font-size: 20px; font-weight: bold; margin-top: 10px; margin-bottom: 10px;">
+                                    <p
+                                        style="font-size: 20px; font-weight: bold; margin-top: 10px; margin-bottom: 10px;">
                                         Anatomi
                                         Tubuh Manusia</p>
 
@@ -135,42 +137,42 @@
         </div>
     </div>
 
-@endsection
+    @push('script')
+        <script>
+            // jam dan tanggal
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
-@push('script')
-    <script>
-        // jam dan tanggal
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+            // Function to show image outside modal
+            function showImage() {
+                var imageUrl = "{{ asset('assets/images/kerangka.png') }}"; // URL of the image
+                var imageContainer = document.getElementById("imageContainer"); // Container element to display image
+                imageContainer.innerHTML = `<img src="${imageUrl}" alt="Kerangka Image">`; // Insert image into container
+            }
 
-        // Function to show image outside modal
-        function showImage() {
-            var imageUrl = "{{ asset('assets/images/kerangka.png') }}"; // URL of the image
-            var imageContainer = document.getElementById("imageContainer"); // Container element to display image
-            imageContainer.innerHTML = `<img src="${imageUrl}" alt="Kerangka Image">`; // Insert image into container
-        }
+            // Add event listener to the button for showing image
+            document.getElementById("lihatGambarButton").addEventListener("click", function() {
+                showImage();
+            });
+        </script>
+    @endpush
 
-        // Add event listener to the button for showing image
-        document.getElementById("lihatGambarButton").addEventListener("click", function() {
-            showImage();
-        });
-    </script>
-@endpush
+</x-admin.layout.terminal>

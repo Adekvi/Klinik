@@ -91,7 +91,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="table mt-2 mb-2 table-striped table-bordered"
-                                        style="overflow: auto; min-width: 120%;">
+                                        style="overflow: auto; min-width: 150%;">
                                         <thead class="table-primary text-center text-nowrap">
                                             <tr>
                                                 <th>NAMA OBAT</th>
@@ -107,45 +107,41 @@
                                                 <div class="obat-container" data-pasien-id="{{ $item->id }}">
                                                     @php
                                                         $semuaObat = json_decode($item->obat->obat_Ro, true) ?? [];
-                                                        $anjuranMinum =
-                                                            json_decode($item->obat->soap->soap_p_anjuran, true) ?? [];
-                                                        $ngombe =
-                                                            json_decode($item->obat->soap->soap_r_minum, true) ?? [];
-                                                        $olehNgombe = array_merge(
-                                                            (array) $anjuranMinum,
-                                                            (array) $ngombe,
-                                                        );
                                                         $aturanMinum =
-                                                            json_decode($item->obat->soap->soap_p_aturan, true) ?? [];
-                                                        $minumAturan =
-                                                            json_decode($item->obat->soap->soap_r_minumRacikan, true) ??
-                                                            [];
-                                                        $allMinumAturan = array_merge(
-                                                            (array) $aturanMinum,
-                                                            array_filter((array) $minumAturan),
-                                                        );
+                                                            json_decode($item->obat->obat_Ro_aturan, true) ?? [];
+                                                        $anjuranMinum =
+                                                            json_decode($item->obat->obat_Ro_anjuran, true) ?? [];
+                                                        $jumlahObat =
+                                                            json_decode($item->obat->obat_Ro_jumlah, true) ?? [];
+                                                        $jenisObat =
+                                                            json_decode($item->obat->obat_Ro_jenisObat, true) ?? [];
+
+                                                        // Pastikan anjuranMinum tidak kosong
+                                                        $olehNgombe = $anjuranMinum; // Gunakan langsung dari obat_Ro_anjuran
+
                                                         $hargaJualData = $reseps->keyBy('nama_obat');
                                                     @endphp
 
-                                                    @if (!empty($semuaObat) && !empty($olehNgombe))
+                                                    @if (!empty($semuaObat))
                                                         @foreach ($semuaObat as $index => $namaObat)
                                                             @php
+                                                                // Pastikan $namaObat string
                                                                 $namaObat = is_array($namaObat)
                                                                     ? implode(', ', $namaObat)
-                                                                    : $namaObat;
-                                                                $anjuran = isset($olehNgombe[$index])
-                                                                    ? $olehNgombe[$index]
-                                                                    : 'AC';
-                                                                $aturan = isset($allMinumAturan[$index])
-                                                                    ? $allMinumAturan[$index]
-                                                                    : 'Sebelum Makan';
+                                                                    : trim($namaObat);
+
+                                                                // Ambil anjuran dari obat_Ro_anjuran
+                                                                $anjuran = $olehNgombe[$index] ?? 'AC';
+
+                                                                // Ambil harga
                                                                 $hargaPokok = $hargaJualData->contains(
                                                                     'nama_obat',
                                                                     $namaObat,
                                                                 )
-                                                                    ? $hargaJualData->get($namaObat)->harga_jual ?? '0'
-                                                                    : '0';
+                                                                    ? $hargaJualData->get($namaObat)->harga_jual ?? 0
+                                                                    : 0;
                                                             @endphp
+
                                                             <div class="form-group obat-row">
                                                                 <div class="nama-obat">
                                                                     <div class="input-row">
@@ -160,6 +156,7 @@
                                                                                 placeholder="Cari Obat..."
                                                                                 aria-autocomplete="list"
                                                                                 aria-controls="results-{{ $item->id }}-{{ $index }}" />
+
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-hapus"
                                                                                 data-pasien-id="{{ $item->id }}"
@@ -174,13 +171,12 @@
                                                                             id="results-{{ $item->id }}-{{ $index }}"
                                                                             role="listbox"></div>
                                                                     </div>
-                                                                    <div class="anjuran">
-                                                                        <input type="hidden"
-                                                                            name="obat_Ro[{{ $index }}][anjuran]"
-                                                                            id="anjuran_{{ $item->id }}_{{ $index }}"
-                                                                            class="form-control anjuran-select"
-                                                                            value="{{ $anjuran }}">
-                                                                    </div>
+
+                                                                    <!-- Hidden input untuk anjuran (AC/PC/DC) -->
+                                                                    <input type="hidden"
+                                                                        name="obat_Ro[{{ $index }}][anjuran]"
+                                                                        id="anjuran_{{ $item->id }}_{{ $index }}"
+                                                                        value="{{ $anjuran }}">
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -193,116 +189,82 @@
                                             <!-- ATURAN MINUM -->
                                             <td>
                                                 <div class="minum-container">
-                                                    @if (!empty($allMinumAturan))
-                                                        @foreach ($allMinumAturan as $index => $minum)
+                                                    @if (!empty($semuaObat))
+                                                        @foreach ($semuaObat as $index => $namaObat)
+                                                            @php
+                                                                $aturanAwal = $aturanMinum[$index] ?? null; // ex: "2x1/2"
+                                                                $anjuranAwal = $olehNgombe[$index] ?? '-';
+
+                                                                // CARI aturan di $aturanList yang cocok dengan awalan
+                                                                $matchedAturan = null;
+                                                                $isCustom = true;
+
+                                                                foreach ($aturanList as $opt) {
+                                                                    // Cocokkan jika aturanAwal adalah bagian dari opsi
+                                                                    // Misal: "2x1/2" cocok dengan "2x1/2 SENDOK"
+                                                                    if (str_starts_with($opt, $aturanAwal . ' ')) {
+                                                                        $matchedAturan = $opt;
+                                                                        $isCustom = false;
+                                                                        break;
+                                                                    }
+                                                                    // Atau jika persis sama
+                                                                    if ($opt === $aturanAwal) {
+                                                                        $matchedAturan = $opt;
+                                                                        $isCustom = false;
+                                                                        break;
+                                                                    }
+                                                                }
+
+                                                                // Jika tidak ketemu, gunakan custom
+                                                                if ($isCustom && $aturanAwal) {
+                                                                    $matchedAturan = $aturanAwal;
+                                                                }
+                                                            @endphp
+
                                                             <div class="form-group minum-row">
                                                                 <div class="input-group d-flex align-items-center">
-                                                                    <!-- Dropdown untuk frekuensi minum -->
+
+                                                                    <!-- Dropdown Aturan -->
                                                                     <select name="obat_Ro[{{ $index }}][sehari]"
                                                                         id="sehari_{{ $item->id }}_{{ $index }}"
                                                                         class="form-control sehari-select"
-                                                                        aria-label="Pilih frekuensi minum"
-                                                                        onchange="toggleInput(this, '{{ $item->id }}_{{ $index }}')">
-                                                                        <option value="1x1 SENDOK"
-                                                                            {{ $minum == '1x1 SENDOK' ? 'selected' : '' }}>
-                                                                            1x1 SENDOK</option>
-                                                                        <option value="1x1/2 SENDOK"
-                                                                            {{ $minum == '1x1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            1x1/2 SENDOK</option>
-                                                                        <option value="1x3/4 SENDOK"
-                                                                            {{ $minum == '1x3/4 SENDOK' ? 'selected' : '' }}>
-                                                                            1x3/4 SENDOK</option>
-                                                                        <option value="1x1 1/2 SENDOK"
-                                                                            {{ $minum == '1x1 1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            1x1 1/2 SENDOK</option>
-                                                                        <option value="2x1 SENDOK"
-                                                                            {{ $minum == '2x1 SENDOK' ? 'selected' : '' }}>
-                                                                            2x1 SENDOK</option>
-                                                                        <option value="2x1/2 SENDOK"
-                                                                            {{ $minum == '2x1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            2x1/2 SENDOK</option>
-                                                                        <option value="2x3/4 SENDOK"
-                                                                            {{ $minum == '2x3/4 SENDOK' ? 'selected' : '' }}>
-                                                                            2x3/4 SENDOK</option>
-                                                                        <option value="3x1 SENDOK"
-                                                                            {{ $minum == '3x1 SENDOK' ? 'selected' : '' }}>
-                                                                            3x1 SENDOK</option>
-                                                                        <option value="3x1/2 SENDOK"
-                                                                            {{ $minum == '3x1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            3x1/2 SENDOK</option>
-                                                                        <option value="3x3/4 SENDOK"
-                                                                            {{ $minum == '3x3/4 SENDOK' ? 'selected' : '' }}>
-                                                                            3x3/4 SENDOK</option>
-                                                                        <option value="3x1 1/2 SENDOK"
-                                                                            {{ $minum == '3x1 1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            3x1 1/2 SENDOK</option>
-                                                                        <option value="4x1 SENDOK"
-                                                                            {{ $minum == '4x1 SENDOK' ? 'selected' : '' }}>
-                                                                            4x1 SENDOK</option>
-                                                                        <option value="4x1 1/2 SENDOK"
-                                                                            {{ $minum == '4x1 1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            4x1 1/2 SENDOK</option>
-                                                                        <option value="4x1/2 SENDOK"
-                                                                            {{ $minum == '4x1/2 SENDOK' ? 'selected' : '' }}>
-                                                                            4x1/2 SENDOK</option>
-                                                                        <option value="4x3/4 SENDOK"
-                                                                            {{ $minum == '4x3/4 SENDOK' ? 'selected' : '' }}>
-                                                                            4x3/4 SENDOK</option>
-                                                                        <option value="3x SEHARI OLES TIPIS-TIPIS"
-                                                                            {{ $minum == '3x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
-                                                                            3x SEHARI OLES TIPIS-TIPIS</option>
-                                                                        <option value="2x SEHARI OLES TIPIS-TIPIS"
-                                                                            {{ $minum == '2x SEHARI OLES TIPIS-TIPIS' ? 'selected' : '' }}>
-                                                                            2x SEHARI OLES TIPIS-TIPIS</option>
-                                                                        <option value="1x1 TABLET"
-                                                                            {{ $minum == '1x1 TABLET' ? 'selected' : '' }}>
-                                                                            1x1 TABLET</option>
-                                                                        <option value="2x1 TABLET"
-                                                                            {{ $minum == '2x1 TABLET' ? 'selected' : '' }}>
-                                                                            2x1 TABLET</option>
-                                                                        <option value="3x1 TABLET"
-                                                                            {{ $minum == '3x1 TABLET' ? 'selected' : '' }}>
-                                                                            3x1 TABLET</option>
-                                                                        <option value="3x1 BUNGKUS"
-                                                                            {{ $minum == '3x1 BUNGKUS' ? 'selected' : '' }}>
-                                                                            3x1 BUNGKUS</option>
-                                                                        <option value="3x2 TETES"
-                                                                            {{ $minum == '3x2 TETES' ? 'selected' : '' }}>
-                                                                            3x2 TETES</option>
-                                                                        <option value="3x1 TETES"
-                                                                            {{ $minum == '3x1 TETES' ? 'selected' : '' }}>
-                                                                            3x1 TETES</option>
-                                                                        <option value="4x2 TETES"
-                                                                            {{ $minum == '4x2 TETES' ? 'selected' : '' }}>
-                                                                            4x2 TETES</option>
-                                                                        <option value="INJEKSI 1 ml"
-                                                                            {{ $minum == 'INJEKSI 1 ml' ? 'selected' : '' }}>
-                                                                            INJEKSI 1 ml</option>
-                                                                        <option value="INJEKSI 2 ml"
-                                                                            {{ $minum == 'INJEKSI 2 ml' ? 'selected' : '' }}>
-                                                                            INJEKSI 2 ml</option>
-                                                                        <option value="INJEKSI 3 ml"
-                                                                            {{ $minum == 'INJEKSI 3 ml' ? 'selected' : '' }}>
-                                                                            INJEKSI 3 ml</option>
-                                                                        <option value="NEBUL 1 ampul"
-                                                                            {{ $minum == 'NEBUL 1 ampul' ? 'selected' : '' }}>
-                                                                            NEBUL 1 ampul</option>
-                                                                        <option value="custom">Lainnya</option>
+                                                                        onchange="toggleCustomAturan(this, '{{ $item->id }}_{{ $index }}')">
+                                                                        @foreach ($aturanList as $opt)
+                                                                            <option value="{{ $opt }}"
+                                                                                {{ $matchedAturan === $opt ? 'selected' : '' }}>
+                                                                                {{ $opt }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                        <option value="custom"
+                                                                            {{ $isCustom ? 'selected' : '' }}>
+                                                                            Lainnya
+                                                                        </option>
                                                                     </select>
-                                                                    <!-- Input kustom untuk opsi "Lainnya" (awalnya disembunyikan) -->
+
+                                                                    <!-- Input Custom -->
                                                                     <input type="text"
                                                                         name="obat_Ro[{{ $index }}][sehari]"
                                                                         id="custom_sehari_{{ $item->id }}_{{ $index }}"
-                                                                        class="form-control sehari-select custom-input d-none"
-                                                                        placeholder="Masukkan aturan minum kustom"
-                                                                        style="display: none;">
+                                                                        class="form-control custom-input {{ $isCustom ? '' : 'd-none' }}"
+                                                                        placeholder="ex: 3x1 KAPSUL"
+                                                                        value="{{ $isCustom ? $aturanAwal : '' }}"
+                                                                        style="{{ $isCustom ? '' : 'display:none' }}">
+
                                                                     <span class="separator">-</span>
-                                                                    <!-- Input untuk aturan minum -->
-                                                                    <input type="text"
-                                                                        name="obat_Ro[{{ $index }}][aturan]"
-                                                                        id="aturan_{{ $item->id }}_{{ $index }}"
-                                                                        class="form-control aturan-select"
-                                                                        value="Sebelum Makan">
+
+                                                                    <!-- Anjuran -->
+                                                                    <select
+                                                                        name="obat_Ro[{{ $index }}][anjuran]"
+                                                                        id="anjuran_select_{{ $item->id }}_{{ $index }}"
+                                                                        class="form-control anjuran-select">
+                                                                        @foreach ($anjuranList as $anj)
+                                                                            <option value="{{ $anj->kode_anjuran }}"
+                                                                                {{ $anjuranAwal === $anj->kode_anjuran ? 'selected' : '' }}>
+                                                                                {{ $anj->kode_anjuran }}
+                                                                                ({{ $anj->golongan }})
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -316,89 +278,59 @@
                                             <td>
                                                 <div class="jumlah-container" data-pasien-id="{{ $item->id }}">
                                                     @php
-                                                        $jmlhP =
-                                                            json_decode($item->obat->soap->soap_p_jumlah, true) ?? [];
-                                                        $jmlhR =
-                                                            json_decode(
-                                                                $item->obat->soap->soap_r_jumlahObatRacikan,
-                                                                true,
-                                                            ) ?? [];
-                                                        $jmlhP = array_filter($jmlhP, function ($value) {
-                                                            return !is_null($value) && $value !== '';
-                                                        });
-                                                        $jmlhR = array_filter($jmlhR, function ($value) {
-                                                            return !is_null($value) && $value !== '';
-                                                        });
-                                                        $allJumlah = array_merge($jmlhP, $jmlhR);
+                                                        $jumlahObat =
+                                                            json_decode($item->obat->obat_Ro_jumlah, true) ?? [];
                                                         $jenisObat =
-                                                            json_decode($item->obat->soap->soap_p_jenisobat, true) ??
-                                                            [];
-                                                        $bangsaObat =
-                                                            json_decode(
-                                                                $item->obat->soap->soap_r_jenisObatRacikan,
-                                                                true,
-                                                            ) ?? [];
-                                                        $jenisObat = array_filter($jenisObat, function ($value) {
-                                                            return !is_null($value) && $value !== '';
-                                                        });
-                                                        $bangsaObat = array_filter($bangsaObat, function ($value) {
-                                                            return !is_null($value) && $value !== '';
-                                                        });
-                                                        $allJenisObat = array_merge($jenisObat, $bangsaObat);
+                                                            json_decode($item->obat->obat_Ro_jenisObat, true) ?? [];
                                                     @endphp
-                                                    @if (!empty($allJenisObat))
-                                                        @foreach ($allJenisObat as $index => $jenis)
+
+                                                    @if (!empty($semuaObat))
+                                                        @foreach ($semuaObat as $index => $namaObat)
                                                             @php
-                                                                $jumlah = $allJumlah[$index] ?? 0;
+                                                                $jumlah = $jumlahObat[$index] ?? 0;
+                                                                $jenis = $jenisObat[$index] ?? '-';
+
+                                                                // Ambil harga dari $hargaJualData (sudah ada di atas)
+                                                                $hargaSatuan = $hargaJualData->contains(
+                                                                    'nama_obat',
+                                                                    $namaObat,
+                                                                )
+                                                                    ? $hargaJualData->get($namaObat)->harga_jual ?? 0
+                                                                    : 0;
+
+                                                                $totalHarga = $jumlah * $hargaSatuan;
                                                             @endphp
+
                                                             <div class="form-group jumlah-row">
-                                                                <div class="jumlah-group">
+                                                                <div class="jumlah-group d-flex align-items-center">
+
+                                                                    <!-- Jenis Obat (Dropdown dari DB) -->
                                                                     <select
                                                                         name="obat_Ro[{{ $index }}][jenisObat]"
                                                                         id="jenisObat_{{ $item->id }}_{{ $index }}"
-                                                                        class="form-control jenis-obat-select"
-                                                                        aria-label="Pilih jenis obat">
-                                                                        <option value="Tablet"
-                                                                            {{ $jenis == 'Tablet' ? 'selected' : '' }}>
-                                                                            Tablet</option>
-                                                                        <option value="Kapsul"
-                                                                            {{ $jenis == 'Kapsul' ? 'selected' : '' }}>
-                                                                            Kapsul</option>
-                                                                        <option value="Bungkus"
-                                                                            {{ $jenis == 'Bungkus' ? 'selected' : '' }}>
-                                                                            Bungkus</option>
-                                                                        <option value="Sirup"
-                                                                            {{ $jenis == 'Sirup' ? 'selected' : '' }}>
-                                                                            Sirup</option>
-                                                                        <option value="Salep"
-                                                                            {{ $jenis == 'Salep' ? 'selected' : '' }}>
-                                                                            Salep</option>
-                                                                        <option value="Krim"
-                                                                            {{ $jenis == 'Krim' ? 'selected' : '' }}>
-                                                                            Krim</option>
-                                                                        <option value="Fls"
-                                                                            {{ $jenis == 'Fls' ? 'selected' : '' }}>Fls
-                                                                        </option>
-                                                                        <option value="Ampul"
-                                                                            {{ $jenis == 'Ampul' ? 'selected' : '' }}>
-                                                                            Ampul</option>
-                                                                        <option value="Vial"
-                                                                            {{ $jenis == 'Vial' ? 'selected' : '' }}>
-                                                                            Vial</option>
-                                                                        <option value="Puyer/Racikan"
-                                                                            {{ $jenis == 'Puyer/Racikan' ? 'selected' : '' }}>
-                                                                            Puyer/Racikan</option>
+                                                                        class="form-control jenis-obat-select me-2"
+                                                                        style="width: 100px;">
+                                                                        @foreach ($jenisObatList as $j)
+                                                                            <option value="{{ $j }}"
+                                                                                {{ $jenis === $j ? 'selected' : '' }}>
+                                                                                {{ $j }}
+                                                                            </option>
+                                                                        @endforeach
                                                                     </select>
-                                                                    <span class="separator">:</span>
-                                                                    <input type="text"
+
+                                                                    <span class="separator mx-1">:</span>
+
+                                                                    <!-- Input Jumlah -->
+                                                                    <input type="number"
                                                                         name="obat_Ro[{{ $index }}][jumlah]"
                                                                         id="jumlah_{{ $item->id }}_{{ $index }}"
-                                                                        class="form-control jumlah-input"
-                                                                        data-pasien-id="{{ $item->id }}"
+                                                                        class="form-control jumlah-input me-2"
+                                                                        value="{{ $jumlah }}" min="0"
+                                                                        data-harga="{{ $hargaSatuan }}"
                                                                         data-index="{{ $index }}"
-                                                                        value="{{ $jumlah }}"
-                                                                        placeholder="Jumlah"
-                                                                        aria-label="Masukkan jumlah obat" />
+                                                                        data-pasien-id="{{ $item->id }}"
+                                                                        onchange="hitungTotalHarga(this)"
+                                                                        style="width: 70px;">
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -565,8 +497,6 @@
         .harga-tablet-container,
         .harga-total-container {
             padding: 5px;
-            /* width: 80%;
-                                    position: relative; */
         }
 
         /* Form group untuk setiap baris */
@@ -618,7 +548,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            width: 80%;
+            width: 100%;
         }
 
         /* Styling input obat */
@@ -660,14 +590,14 @@
 
         /* Styling select dan input jumlah */
         .jenis-obat-select {
-            width: 80px;
+            width: 100px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
         }
 
         .jumlah-input {
-            width: 80px;
+            width: 100px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
@@ -685,7 +615,7 @@
         /* Styling input harga */
         .harga-tablet-input,
         .harga-total-input {
-            width: 150px;
+            width: 120px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Apoteker')
-@section('content')
+<x-admin-layout.terminal title="Apoteker">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -34,7 +32,8 @@
                                                 <!-- Teks dan ikon di atas -->
                                                 <span class="badge border text-success fs-6 p-3">
                                                     <i class="fa-solid fa-check-circle"></i> Dilayani:
-                                                    <span id="pasienDilayani">0</span>
+                                                    <span id="pasienDilayani"
+                                                        style="font-size: 25px">{{ $pasienDilayani }}</span>
                                                 </span>
                                                 <!-- Gambar di bawah -->
                                                 <img src="{{ asset('aset/img/periksa.jpg') }}" alt="Pasien DIlayani"
@@ -44,7 +43,8 @@
                                                 <!-- Teks dan ikon di atas -->
                                                 <span class="badge border text-warning fs-6 p-3">
                                                     <i class="fa-solid fa-times-circle"></i> Belum Dilayani:
-                                                    <span id="pasienBelumDilayani">0</span>
+                                                    <span id="pasienBelumDilayani"
+                                                        style="font-size: 25px">{{ $pasienBelumDilayani }}</span>
                                                 </span>
                                                 <!-- Gambar di bawah -->
                                                 <img src="{{ asset('aset/img/check.jpg') }}" alt="Pasien Belum Dilayani"
@@ -69,19 +69,23 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli UMUM (Bpjs)</td>
-                                                        <td id="poliUmumBpjsPagi" class="text-center">0</td>
+                                                        <td id="poliUmumBpjsPagi" class="text-center">
+                                                            {{ $countShiftPagiUmumBPJS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli UMUM (Umum)</td>
-                                                        <td id="poliUmumUmumPagi" class="text-center">0</td>
+                                                        <td id="poliUmumUmumPagi" class="text-center">
+                                                            {{ $countShiftPagiUmumUmum }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli GIGI (Bpjs)</td>
-                                                        <td id="poliGigiBpjsPagi" class="text-center">0</td>
+                                                        <td id="poliGigiBpjsPagi" class="text-center">
+                                                            {{ $countShiftPagiGigiBPJS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli GIGI (Umum)</td>
-                                                        <td id="poliGigiUmumPagi" class="text-center">0</td>
+                                                        <td id="poliGigiUmumPagi" class="text-center">
+                                                            {{ $countShiftPagiGigiUmum }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -103,19 +107,23 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli UMUM (Bpjs)</td>
-                                                        <td id="poliUmumBpjsSiang" class="text-center">0</td>
+                                                        <td id="poliUmumBpjsSiang" class="text-center">
+                                                            {{ $countShiftSiangUmumBPJS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli UMUM (Umum)</td>
-                                                        <td id="poliUmumUmumSiang" class="text-center">0</td>
+                                                        <td id="poliUmumUmumSiang" class="text-center">
+                                                            {{ $countShiftSiangUmumUmum }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli GIGI (Bpjs)</td>
-                                                        <td id="poliGigiBpjsSiang" class="text-center">0</td>
+                                                        <td id="poliGigiBpjsSiang" class="text-center">
+                                                            {{ $countShiftSiangGigiBpjs }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli GIGI (Umum)</td>
-                                                        <td id="poliGigiUmumSiang" class="text-center">0</td>
+                                                        <td id="poliGigiUmumSiang" class="text-center">
+                                                            {{ $countShiftSiangGigiUmum }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -134,33 +142,25 @@
                                                     <tr>
                                                         <td>Pasien Poli UMUM (Bpjs)</td>
                                                         <td id="poliUmumBpjsTotal" style="text-align: center">
-                                                            0</td>
+                                                            {{ $totalPoliUmumPasienBPJS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli UMUM (Umum)</td>
                                                         <td id="poliUmumUmumTotal" style="text-align: center">
-                                                            0</td>
+                                                            {{ $totalPoliUmumPasienUmum }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli GIGI (Bpjs)</td>
                                                         <td id="poliGigiBpjsTotal" style="text-align: center">
-                                                            0</td>
+                                                            {{ $totalPoliGigiPasienBPJS }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pasien Poli GIGI (Umum)</td>
                                                         <td id="poliGigiUmumTotal" style="text-align: center">
-                                                            0</td>
+                                                            {{ $totalPoliGigiPasienUmum }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
-                                    </div>
-                                    <div class="row g-2">
-                                        <div class="col-6">
-                                            <button type="button" class="btn btn-outline-secondary w-100"
-                                                data-bs-dismiss="offcanvas">
-                                                Cancel
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -211,7 +211,7 @@
                                         <th>Jenis Kelamin</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody class="text-center" style="text-transform: uppercase">
                                     @if (count($antrianObat) === 0)
                                         <tr>
                                             <td colspan="9" style="text-align: center; font-size: bold">Tidak ada
@@ -346,9 +346,11 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati Pasien
+                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati
+                            Pasien
                         </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <h5>Apakah Anda yakin ingin melewati pasien ini?</h5>
@@ -366,123 +368,122 @@
         </div>
     @endforeach
 
-@endsection
-@push('style')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <style>
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
+    @push('style')
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=auvTMQpf"></script>
-    <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-    <script>
-        // SHIFT
-        document.addEventListener("DOMContentLoaded", function() {
-            function checkShift() {
-                let now = new Date();
-                let hours = now.getHours();
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=auvTMQpf"></script>
+        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
+        <script>
+            // SHIFT
+            document.addEventListener("DOMContentLoaded", function() {
+                function checkShift() {
+                    let now = new Date();
+                    let hours = now.getHours();
 
-                let shiftPagi = document.getElementById("shiftPagi");
-                let shiftSiang = document.getElementById("shiftSiang");
-                let shiftTotal = document.getElementById("shiftReportTotal"); // Tambahkan elemen total shift
+                    let shiftPagi = document.getElementById("shiftPagi");
+                    let shiftSiang = document.getElementById("shiftSiang");
+                    let shiftTotal = document.getElementById("shiftReportTotal"); // Tambahkan elemen total shift
 
-                let tanggalHariIni = now.toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
+                    let tanggalHariIni = now.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
 
-                // Atur tanggal di tabel shift pagi dan siang
-                document.getElementById("tanggalShiftPagi").innerText = tanggalHariIni;
-                document.getElementById("tanggalShiftSiang").innerText = tanggalHariIni;
+                    // Atur tanggal di tabel shift pagi dan siang
+                    document.getElementById("tanggalShiftPagi").innerText = tanggalHariIni;
+                    document.getElementById("tanggalShiftSiang").innerText = tanggalHariIni;
 
-                // Reset tampilan semua shift
-                shiftPagi.style.display = "none";
-                shiftSiang.style.display = "none";
-                shiftTotal.style.display = "none";
+                    // Reset tampilan semua shift
+                    shiftPagi.style.display = "none";
+                    shiftSiang.style.display = "none";
+                    shiftTotal.style.display = "none";
 
-                // Tampilkan tabel sesuai shift
-                if (hours >= 7 && hours < 12) {
-                    // Shift Pagi (07:00 - 12:00)
-                    shiftPagi.style.display = "block";
-                } else if (hours >= 12 && hours < 17) {
-                    // Shift Siang (12:00 - 17:00)
-                    shiftSiang.style.display = "block";
-                } else {
-                    // Setelah 17:00, tampilkan total pasien
-                    shiftTotal.style.display = "block";
+                    // Tampilkan tabel sesuai shift
+                    if (hours >= 7 && hours < 12) {
+                        // Shift Pagi (07:00 - 12:00)
+                        shiftPagi.style.display = "block";
+                    } else if (hours >= 12 && hours < 17) {
+                        // Shift Siang (12:00 - 17:00)
+                        shiftSiang.style.display = "block";
+                    } else {
+                        // Setelah 17:00, tampilkan total pasien
+                        shiftTotal.style.display = "block";
+                    }
                 }
+
+                checkShift(); // Jalankan saat halaman dimuat
+                setInterval(checkShift, 60000); // Perbarui setiap 1 menit
+            });
+
+            // TANGGAL SHIFT
+            function updateTanggal() {
+                var now = new Date();
+
+                // Opsi format tanggal dan hari
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                // Mengambil elemen HTML untuk shift pagi dan siang
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                // Format tanggal lengkap dengan nama hari
+                var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+
+                // Menampilkan tanggal pada elemen yang sesuai
+                tanggalPagiElement.textContent = tanggalLengkap;
+                tanggalSiangElement.textContent = tanggalLengkap;
             }
 
-            checkShift(); // Jalankan saat halaman dimuat
-            setInterval(checkShift, 60000); // Perbarui setiap 1 menit
-        });
+            // Panggil fungsi saat halaman dimuat
+            updateTanggal();
 
-        // TANGGAL SHIFT
-        function updateTanggal() {
-            var now = new Date();
+            // jam dan tgl
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<p>' + now.toLocaleDateString('id-ID', options) + '</p>';
 
-            // Opsi format tanggal dan hari
-            var options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0');
+                jamElement.innerHTML = '<p>' + jamString + '</p>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
 
-            // Mengambil elemen HTML untuk shift pagi dan siang
-            var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
-            var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+            // Tampilkan modal jumlah pasien
+            function togglePopup() {
+                $('#jmlhpasien').modal('toggle');
+                // Anda bisa menambahkan logika tambahan di sini jika diperlukan
+            }
 
-            // Format tanggal lengkap dengan nama hari
-            var tanggalLengkap = now.toLocaleDateString('id-ID', options);
-
-            // Menampilkan tanggal pada elemen yang sesuai
-            tanggalPagiElement.textContent = tanggalLengkap;
-            tanggalSiangElement.textContent = tanggalLengkap;
-        }
-
-        // Panggil fungsi saat halaman dimuat
-        updateTanggal();
-
-        // jam dan tgl
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<p>' + now.toLocaleDateString('id-ID', options) + '</p>';
-
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0');
-            jamElement.innerHTML = '<p>' + jamString + '</p>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Tampilkan modal jumlah pasien
-        function togglePopup() {
-            $('#jmlhpasien').modal('toggle');
-            // Anda bisa menambahkan logika tambahan di sini jika diperlukan
-        }
-
-        var i = 0;
-        $('#tambah').click(function() {
-            ++i;
-            $('#obat').append(
-                `<tr id="remove">
+            var i = 0;
+            $('#tambah').click(function() {
+                ++i;
+                $('#obat').append(
+                    `<tr id="remove">
                 <td>
                     <input type="text" name="obat[` + i + `]"  class="form-control">
                 </td>
@@ -495,11 +496,13 @@
                     </div>
                 </td>
             </tr>`
-            );
-        });
+                );
+            });
 
-        $(document).on('click', '.remove-resep', function() {
-            $(this).parents('#remove').remove();
-        });
-    </script>
-@endpush
+            $(document).on('click', '.remove-resep', function() {
+                $(this).parents('#remove').remove();
+            });
+        </script>
+    @endpush
+
+</x-admin-layout.terminal>

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Apoteker | Rekap Obat Masuk')
-@section('content')
+<x-admin.layout.terminal title="Apoteker | Rekap Obat Masuk">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -41,35 +39,71 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr class="table-primary">
-                                        <th>No</th>
-                                        <th>Tanggal</th>
-                                        <th>Nama Obat</th>
-                                        <th>Obat Masuk</th>
-                                        <th>Obat Retur</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    @foreach ($apotek as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ date_format(date_create($item->updated_at), 'd-m-Y / H:i') }}</td>
-                                            <td>{{ $item->nama_obat }}</td>
-                                            <td>{{ isset($item->masuk) ? $item->masuk : '0' }}</td>
-                                            <td>{{ isset($item->retur) ? $item->retur : '0' }}</td>
-                                            <td>
-                                                <button type="button" data-bs-target="#ubah{{ $item->id }}"
-                                                    data-bs-toggle="modal" class="btn btn-primary">
-                                                    <i class="fa-solid fa-circle-info"></i> Informasi
-                                                </button>
-                                            </td>
+                            <div class="table-responsive">
+                                <form method="GET" action=""
+                                    class="d-flex justify-content-between align-items-center mb-3">
+                                    <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                                    <div class="d-flex align-items-center">
+                                        <label for="entries" class="me-2">Tampilkan:</label>
+                                        <select name="entries" id="entries" class="form-select form-select-sm me-3"
+                                            style="width: 80px;" onchange="this.form.submit()">
+                                            <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
+                                            </option>
+                                            <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
+                                            </option>
+                                            <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50
+                                            </option>
+                                            <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group w-25">
+                                        <input type="text" name="search" class="form-control form-control-sm"
+                                            placeholder="Cari nama obat..." value="{{ $search }}">
+                                        <button class="btn btn-primary btn-sm" type="submit"><i
+                                                class="fa fa-search"></i></button>
+                                    </div>
+                                </form>
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr class="table-primary text-center">
+                                            <th>No</th>
+                                            <th>Tanggal</th>
+                                            <th>Nama Obat</th>
+                                            <th>Obat Masuk</th>
+                                            <th>Obat Retur</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        @if ($apotek->isEmpty())
+                                            <tr>
+                                                <td colspan="6" class="text-center">Tidak ada data</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($apotek as $item)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ date_format(date_create($item->updated_at), 'd-m-Y / H:i') }}
+                                                    </td>
+                                                    <td>{{ $item->nama_obat }}</td>
+                                                    <td>{{ isset($item->masuk) ? $item->masuk : '0' }}</td>
+                                                    <td>{{ isset($item->retur) ? $item->retur : '0' }}</td>
+                                                    <td>
+                                                        <button type="button"
+                                                            data-bs-target="#ubah{{ $item->id }}"
+                                                            data-bs-toggle="modal" class="btn btn-primary">
+                                                            <i class="fa-solid fa-circle-info"></i> Informasi
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +119,8 @@
                 <div class="modal-content" style="margin-top: 20px; width: 95%; margin-left: 3%;">
                     <div class="modal-header bg-primary">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Rincian Obat</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
@@ -156,8 +191,11 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header bg-primary">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Informasi Stok Obat</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Informasi Stok
+                            Obat
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <form action="#" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -193,7 +231,8 @@
                                                     <td>{{ \Carbon\Carbon::parse($log->created_at)->translatedFormat('l, d F Y / H:i:s') }}
                                                     </td>
                                                     <td>{{ $item->nama_obat }}</td>
-                                                    <td>{{ $item->harga_pokok ? Rupiah($item->harga_pokok) : '0' }}</td>
+                                                    <td>{{ $item->harga_pokok ? Rupiah($item->harga_pokok) : '0' }}
+                                                    </td>
                                                     <td>{{ Rupiah($item->harga_jual) }}</td>
                                                     <td>{{ $log->stok_masuk ?? '0' }}</td>
                                                     <td>{{ $log->stok_retur ?? '0' }}</td>
@@ -206,7 +245,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-light-secondary"
+                                data-bs-dismiss="modal">Tutup</button>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </div>
                     </form>
@@ -215,100 +255,92 @@
         </div>
     @endforeach
 
+    @push('style')
+    @endpush
 
-@endsection
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const tanggalInput = document.getElementById('tanggal');
+                const monthSelect = document.getElementById('month');
+                const tahunSelect = document.getElementById('tahun');
+                const filterByFullDate = document.getElementById('filter_by_full_date');
+                const filterByMonthYear = document.getElementById('filter_by_month_year');
+                const btnSearch = document.getElementById('btnSearch');
+                const btnCetak = document.getElementById('btnCetak');
 
-    <script>
-        new DataTable('#example');
-        document.addEventListener('DOMContentLoaded', function() {
-            const tanggalInput = document.getElementById('tanggal');
-            const monthSelect = document.getElementById('month');
-            const tahunSelect = document.getElementById('tahun');
-            const filterByFullDate = document.getElementById('filter_by_full_date');
-            const filterByMonthYear = document.getElementById('filter_by_month_year');
-            const btnSearch = document.getElementById('btnSearch');
-            const btnCetak = document.getElementById('btnCetak');
+                // Tambahkan event listener untuk radio button 'Tanggal'
+                filterByFullDate.addEventListener('change', function() {
+                    if (this.checked) {
+                        tanggalInput.disabled = false;
+                        monthSelect.disabled = true;
+                        tahunSelect.disabled = true;
+                    }
+                });
 
-            // Tambahkan event listener untuk radio button 'Tanggal'
-            filterByFullDate.addEventListener('change', function() {
-                if (this.checked) {
-                    tanggalInput.disabled = false;
-                    monthSelect.disabled = true;
-                    tahunSelect.disabled = true;
-                }
-            });
+                // Tambahkan event listener untuk radio button 'Bulan dan Tahun'
+                filterByMonthYear.addEventListener('change', function() {
+                    if (this.checked) {
+                        tanggalInput.disabled = true;
+                        monthSelect.disabled = false;
+                        tahunSelect.disabled = false;
+                    }
+                });
 
-            // Tambahkan event listener untuk radio button 'Bulan dan Tahun'
-            filterByMonthYear.addEventListener('change', function() {
-                if (this.checked) {
-                    tanggalInput.disabled = true;
-                    monthSelect.disabled = false;
-                    tahunSelect.disabled = false;
-                }
-            });
+                btnSearch.addEventListener('click', function() {
+                    let searchData;
+                    if (filterByMonthYear.checked) {
+                        const selectedMonth = monthSelect.value;
+                        const selectedYear = tahunSelect.value;
+                        searchData = {
+                            type: 'month_year',
+                            month: selectedMonth,
+                            year: selectedYear
+                        };
+                    } else if (filterByFullDate.checked) {
+                        const selectedDate = tanggalInput.value;
+                        searchData = {
+                            type: 'full_date',
+                            date: selectedDate
+                        };
+                    } else {
+                        console.log('Harap pilih opsi pencarian terlebih dahulu');
+                        return;
+                    }
 
-            btnSearch.addEventListener('click', function() {
-                let searchData;
-                if (filterByMonthYear.checked) {
-                    const selectedMonth = monthSelect.value;
-                    const selectedYear = tahunSelect.value;
-                    searchData = {
-                        type: 'month_year',
-                        month: selectedMonth,
-                        year: selectedYear
-                    };
-                } else if (filterByFullDate.checked) {
-                    const selectedDate = tanggalInput.value;
-                    searchData = {
-                        type: 'full_date',
-                        date: selectedDate
-                    };
-                } else {
-                    console.log('Harap pilih opsi pencarian terlebih dahulu');
-                    return;
-                }
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    fetch('cari-ObatMasuk', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            body: JSON.stringify(searchData),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            updateTable(data);
+                        })
+                        .catch(error => {
+                            console.error('Terjadi kesalahan saat melakukan pencarian:', error);
+                        });
+                });
+                btnCetak.addEventListener('click', function() {
+                    // Panggil fungsi cetak tabel saat tombol cetak diklik
+                    cetakHasilFilter();
+                });
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                fetch('cari-ObatMasuk', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify(searchData),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        updateTable(data);
-                    })
-                    .catch(error => {
-                        console.error('Terjadi kesalahan saat melakukan pencarian:', error);
-                    });
-            });
-            btnCetak.addEventListener('click', function() {
-                // Panggil fungsi cetak tabel saat tombol cetak diklik
-                cetakHasilFilter();
-            });
+                function updateTable(data) {
+                    const tableBody = document.querySelector('#example tbody');
+                    // Kosongkan tabel
+                    tableBody.innerHTML = '';
 
-            function updateTable(data) {
-                const tableBody = document.querySelector('#example tbody');
-                // Kosongkan tabel
-                tableBody.innerHTML = '';
-
-                // Tambahkan baris-baris baru berdasarkan data
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    // Tambahkan baris-baris baru berdasarkan data
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
                         <td>${item.tanggal}</td>
                         <td>${item.no_rm}</td>
                         <td>${item.nama_pasien}</td>
@@ -321,81 +353,83 @@
                                 <i class="fas fa-trash"></i> Hapus</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            function cetakHasilFilter() {
-                // Data filter yang akan dikirim
-                let searchData;
-                if (filterByMonthYear.checked) {
-                    const selectedMonth = monthSelect.value;
-                    const selectedYear = tahunSelect.value;
-                    searchData = {
-                        type: 'month_year',
-                        month: selectedMonth,
-                        year: selectedYear
-                    };
-                } else if (filterByFullDate.checked) {
-                    const selectedDate = tanggalInput.value;
-                    searchData = {
-                        type: 'full_date',
-                        date: selectedDate
-                    };
-                } else {
-                    // Jika tidak ada filter yang dipilih, kirim permintaan pencetakan tanpa data filter
-                    searchData = {
-                        type: 'no_filter'
-                    };
-                }
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                // Kirim data filter ke route pencetakan menggunakan AJAX
-                fetch('/cetak', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken // Sesuaikan dengan cara Anda mendapatkan token CSRF
-                        },
-                        body: JSON.stringify(searchData),
-                    })
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(new Blob([blob]));
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', 'Rekap Obat.pdf'); // Nama file untuk diunduh
-                        document.body.appendChild(link);
-                        link.click();
-                        link.parentNode.removeChild(link);
-                    })
-                    .catch(error => {
-                        console.error('Terjadi kesalahan saat mencetak:', error);
+                        tableBody.appendChild(row);
                     });
-            }
+                }
 
-            // Dapatkan tahun saat ini
-            const currentYear = new Date().getFullYear();
-            const startYear = currentYear - 10;
-            const endYear = currentYear;
+                function cetakHasilFilter() {
+                    // Data filter yang akan dikirim
+                    let searchData;
+                    if (filterByMonthYear.checked) {
+                        const selectedMonth = monthSelect.value;
+                        const selectedYear = tahunSelect.value;
+                        searchData = {
+                            type: 'month_year',
+                            month: selectedMonth,
+                            year: selectedYear
+                        };
+                    } else if (filterByFullDate.checked) {
+                        const selectedDate = tanggalInput.value;
+                        searchData = {
+                            type: 'full_date',
+                            date: selectedDate
+                        };
+                    } else {
+                        // Jika tidak ada filter yang dipilih, kirim permintaan pencetakan tanpa data filter
+                        searchData = {
+                            type: 'no_filter'
+                        };
+                    }
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    // Kirim data filter ke route pencetakan menggunakan AJAX
+                    fetch('/cetak', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken // Sesuaikan dengan cara Anda mendapatkan token CSRF
+                            },
+                            body: JSON.stringify(searchData),
+                        })
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const url = window.URL.createObjectURL(new Blob([blob]));
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.setAttribute('download', 'Rekap Obat.pdf'); // Nama file untuk diunduh
+                            document.body.appendChild(link);
+                            link.click();
+                            link.parentNode.removeChild(link);
+                        })
+                        .catch(error => {
+                            console.error('Terjadi kesalahan saat mencetak:', error);
+                        });
+                }
 
-            // Buat opsi tahun secara dinamis
-            for (let year = endYear; year >= startYear; year--) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                tahunSelect.appendChild(option);
-            }
+                // Dapatkan tahun saat ini
+                const currentYear = new Date().getFullYear();
+                const startYear = currentYear - 10;
+                const endYear = currentYear;
 
-            // Buat opsi bulan secara dinamis
-            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
-                "Oktober", "November", "Desember"
-            ];
-            months.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;
-                option.textContent = month;
-                monthSelect.appendChild(option);
+                // Buat opsi tahun secara dinamis
+                for (let year = endYear; year >= startYear; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    tahunSelect.appendChild(option);
+                }
+
+                // Buat opsi bulan secara dinamis
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
+                    "Oktober", "November", "Desember"
+                ];
+                months.forEach((month, index) => {
+                    const option = document.createElement('option');
+                    option.value = index + 1;
+                    option.textContent = month;
+                    monthSelect.appendChild(option);
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

@@ -576,14 +576,11 @@
                                         id="modal-jenis_obat_0_hidden">
                                     <div id="modal-dropdown-jenis_obat_0" class="dropdown-menu autocomplete-dropdown">
                                     </div>
-
-                                    <!-- catatan dipindah ke sini -->
                                     <p class="text-warning" style="font-style: italic; font-size: 12px">
                                         *Bisa memilih lebih dari 1 jenis obat
                                     </p>
                                 </div>
                             </div>
-
                             <!-- Aturan Pakai -->
                             <div class="input-row" id="modal-aturanContainer">
                                 <label for="modal-aturan_0" style="min-width: 100px">Aturan Pakai</label>
@@ -599,7 +596,6 @@
                                     <input type="hidden" name="soap_p[0][aturan][]" id="modal-aturan_0_hidden">
                                     <div id="modal-dropdown-aturan_0" class="dropdown-menu autocomplete-dropdown">
                                     </div>
-
                                     <p class="text-warning" style="font-style: italic; font-size: 12px">
                                         *Bisa memilih lebih dari 1 aturan pakai
                                     </p>
@@ -620,7 +616,6 @@
                                     <input type="hidden" name="soap_p[0][anjuran][]" id="modal-anjuran_0_hidden">
                                     <div id="modal-dropdown-anjuran_0" class="dropdown-menu autocomplete-dropdown">
                                     </div>
-
                                     <p class="text-warning" style="font-style: italic; font-size: 12px">
                                         *Bisa memilih lebih dari 1 anjuran minum
                                     </p>
@@ -643,12 +638,6 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline-primary" onclick="modalAddColumn()"
-                            data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
-                            data-bs-html="true"
-                            data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                            <i class="fa-solid fa-pills"></i>
-                        </button>
                         <label for=""
                             style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; width: 100%; cursor: pointer"
                             onclick="toggleRacikanContainer()">Resep Racikan</label>
@@ -938,9 +927,9 @@
                 const $tagsContainer = $wrapper.find('.selected-tags');
                 const $hiddenInput = $(`#${inputId}_hidden`);
 
-                if (!$input.length || !$dropdown.length) {
+                if (!$input.length || !$dropdown.length || !$hiddenInput.length) {
                     console.error(
-                        `[initializeAutocomplete] Elemen input (${inputId}) atau dropdown (${dropdownId}) tidak ditemukan`
+                        `[initializeAutocomplete] Elemen input (${inputId}), dropdown (${dropdownId}), atau hidden input tidak ditemukan`
                     );
                     return;
                 }
@@ -954,25 +943,35 @@
 
                 // Fungsi untuk memperbarui input tersembunyi
                 function updateHiddenInput() {
-                    $hiddenInput.val(selectedItems.join(','));
+                    // Hapus semua input hidden dengan nama yang sama
+                    $wrapper.find(`input[name="${$hiddenInput.attr('name')}"]`).remove();
+                    // Tambahkan input hidden baru hanya untuk nilai yang valid
+                    selectedItems.forEach(value => {
+                        if (value && value !== 'null' && value !== '') {
+                            $wrapper.append(
+                                `<input type="hidden" name="${$hiddenInput.attr('name')}" value="${value}">`
+                            );
+                        }
+                    });
                 }
 
                 // Fungsi untuk menambahkan tag
                 function addTag(text, value) {
-                    selectedItems.push(value);
-                    const tagHtml = `
-                <span class="tag" data-value="${value}" data-text="${text}">
-                    ${text}
-                    <span class="remove-tag">×</span>
-                </span>`;
-                    $tagsContainer.append(tagHtml);
-                    updateHiddenInput();
-                    $input.val(''); // Kosongkan input pencarian
+                    if (value && value !== 'null' && value !== '') { // Pastikan nilai valid
+                        selectedItems.push(value);
+                        const tagHtml = `
+                    <span class="tag" data-value="${value}" data-text="${text}">
+                        ${text}
+                        <span class="remove-tag">×</span>
+                    </span>`;
+                        $tagsContainer.append(tagHtml);
+                        updateHiddenInput();
+                        $input.val(''); // Kosongkan input pencarian
+                    }
                 }
 
                 // Fungsi untuk menghapus tag
                 function removeTag(value, index) {
-                    // Menghapus item berdasarkan nilai dan indeks (untuk mendukung duplikasi)
                     selectedItems.splice(index, 1);
                     $tagsContainer.find(`.tag[data-value="${value}"]:eq(${index})`).remove();
                     updateHiddenInput();
@@ -1012,9 +1011,11 @@
                             error: function(jqXHR, textStatus, errorThrown) {
                                 console.error(
                                     `[initializeAutocomplete] Error fetching data untuk ${inputId}:`,
-                                    textStatus, errorThrown);
+                                    textStatus, errorThrown
+                                );
                                 $dropdown.empty().show().append(
-                                    `<div class="dropdown-item">Error: ${textStatus}</div>`);
+                                    `<div class="dropdown-item">Error: ${textStatus}</div>`
+                                );
                             }
                         });
                     } else {
@@ -1026,7 +1027,8 @@
                 $dropdown.off('click').on('click', '.dropdown-item', function() {
                     const text = $(this).data('text');
                     const value = $(this).data('value');
-                    if (text !== 'Tidak ada saran' && !text.startsWith('Error:') && value) {
+                    if (text !== 'Tidak ada saran' && !text.startsWith('Error:') && value && value !==
+                        'null' && value !== '') {
                         addTag(text, value);
                         $dropdown.hide();
                     }
@@ -1061,7 +1063,16 @@
 
                 // Fungsi untuk memperbarui input tersembunyi
                 function updateHiddenInput() {
-                    $hiddenInput.val(selectedItems.join(','));
+                    // Hapus semua input hidden dengan nama yang sama
+                    $wrapper.find(`input[name="${$hiddenInput.attr('name')}"]`).remove();
+                    // Tambahkan input hidden baru hanya untuk nilai yang valid
+                    selectedItems.forEach(value => {
+                        if (value && value !== 'null' && value !== '') {
+                            $wrapper.append(
+                                `<input type="hidden" name="${$hiddenInput.attr('name')}" value="${value}">`
+                            );
+                        }
+                    });
                 }
 
                 // Fungsi untuk menambahkan tag
@@ -1080,9 +1091,9 @@
                 }
 
                 // Fungsi untuk menghapus tag
-                function removeTag(text, index) {
+                function removeTag(value, index) {
                     selectedItems.splice(index, 1);
-                    $tagsContainer.find(`.tag[data-text="${text}"]:eq(${index})`).remove();
+                    $tagsContainer.find(`.tag[data-value="${value}"]:eq(${index})`).remove();
                     updateHiddenInput();
                 }
 
@@ -1095,16 +1106,17 @@
                             addTag(value);
                         } else {
                             console.warn(
-                                `[initializeJumlahInput] Input tidak valid untuk ${inputId}: ${value}`);
+                                `[initializeJumlahInput] Input tidak valid untuk ${inputId}: ${value}`
+                            );
                         }
                     }
                 });
 
                 // Event click untuk menghapus tag
                 $tagsContainer.off('click').on('click', '.tag', function() {
-                    const text = $(this).data('text');
+                    const value = $(this).data('value');
                     const index = $tagsContainer.find('.tag').index(this);
-                    removeTag(text, index);
+                    removeTag(value, index);
                 });
             }
 
@@ -1124,113 +1136,21 @@
             // Sembunyikan dropdown saat klik di luar
             $(document).on('click', function(e) {
                 if (!$(e.target).closest(
-                        '.autocomplete-input, .autocomplete-dropdown, .multi-select-wrapper, .jumlah-input')
-                    .length) {
+                        '.autocomplete-input, .autocomplete-dropdown, .multi-select-wrapper, .jumlah-input'
+                    ).length) {
                     $('.autocomplete-dropdown').hide();
                 }
             });
 
-            let kolomIndex = 1;
-
-            // Tambahkan kolom baru untuk modal
-            window.modalAddColumn = function() {
-                console.log(`[modalAddColumn] Menambahkan kolom baru dengan indeks: ${kolomIndex}`);
-
-                let newElement = `
-            <div class="input-package new-package" id="modal-package_${kolomIndex}">
-                <label for="modal-soap_p_${kolomIndex}" style="font-weight: bold; margin-top: 20px;">Pilih Obat Baru (P)</label>
-                <div class="input-row">
-                    <label for="modal-resep_${kolomIndex}" style="min-width: 100px;">Nama Obat</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="modal-resep_${kolomIndex}">
-                            <div class="selected-tags" id="modal-resep_${kolomIndex}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="modal-resep_${kolomIndex}" placeholder="Cari Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}" data-dropdown="modal-dropdown-resep_${kolomIndex}">
-                        </div>
-                        <input type="hidden" name="soap_p[${kolomIndex}][resep][]" id="modal-resep_${kolomIndex}_hidden">
-                        <div id="modal-dropdown-resep_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 nama obat
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row">
-                    <label for="modal-jenis_obat_${kolomIndex}" style="min-width: 100px;">Jenis Obat</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="modal-jenis_obat_${kolomIndex}">
-                            <div class="selected-tags" id="modal-jenis_obat_${kolomIndex}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="modal-jenis_obat_${kolomIndex}" placeholder="Cari Jenis Obat" autocomplete="off" data-url="{{ url('jenis-autocomplete') }}" data-dropdown="modal-dropdown-jenis_obat_${kolomIndex}">
-                        </div>
-                        <input type="hidden" name="soap_p[${kolomIndex}][jenisobat][]" id="modal-jenis_obat_${kolomIndex}_hidden">
-                        <div id="modal-dropdown-jenis_obat_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 jenis obat
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row">
-                    <label for="modal-aturan_${kolomIndex}" style="min-width: 100px;">Aturan Pakai</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="modal-aturan_${kolomIndex}">
-                            <div class="selected-tags" id="modal-aturan_${kolomIndex}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="modal-aturan_${kolomIndex}" placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('aturan-autocomplete') }}" data-dropdown="modal-dropdown-aturan_${kolomIndex}">
-                        </div>
-                        <input type="hidden" name="soap_p[${kolomIndex}][aturan][]" id="modal-aturan_${kolomIndex}_hidden">
-                        <div id="modal-dropdown-aturan_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 aturan pakai
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row">
-                    <label for="modal-anjuran_${kolomIndex}" style="min-width: 100px;">Anjuran Minum</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="modal-anjuran_${kolomIndex}">
-                            <div class="selected-tags" id="modal-anjuran_${kolomIndex}_tags"></div>
-                            <input type="text" class="autocomplete-input multi-select-input" id="modal-anjuran_${kolomIndex}" placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}" data-dropdown="modal-dropdown-anjuran_${kolomIndex}">
-                        </div>
-                        <input type="hidden" name="soap_p[${kolomIndex}][anjuran][]" id="modal-anjuran_${kolomIndex}_hidden">
-                        <div id="modal-dropdown-anjuran_${kolomIndex}" class="dropdown-menu autocomplete-dropdown"></div>
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memilih lebih dari 1 anjuran minum
-                        </p>
-                    </div>
-                </div>
-                <div class="input-row">
-                    <label for="modal-jumlah_${kolomIndex}" style="min-width: 100px;">Jumlah</label>
-                    <span>:</span>
-                    <div class="input-wrapper">
-                        <div class="multi-select-wrapper form-control" data-input-id="modal-jumlah_${kolomIndex}">
-                            <div class="selected-tags" id="modal-jumlah_${kolomIndex}_tags"></div>
-                            <input type="number" class="multi-select-input jumlah-input" id="modal-jumlah_${kolomIndex}" placeholder="Masukkan Jumlah" min="1">
-                        </div>
-                        <input type="hidden" name="soap_p[${kolomIndex}][jumlah][]" id="modal-jumlah_${kolomIndex}_hidden">
-                        <p class="text-warning" style="font-style: italic; font-size: 12px">
-                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
-                        </p>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-danger btn-wide" style="width: 50px; padding: 5px 10px; margin-bottom: 5px" onclick="$(this).closest('.input-package').remove()">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>`;
-
-                $('#modal-resep').append(newElement);
-                console.log(`[modalAddColumn] Elemen baru ditambahkan: modal-package_${kolomIndex}`);
-
-                // Inisialisasi autocomplete dan input jumlah untuk elemen baru
-                $(`#modal-package_${kolomIndex} .autocomplete-input`).each(function() {
-                    initializeAutocomplete($(this));
+            // Bersihkan input hidden kosong sebelum submit form
+            $('form').on('submit', function() {
+                $(this).find('input[type="hidden"]').each(function() {
+                    const value = $(this).val();
+                    if (!value || value === 'null' || value === '') {
+                        $(this).remove();
+                    }
                 });
-                $(`#modal-package_${kolomIndex} .jumlah-input`).each(function() {
-                    initializeJumlahInput($(this));
-                });
-
-                kolomIndex++;
-            };
+            });
         });
     </script>
 @endpush

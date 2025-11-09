@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Daftar Antrian</title>
-    
+
 </head>
 <style>
     .container .top .image {
@@ -14,48 +15,58 @@
         align-items: center;
         margin-top: 30px;
     }
+
     .container .top .image img {
         width: 150px;
     }
-    .container .top .clinic h1{
+
+    .container .top .clinic h1 {
         text-align: center;
         font-size: 30px;
     }
+
     .container .top .addres h2 {
         text-align: center;
         font-size: 24px;
     }
+
     .container .top .telp h2 {
         text-align: center;
         font-size: 24px;
         margin-top: -10px;
     }
+
     .container .middle .antrian h1 {
         text-align: center;
         font-size: 130px;
         margin-top: -20px;
         margin-bottom: 10px;
     }
+
     .container .middle .poli h3 {
         text-align: center;
         font-size: 24px;
         margin-top: -5px;
     }
+
     .container .bottom .kunjungan h5 {
         text-align: center;
         font-size: 24px;
         margin-top: -10px;
     }
+
     .container .bottom .people p {
         text-align: center;
         font-size: 24px;
         margin-top: -20px;
     }
+
     .container .bawah h4 {
         text-align: center;
         font-size: 30px;
         margin-top: 20px;
     }
+
     .patients-container {
         display: flex;
         justify-content: space-around;
@@ -72,7 +83,8 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .patient-card .middle, .patient-card .bottom {
+    .patient-card .middle,
+    .patient-card .bottom {
         text-align: center;
         margin-bottom: 10px;
     }
@@ -97,6 +109,7 @@
         margin: 0;
     }
 </style>
+
 <body>
 
     <section class="antrian">
@@ -147,42 +160,14 @@
                         </div>
                     @endif
                 @endforeach
-            </div>  
+            </div>
             <div class="bawah">
                 <h4>Terimakasih Kunjungannya <br>
                     Semoga Sehat Selalu</h4>
-            </div>          
+            </div>
         </div>
     </section>
 
-    {{-- Export foto ke jpg/png --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script> --}}
-    <script>
-        // // Fungsi untuk melakukan render dan penyimpanan gambar
-        // function exportToImage() {
-        //     // Menggunakan html2canvas untuk merender konten halaman
-        //     html2canvas(document.querySelector('.container')).then(canvas => {
-        //         // Mengonversi canvas menjadi data URL gambar (png)
-        //         const dataURL = canvas.toDataURL('image/png');
-    
-        //         // Mengirim data URL gambar ke server untuk disimpan
-        //         const xhr = new XMLHttpRequest();
-        //         xhr.open('POST', '/simpan-daftar-antrian', true); // Sesuaikan endpoint dengan yang Anda gunakan di server
-        //         xhr.setRequestHeader('Content-Type', 'application/json');
-        //         xhr.onreadystatechange = function() {
-        //             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        //                 console.log('Gambar berhasil disimpan:', JSON.parse(xhr.responseText).url);
-        //             }
-        //         };
-        //         xhr.send(JSON.stringify({ image: dataURL }));
-        //     });
-        // }
-    
-        // // Panggil fungsi exportToImage saat halaman dimuat
-        // window.onload = function() {
-        //     exportToImage();
-        // };
-    </script>   
-
 </body>
+
 </html>

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Informasi')
-@section('content')
+<x-admin.layout.terminal title="Admin | Informasi">
 
     <div class="content-wrapper">
         <!-- Content -->
@@ -39,4 +37,5 @@
         </div>
 
     </div>
-@endsection
+
+</x-admin.layout.terminal>

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Video')
-@section('content')
+<x-admin.layout.terminal title="Admin | Video">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -42,9 +40,10 @@
                                         <td>
                                             <div class="aksi d-flex">
                                                 <button class="btn btn-primary"
-                                                    data-bs-target="#editpoli{{ $item->id }}" data-bs-toggle="modal"><i
-                                                        class="fas fa-info"></i> Edit</button>
-                                                <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                                                    data-bs-target="#editpoli{{ $item->id }}"
+                                                    data-bs-toggle="modal"><i class="fas fa-info"></i> Edit</button>
+                                                <button type="button" class="btn btn-danger mx-2"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#hapuspoli{{ $item->id }}"><i
                                                         class="fa fa-trash"></i> Hapus</button>
                                             </div>
@@ -61,30 +60,32 @@
     @include('admin.master.pidio.modaltambah')
     @include('admin.master.pidio.modaledit')
     @include('admin.master.pidio.modalhapus')
-@endsection
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
 
-    <script>
-        new DataTable('#example');
+    @push('style')
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+    @endpush
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
 
-        // Ambil elemen input file
-        var inputFoto = document.getElementById('exampleInputVidio');
+        <script>
+            new DataTable('#example');
 
-        // Tambahkan event listener untuk 'change' event
-        inputFoto.addEventListener('change', function(event) {
-            // Ambil nama file yang dipilih
-            var namaFile = event.target.files[0].name;
+            // Ambil elemen input file
+            var inputFoto = document.getElementById('exampleInputVidio');
 
-            // Tampilkan nama file di dalam elemen dengan id 'namaFoto'
-            document.getElementById('vidio').textContent = namaFile;
-        });
-    </script>
-@endpush
+            // Tambahkan event listener untuk 'change' event
+            inputFoto.addEventListener('change', function(event) {
+                // Ambil nama file yang dipilih
+                var namaFile = event.target.files[0].name;
+
+                // Tampilkan nama file di dalam elemen dengan id 'namaFoto'
+                document.getElementById('vidio').textContent = namaFile;
+            });
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

@@ -29,7 +29,7 @@ class PerawatController extends Controller
         // Query untuk pasien dengan status 'D' (Datang)
         $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
             ->where('status', 'D') // Filter hanya status D
-            ->whereDate('created_at', Carbon::today()) // Hanya data hari ini
+            // ->whereDate('created_at', Carbon::today()) // Hanya data hari ini
             ->orderBy('urutan', 'asc')
             ->orderBy('created_at', 'asc');
 
@@ -82,13 +82,6 @@ class PerawatController extends Controller
 
         // Jumlah pasien
         $today = Carbon::today();
-        $totalpasien = Pasien::count();
-        $pasienHariniUmum = Pasien::where('jenis_pasien', 'Umum')
-            ->whereDate('created_at', $today)
-            ->count();
-        $pasienHariniBpjs = Pasien::where('jenis_pasien', 'Bpjs')
-            ->whereDate('created_at', $today)
-            ->count();
 
         // PASIEN DILAYANI & BELUM
         // Hitung pasien dilayani (status M) hari ini
@@ -233,9 +226,6 @@ class PerawatController extends Controller
             'diagnosaSekunder',
             'resep',
             'ttd',
-            'pasienHariniUmum',
-            'pasienHariniBpjs',
-            'totalpasien',
             'search',
             'entries',
             'periksaSearch',

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Dokter Gigi | Odontogram')
-@section('content')
+<x-admin.layout.terminal title="Dokter Gigi | Odontogram">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
@@ -206,7 +204,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding: 4px; text-align: left; white-space: nowrap">
+                                                        <td
+                                                            style="padding: 4px; text-align: left; white-space: nowrap">
                                                             Dengan menggunakan
                                                             metode
                                                         </td>
@@ -215,8 +214,8 @@
                                                             <div id="metode" class="d-flex flex-wrap"
                                                                 style="white-space: nowrap">
                                                                 <label for="nrs" class="mr-4">
-                                                                    <input type="checkbox" name="metode" id="nrs"
-                                                                        value="NRS"
+                                                                    <input type="checkbox" name="metode"
+                                                                        id="nrs" value="NRS"
                                                                         style="transform: scale(1.5); margin-right: 5px">
                                                                     NRS
                                                                 </label>
@@ -232,8 +231,8 @@
                                                 </tbody>
                                             </table>
                                             <div class="skala text-center mt-3">
-                                                <img src="{{ asset('assets/images/analog-gigi.png') }}" alt=""
-                                                    height="auto" width="70%">
+                                                <img src="{{ asset('assets/images/analog-gigi.png') }}"
+                                                    alt="" height="auto" width="70%">
                                             </div>
                                             <div class="row text-center" style="font-size: 18px">
                                                 <div class="col">
@@ -328,7 +327,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="padding: 4px; text-align: left;">5. Riwayat Pengggunaan
+                                                        <th style="padding: 4px; text-align: left;">5. Riwayat
+                                                            Pengggunaan
                                                             Obat
                                                         </th>
                                                         <td style="padding: 4px; width: 10px;">:</td>
@@ -370,7 +370,8 @@
                                     <div class="row">
                                         <div class="d-flex justify-content-center mb-4 mt-3">
                                             <img id="displayedImage" src="{{ asset('assets/images/gigi.jpeg') }}"
-                                                style="max-width: 70%; height: auto; border-radius: 10px" alt="Kerangka">
+                                                style="max-width: 70%; height: auto; border-radius: 10px"
+                                                alt="Kerangka">
                                         </div>
                                         <hr>
                                         {{-- PILIH GIGI --}}
@@ -381,7 +382,8 @@
                                                     class="form-control mt-2 mb-2 select2" multiple>
                                                     <option value="">--Pilih Gigi--</option>
                                                     @for ($i = 1; $i <= 85; $i++)
-                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                        <option value="{{ $i }}">{{ $i }}
+                                                        </option>
                                                     @endfor
                                                 </select>
                                                 {{-- <div class="input-row d-flex align-items-center mb-2" style="gap: 8px;">
@@ -429,7 +431,8 @@
                                         <hr>
                                         <div class="col-md-12">
                                             {{-- OCCLUSI --}}
-                                            <div class="form-group d-flex align-items-center mb-3 mt-4" style="gap: 8px">
+                                            <div class="form-group d-flex align-items-center mb-3 mt-4"
+                                                style="gap: 8px">
                                                 <label style="min-width: 200px; margin-bottom: 0;">Occlusi</label>
                                                 <span style="width: 30px">:</span>
                                                 <div id="occlusi_gigi">
@@ -440,15 +443,15 @@
                                                         Bite
                                                     </label>
                                                     <label for="jawaban-crossbite" class="mx-3">
-                                                        <input type="radio" name="occlusi_gigi" id="jawaban-crossbite"
-                                                            value="Cross-bite"
+                                                        <input type="radio" name="occlusi_gigi"
+                                                            id="jawaban-crossbite" value="Cross-bite"
                                                             style="transform: scale(1.5); margin-right: 10px;">
                                                         Cross
                                                         Bite
                                                     </label>
                                                     <label for="jawaban-steepbite" class="ml-3">
-                                                        <input type="radio" name="occlusi_gigi" id="jawaban-steepbite"
-                                                            value="Steep-bite"
+                                                        <input type="radio" name="occlusi_gigi"
+                                                            id="jawaban-steepbite" value="Steep-bite"
                                                             style="transform: scale(1.5); margin-right: 10px;">
                                                         Steep
                                                         Bite
@@ -456,8 +459,10 @@
                                                 </div>
                                             </div>
                                             {{-- PALATINES --}}
-                                            <div class="form-group d-flex align-items-center mb-3 mt-4" style="gap: 8px">
-                                                <label style="min-width: 200px; margin-bottom: 0;">Torus Palatines</label>
+                                            <div class="form-group d-flex align-items-center mb-3 mt-4"
+                                                style="gap: 8px">
+                                                <label style="min-width: 200px; margin-bottom: 0;">Torus
+                                                    Palatines</label>
                                                 <span style="width: 30px">:</span>
                                                 <div id="torus_palatinus">
                                                     <label for="jawaban-normal" class="mr-3">
@@ -467,20 +472,20 @@
                                                         Tidak Ada
                                                     </label>
                                                     <label for="jawaban-crossbite" class="mx-3">
-                                                        <input type="radio" name="torus_palatinus" id="jawaban-kecil"
-                                                            value="Kecil"
+                                                        <input type="radio" name="torus_palatinus"
+                                                            id="jawaban-kecil" value="Kecil"
                                                             style="transform: scale(1.5); margin-right: 10px; margin-left: 13px">
                                                         Kecil
                                                     </label>
                                                     <label for="jawaban-steepbite" class="ml-3">
-                                                        <input type="radio" name="torus_palatinus" id="jawaban-sedang"
-                                                            value="Sedang"
+                                                        <input type="radio" name="torus_palatinus"
+                                                            id="jawaban-sedang" value="Sedang"
                                                             style="transform: scale(1.5); margin-right: 10px; margin-left: 37px">
                                                         Sedang
                                                     </label>
                                                     <label for="jawaban-steepbite" class="ml-3">
-                                                        <input type="radio" name="torus_palatinus" id="jawaban-besar"
-                                                            value="Besar"
+                                                        <input type="radio" name="torus_palatinus"
+                                                            id="jawaban-besar" value="Besar"
                                                             style="transform: scale(1.5); margin-right: 10px; margin-left: 40px">
                                                         Besar
                                                     </label>
@@ -493,7 +498,8 @@
                                                 </div>
                                             </div>
                                             {{-- MANDIBULARIS --}}
-                                            <div class="form-group d-flex align-items-center mb-3 mt-4" style="gap: 8px">
+                                            <div class="form-group d-flex align-items-center mb-3 mt-4"
+                                                style="gap: 8px">
                                                 <label style="min-width: 200px; margin-bottom: 0;">Torus
                                                     Mandibularis</label>
                                                 <span style="width: 30px">:</span>
@@ -528,7 +534,8 @@
                                                 </div>
                                             </div>
                                             {{-- PALATUM --}}
-                                            <div class="form-group d-flex align-items-center mb-3 mt-4" style="gap: 8px">
+                                            <div class="form-group d-flex align-items-center mb-3 mt-4"
+                                                style="gap: 8px">
                                                 <label style="min-width: 200px; margin-bottom: 0;">Palatum</label>
                                                 <span style="width: 30px">:</span>
                                                 <div id="palatum">
@@ -558,9 +565,10 @@
                                                     <span style="width: 30px;">:</span>
                                                     <div id="diastema">
                                                         <label for="jawaban-tidak_ada" class="mr-3">
-                                                            <input type="radio" name="diastema" id="jawaban-tidak_ada"
-                                                                value="tidak-ada" checked
-                                                                style="transform: scale(1.5); margin-right: 10px;"> Tidak
+                                                            <input type="radio" name="diastema"
+                                                                id="jawaban-tidak_ada" value="tidak-ada" checked
+                                                                style="transform: scale(1.5); margin-right: 10px;">
+                                                            Tidak
                                                             Ada
                                                         </label>
                                                         <label for="jawaban-ada" class="mx-3">
@@ -584,18 +592,20 @@
                                             {{-- GIGI ANOMALI --}}
                                             <div class="form-group mb-3 mt-4">
                                                 <div class="d-flex align-items-center" style="gap: 8px">
-                                                    <label style="min-width: 200px; margin-bottom: 0;">Gigi Anomaly</label>
+                                                    <label style="min-width: 200px; margin-bottom: 0;">Gigi
+                                                        Anomaly</label>
                                                     <span style="width: 30px;">:</span>
                                                     <div id="gigi_anomali">
                                                         <label for="anomali-tidak_ada" class="mr-3">
                                                             <input type="radio" name="gigi_anomali"
                                                                 id="anomali-tidak_ada" value="tidak-ada" checked
-                                                                style="transform: scale(1.5); margin-right: 10px;"> Tidak
+                                                                style="transform: scale(1.5); margin-right: 10px;">
+                                                            Tidak
                                                             Ada
                                                         </label>
                                                         <label for="anomali-ada" class="mx-3">
-                                                            <input type="radio" name="gigi_anomali" id="anomali-ada"
-                                                                value="ada"
+                                                            <input type="radio" name="gigi_anomali"
+                                                                id="anomali-ada" value="ada"
                                                                 style="transform: scale(1.5); margin-right: 10px;"> Ada
                                                         </label>
                                                     </div>
@@ -633,13 +643,14 @@
                                                     <span style="width: 30px;">:</span>
                                                     <div id="foto_ambil">
                                                         <label for="digital" class="mr-3">
-                                                            <input type="checkbox" name="foto_yg_diambil" id="digital"
-                                                                value="Digital" checked
-                                                                style="transform: scale(1.5); margin-right: 10px;"> Digital
+                                                            <input type="checkbox" name="foto_yg_diambil"
+                                                                id="digital" value="Digital" checked
+                                                                style="transform: scale(1.5); margin-right: 10px;">
+                                                            Digital
                                                         </label>
                                                         <label for="intraoral" class="mx-3">
-                                                            <input type="checkbox" name="foto_yg_diambil" id="intraoral"
-                                                                value="Intraoral"
+                                                            <input type="checkbox" name="foto_yg_diambil"
+                                                                id="intraoral" value="Intraoral"
                                                                 style="transform: scale(1.5); margin-right: 10px;">
                                                             Intraoral
                                                         </label>
@@ -654,7 +665,8 @@
                                             {{-- JUMLAH RONTGEN --}}
                                             <div class="form-group mb-3 mt-4">
                                                 <div class="d-flex align-items-center" style="gap: 8px">
-                                                    <label style="min-width: 200px; margin-bottom: 0;">Jumlah rontgen photo
+                                                    <label style="min-width: 200px; margin-bottom: 0;">Jumlah rontgen
+                                                        photo
                                                         <br>
                                                         yang diambil</label>
                                                     <span style="width: 30px;">:</span>
@@ -704,8 +716,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="">Tindakan</label>
-                                                <input type="date" class="form-control mt-2 mb-2" name="tindakan_gigi"
-                                                    id="tindakan_gigi" placeholder="Tindakan">
+                                                <input type="date" class="form-control mt-2 mb-2"
+                                                    name="tindakan_gigi" id="tindakan_gigi" placeholder="Tindakan">
                                             </div>
                                         </div>
                                         {{-- PROSEDURE TINDAKAN --}}
@@ -721,16 +733,18 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="">Tanggal Rencana</label>
-                                                <input type="date" class="form-control mt-2 mb-2" name="tgl_rencana"
-                                                    id="tgl_rencana" placeholder="Prosedur Tindakan">
+                                                <input type="date" class="form-control mt-2 mb-2"
+                                                    name="tgl_rencana" id="tgl_rencana"
+                                                    placeholder="Prosedur Tindakan">
                                             </div>
                                         </div>
                                         {{-- LAMA TINDAKAN --}}
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="">Lama Tindakan</label>
-                                                <input type="text" class="form-control mt-2 mb-2" name="lama_tindakan"
-                                                    id="lama_tindakan" placeholder="Lama Tindakan">
+                                                <input type="text" class="form-control mt-2 mb-2"
+                                                    name="lama_tindakan" id="lama_tindakan"
+                                                    placeholder="Lama Tindakan">
                                             </div>
                                         </div>
                                         {{-- HASIL --}}
@@ -816,4 +830,4 @@
         </div>
     </div>
 
-@endsection
+</x-admin.layout.terminal>

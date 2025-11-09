@@ -89,7 +89,7 @@
                              <div class="form-group">
                                  <label for="">Umur</label>
                                  <p>
-                                     {{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }} Tahun
+                                     {{ Carbon::parse($item->booking->pasien->tgllahir)->age }} Tahun
                                  </p>
                              </div>
                          </div>
@@ -334,7 +334,7 @@
                                      <div class="form-group">
                                          <label for="">Umur</label>
                                          <input type="text"
-                                             value="{{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age . ' Tahun' }}"
+                                             value="{{ Carbon::parse($item->booking->pasien->tgllahir)->age . ' Tahun' }}"
                                              class="form-control mt-2 mb-2" readonly>
                                      </div>
                                  </div>

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Rekap Kunjungan Harian')
-@section('content')
+<x-admin.layout.terminal title="Rekap Kunjungan Harian">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -34,16 +32,17 @@
                                         <form method="GET" action="" class="row g-3 align-items-end">
                                             <div class="col-md-4">
                                                 <label for="start_date">Tanggal Awal</label>
-                                                <input type="date" name="start_date" id="start_date" class="form-control"
-                                                    value="{{ request()->query('start_date') }}">
+                                                <input type="date" name="start_date" id="start_date"
+                                                    class="form-control" value="{{ request()->query('start_date') }}">
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="end_date">Tanggal Akhir</label>
-                                                <input type="date" name="end_date" id="end_date" class="form-control"
-                                                    value="{{ request()->query('end_date') }}">
+                                                <input type="date" name="end_date" id="end_date"
+                                                    class="form-control" value="{{ request()->query('end_date') }}">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-end">
-                                                <button type="submit" class="btn btn-primary" style="margin-right: 10px">
+                                                <button type="submit" class="btn btn-primary"
+                                                    style="margin-right: 10px">
                                                     <i class="fa fa-search me-1"></i> Tampilkan
                                                 </button>
                                                 <a href="{{ route('perawat.rekap.harian') }}"
@@ -98,8 +97,9 @@
                                         <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
                                         <div class="d-flex align-items-center">
                                             <label for="entries" class="me-2">Tampilkan:</label>
-                                            <select name="entries" id="entries" class="form-select form-select-sm me-3"
-                                                style="width: 80px;" onchange="this.form.submit()">
+                                            <select name="entries" id="entries"
+                                                class="form-select form-select-sm me-3" style="width: 80px;"
+                                                onchange="this.form.submit()">
                                                 <option value="10">10
                                                 </option>
                                                 <option value="25">25
@@ -155,7 +155,8 @@
                                             <th class="custom-th" colspan="7" style="text-align: center">
                                                 PEMERIKSAAN (O)
                                             </th>
-                                            <th class="custom-th" colspan="2" style="text-align: center">DIAGNOSA (A)
+                                            <th class="custom-th" colspan="2" style="text-align: center">DIAGNOSA
+                                                (A)
                                                 ICD
                                                 X
                                             </th>
@@ -212,7 +213,8 @@
                                             @foreach ($harian as $item)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}
+                                                    </td>
                                                     <td>{{ $item->jam_datang }}</td>
                                                     <td>{{ $item->lama_daftar }}</td>
                                                     <td>{{ $item->jam_periksa }}</td>
@@ -275,39 +277,39 @@
         </div>
     </div>
 
-@endsection
+    @push('style')
+        <style>
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('style')
-    <style>
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
+    @push('script')
+        <script>
+            // jam dan tgl
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
-@push('script')
-    <script>
-        // jam dan tgl
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>
+    @endpush
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
-@endpush
+</x-admin.layout.terminal>

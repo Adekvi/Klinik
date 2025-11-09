@@ -18,40 +18,120 @@
                 </li>
 
                 <!-- Layouts -->
-                <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Main</li>
-                <li class="menu-item {{ Request::is('admin/master*') ? 'active open' : '' }}">
+                <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Master Data</li>
+                {{-- Data Poli --}}
+                <li class="menu-item {{ Request::is('admin/master/datapoli') ? 'active' : '' }}">
+                    <a href="{{ url('admin/master/datapoli') }}" class="menu-link">
+                        <i class="menu-icon tf-icons fa-solid fa-droplet"></i>
+                        <div>Data Poli</div>
+                    </a>
+                </li>
+
+                {{-- Data Dokter --}}
+                <li
+                    class="menu-item {{ Request::is('admin/master/datadokter') || Request::is('admin/master/user') || Request::is('admin/master/master-ttd') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons fa-solid fa-layer-group"></i>
-                        <div>Master Data</div>
+                        <i class="menu-icon tf-icons fa-solid fa-hospital-user"></i>
+                        <div>Data Dokter</div>
                     </a>
                     <ul class="menu-sub">
-                        @foreach ([
-        'datapoli' => 'Data Poli',
-        'datadokter' => 'Data Tenaga Medis',
-        'user' => 'Data Akses User',
-        'master-ttd' => 'Ttd Tenaga Medis',
-        'semuapasien' => 'Data Semua Pasien',
-        'pasienumum' => 'Data Pasien Umum',
-        'pasienbpjs' => 'Data Pasien BPJS',
-        'diagnosa' => 'Data Diagnosa',
-        'obat' => 'Data Obat',
-        'master-jenis' => 'Data Jenis Obat',
-        'master-anjuran' => 'Data Anjuran Minum',
-        'master-aturan' => 'Data Aturan Minum',
-        'master-margin' => 'Setting Margin',
-        'master-shift' => 'Data Shift',
-        'tindakan' => 'Data Tindakan Dokter',
-        'ppn' => 'Data Pajak',
-        'video' => 'Custom Video Antrian',
-        'poto' => 'Galeri Foto',
-        'pidio' => 'Galeri Video',
-    ] as $route => $name)
-                            <li class="menu-item {{ Request::is('admin/master/' . $route) ? 'active' : '' }}">
-                                <a href="{{ url('admin/master/' . $route) }}" class="menu-link">
-                                    <div>{{ $name }}</div>
-                                </a>
-                            </li>
-                        @endforeach
+                        <li class="menu-item {{ Request::is('admin/master/datadokter') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/datadokter') }}" class="menu-link">Data Tenaga Medis</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/user') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/user') }}" class="menu-link">Data Akses User</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/master-ttd') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/master-ttd') }}" class="menu-link">Ttd Tenaga Medis</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Data Pasien --}}
+                <li
+                    class="menu-item {{ Request::is('admin/master/semuapasien') || Request::is('admin/master/pasienumum') || Request::is('admin/master/pasienbpjs') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons fa-solid fa-user-nurse"></i>
+                        <div>Data Pasien</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ Request::is('admin/master/semuapasien') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/semuapasien') }}" class="menu-link">Data Semua Pasien</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/pasienumum') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/pasienumum') }}" class="menu-link">Data Pasien Umum</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/pasienbpjs') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/pasienbpjs') }}" class="menu-link">Data Pasien BPJS</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Data Diagnosa --}}
+                <li class="menu-item {{ Request::is('admin/master/diagnosa') ? 'active' : '' }}">
+                    <a href="{{ url('admin/master/diagnosa') }}" class="menu-link">
+                        <i class="menu-icon tf-icons fa-solid fa-book-medical"></i>
+                        <div>Data Diagnosa</div>
+                    </a>
+                </li>
+
+                {{-- Data Obat --}}
+                <li
+                    class="menu-item {{ Request::is('admin/master/obat') || Request::is('admin/master/master-jenis') || Request::is('admin/master/master-anjuran') || Request::is('admin/master/master-aturan') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons fa-solid fa-capsules"></i>
+                        <div>Data Obat</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ Request::is('admin/master/obat') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/obat') }}" class="menu-link">Data Obat</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/master-jenis') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/master-jenis') }}" class="menu-link">Data Jenis Obat</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/master-anjuran') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/master-anjuran') }}" class="menu-link">Data Anjuran Minum</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/master-aturan') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/master-aturan') }}" class="menu-link">Data Aturan Minum</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Data Margin & Pajak --}}
+                <li
+                    class="menu-item {{ Request::is('admin/master/master-margin') || Request::is('admin/master/ppn') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons fa-solid fa-receipt"></i>
+                        <div>Data Margin & Pajak</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ Request::is('admin/master/master-margin') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/master-margin') }}" class="menu-link">Data Setting Margin</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/ppn') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/ppn') }}" class="menu-link">Data Pajak</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Landing Page --}}
+                <li
+                    class="menu-item {{ Request::is('admin/master/video') || Request::is('admin/master/poto') || Request::is('admin/master/pidio') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons fa-solid fa-tv"></i>
+                        <div>Landing Page</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ Request::is('admin/master/video') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/video') }}" class="menu-link">Setting Antrian</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/poto') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/poto') }}" class="menu-link">Foto Kegiatan</a>
+                        </li>
+                        <li class="menu-item {{ Request::is('admin/master/pidio') ? 'active' : '' }}">
+                            <a href="{{ url('admin/master/pidio') }}" class="menu-link">Video Kegiatan</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -123,7 +203,8 @@
                         <div data-i18n="Account Settings">Rekapan Internal</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item {{ Request::is('admin/rekapan/pemeriksaan-lab/index') ? 'active' : '' }}">
+                        <li
+                            class="menu-item {{ Request::is('admin/rekapan/pemeriksaan-lab/index') ? 'active' : '' }}">
                             <a href="{{ url('admin/rekapan/pemeriksaan-lab/index') }}" class="menu-link">
                                 <div data-i18n="Without menu">Pemeriksaan Laborat</div>
                             </a>
@@ -316,7 +397,7 @@
                 <li class="menu-item {{ Request::is('dokter/periksa') ? 'active' : '' }}">
                     <a href="{{ url('dokter/periksa') }}"
                         class="menu-link {{ Request::is('dokter/periksa') ? 'active' : '' }}">
-                        <i class="menu-icon tf-icons fa-solid fa-bed-pulse"></i>
+                        <i class="menu-icon tf-icons fa-solid fa-vial-circle-check"></i>
                         <div data-i18n="Analytics">Data Pasien</div>
                     </a>
                 </li>
@@ -345,21 +426,42 @@
                         <div data-i18n="Analytics">Obat</div>
                     </a>
                 </li>
-
-                <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Master</li>
-                <li class="menu-item {{ Request::is('apoteker/masterObat') ? 'active' : '' }}">
-                    <a href="{{ url('apoteker/masterObat') }}"
-                        class="menu-link {{ Request::is('apoteker/masterObat') ? 'active' : '' }}">
-                        <i class="menu-icon tf-icons fa-solid fa-folder"></i>
-                        <div data-i18n="Analytics">Data Master Obat</div>
+                <li class="menu-item {{ Request::is('apoteker/pasien-dapat-obat') ? 'active' : '' }}">
+                    <a href="{{ url('apoteker/pasien-dapat-obat') }}"
+                        class="menu-link {{ Request::is('apoteker/pasien-dapat-obat') ? 'active' : '' }}">
+                        <i class="menu-icon tf-icons fa-solid fa-clipboard-user"></i>
+                        <div data-i18n="Analytics">Data Pasien</div>
                     </a>
                 </li>
-                <li class="menu-item {{ Request::is('apoteker/master-anjuran') ? 'active' : '' }}">
-                    <a href="{{ url('apoteker/master-anjuran') }}"
-                        class="menu-link {{ Request::is('apoteker/master-anjuran') ? 'active' : '' }}">
-                        <i class="menu-icon tf-icons fa-solid fa-file"></i>
-                        <div data-i18n="Analytics">Data Master Anjuran Minum</div>
+
+                <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Master</li>
+                <li class="menu-item {{ Request::is('apoteker/master-obat*') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons fa-solid fa-folder"></i>
+                        <div>Data Master Obat</div>
                     </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ Request::is('apoteker/master-obat/obat*') ? 'active' : '' }}">
+                            <a href="{{ url('apoteker/master-obat/obat') }}" class="menu-link">
+                                <div data-i18n="Without menu">Data Obat</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ Request::is('apoteker/master-obat/aturan*') ? 'active' : '' }}">
+                            <a href="{{ url('apoteker/master-obat/aturan') }}" class="menu-link">
+                                <div data-i18n="Without menu">Data Aturan</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ Request::is('apoteker/master-obat/anjuran*') ? 'active' : '' }}">
+                            <a href="{{ url('apoteker/master-obat/anjuran') }}" class="menu-link">
+                                <div data-i18n="Without menu">Data Anjuran</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ Request::is('apoteker/master-obat/jenis*') ? 'active' : '' }}">
+                            <a href="{{ url('apoteker/master-obat/jenis') }}" class="menu-link">
+                                <div data-i18n="Without menu">Data Jenis Obat</div>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <!-- Rekap -->
@@ -396,9 +498,9 @@
                 </li>
 
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Menu</li>
-                <li class="menu-item {{ Request::is('kasir/index') ? 'active' : '' }}">
+                <li class="menu-item {{ Request::is('kasir/*') ? 'active' : '' }}">
                     <a href="{{ url('kasir/index') }}"
-                        class="menu-link {{ Request::is('kasir/index') ? 'active' : '' }}">
+                        class="menu-link {{ Request::is('kasir/*') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
                         <div data-i18n="Analytics">Kasir</div>
                     </a>

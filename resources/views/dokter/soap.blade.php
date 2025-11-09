@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Asesmen')
-@section('content')
+<x-admin.layout.terminal title="Asesmen">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
@@ -18,8 +16,8 @@
                     <div class="card-header">
                         <div class="d-flex" style="gap: 5px">
                             <div class="kembali">
-                                <a href="{{ url('dokter/index') }}" class="btn btn-outline-primary" data-toggle="tooltip"
-                                    data-bs-placement="top" title="Kembali">
+                                <a href="{{ url('dokter/index/tampil') }}" class="btn btn-outline-primary"
+                                    data-toggle="tooltip" data-bs-placement="top" title="Kembali">
                                     <i class="fa-solid fa-backward"></i> Kembali
                                 </a>
                             </div>
@@ -62,7 +60,8 @@
                                         <li>
                                             @if ($fisik && $fisik->id)
                                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#riwayatGigi{{ $fisik->id }}">Riwayat Odontogram</a>
+                                                    data-bs-target="#riwayatGigi{{ $fisik->id }}">Riwayat
+                                                    Odontogram</a>
                                             @else
                                                 <a class="dropdown-item disabled" href="#"
                                                     aria-disabled="true">Riwayat Odontogram (Belum Ada)</a>
@@ -102,7 +101,8 @@
                                         </button>
                                     @else
                                         <span class="text-muted">
-                                            <i class="fas fa-circle-info text-success"></i>Periksa Gigi Odontogram terakhir
+                                            <i class="fas fa-circle-info text-success"></i>Periksa Gigi Odontogram
+                                            terakhir
                                             diisi:
                                             {{ $lastOdontogramTime->translatedFormat('H:i') }}</span>
                                     @endif
@@ -122,12 +122,14 @@
                                     <tr>
                                         <th scope="row" style="padding: 4px; text-align: left;">Nama Pasien</th>
                                         <td style="padding: 4px; width: 10px;">:</td>
-                                        <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->nama_pasien }}</td>
+                                        <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->nama_pasien }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row" style="padding: 4px; text-align: left;">Jenis Pasien</th>
                                         <td style="padding: 4px; width: 10px;">:</td>
-                                        <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->jenis_pasien }}</td>
+                                        <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->jenis_pasien }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row" style="padding: 4px; text-align: left;">Umur</th>
@@ -153,7 +155,8 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style="padding: 4px; text-align: left;">Alamat Domisili</th>
+                                        <th scope="row" style="padding: 4px; text-align: left;">Alamat Domisili
+                                        </th>
                                         <td style="padding: 4px; width: 10px;">:</td>
                                         <td style="padding: 4px;">{{ $antrianDokter->booking->pasien->domisili }}</td>
                                     </tr>
@@ -201,34 +204,29 @@
                                                             data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Edit SOAP</span>">
                                                             <button type="button" class="btn text-primary"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#editSoap{{ $soapTerbaru->id }}">
+                                                                data-bs-target="#editSoap{{ $item['id'] }}">
                                                                 <i class="fas fa-pen"></i>
                                                             </button>
                                                         </span>
+
+                                                        @include('dokter.modal.editSoap', [
+                                                            'item' => $item,
+                                                        ])
                                                     @endif
-                                                    @if ($fisik && $fisik->dokter && $fisik->dokter->poli)
+
+                                                    @if ($soapTerbaru && $item['id'] == $soapTerbaru->id && $fisik)
                                                         @if ($fisik->dokter->poli->namapoli == 'Umum')
-                                                            <!-- Tombol edit anatomi -->
-                                                            <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-offset="0,4" data-bs-html="true"
-                                                                data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Edit Anatomi</span>">
-                                                                <button type="button" class="btn text-warning"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#edittubuh{{ $fisik->id }}">
-                                                                    <i class="fa-solid fa-stethoscope"></i>
-                                                                </button>
-                                                            </span>
+                                                            <button type="button" class="btn text-warning"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#edittubuh{{ $fisik['id'] }}">
+                                                                <i class="fa-solid fa-stethoscope"></i>
+                                                            </button>
                                                         @elseif ($fisik->dokter->poli->namapoli == 'Gigi')
-                                                            <!-- Tombol edit odontogram -->
-                                                            <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-offset="0,4" data-bs-html="true"
-                                                                data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Edit Odontogram</span>">
-                                                                <button type="button" class="btn text-warning"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#editFisik{{ $fisik->id }}">
-                                                                    <i class="fa-solid fa-tooth"></i>
-                                                                </button>
-                                                            </span>
+                                                            <button type="button" class="btn text-warning"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editFisik{{ $fisik['id'] }}">
+                                                                <i class="fa-solid fa-tooth"></i>
+                                                            </button>
                                                         @endif
                                                     @endif
                                                 </td>
@@ -280,21 +278,24 @@
                                                                             <div
                                                                                 style="display: grid; grid-template-columns: 80px auto;">
                                                                                 <span>Suhu</span><span>:
-                                                                                    {{ $item['p_suhu'] ?? '-' }} °c</span>
+                                                                                    {{ $item['p_suhu'] ?? '-' }}
+                                                                                    °c</span>
                                                                             </div>
                                                                         </li>
                                                                         <li>
                                                                             <div
                                                                                 style="display: grid; grid-template-columns: 80px auto;">
                                                                                 <span>TB</span><span>:
-                                                                                    {{ $item['p_tb'] ?? '-' }} / cm</span>
+                                                                                    {{ $item['p_tb'] ?? '-' }} /
+                                                                                    cm</span>
                                                                             </div>
                                                                         </li>
                                                                         <li>
                                                                             <div
                                                                                 style="display: grid; grid-template-columns: 80px auto;">
                                                                                 <span>BB</span><span>:
-                                                                                    {{ $item['p_bb'] ?? '-' }} / kg</span>
+                                                                                    {{ $item['p_bb'] ?? '-' }} /
+                                                                                    kg</span>
                                                                             </div>
                                                                         </li>
                                                                     </ul>
@@ -365,27 +366,6 @@
                                                                             </ul>
                                                                         @endforeach
                                                                     @endif
-                                                                    {{-- @if (is_array($resep) && is_array($aturan) && count($resep) == count($aturan))
-                                                                        @foreach ($resep as $obat => $namaObat)
-                                                                            @php
-                                                                                $aturanMinum = $aturan[$obat] ?? '-';
-                                                                            @endphp
-                                                                            <ul>
-                                                                                <li>
-                                                                                    <div
-                                                                                        style="display: grid; grid-template-columns: 200px 20px auto; gap: 5px;">
-                                                                                        <span>{{ $namaObat ?? '-' }}</span>
-                                                                                        <span>-</span>
-                                                                                        <span>{{ $aturanMinum ?? '-' }}</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                            </ul>
-                                                                        @endforeach
-                                                                    @else
-                                                                        <ul>
-                                                                            <li>Tidak Ada Resep Non Racikan</li>
-                                                                        </ul>
-                                                                    @endif --}}
                                                                     <p style="font-weight: bold; margin-bottom: -0px">
                                                                         - Racikan
                                                                     </p>
@@ -414,7 +394,6 @@
 
     {{-- SOAP --}}
     @include('dokter.modal.modalSoap')
-    @include('dokter.modal.editSoap')
 
     {{-- DOOKTER UMUM --}}
     @include('dokter.umum.tubuh')
@@ -429,139 +408,140 @@
     {{-- RIWAYAT --}}
     @include('dokter.modal.riwayatPasien')
 
-@endsection
+    @push('style')
+        <style>
+            .table th,
+            .table td {
+                padding: 5px 5px;
+                /* Mengurangi padding */
+                margin: 0;
+                /* Menghapus margin */
+                line-height: 1.5;
+                /* Mengurangi tinggi baris */
+            }
 
-@push('style')
-    <style>
-        .table th,
-        .table td {
-            padding: 5px 5px;
-            /* Mengurangi padding */
-            margin: 0;
-            /* Menghapus margin */
-            line-height: 1.5;
-            /* Mengurangi tinggi baris */
-        }
+            .table th {
+                vertical-align: top;
+                /* Menyelaraskan teks ke atas untuk header kolom */
+            }
 
-        .table th {
-            vertical-align: top;
-            /* Menyelaraskan teks ke atas untuk header kolom */
-        }
+            .table td {
+                vertical-align: top;
+                /* Menyelaraskan teks ke atas untuk sel */
+            }
 
-        .table td {
-            vertical-align: top;
-            /* Menyelaraskan teks ke atas untuk sel */
-        }
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
-@push('script')
-    <script src="{{ asset('assets/js/script.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @push('script')
+        <script src="{{ asset('assets/js/script.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        // jam dan tanggal
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+        <script>
+            // jam dan tanggal
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
 
-        // Get the input fields
-        var gcs_e = document.getElementById('gcs_e');
-        var gcs_m = document.getElementById('gcs_m');
-        var gcs_v = document.getElementById('gcs_v');
-        var gcs_total = document.getElementById('gcs_total');
+            // Get the input fields
+            var gcs_e = document.getElementById('gcs_e');
+            var gcs_m = document.getElementById('gcs_m');
+            var gcs_v = document.getElementById('gcs_v');
+            var gcs_total = document.getElementById('gcs_total');
 
-        // Function to calculate the total GCS score
-        function calculateTotal() {
-            var e = parseFloat(gcs_e.value) || 0;
-            var m = parseFloat(gcs_m.value) || 0;
-            var v = parseFloat(gcs_v.value) || 0;
+            // Function to calculate the total GCS score
+            function calculateTotal() {
+                var e = parseFloat(gcs_e.value) || 0;
+                var m = parseFloat(gcs_m.value) || 0;
+                var v = parseFloat(gcs_v.value) || 0;
 
-            // Calculate the sum of E, M, and V
-            var totalInput = e + m + v;
+                // Calculate the sum of E, M, and V
+                var totalInput = e + m + v;
 
-            // Check if any input is missing (i.e. if any value is 0)
-            if (e === 0 || m === 0 || v === 0) {
-                gcs_total.textContent = totalInput; // Set total to the actual sum of the inputs
-            } else {
-                // If all inputs are filled, normalize to 15
-                if (totalInput !== 15) {
-                    var ratio = 15 / totalInput;
-                    e = e * ratio;
-                    m = m * ratio;
-                    v = v * ratio;
-                    totalInput = 15; // Normalize the total to 15
+                // Check if any input is missing (i.e. if any value is 0)
+                if (e === 0 || m === 0 || v === 0) {
+                    gcs_total.textContent = totalInput; // Set total to the actual sum of the inputs
+                } else {
+                    // If all inputs are filled, normalize to 15
+                    if (totalInput !== 15) {
+                        var ratio = 15 / totalInput;
+                        e = e * ratio;
+                        m = m * ratio;
+                        v = v * ratio;
+                        totalInput = 15; // Normalize the total to 15
+                    }
+                    gcs_total.textContent = 15; // Always display 15 when all inputs are valid
                 }
-                gcs_total.textContent = 15; // Always display 15 when all inputs are valid
             }
-        }
 
-        // Listen for input changes and recalculate total
-        gcs_e.addEventListener('input', calculateTotal);
-        gcs_m.addEventListener('input', calculateTotal);
-        gcs_v.addEventListener('input', calculateTotal);
+            // Listen for input changes and recalculate total
+            gcs_e.addEventListener('input', calculateTotal);
+            gcs_m.addEventListener('input', calculateTotal);
+            gcs_v.addEventListener('input', calculateTotal);
 
-        // Initial calculation
-        calculateTotal();
+            // Initial calculation
+            calculateTotal();
 
-        // Mendapatkan nilai tinggi badan dan berat badan dari inputan
-        var tbInput = document.getElementById('tb');
-        var bbInput = document.getElementById('bb');
-        var imtInput = document.getElementById('p_imt');
+            // Mendapatkan nilai tinggi badan dan berat badan dari inputan
+            var tbInput = document.getElementById('tb');
+            var bbInput = document.getElementById('bb');
+            var imtInput = document.getElementById('p_imt');
 
-        // Event listener untuk menghitung IMT setiap kali input berubah
-        tbInput.addEventListener('input', hitungIMT);
-        bbInput.addEventListener('input', hitungIMT);
+            // Event listener untuk menghitung IMT setiap kali input berubah
+            tbInput.addEventListener('input', hitungIMT);
+            bbInput.addEventListener('input', hitungIMT);
 
-        function hitungIMT() {
-            // Mengambil nilai tinggi badan dan berat badan dari inputan
-            var tb = parseFloat(tbInput.value);
-            var bb = parseFloat(bbInput.value);
+            function hitungIMT() {
+                // Mengambil nilai tinggi badan dan berat badan dari inputan
+                var tb = parseFloat(tbInput.value);
+                var bb = parseFloat(bbInput.value);
 
-            // Memastikan bahwa tinggi badan dan berat badan valid
-            if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
-                // Menghitung IMT
-                var imt = bb / ((tb / 100) * (tb / 100));
-                // Menetapkan nilai IMT ke inputan IMT
-                imtInput.value = imt.toFixed(2); // Memformat menjadi dua desimal
-            } else {
-                // Jika ada input yang tidak valid, atur nilai IMT menjadi kosong
-                imtInput.value = '';
+                // Memastikan bahwa tinggi badan dan berat badan valid
+                if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
+                    // Menghitung IMT
+                    var imt = bb / ((tb / 100) * (tb / 100));
+                    // Menetapkan nilai IMT ke inputan IMT
+                    imtInput.value = imt.toFixed(2); // Memformat menjadi dua desimal
+                } else {
+                    // Jika ada input yang tidak valid, atur nilai IMT menjadi kosong
+                    imtInput.value = '';
+                }
             }
-        }
 
-        // modal close
-        document.addEventListener('DOMContentLoaded', (event) => {
-            console.log("DOM fully loaded and parsed");
+            // modal close
+            document.addEventListener('DOMContentLoaded', (event) => {
+                console.log("DOM fully loaded and parsed");
 
-            // Event listener untuk tombol close
-            const closeModalButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
-            closeModalButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    console.log("Close button clicked");
+                // Event listener untuk tombol close
+                const closeModalButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
+                closeModalButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        console.log("Close button clicked");
+                    });
                 });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

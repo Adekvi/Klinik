@@ -1,5 +1,5 @@
 @if ($soapTerbaru)
-    <div class="modal fade" id="editSoap{{ $soapTerbaru->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    <div class="modal fade" id="editSoap{{ $soapTerbaru['id'] }}" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -10,8 +10,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('soap/update/' . $soapTerbaru->id) }}" method="post"
-                        enctype="multipart/form-data">
+                    <form action="{{ route('soap.update', ['id' => $id, 'soap_id' => $soapTerbaru->id]) }}"
+                        method="POST" enctype="multipart/form-data" class="text-start edit-soap-form"
+                        id="edit-soap-form-{{ $soapTerbaru->id }}">
                         @csrf
                         @method('PUT')
                         <div class="row">
@@ -585,208 +586,272 @@
                             </div>
                         </div>
                         <div class="form-group mt-3 mb-2">
-                            <div class="resep" id="edit-resep">
-                                @php
-                                    $allResep = is_array($resep) ? array_filter($resep) : [];
-                                    $allJenis = is_array($resepJenis) ? array_filter($resepJenis) : [];
-                                    $allAturan = is_array($resepAturan) ? array_filter($resepAturan) : [];
-                                    $allAnjuran = is_array($resepAnjuran) ? array_filter($resepAnjuran) : [];
-                                    $allJumlah = is_array($resepJumlah) ? array_filter($resepJumlah) : [];
-                                    $entryCount = max(
-                                        count($allResep),
-                                        count($allJenis),
-                                        count($allAturan),
-                                        count($allAnjuran),
-                                        count($allJumlah)
-                                    );
-                                    $entryCount = max($entryCount, 1);
-                                @endphp
-
-                                @for ($index = 0; $index < $entryCount; $index++)
-                                    <label for="soap_p_{{ $index }}"
-                                        style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;"
-                                        onclick="toggleObatContainer()">
-                                        Pilih Obat (P) {{ $index + 1 }}
-                                    </label>
-
-                                    <div class="entry-group" id="edit-entry_{{ $index }}">
-                                        <!-- Nama Obat -->
-                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-resep_{{ $index }}" style="min-width: 100px;">Nama Obat</label>
-                                            <span>:</span>
-                                            <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control" data-input-id="edit-resep_{{ $index }}">
-                                                    <div class="selected-tags" id="edit-resep_{{ $index }}_tags">
-                                                        @if (isset($allResep[$index]))
-                                                            @foreach (explode(',', $allResep[$index]) as $obat)
-                                                                @if (!empty($obat))
-                                                                    <span class="tag" data-value="{{ $obat }}">
-                                                                        {{ $obat }}
-                                                                        <i class="fas fa-times remove-tag"></i>
-                                                                    </span>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    <input type="text" class="autocomplete-input multi-select-input"
-                                                        id="edit-resep_{{ $index }}" placeholder="Cari Obat" autocomplete="off"
-                                                        data-url="{{ url('/resep-autocomplete') }}"
-                                                        data-dropdown="edit-dropdown-resep_{{ $index }}">
-                                                </div>
-                                                <input type="hidden" name="soap_p[{{ $index }}][resep]"
-                                                    id="edit-resep_{{ $index }}_hidden"
-                                                    value="{{ $allResep[$index] ?? '' }}">
-                                                <div id="edit-dropdown-resep_{{ $index }}" class="dropdown-menu autocomplete-dropdown"></div>
-                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                    *Bisa memilih lebih dari 1 obat
-                                                </p>
+                            <div class="resep" id="edit-resep-{{ $soapTerbaru->id }}">
+                                <!-- Nama Obat -->
+                                <div class="input-row" id="edit-namaObatContainer-{{ $soapTerbaru->id }}">
+                                    <label for="edit-resep_{{ $soapTerbaru->id }}_0" style="min-width: 100px;">Nama
+                                        Obat</label>
+                                    <span>:</span>
+                                    <div class="input-wrapper">
+                                        <div class="multi-select-wrapper form-control"
+                                            data-input-id="edit-resep_{{ $soapTerbaru->id }}_0">
+                                            <div class="selected-tags"
+                                                id="edit-resep_{{ $soapTerbaru->id }}_0_tags">
+                                                @foreach ($resep as $index => $nama_obat)
+                                                    @php
+                                                        $obat = App\Models\Resep::where(
+                                                            'nama_obat',
+                                                            $nama_obat,
+                                                        )->first();
+                                                        $obatId = $obat ? $obat->id : '';
+                                                    @endphp
+                                                    @if ($obatId)
+                                                        <span class="tag" data-value="{{ $obatId }}"
+                                                            data-text="{{ $nama_obat }}">
+                                                            {{ $nama_obat }}
+                                                            <span class="remove-tag">×</span>
+                                                        </span>
+                                                    @endif
+                                                @endforeach
                                             </div>
+                                            <input type="text" class="autocomplete-input multi-select-input"
+                                                id="edit-resep_{{ $soapTerbaru->id }}_0" placeholder="Cari Obat"
+                                                autocomplete="off" data-url="{{ url('/resep-autocomplete') }}"
+                                                data-dropdown="edit-dropdown-resep_{{ $soapTerbaru->id }}_0">
                                         </div>
-
-                                        <!-- Jenis Obat -->
-                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-jenis_obat_{{ $index }}" style="min-width: 100px;">Jenis Obat</label>
-                                            <span>:</span>
-                                            <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_{{ $index }}">
-                                                    <div class="selected-tags" id="edit-jenis_obat_{{ $index }}_tags">
-                                                        @if (isset($allJenis[$index]))
-                                                            @foreach (explode(',', $allJenis[$index]) as $jenis)
-                                                                @if (!empty($jenis))
-                                                                    <span class="tag" data-value="{{ $jenis }}">
-                                                                        {{ $jenis }}
-                                                                        <i class="fas fa-times remove-tag"></i>
-                                                                    </span>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    <input type="text" class="autocomplete-input multi-select-input"
-                                                        id="edit-jenis_obat_{{ $index }}" placeholder="Cari Jenis Obat" autocomplete="off"
-                                                        data-url="{{ url('jenis-autocomplete') }}"
-                                                        data-dropdown="edit-dropdown-jenis_obat_{{ $index }}">
-                                                </div>
-                                                <input type="hidden" name="soap_p[{{ $index }}][jenisobat]"
-                                                    id="edit-jenis_obat_{{ $index }}_hidden"
-                                                    value="{{ $allJenis[$index] ?? '' }}">
-                                                <div id="edit-dropdown-jenis_obat_{{ $index }}" class="dropdown-menu autocomplete-dropdown"></div>
-                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                    *Bisa memilih lebih dari 1 jenis obat
-                                                </p>
-                                            </div>
+                                        <div class="hidden-inputs"
+                                            id="edit-resep_{{ $soapTerbaru->id }}_0_hidden_inputs">
+                                            @foreach ($resep as $index => $nama_obat)
+                                                @php
+                                                    $obat = App\Models\Resep::where('nama_obat', $nama_obat)->first();
+                                                    $obatId = $obat ? $obat->id : '';
+                                                @endphp
+                                                @if ($obatId)
+                                                    <input type="hidden"
+                                                        name="soap_p[{{ $soapTerbaru->id }}][resep][]"
+                                                        value="{{ $obatId }}">
+                                                @endif
+                                            @endforeach
                                         </div>
-
-                                        <!-- Aturan Pakai -->
-                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-aturan_{{ $index }}" style="min-width: 100px">Aturan Pakai</label>
-                                            <span>:</span>
-                                            <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_{{ $index }}">
-                                                    <div class="selected-tags" id="edit-aturan_{{ $index }}_tags">
-                                                        @if (isset($allAturan[$index]))
-                                                            @foreach (explode(',', $allAturan[$index]) as $aturan)
-                                                                @if (!empty($aturan))
-                                                                    <span class="tag" data-value="{{ $aturan }}">
-                                                                        {{ $aturan }}
-                                                                        <i class="fas fa-times remove-tag"></i>
-                                                                    </span>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    <input type="text" class="autocomplete-input multi-select-input"
-                                                        id="edit-aturan_{{ $index }}" placeholder="Cari Aturan Pakai" autocomplete="off"
-                                                        data-url="{{ url('aturan-autocomplete') }}"
-                                                        data-dropdown="edit-dropdown-aturan_{{ $index }}">
-                                                </div>
-                                                <input type="hidden" name="soap_p[{{ $index }}][aturan]"
-                                                    id="edit-aturan_{{ $index }}_hidden"
-                                                    value="{{ $allAturan[$index] ?? '' }}">
-                                                <div id="edit-dropdown-aturan_{{ $index }}" class="dropdown-menu autocomplete-dropdown"></div>
-                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                    *Bisa memilih lebih dari 1 aturan pakai
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Anjuran Minum -->
-                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-anjuran_{{ $index }}" style="min-width: 100px">Anjuran Minum</label>
-                                            <span>:</span>
-                                            <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_{{ $index }}">
-                                                    <div class="selected-tags" id="edit-anjuran_{{ $index }}_tags">
-                                                        @if (isset($allAnjuran[$index]))
-                                                            @foreach (explode(',', $allAnjuran[$index]) as $anjuran)
-                                                                @if (!empty($anjuran))
-                                                                    <span class="tag" data-value="{{ $anjuran }}">
-                                                                        {{ $anjuran }}
-                                                                        <i class="fas fa-times remove-tag"></i>
-                                                                    </span>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    <input type="text" class="autocomplete-input multi-select-input"
-                                                        id="edit-anjuran_{{ $index }}" placeholder="Cari Anjuran Minum" autocomplete="off"
-                                                        data-url="{{ url('anjuran-autocomplete') }}"
-                                                        data-dropdown="edit-dropdown-anjuran_{{ $index }}">
-                                                </div>
-                                                <input type="hidden" name="soap_p[{{ $index }}][anjuran]"
-                                                    id="edit-anjuran_{{ $index }}_hidden"
-                                                    value="{{ $allAnjuran[$index] ?? '' }}">
-                                                <div id="edit-dropdown-anjuran_{{ $index }}" class="dropdown-menu autocomplete-dropdown"></div>
-                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                    *Bisa memilih lebih dari 1 anjuran minum
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Jumlah -->
-                                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                                            <label for="edit-jumlah_{{ $index }}" style="min-width: 100px">Jumlah</label>
-                                            <span>:</span>
-                                            <div class="input-wrapper">
-                                                <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_{{ $index }}">
-                                                    <div class="selected-tags" id="edit-jumlah_{{ $index }}_tags">
-                                                        @if (isset($allJumlah[$index]))
-                                                            @foreach (explode(',', $allJumlah[$index]) as $jml)
-                                                                @if (!empty($jml))
-                                                                    <span class="tag" data-value="{{ $jml }}">
-                                                                        {{ $jml }}
-                                                                        <i class="fas fa-times remove-tag"></i>
-                                                                    </span>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    <input type="number" class="multi-select-input jumlah-input"
-                                                        id="edit-jumlah_{{ $index }}" placeholder="Masukkan Jumlah" min="1">
-                                                </div>
-                                                <input type="hidden" name="soap_p[{{ $index }}][jumlah]"
-                                                    id="edit-jumlah_{{ $index }}_hidden"
-                                                    value="{{ $allJumlah[$index] ?? '' }}">
-                                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                                    *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!-- Tombol Hapus Entri -->
-                                        @if ($index > 0)
-                                            <button type="button" onclick="editRemoveColumn(this)" class="btn btn-danger mt-2">Hapus Obat</button>
-                                        @endif
+                                        <div id="edit-dropdown-resep_{{ $soapTerbaru->id }}_0"
+                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                            *Bisa memilih lebih dari 1 obat
+                                        </p>
                                     </div>
-                                @endfor
-
-                                <!-- Tombol Tambah Kolom -->
-                                <button type="button" onclick="editAddColumn()" class="btn btn-primary mt-2">Tambah Obat</button>
-
-                                <label for=""
-                                    style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; width: 100%; cursor: pointer"
-                                    onclick="toggleRacikanContainer()">Resep Racikan</label>
-                                <div class="racikan" id="edit-resepRacikan">
-                                    <textarea name="ObatRacikan" id="edit-ObatRacikan" cols="30" rows="5" class="form-control mb-2 mt-2">{{ $soapTerbaru->ObatRacikan ?? '' }}</textarea>
                                 </div>
+                                <!-- Jenis Obat -->
+                                <div class="input-row" id="edit-jenisObatContainer-{{ $soapTerbaru->id }}">
+                                    <label for="edit-jenis_{{ $soapTerbaru->id }}_0" style="min-width: 100px;">Jenis
+                                        Obat</label>
+                                    <span>:</span>
+                                    <div class="input-wrapper">
+                                        <div class="multi-select-wrapper form-control"
+                                            data-input-id="edit-jenis_{{ $soapTerbaru->id }}_0">
+                                            <div class="selected-tags"
+                                                id="edit-jenis_{{ $soapTerbaru->id }}_0_tags">
+                                                @foreach ($resepJenis as $index => $jenis)
+                                                    @php
+                                                        $jenisObat = App\Models\Jenisobat::where(
+                                                            'jenis',
+                                                            $jenis,
+                                                        )->first();
+                                                        $jenisId = $jenisObat ? $jenisObat->id : '';
+                                                    @endphp
+                                                    @if ($jenisId)
+                                                        <span class="tag" data-value="{{ $jenisId }}"
+                                                            data-text="{{ $jenis }}">
+                                                            {{ $jenis }}
+                                                            <span class="remove-tag">×</span>
+                                                        </span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            <input type="text" class="autocomplete-input multi-select-input"
+                                                id="edit-jenis_{{ $soapTerbaru->id }}_0"
+                                                placeholder="Cari Jenis Obat" autocomplete="off"
+                                                data-url="{{ url('/jenis-autocomplete') }}"
+                                                data-dropdown="edit-dropdown-jenis_{{ $soapTerbaru->id }}_0">
+                                        </div>
+                                        <div class="hidden-inputs"
+                                            id="edit-jenis_{{ $soapTerbaru->id }}_0_hidden_inputs">
+                                            @foreach ($resepJenis as $index => $jenis)
+                                                @php
+                                                    $jenisObat = App\Models\Jenisobat::where('jenis', $jenis)->first();
+                                                    $jenisId = $jenisObat ? $jenisObat->id : '';
+                                                @endphp
+                                                @if ($jenisId)
+                                                    <input type="hidden"
+                                                        name="soap_p[{{ $soapTerbaru->id }}][jenis][]"
+                                                        value="{{ $jenisId }}">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <div id="edit-dropdown-jenis_{{ $soapTerbaru->id }}_0"
+                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                            *Bisa memilih lebih dari 1 jenis obat
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Aturan Pakai -->
+                                <div class="input-row" id="edit-aturanContainer-{{ $soapTerbaru->id }}">
+                                    <label for="edit-aturan_{{ $soapTerbaru->id }}_0"
+                                        style="min-width: 100px">Aturan Pakai</label>
+                                    <span>:</span>
+                                    <div class="input-wrapper">
+                                        <div class="multi-select-wrapper form-control"
+                                            data-input-id="edit-aturan_{{ $soapTerbaru->id }}_0">
+                                            <div class="selected-tags"
+                                                id="edit-aturan_{{ $soapTerbaru->id }}_0_tags">
+                                                @foreach ($resepAturan as $index => $aturan)
+                                                    @php
+                                                        $aturanModel = App\Models\Aturan::where(
+                                                            'aturan_minum',
+                                                            $aturan,
+                                                        )->first();
+                                                        $aturanId = $aturanModel ? $aturanModel->id : '';
+                                                    @endphp
+                                                    @if ($aturanId)
+                                                        <span class="tag" data-value="{{ $aturanId }}"
+                                                            data-text="{{ $aturan }}">
+                                                            {{ $aturan }}
+                                                            <span class="remove-tag">×</span>
+                                                        </span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            <input type="text" class="autocomplete-input multi-select-input"
+                                                id="edit-aturan_{{ $soapTerbaru->id }}_0"
+                                                placeholder="Cari Aturan Pakai" autocomplete="off"
+                                                data-url="{{ url('/aturan-autocomplete') }}"
+                                                data-dropdown="edit-dropdown-aturan_{{ $soapTerbaru->id }}_0">
+                                        </div>
+                                        <div class="hidden-inputs"
+                                            id="edit-aturan_{{ $soapTerbaru->id }}_0_hidden_inputs">
+                                            @foreach ($resepAturan as $index => $aturan)
+                                                @php
+                                                    $aturanModel = App\Models\Aturan::where(
+                                                        'aturan_minum',
+                                                        $aturan,
+                                                    )->first();
+                                                    $aturanId = $aturanModel ? $aturanModel->id : '';
+                                                @endphp
+                                                @if ($aturanId)
+                                                    <input type="hidden"
+                                                        name="soap_p[{{ $soapTerbaru->id }}][aturan][]"
+                                                        value="{{ $aturanId }}">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <div id="edit-dropdown-aturan_{{ $soapTerbaru->id }}_0"
+                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                            *Bisa memilih lebih dari 1 aturan pakai
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Anjuran Minum -->
+                                <div class="input-row" id="edit-anjuranMinumContainer-{{ $soapTerbaru->id }}">
+                                    <label for="edit-anjuran_{{ $soapTerbaru->id }}_0"
+                                        style="min-width: 100px">Anjuran Minum</label>
+                                    <span>:</span>
+                                    <div class="input-wrapper">
+                                        <div class="multi-select-wrapper form-control"
+                                            data-input-id="edit-anjuran_{{ $soapTerbaru->id }}_0">
+                                            <div class="selected-tags"
+                                                id="edit-anjuran_{{ $soapTerbaru->id }}_0_tags">
+                                                @foreach ($resepAnjuran as $index => $anjuran)
+                                                    @php
+                                                        $anjuranModel = App\Models\Anjuran::where(
+                                                            'kode_anjuran',
+                                                            $anjuran,
+                                                        )->first();
+                                                        $anjuranId = $anjuranModel ? $anjuranModel->id : '';
+                                                    @endphp
+                                                    @if ($anjuranId)
+                                                        <span class="tag" data-value="{{ $anjuranId }}"
+                                                            data-text="{{ $anjuran }}">
+                                                            {{ $anjuran }}
+                                                            <span class="remove-tag">×</span>
+                                                        </span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            <input type="text" class="autocomplete-input multi-select-input"
+                                                id="edit-anjuran_{{ $soapTerbaru->id }}_0"
+                                                placeholder="Cari Anjuran Minum" autocomplete="off"
+                                                data-url="{{ url('/anjuran-autocomplete') }}"
+                                                data-dropdown="edit-dropdown-anjuran_{{ $soapTerbaru->id }}_0">
+                                        </div>
+                                        <div class="hidden-inputs"
+                                            id="edit-anjuran_{{ $soapTerbaru->id }}_0_hidden_inputs">
+                                            @foreach ($resepAnjuran as $index => $anjuran)
+                                                @php
+                                                    $anjuranModel = App\Models\Anjuran::where(
+                                                        'kode_anjuran',
+                                                        $anjuran,
+                                                    )->first();
+                                                    $anjuranId = $anjuranModel ? $anjuranModel->id : '';
+                                                @endphp
+                                                @if ($anjuranId)
+                                                    <input type="hidden"
+                                                        name="soap_p[{{ $soapTerbaru->id }}][anjuran][]"
+                                                        value="{{ $anjuranId }}">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <div id="edit-dropdown-anjuran_{{ $soapTerbaru->id }}_0"
+                                            class="dropdown-menu autocomplete-dropdown"></div>
+                                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                            *Bisa memilih lebih dari 1 anjuran minum
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Jumlah Masing-masing Obat -->
+                                <div class="input-row" id="edit-jumlahObatContainer-{{ $soapTerbaru->id }}">
+                                    <label for="edit-jumlah_{{ $soapTerbaru->id }}_0"
+                                        style="min-width: 100px">Jumlah</label>
+                                    <span>:</span>
+                                    <div class="input-wrapper">
+                                        <div class="multi-select-wrapper form-control"
+                                            data-input-id="edit-jumlah_{{ $soapTerbaru->id }}_0">
+                                            <div class="selected-tags"
+                                                id="edit-jumlah_{{ $soapTerbaru->id }}_0_tags">
+                                                @foreach ($resepJumlah as $jumlah)
+                                                    @if ($jumlah && is_numeric($jumlah) && $jumlah > 0)
+                                                        <span class="tag" data-value="{{ $jumlah }}"
+                                                            data-text="{{ $jumlah }}">
+                                                            {{ $jumlah }}
+                                                            <span class="remove-tag">×</span>
+                                                        </span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            <input type="number" class="multi-select-input jumlah-input"
+                                                id="edit-jumlah_{{ $soapTerbaru->id }}_0"
+                                                placeholder="Masukkan Jumlah" min="1">
+                                        </div>
+                                        <div class="hidden-inputs"
+                                            id="edit-jumlah_{{ $soapTerbaru->id }}_0_hidden_inputs">
+                                            @foreach ($resepJumlah as $jumlah)
+                                                @if ($jumlah && is_numeric($jumlah) && $jumlah > 0)
+                                                    <input type="hidden"
+                                                        name="soap_p[{{ $soapTerbaru->id }}][jumlah][]"
+                                                        value="{{ $jumlah }}">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <p class="text-warning" style="font-style: italic; font-size: 12px">
+                                            *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label for="">Resep Racikan</label>
+                            <div class="racikan" id="edit-resepRacikan">
+                                <textarea name="ObatRacikan" id="edit-ObatRacikan" cols="30" rows="5" class="form-control mb-2 mt-2">{{ $soapTerbaru->ObatRacikan }}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -825,10 +890,9 @@
             flex-grow: 1;
         }
 
-        .dropdown-menu-autocomplete {
+        .autocomplete-dropdown {
             position: absolute;
             top: 100%;
-            /* Dropdown akan muncul tepat di bawah input */
             left: 0;
             z-index: 1000 !important;
             width: 100%;
@@ -843,7 +907,6 @@
             display: none;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             margin-top: 2px;
-            /* Sedikit jarak dari input */
         }
 
         /* Pastikan row tidak memotong dropdown */
@@ -1015,7 +1078,8 @@
             initializeEditSoap();
 
             // Ambil RM ID dengan fallback (handle null di PHP: @if ($soapTerbaru && $soapTerbaru->rm) {{ $soapTerbaru->rm->id }} @else 0 @endif
-            const rmId = {{ $soapTerbaru && $soapTerbaru->rm ? $soapTerbaru->rm->id : 'null' }};
+            // const rmId = {{ $soapTerbaru && $soapTerbaru->rm ? $soapTerbaru->rm->id : 'null' }};
+            const rmId = @json(optional($soapTerbaru->rm)->id);
 
             // Tambahkan event listener untuk semua select yang memicu toggle
             const selects = document.querySelectorAll(
@@ -1064,9 +1128,10 @@
             });
         }
 
-        // DIAGNOSA - Versi yang diperbaiki
         document.addEventListener('DOMContentLoaded', function() {
+            // Fungsi untuk menampilkan dropdown diagnosa
             function showDiagnosaDropdown(inputElement, dropdownElement, results) {
+                if (!dropdownElement) return; // Keluar jika dropdown tidak ada
                 dropdownElement.innerHTML = '';
                 if (results.length === 0) {
                     dropdownElement.style.display = 'none';
@@ -1094,6 +1159,7 @@
                 console.log(`[Diagnosa] Menampilkan ${results.length} hasil saran`);
             }
 
+            // Fungsi untuk mencari diagnosa
             function searchDiagnosa(term, callback) {
                 if (term.length < 1) {
                     callback([]);
@@ -1101,7 +1167,6 @@
                 }
 
                 console.log(`[Diagnosa] Mencari: "${term}"`);
-
                 fetch(`/search-diagnosa?term=${encodeURIComponent(term)}`)
                     .then(response => {
                         if (!response.ok) {
@@ -1119,6 +1184,7 @@
                     });
             }
 
+            // Inisialisasi autocomplete diagnosa
             function initDiagnosaAutocomplete(prefix, dropdownPrefix) {
                 const inputs = document.querySelectorAll(`[id^="${prefix}"]`);
                 inputs.forEach(input => {
@@ -1146,7 +1212,7 @@
                             }
                         });
 
-                        input.dataset.autocompleteInitialized = 'true'; // Tandai sebagai diinisialisasi
+                        input.dataset.autocompleteInitialized = 'true';
                         console.log(`[Diagnosa] Diinisialisasi input: ${input.id}`);
                     }
                 });
@@ -1156,7 +1222,7 @@
             initDiagnosaAutocomplete('soap_a_', 'dropdown-diagnosa-primer-');
             initDiagnosaAutocomplete('soap_a_b_', 'dropdown-diagnosa-sekunder-');
 
-            // Satu event listener global untuk sembunyikan dropdown saat klik di luar
+            // Sembunyikan dropdown saat klik di luar
             document.addEventListener('click', function(e) {
                 const allInputs = document.querySelectorAll('.soap_a, .soap_a_b');
                 const allDropdowns = document.querySelectorAll('.diagnosa-dropdown');
@@ -1175,231 +1241,309 @@
             });
         });
 
-        // RESEP OBAT
-        document.addEventListener('DOMContentLoaded', function() {
-            function initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues = []) {
-                const input = document.getElementById(inputId);
-                const hiddenInput = document.getElementById(hiddenInputId);
-                const dropdown = document.getElementById(dropdownId);
-                const tagsContainer = document.getElementById(`${inputId}_tags`);
-                let selectedValues = existingValues.length ? existingValues : hiddenInput.value ? hiddenInput.value.split(',').filter(v => v.trim()) : [];
+        $(document).ready(function() {
+            console.log('[document.ready] Script autocomplete dan jumlah dimuat untuk edit.');
 
-                // Sinkronisasi selectedValues dengan tag yang ada di HTML
-                selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value => value);
+            // Inisialisasi saat modal ditampilkan
+            $('div[id^="editSoap"]').on('shown.bs.modal', function() {
+                const modalId = this.id;
+                console.log('[modal.shown] Menginisialisasi input di modal:', modalId);
+                initializeAllInputs(modalId);
+            });
 
-                // Update hidden input berdasarkan selectedValues
+            function initializeAllInputs(modalId) {
+                $(`#${modalId} .autocomplete-input`).each(function() {
+                    initializeAutocomplete($(this));
+                });
+                $(`#${modalId} .jumlah-input`).each(function() {
+                    initializeJumlahInput($(this));
+                });
+            }
+
+            function initializeAutocomplete($input) {
+                const inputId = $input.attr('id');
+                const url = $input.data('url');
+                const dropdownId = $input.data('dropdown');
+                const $dropdown = $(`#${dropdownId}`);
+                const $wrapper = $input.closest('.multi-select-wrapper');
+                const $tagsContainer = $wrapper.find('.selected-tags');
+                const $hiddenInputsContainer = $(`#${inputId}_hidden_inputs`);
+                const soapId = inputId.split('_')[1]; // Ambil soap ID dari inputId (edit-resep_{soapId}_0)
+                const fieldName = inputId.replace(`edit-`, '').replace(`_${soapId}_0`, '');
+                const hiddenInputName = `soap_p[${soapId}][${fieldName}][]`;
+
+                if (!$input.length || !$dropdown.length || !$tagsContainer.length || !$hiddenInputsContainer
+                    .length) {
+                    console.warn(
+                        `[initializeAutocomplete] Elemen input (${inputId}), dropdown (${dropdownId}), tags container, atau hidden inputs container tidak ditemukan`
+                    );
+                    return;
+                }
+
+                console.log(
+                    `[initializeAutocomplete] Menginisialisasi autocomplete untuk ${inputId} dengan URL: ${url}`
+                );
+
+                let selectedItems = [];
+                $tagsContainer.find('.tag').each(function() {
+                    const value = $(this).data('value');
+                    if (value && value !== 'null' && value !== '') {
+                        selectedItems.push(value.toString());
+                    }
+                });
+
                 function updateHiddenInput() {
-                    hiddenInput.value = selectedValues.length ? selectedValues.join(',') : '';
-                    console.log(`Updated hidden input ${hiddenInputId}: ${hiddenInput.value}`);
+                    $hiddenInputsContainer.empty();
+                    selectedItems.forEach(value => {
+                        if (value && value !== 'null' && value !== '') {
+                            $hiddenInputsContainer.append(
+                                `<input type="hidden" name="${hiddenInputName}" value="${value}">`);
+                        }
+                    });
+                    console.log(`[updateHiddenInput] Inputs for ${hiddenInputName}:`, selectedItems);
                 }
 
                 updateHiddenInput();
 
-                // Event listener untuk input autocomplete
-                if (url) {
-                    input.addEventListener('input', function() {
-                        const query = input.value.trim();
-                        if (query.length < 2) {
-                            dropdown.style.display = 'none';
-                            return;
-                        }
-
-                        fetch(`${url}?query=${encodeURIComponent(query)}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                dropdown.innerHTML = '';
-                                data.forEach(item => {
-                                    const li = document.createElement('li');
-                                    li.textContent = item.value;
-                                    li.addEventListener('click', () => {
-                                        if (!selectedValues.includes(item.value)) {
-                                            selectedValues.push(item.value);
-                                            const tag = document.createElement('span');
-                                            tag.className = 'tag';
-                                            tag.dataset.value = item.value;
-                                            tag.innerHTML = `${item.value} <i class="fas fa-times remove-tag"></i>`;
-                                            tagsContainer.appendChild(tag);
-                                            updateHiddenInput();
-                                        }
-                                        input.value = '';
-                                        dropdown.style.display = 'none';
-                                    });
-                                    dropdown.appendChild(li);
-                                });
-                                dropdown.style.display = data.length ? 'block' : 'none';
-                            });
-                    });
+                function addTag(text, value) {
+                    if (value && value !== 'null' && value !== '') {
+                        selectedItems.push(value.toString());
+                        const tagHtml = `
+                    <span class="tag" data-value="${value}" data-text="${text}">
+                        ${text}
+                        <span class="remove-tag">×</span>
+                    </span>`;
+                        $tagsContainer.append(tagHtml);
+                        updateHiddenInput();
+                        $input.val('');
+                        console.log(`[addTag] Menambahkan tag untuk ${inputId}: ${text} (${value})`);
+                    } else {
+                        console.warn(`[addTag] Tag untuk ${inputId} tidak ditambahkan: nilai ${value} tidak valid`);
+                    }
                 }
 
-                // Event listener untuk menghapus tag
-                tagsContainer.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('remove-tag')) {
-                        const tag = e.target.parentElement;
-                        const value = tag.dataset.value;
-                        selectedValues = selectedValues.filter(val => val !== value);
-                        tag.remove();
+                function removeTag(value) {
+                    const index = selectedItems.indexOf(value.toString());
+                    if (index !== -1) {
+                        selectedItems.splice(index, 1);
+                        $tagsContainer.find(`.tag[data-value="${value}"]`).first().remove();
                         updateHiddenInput();
+                        console.log(`[removeTag] Menghapus tag untuk ${inputId}: ${value}`);
+                    }
+                }
+
+                $input.off('input').on('input', function() {
+                    const query = $(this).val().trim();
+                    console.log(`[initializeAutocomplete] Input: ${inputId}, Value: "${query}"`);
+                    if (query.length >= 2) {
+                        $.ajax({
+                            url: url,
+                            data: {
+                                term: query
+                            },
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log(
+                                    `[initializeAutocomplete] Data diterima untuk ${inputId}:`,
+                                    data);
+                                $dropdown.empty().show();
+                                if (data.length) {
+                                    data.forEach(item => {
+                                        $dropdown.append(
+                                            `<div class="dropdown-item" data-value="${item.id}" data-text="${item.text}">${item.text}</div>`
+                                        );
+                                    });
+                                } else {
+                                    $dropdown.append(
+                                        '<div class="dropdown-item">Tidak ada saran</div>');
+                                    console.warn(
+                                        `[initializeAutocomplete] Tidak ada data untuk ${inputId} dengan query "${query}"`
+                                    );
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error(
+                                    `[initializeAutocomplete] Error fetching data untuk ${inputId}:`,
+                                    textStatus, errorThrown);
+                                $dropdown.empty().show().append(
+                                    `<div class="dropdown-item">Error: ${textStatus}</div>`);
+                            }
+                        });
+                    } else {
+                        $dropdown.hide();
                     }
                 });
 
-                // Event listener untuk jumlah (tekan Enter)
-                if (input.type === 'number' && inputId.startsWith('edit-jumlah_')) {
-                    input.addEventListener('keypress', function(e) {
-                        if (e.key === 'Enter' && input.value) {
-                            const value = input.value.trim();
-                            if (!selectedValues.includes(value)) {
-                                selectedValues.push(value);
-                                const tag = document.createElement('span');
-                                tag.className = 'tag';
-                                tag.dataset.value = value;
-                                tag.innerHTML = `${value} <i class="fas fa-times remove-tag"></i>`;
-                                tagsContainer.appendChild(tag);
-                                updateHiddenInput();
-                            }
-                            input.value = '';
-                        }
-                    });
-                }
+                $dropdown.off('click').on('click', '.dropdown-item', function() {
+                    const text = $(this).data('text');
+                    const value = $(this).data('value');
+                    if (text !== 'Tidak ada saran' && !text.startsWith('Error:') && value && value !==
+                        'null' && value !== '') {
+                        addTag(text, value);
+                        $dropdown.hide();
+                    }
+                });
+
+                $tagsContainer.off('click').on('click', '.remove-tag', function() {
+                    const $tag = $(this).parent('.tag');
+                    const value = $tag.data('value');
+                    removeTag(value);
+                });
             }
 
-            // Inisialisasi multi-select untuk setiap entri
-            document.querySelectorAll('.multi-select-wrapper').forEach(wrapper => {
-                const inputId = wrapper.dataset.inputId;
-                const hiddenInputId = `${inputId}_hidden`;
-                const dropdownId = wrapper.dataset.dropdown || `edit-dropdown-${inputId.split('_').slice(1).join('_')}`;
-                const url = wrapper.querySelector('.autocomplete-input')?.dataset.url || '';
-                const existingValues = Array.from(wrapper.querySelector('.selected-tags').children).map(tag => tag.dataset.value);
-                initializeMultiSelect(inputId, hiddenInputId, dropdownId, url, existingValues);
+            function initializeJumlahInput($input) {
+                const inputId = $input.attr('id');
+                const $wrapper = $input.closest('.multi-select-wrapper');
+                const $tagsContainer = $wrapper.find('.selected-tags');
+                const $hiddenInputsContainer = $(`#${inputId}_hidden_inputs`);
+                const soapId = inputId.split('_')[1]; // Ambil soap ID dari inputId (edit-jumlah_{soapId}_0)
+                const hiddenInputName = `soap_p[${soapId}][jumlah][]`;
+
+                if (!$input.length || !$tagsContainer.length || !$hiddenInputsContainer.length) {
+                    console.warn(
+                        `[initializeJumlahInput] Elemen input (${inputId}), tags container, atau hidden inputs container tidak ditemukan`
+                    );
+                    return;
+                }
+
+                console.log(`[initializeJumlahInput] Menginisialisasi input jumlah untuk ${inputId}`);
+
+                let selectedItems = [];
+                $tagsContainer.find('.tag').each(function() {
+                    const value = $(this).data('value');
+                    if (value && value !== 'null' && value !== '' && !isNaN(value) && value > 0) {
+                        selectedItems.push(value.toString());
+                    }
+                });
+
+                function updateHiddenInput() {
+                    $hiddenInputsContainer.empty();
+                    selectedItems.forEach(value => {
+                        if (value && value !== 'null' && value !== '' && !isNaN(value) && value > 0) {
+                            $hiddenInputsContainer.append(
+                                `<input type="hidden" name="${hiddenInputName}" value="${value}">`);
+                        }
+                    });
+                    console.log(`[updateHiddenInput] Inputs for ${hiddenInputName}:`, selectedItems);
+                }
+
+                updateHiddenInput();
+
+                function addTag(value) {
+                    if (value && !isNaN(value) && value > 0) {
+                        selectedItems.push(value.toString());
+                        const tagHtml = `
+                    <span class="tag" data-value="${value}" data-text="${value}">
+                        ${value}
+                        <span class="remove-tag">×</span>
+                    </span>`;
+                        $tagsContainer.append(tagHtml);
+                        updateHiddenInput();
+                        $input.val('');
+                        console.log(`[addTag] Menambahkan jumlah untuk ${inputId}: ${value}`);
+                    } else {
+                        console.warn(`[addTag] Jumlah tidak valid untuk ${inputId}: ${value}`);
+                        alert('Masukkan jumlah yang valid (angka positif).');
+                    }
+                }
+
+                function removeTag(value) {
+                    const index = selectedItems.indexOf(value.toString());
+                    if (index !== -1) {
+                        selectedItems.splice(index, 1);
+                        $tagsContainer.find(`.tag[data-value="${value}"]`).first().remove();
+                        updateHiddenInput();
+                        console.log(`[removeTag] Menghapus jumlah untuk ${inputId}: ${value}`);
+                    }
+                }
+
+                $input.off('keypress').on('keypress', function(e) {
+                    if (e.which === 13) {
+                        e.preventDefault();
+                        const value = $(this).val().trim();
+                        if (value && !isNaN(value) && value > 0) {
+                            addTag(value);
+                        } else {
+                            console.warn(
+                                `[initializeJumlahInput] Input tidak valid untuk ${inputId}: ${value}`);
+                            alert('Masukkan jumlah yang valid (angka positif).');
+                        }
+                    }
+                });
+
+                $tagsContainer.off('click').on('click', '.remove-tag', function() {
+                    const $tag = $(this).parent('.tag');
+                    const value = $tag.data('value');
+                    removeTag(value);
+                });
+            }
+
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest(
+                        '.autocomplete-input, .autocomplete-dropdown, .multi-select-wrapper, .jumlah-input')
+                    .length) {
+                    $('.autocomplete-dropdown').hide();
+                }
             });
 
-            // Fungsi untuk menambah kolom baru
-            window.editAddColumn = function() {
-                const container = document.getElementById('edit-resep');
-                const index = container.querySelectorAll('.entry-group').length;
-                const newGroup = `
-                    <label for="soap_p_${index}" style="font-weight: bold; margin-top: 10px; margin-bottom: 5px; width: 100%; cursor: pointer;" onclick="toggleObatContainer()">
-                        Pilih Obat (P) ${index + 1}
-                    </label>
-                    <div class="entry-group" id="edit-entry_${index}">
-                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-resep_${index}" style="min-width: 100px;">Nama Obat</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-resep_${index}">
-                                    <div class="selected-tags" id="edit-resep_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-resep_${index}"
-                                        placeholder="Cari Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}"
-                                        data-dropdown="edit-dropdown-resep_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][resep]" id="edit-resep_${index}_hidden">
-                                <div id="edit-dropdown-resep_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 obat
-                                </p>
-                            </div>
-                        </div>
-                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-jenis_obat_${index}" style="min-width: 100px;">Jenis Obat</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-jenis_obat_${index}">
-                                    <div class="selected-tags" id="edit-jenis_obat_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-jenis_obat_${index}"
-                                        placeholder="Cari Jenis Obat" autocomplete="off" data-url="{{ url('jenis-autocomplete') }}"
-                                        data-dropdown="edit-dropdown-jenis_obat_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][jenisobat]" id="edit-jenis_obat_${index}_hidden">
-                                <div id="edit-dropdown-jenis_obat_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 jenis obat
-                                </p>
-                            </div>
-                        </div>
-                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-aturan_${index}" style="min-width: 100px">Aturan Pakai</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-aturan_${index}">
-                                    <div class="selected-tags" id="edit-aturan_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-aturan_${index}"
-                                        placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('aturan-autocomplete') }}"
-                                        data-dropdown="edit-dropdown-aturan_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][aturan]" id="edit-aturan_${index}_hidden">
-                                <div id="edit-dropdown-aturan_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 aturan pakai
-                                </p>
-                            </div>
-                        </div>
-                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-anjuran_${index}" style="min-width: 100px">Anjuran Minum</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-anjuran_${index}">
-                                    <div class="selected-tags" id="edit-anjuran_${index}_tags"></div>
-                                    <input type="text" class="autocomplete-input multi-select-input" id="edit-anjuran_${index}"
-                                        placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('anjuran-autocomplete') }}"
-                                        data-dropdown="edit-dropdown-anjuran_${index}">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][anjuran]" id="edit-anjuran_${index}_hidden">
-                                <div id="edit-dropdown-anjuran_${index}" class="dropdown-menu autocomplete-dropdown"></div>
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memilih lebih dari 1 anjuran minum
-                                </p>
-                            </div>
-                        </div>
-                        <div class="input-row" style="display: flex; align-items: center; gap: 5px;">
-                            <label for="edit-jumlah_${index}" style="min-width: 100px">Jumlah</label>
-                            <span>:</span>
-                            <div class="input-wrapper">
-                                <div class="multi-select-wrapper form-control" data-input-id="edit-jumlah_${index}">
-                                    <div class="selected-tags" id="edit-jumlah_${index}_tags"></div>
-                                    <input type="number" class="multi-select-input jumlah-input" id="edit-jumlah_${index}"
-                                        placeholder="Masukkan Jumlah" min="1">
-                                </div>
-                                <input type="hidden" name="soap_p[${index}][jumlah]" id="edit-jumlah_${index}_hidden">
-                                <p class="text-warning" style="font-style: italic; font-size: 12px">
-                                    *Bisa memasukkan lebih dari 1 jumlah (tekan Enter untuk menambah)
-                                </p>
-                            </div>
-                        </div>
-                        <button type="button" onclick="editRemoveColumn(this)" class="btn btn-danger mt-2">Hapus Obat</button>
-                    </div>
-                `;
+            $(document).on('submit', '.edit-soap-form', function(e) {
+                const $form = $(this);
+                const $modal = $form.closest('.modal');
+                const modalId = $modal.attr('id');
 
-                container.insertAdjacentHTML('beforeend', newGroup);
-
-                // Inisialisasi multi-select untuk kolom baru
-                initializeMultiSelect(`edit-resep_${index}`, `edit-resep_${index}_hidden`, `edit-dropdown-resep_${index}`, '{{ url('/resep-autocomplete') }}');
-                initializeMultiSelect(`edit-jenis_obat_${index}`, `edit-jenis_obat_${index}_hidden`, `edit-dropdown-jenis_obat_${index}`, '{{ url('jenis-autocomplete') }}');
-                initializeMultiSelect(`edit-aturan_${index}`, `edit-aturan_${index}_hidden`, `edit-dropdown-aturan_${index}`, '{{ url('aturan-autocomplete') }}');
-                initializeMultiSelect(`edit-anjuran_${index}`, `edit-anjuran_${index}_hidden`, `edit-dropdown-anjuran_${index}`, '{{ url('anjuran-autocomplete') }}');
-                initializeMultiSelect(`edit-jumlah_${index}`, `edit-jumlah_${index}_hidden`, `edit-dropdown-jumlah_${index}`, '');
-            };
-
-            window.editRemoveColumn = function(button) {
-                const group = button.closest('.entry-group');
-                const label = group.previousElementSibling;
-                if (label && label.tagName === 'LABEL' && label.getAttribute('for').startsWith('soap_p_')) {
-                    label.remove();
+                // Pastikan ini modal edit SOAP
+                if (!modalId || !modalId.startsWith('editSoap')) {
+                    console.log('[form.submit] Bukan modal edit SOAP, skip validasi resep.');
+                    return; // Biarkan submit normal
                 }
-                group.remove();
-            };
 
-            // Tambahkan event listener untuk form submission
-            document.querySelector('form').addEventListener('submit', function(e) {
-                document.querySelectorAll('.multi-select-wrapper').forEach(wrapper => {
-                    const inputId = wrapper.dataset.inputId;
-                    const hiddenInputId = `${inputId}_hidden`;
-                    const tagsContainer = document.getElementById(`${inputId}_tags`);
-                    const hiddenInput = document.getElementById(hiddenInputId);
-                    const selectedValues = Array.from(tagsContainer.children).map(tag => tag.dataset.value).filter(value => value);
-                    hiddenInput.value = selectedValues.join(',');
-                    console.log(`Form submit: ${hiddenInputId} = ${hiddenInput.value}`);
+                const soapId = modalId.replace('editSoap', ''); // editSoap2 → 2
+
+                const $resepTags = $(`#edit-resep_${soapId}_0_tags`);
+                const $jenisTags = $(`#edit-jenis_${soapId}_0_tags`);
+                const $aturanTags = $(`#edit-aturan_${soapId}_0_tags`);
+                const $anjuranTags = $(`#edit-anjuran_${soapId}_0_tags`);
+                const $jumlahTags = $(`#edit-jumlah_${soapId}_0_tags`);
+
+                if (!$resepTags.length || !$jenisTags.length || !$aturanTags.length || !$anjuranTags
+                    .length || !$jumlahTags.length) {
+                    console.error('[form.submit] Salah satu container tag tidak ditemukan untuk soap_id:',
+                        soapId);
+                    alert('Terjadi kesalahan: Data resep tidak lengkap.');
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Hapus hidden input kosong
+                $form.find('input[type="hidden"]').each(function() {
+                    const value = $(this).val();
+                    if (!value || value === 'null' || value === '') {
+                        $(this).remove();
+                    }
                 });
+
+                const resepCount = $resepTags.find('.tag').length;
+                const jenisCount = $jenisTags.find('.tag').length;
+                const aturanCount = $aturanTags.find('.tag').length;
+                const anjuranCount = $anjuranTags.find('.tag').length;
+                const jumlahCount = $jumlahTags.find('.tag').length;
+
+                if (resepCount === 0) {
+                    alert('Pilih minimal 1 obat.');
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (resepCount !== jenisCount || resepCount !== aturanCount || resepCount !==
+                    anjuranCount || resepCount !== jumlahCount) {
+                    alert('Jumlah obat, jenis, aturan, anjuran, dan jumlah harus sama.');
+                    e.preventDefault();
+                    return false;
+                }
+
+                console.log('[form.submit] Validasi resep LOLOS untuk soap_id:', soapId);
             });
         });
-    
     </script>
 @endpush

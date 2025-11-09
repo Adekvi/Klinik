@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Kasir Antrian')
-@section('content')
+<x-admin.layout.terminal title="Kasir Antrian">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -68,7 +66,8 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form method="GET" action="" class="d-flex justify-content-between align-items-center mb-3">
+                        <form method="GET" action=""
+                            class="d-flex justify-content-between align-items-center mb-3">
                             <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
                             <div class="d-flex align-items-center">
                                 <label for="entries" class="me-2">Tampilkan:</label>
@@ -107,10 +106,11 @@
                                         <th>Jenis Kelamin</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody class="text-center" style="text-transform: uppercase">
                                     @if (count($antrianKasir) === 0)
                                         <tr>
-                                            <td colspan="9" style="text-align: center; font-size: bold">Tidak ada data
+                                            <td colspan="9" style="text-align: center; font-size: bold">Tidak ada
+                                                data
                                             </td>
                                         </tr>
                                     @else
@@ -147,7 +147,8 @@
                                                     </button>
                                                     <a href="{{ url('kasir/totalan/' . $item->id) }}"
                                                         class="btn btn-primary" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" data-bs-offset="0,4" data-bs-html="true"
+                                                        data-bs-placement="top" data-bs-offset="0,4"
+                                                        data-bs-html="true"
                                                         data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Total</span>">
                                                         <i class="fa-solid fa-calculator"></i>
                                                     </a>
@@ -181,9 +182,11 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati Pasien
+                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati
+                            Pasien
                         </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <h5>Apakah Anda yakin ingin melewati pasien ini?</h5>
@@ -201,48 +204,48 @@
         </div>
     @endforeach
 
-@endsection
+    @push('style')
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('style')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <style>
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        <script src="{{ asset('assets/responsivevoice.js') }}"></script>
+        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
+        <script src="{{ asset('assets/js/script.js') }}"></script>
 
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-    <script src="{{ asset('assets/responsivevoice.js') }}"></script>
-    <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-    <script src="{{ asset('assets/js/script.js') }}"></script>
+        <script>
+            // tanggal dan jam
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
-    <script>
-        // tanggal dan jam
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>
+    @endpush
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
-@endpush
+</x-admin.layout.terminal>

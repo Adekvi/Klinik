@@ -9,44 +9,36 @@ use Illuminate\Support\Facades\View;
 
 class StokObatApotekerController extends Controller
 {
-    // public function obatMasuk()
-    // {
-    //     $apotek = Resep::with('record')
-    //         ->where('masuk', '>', 0)
-    //         ->orWhere('retur', '>', 0) // Pastikan hanya obat yang ada stok masuknya
-    //         ->orderBy('updated_at', 'desc') // Urutkan berdasarkan tanggal update terbaru
-    //         ->paginate(10);
-    //     // dd($apotek);
-    //     $obat = Obat::with(['booking', 'antrianPerawat', 'soap.poli', 'resep'])->get();
-    //     // dd($obat);
-    //     return view('obat.rekapObat.ObatMasuk', compact('obat', 'apotek'));
-    // }
-
-    public function obatMasuk()
+    public function obatMasuk(Request $request)
     {
+        // Ambil input dari form (pencarian & jumlah data per halaman)
+        $search = $request->input('search');
+        $entries = $request->input('entries', 10); // default 10 baris per halaman
+
+        // Query utama untuk data resep (obat masuk / retur)
         $apotek = Resep::with(['record' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])
+                $query->orderBy('created_at', 'desc');
+            }])
             ->where(function ($query) {
-                $query->where('masuk', '>', 0)
-                    ->orWhere('retur', '>', 0);
+                $query->where('masuk', '>', 0)   // hanya obat yang masuk
+                    ->orWhere('retur', '>', 0); // atau obat yang diretur
+            })
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_obat', 'like', "%{$search}%")
+                    ->orWhere('kode_obat', 'like', "%{$search}%")
+                    ->orWhere('keterangan', 'like', "%{$search}%");
+                });
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate(10);
+            ->paginate($entries);
 
+        // Data referensi semua obat (misalnya untuk dropdown atau relasi)
         $obat = Obat::with(['booking', 'antrianPerawat', 'soap.poli', 'resep'])->get();
 
-        return view('obat.rekapObat.ObatMasuk', compact('apotek', 'obat'));
+        // Kirim ke view
+        return view('obat.rekapObat.ObatMasuk', compact('apotek', 'obat', 'search', 'entries'));
     }
-
-
-    // public function ubahStokMasuk(Request $request, $id)
-    // {
-    //     $apotek = Obat::find($id);
-    //     $apotek->masuk = $request->input('stok_masuk');
-    //     $apotek->save();
-    //     return redirect()->route('apoteker.obat.masuk')->with('success', 'Stok obat berhasil diubah');
-    // }
 
     public function searchObatMasuk(Request $request)
     {
@@ -82,14 +74,32 @@ class StokObatApotekerController extends Controller
         return response()->json($formattedData);
     }
 
-    public function obatKeluar()
+    public function obatKeluar(Request $request)
     {
-        $obat = Obat::with(['booking.pasien', 'soap.poli', 'resep', 'antrianPerawat'])
-            ->where('status', 'O')
-            ->get();
+        $search = $request->input('search');
+        $entries = $request->input('entries', 10);
+        $page = $request->input('page', 1);
+
+        $query = Obat::with(['booking.pasien', 'soap.poli', 'resep', 'antrianPerawat'])
+            ->where('status', 'O');
+
+        if($search){
+           $query->whereHas('booking.pasien', function ($q) use ($search) {
+                $q->where('obat_Ro_namaObatUpdate', 'LIKE', "%{$search}%")
+                    ->orWhere('obat_Ro_jumlah', 'LIKE', "%{$search}%");
+            }); 
+        }
+
+        $obat = $query->paginate($entries, ['*'], 'page', $page);
+        $obat->appends(['search' => $search, 'entries' => $entries]);
+
         $resep = Resep::all();
         // dd($obat);
-        return view('obat.rekapObat.ObatKeluar', compact('obat', 'resep'));
+        return view('obat.rekapObat.ObatKeluar', compact(
+            'entries',
+            'search',
+            'obat', 
+            'resep'));
     }
 
     public function stokObat()

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin Dashboard')
-@section('content')
+<x-admin.layout.terminal title="Admin Dashboard">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row mt-4">
@@ -9,7 +7,8 @@
                     <div class="d-flex align-items-end row">
                         <div class="col-sm-6">
                             <div class="card-body">
-                                <h4 class="card-title text-primary">Selamat Datang, <span class="text-info">Admin!</span></h4>
+                                <h4 class="card-title text-primary">Selamat Datang, <span class="text-info">Admin!</span>
+                                </h4>
                                 <p class="mb-4">
                                     @if (session('admin_active'))
                                         <div class="text-success">
@@ -131,8 +130,8 @@
                                 <div class="card-title d-flex align-items-start justify-content-between">
                                     <i class="fa-solid fa-user-doctor fa-2x text-danger"></i>
                                     <div class="dropdown">
-                                        <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
+                                        <button class="btn p-0" type="button" id="cardOpt3"
+                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                     </div>
@@ -150,8 +149,8 @@
                                 <div class="card-title d-flex align-items-start justify-content-between">
                                     <i class="fa-solid fa-user-nurse fa-2x text-secondary"></i>
                                     <div class="dropdown">
-                                        <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
+                                        <button class="btn p-0" type="button" id="cardOpt3"
+                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                     </div>
@@ -169,143 +168,143 @@
 
     </div>
 
-@endsection
+    @push('script')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Import ApexCharts library -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-@push('script')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Import ApexCharts library -->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script>
+            // Ambil data pasien per bulan dari variabel PHP
+            var pasienSehatData = @json($pasienSehatPerBulan);
+            var pasienUmumData = @json($pasienUmumPerBulan);
+            var pasienBpjsData = @json($pasienBpjsPerBulan);
 
-    <script>
-        // Ambil data pasien per bulan dari variabel PHP
-        var pasienSehatData = @json($pasienSehatPerBulan);
-        var pasienUmumData = @json($pasienUmumPerBulan);
-        var pasienBpjsData = @json($pasienBpjsPerBulan);
-
-        // Konfigurasi ApexCharts untuk menampilkan data pasien
-        const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
-        const totalRevenueChartOptions = {
-            series: [{
-                    name: 'Pasien Sehat',
-                    data: pasienSehatData
-                },
-                {
-                    name: 'Pasien Umum',
-                    data: pasienUmumData
-                },
-                {
-                    name: 'Pasien BPJS',
-                    data: pasienBpjsData
-                }
-            ],
-            chart: {
-                height: 300,
-                stacked: true,
-                type: 'bar',
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '33%',
-                    borderRadius: 12,
-                    startingShape: 'rounded',
-                    endingShape: 'rounded'
-                }
-            },
-            colors: ['#28a745', '#007bff', '#ffc107'], // Warna untuk masing-masing kategori
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 6,
-                lineCap: 'round',
-                colors: ['#fff']
-            },
-            legend: {
-                show: true,
-                horizontalAlign: 'left',
-                position: 'top',
-                markers: {
-                    height: 8,
-                    width: 8,
-                    radius: 12,
-                    offsetX: -3
-                },
-                labels: {
-                    colors: '#333'
-                },
-                itemMargin: {
-                    horizontal: 10
-                }
-            },
-            grid: {
-                borderColor: '#e0e0e0',
-                padding: {
-                    top: 0,
-                    bottom: -8,
-                    left: 20,
-                    right: 20
-                }
-            },
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov',
-                    'Des'
-                ], // Menampilkan bulan
-                labels: {
-                    style: {
-                        fontSize: '13px',
-                        colors: '#333'
+            // Konfigurasi ApexCharts untuk menampilkan data pasien
+            const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
+            const totalRevenueChartOptions = {
+                series: [{
+                        name: 'Pasien Sehat',
+                        data: pasienSehatData
+                    },
+                    {
+                        name: 'Pasien Umum',
+                        data: pasienUmumData
+                    },
+                    {
+                        name: 'Pasien BPJS',
+                        data: pasienBpjsData
+                    }
+                ],
+                chart: {
+                    height: 300,
+                    stacked: true,
+                    type: 'bar',
+                    toolbar: {
+                        show: false
                     }
                 },
-                axisTicks: {
-                    show: false
-                },
-                axisBorder: {
-                    show: false
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        fontSize: '13px',
-                        colors: '#333'
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '33%',
+                        borderRadius: 12,
+                        startingShape: 'rounded',
+                        endingShape: 'rounded'
                     }
-                }
-            },
-            responsive: [{
-                    breakpoint: 1700,
-                    options: {
-                        plotOptions: {
-                            bar: {
-                                borderRadius: 10,
-                                columnWidth: '32%'
-                            }
+                },
+                colors: ['#28a745', '#007bff', '#ffc107'], // Warna untuk masing-masing kategori
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 6,
+                    lineCap: 'round',
+                    colors: ['#fff']
+                },
+                legend: {
+                    show: true,
+                    horizontalAlign: 'left',
+                    position: 'top',
+                    markers: {
+                        height: 8,
+                        width: 8,
+                        radius: 12,
+                        offsetX: -3
+                    },
+                    labels: {
+                        colors: '#333'
+                    },
+                    itemMargin: {
+                        horizontal: 10
+                    }
+                },
+                grid: {
+                    borderColor: '#e0e0e0',
+                    padding: {
+                        top: 0,
+                        bottom: -8,
+                        left: 20,
+                        right: 20
+                    }
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov',
+                        'Des'
+                    ], // Menampilkan bulan
+                    labels: {
+                        style: {
+                            fontSize: '13px',
+                            colors: '#333'
+                        }
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    axisBorder: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            fontSize: '13px',
+                            colors: '#333'
                         }
                     }
                 },
-                // More responsive breakpoints can be added here
-            ],
-            states: {
-                hover: {
-                    filter: {
-                        type: 'none'
-                    }
-                },
-                active: {
-                    filter: {
-                        type: 'none'
+                responsive: [{
+                        breakpoint: 1700,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '32%'
+                                }
+                            }
+                        }
+                    },
+                    // More responsive breakpoints can be added here
+                ],
+                states: {
+                    hover: {
+                        filter: {
+                            type: 'none'
+                        }
+                    },
+                    active: {
+                        filter: {
+                            type: 'none'
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        if (typeof totalRevenueChartEl !== undefined && totalRevenueChartEl !== null) {
-            const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
-            totalRevenueChart.render();
-        }
-    </script>
-@endpush
+            if (typeof totalRevenueChartEl !== undefined && totalRevenueChartEl !== null) {
+                const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
+                totalRevenueChart.render();
+            }
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

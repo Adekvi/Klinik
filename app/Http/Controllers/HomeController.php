@@ -6,6 +6,7 @@ use App\Models\Pasien;
 use App\Models\Pidio;
 use App\Models\Poli;
 use App\Models\Poto;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 

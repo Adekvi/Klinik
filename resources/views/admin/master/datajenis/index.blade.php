@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Data Jenis Obat')
-@section('content')
+<x-admin.layout.terminal title="Admin | Data Jenis Obat">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -40,7 +38,8 @@
                                             <i class="fa-solid fa-magnifying-glass"></i> Cari</button>
                                     </div>
                                 </form>
-                                <table class="table table-striped table-responsive" style="width:100%; text-align: center">
+                                <table class="table table-striped table-responsive"
+                                    style="width:100%; text-align: center">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>No</th>
@@ -110,98 +109,100 @@
             </div>
         </div>
     </div>
+
     @include('admin.master.datajenis.tambah')
     @include('admin.master.datajenis.edit')
     @include('admin.master.datajenis.hapus')
-@endsection
 
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-    <style>
-        .status-toggle {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
+    @push('style')
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+        <style>
+            .status-toggle {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
 
-        .toggle-label {
-            position: relative;
-            width: 60px;
-            height: 28px;
-            background-color: #ccc;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            .toggle-label {
+                position: relative;
+                width: 60px;
+                height: 28px;
+                background-color: #ccc;
+                border-radius: 50px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
-        .toggle-label::before {
-            content: "";
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-        }
+            .toggle-label::before {
+                content: "";
+                position: absolute;
+                top: 4px;
+                left: 4px;
+                width: 20px;
+                height: 20px;
+                background-color: white;
+                border-radius: 50%;
+                transition: transform 0.3s ease;
+            }
 
-        input[type="checkbox"] {
-            display: none;
-        }
+            input[type="checkbox"] {
+                display: none;
+            }
 
-        input[type="checkbox"]:checked+.toggle-label {
-            background-color: #007bff;
-        }
+            input[type="checkbox"]:checked+.toggle-label {
+                background-color: #007bff;
+            }
 
-        input[type="checkbox"]:checked+.toggle-label::before {
-            transform: translateX(32px);
-        }
+            input[type="checkbox"]:checked+.toggle-label::before {
+                transform: translateX(32px);
+            }
 
-        .status-text {
-            font-weight: bold;
-            font-size: 14px;
-            color: #777;
-        }
+            .status-text {
+                font-weight: bold;
+                font-size: 14px;
+                color: #777;
+            }
 
-        .status-text.active {
-            color: green;
-        }
+            .status-text.active {
+                color: green;
+            }
 
-        .status-text.inactive {
-            color: #888;
-        }
+            .status-text.inactive {
+                color: #888;
+            }
 
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script>
-        // jam dan tgl
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script>
+            // jam dan tgl
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
-@endpush
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

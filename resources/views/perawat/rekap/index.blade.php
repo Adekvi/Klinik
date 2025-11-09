@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Perawat | Rekap Pasien')
-@section('content')
+<x-admin.layout.terminal title="Perawat | Rekap Pasien">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
@@ -269,9 +267,11 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header bg-primary">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Riwayat Asesmen Pasien
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Riwayat Asesmen
+                            Pasien
                         </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="asesmen">
@@ -310,7 +310,8 @@
                                                 <td>
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#detailAsesmen{{ $asesmen['id'] }}"
-                                                        data-toggle="tooltip" data-bs-placement="top" title="Asesmen">
+                                                        data-toggle="tooltip" data-bs-placement="top"
+                                                        title="Asesmen">
                                                         <i class="fas fa-eye"></i> Lihat Asesmen
                                                     </button>
                                                 </td>
@@ -333,167 +334,167 @@
         </div>
     @endforeach
 
-@endsection
+    @push('style')
+        <style>
+            /* TANGGAL PERIODE */
+            .filter {
+                display: flex;
+                align-items: center;
+            }
 
-@push('style')
-    <style>
-        /* TANGGAL PERIODE */
-        .filter {
-            display: flex;
-            align-items: center;
-        }
+            .filter>div {
+                margin-right: 10px;
+                /* Memberi jarak antar elemen */
+            }
 
-        .filter>div {
-            margin-right: 10px;
-            /* Memberi jarak antar elemen */
-        }
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        /* TAMPILAN REPORT */
+            /* TAMPILAN REPORT */
 
 
-        /* TAMPILAN SHIFT */
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+            /* TAMPILAN SHIFT */
+            .container {
+                width: 80%;
+                margin: auto;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+            h1 {
+                text-align: center;
+                color: #333;
+            }
 
-        .filter {
-            margin-bottom: 20px;
-        }
+            .filter {
+                margin-bottom: 20px;
+            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
 
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-        }
+            table,
+            th,
+            td {
+                border: 1px solid #ddd;
+            }
 
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
+            th,
+            td {
+                padding: 10px;
+                text-align: left;
+            }
 
-        th {
-            background-color: #f4f4f4;
-        }
+            th {
+                background-color: #f4f4f4;
+            }
 
-        .table thead th {
-            /* color: rgb(94, 94, 221); */
-            text-align: left;
-        }
+            .table thead th {
+                /* color: rgb(94, 94, 221); */
+                text-align: left;
+            }
 
-        .table tbody {
-            text-align: left;
-        }
-    </style>
-@endpush
+            .table tbody {
+                text-align: left;
+            }
+        </style>
+    @endpush
 
-@push('script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const now = new Date();
-            const currentDay = now.getDate();
-            const currentMonth = now.getMonth() + 1; // Bulan dimulai dari 0
-            const currentYear = now.getFullYear();
+    @push('script')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const now = new Date();
+                const currentDay = now.getDate();
+                const currentMonth = now.getMonth() + 1; // Bulan dimulai dari 0
+                const currentYear = now.getFullYear();
 
-            // Mengisi dropdown bulan
-            const monthNames = [
-                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-            ];
-            const monthSelect = document.getElementById('month');
-            monthNames.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1; // Bulan dimulai dari 1
-                option.textContent = month;
-                if (index + 1 === currentMonth) {
-                    option.selected = true; // Bulan saat ini dipilih
+                // Mengisi dropdown bulan
+                const monthNames = [
+                    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                ];
+                const monthSelect = document.getElementById('month');
+                monthNames.forEach((month, index) => {
+                    const option = document.createElement('option');
+                    option.value = index + 1; // Bulan dimulai dari 1
+                    option.textContent = month;
+                    if (index + 1 === currentMonth) {
+                        option.selected = true; // Bulan saat ini dipilih
+                    }
+                    monthSelect.appendChild(option);
+                });
+
+                // Mengisi dropdown tahun
+                const yearSelect = document.getElementById('year');
+                for (let year = currentYear - 10; year <= currentYear + 10; year++) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    if (year === currentYear) {
+                        option.selected = true; // Tahun saat ini dipilih
+                    }
+                    yearSelect.appendChild(option);
                 }
-                monthSelect.appendChild(option);
+
+                // Menentukan tanggal default dan max tanggal
+                const dateInput = document.getElementById('date');
+                dateInput.value = currentDay;
+                dateInput.max = new Date(currentYear, currentMonth, 0)
+                    .getDate(); // Set max tanggal sesuai bulan dan tahun yang dipilih
+
+                // Menangani perubahan pada bulan dan tahun untuk memperbarui max tanggal
+                monthSelect.addEventListener('change', updateMaxDate);
+                yearSelect.addEventListener('change', updateMaxDate);
+
+                function updateMaxDate() {
+                    const selectedMonth = parseInt(monthSelect.value);
+                    const selectedYear = parseInt(yearSelect.value);
+                    const maxDate = new Date(selectedYear, selectedMonth, 0).getDate(); // Update max tanggal
+                    dateInput.max = maxDate; // Update max tanggal sesuai bulan dan tahun yang dipilih
+
+                    if (parseInt(dateInput.value) > maxDate) {
+                        dateInput.value = maxDate; // Update nilai tanggal jika lebih dari max
+                    }
+                }
+
+                // Pastikan max tanggal sesuai dengan bulan dan tahun saat ini
+                updateMaxDate();
             });
 
-            // Mengisi dropdown tahun
-            const yearSelect = document.getElementById('year');
-            for (let year = currentYear - 10; year <= currentYear + 10; year++) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                if (year === currentYear) {
-                    option.selected = true; // Tahun saat ini dipilih
-                }
-                yearSelect.appendChild(option);
+            // TANGGAL SHIFT
+            function updateTanggal() {
+                var now = new Date();
+
+                // Opsi format tanggal dan hari
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                // Mengambil elemen HTML untuk shift pagi dan siang
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                // Format tanggal lengkap dengan nama hari
+                var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+
+                // Menampilkan tanggal pada elemen yang sesuai
+                tanggalPagiElement.textContent = tanggalLengkap;
+                tanggalSiangElement.textContent = tanggalLengkap;
             }
 
-            // Menentukan tanggal default dan max tanggal
-            const dateInput = document.getElementById('date');
-            dateInput.value = currentDay;
-            dateInput.max = new Date(currentYear, currentMonth, 0)
-                .getDate(); // Set max tanggal sesuai bulan dan tahun yang dipilih
+            // Panggil fungsi saat halaman dimuat
+            updateTanggal();
+        </script>
+    @endpush
 
-            // Menangani perubahan pada bulan dan tahun untuk memperbarui max tanggal
-            monthSelect.addEventListener('change', updateMaxDate);
-            yearSelect.addEventListener('change', updateMaxDate);
-
-            function updateMaxDate() {
-                const selectedMonth = parseInt(monthSelect.value);
-                const selectedYear = parseInt(yearSelect.value);
-                const maxDate = new Date(selectedYear, selectedMonth, 0).getDate(); // Update max tanggal
-                dateInput.max = maxDate; // Update max tanggal sesuai bulan dan tahun yang dipilih
-
-                if (parseInt(dateInput.value) > maxDate) {
-                    dateInput.value = maxDate; // Update nilai tanggal jika lebih dari max
-                }
-            }
-
-            // Pastikan max tanggal sesuai dengan bulan dan tahun saat ini
-            updateMaxDate();
-        });
-
-        // TANGGAL SHIFT
-        function updateTanggal() {
-            var now = new Date();
-
-            // Opsi format tanggal dan hari
-            var options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
-
-            // Mengambil elemen HTML untuk shift pagi dan siang
-            var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
-            var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
-
-            // Format tanggal lengkap dengan nama hari
-            var tanggalLengkap = now.toLocaleDateString('id-ID', options);
-
-            // Menampilkan tanggal pada elemen yang sesuai
-            tanggalPagiElement.textContent = tanggalLengkap;
-            tanggalSiangElement.textContent = tanggalLengkap;
-        }
-
-        // Panggil fungsi saat halaman dimuat
-        updateTanggal();
-    </script>
-@endpush
+</x-admin.layout.terminal>

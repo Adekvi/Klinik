@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Data Master Shift')
-@section('content')
+<x-admin.layout.terminal title="Admin | Data Master Shift">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -39,8 +37,8 @@
 
                                                 <div class="piket">
                                                     <!-- Checkbox toggle -->
-                                                    <input type="checkbox" name="status" id="status_{{ $item->id }}"
-                                                        onchange="this.form.submit()"
+                                                    <input type="checkbox" name="status"
+                                                        id="status_{{ $item->id }}" onchange="this.form.submit()"
                                                         {{ $item->status === 'Aktif' ? 'checked' : '' }}>
                                                     <label for="status_{{ $item->id }}" class="button"></label>
 
@@ -55,9 +53,10 @@
                                         <td>
                                             <div class="aksi d-flex justify-content-center">
                                                 <button class="btn btn-primary"
-                                                    data-bs-target="#editpoli{{ $item->id }}" data-bs-toggle="modal"><i
-                                                        class="fas fa-info"></i> Edit</button>
-                                                <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                                                    data-bs-target="#editpoli{{ $item->id }}"
+                                                    data-bs-toggle="modal"><i class="fas fa-info"></i> Edit</button>
+                                                <button type="button" class="btn btn-danger mx-2"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#hapuspoli{{ $item->id }}"><i
                                                         class="fa fa-trash"></i> Hapus</button>
                                             </div>
@@ -71,62 +70,65 @@
             </div>
         </div>
     </div>
+
     @include('admin.master.datashift.tambah')
     @include('admin.master.datashift.edit')
     @include('admin.master.datashift.hapus')
-@endsection
 
-@push('style')
-    <style>
-        .piket {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    @push('style')
+        <style>
+            .piket {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .button {
-            width: 55px;
-            height: 25px;
-            background-color: #d2d2d2;
-            border-radius: 200px;
-            cursor: pointer;
-            position: relative;
-            transition: background-color 0.2s;
-        }
+            .button {
+                width: 55px;
+                height: 25px;
+                background-color: #d2d2d2;
+                border-radius: 200px;
+                cursor: pointer;
+                position: relative;
+                transition: background-color 0.2s;
+            }
 
-        .button::before {
-            position: absolute;
-            content: "";
-            width: 15px;
-            height: 15px;
-            background-color: #fff;
-            border-radius: 50%;
-            margin: 5px;
-            transition: transform 0.2s;
-        }
+            .button::before {
+                position: absolute;
+                content: "";
+                width: 15px;
+                height: 15px;
+                background-color: #fff;
+                border-radius: 50%;
+                margin: 5px;
+                transition: transform 0.2s;
+            }
 
-        input[type="checkbox"] {
-            display: none;
-        }
+            input[type="checkbox"] {
+                display: none;
+            }
 
-        input[type="checkbox"]:checked+.button {
-            background-color: blue;
-        }
+            input[type="checkbox"]:checked+.button {
+                background-color: blue;
+            }
 
-        input[type="checkbox"]:checked+.button::before {
-            transform: translateX(30px);
-        }
+            input[type="checkbox"]:checked+.button::before {
+                transform: translateX(30px);
+            }
 
-        .status-text {
-            margin-top: 8px;
-            font-weight: bold;
-            color: #333;
-            font-size: 14px;
-        }
-    </style>
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-@endpush
+            .status-text {
+                margin-top: 8px;
+                font-weight: bold;
+                color: #333;
+                font-size: 14px;
+            }
+        </style>
+    @endpush
+
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    @endpush
+
+</x-admin.layout.terminal>

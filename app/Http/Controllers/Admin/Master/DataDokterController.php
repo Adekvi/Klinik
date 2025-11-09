@@ -66,6 +66,7 @@ class DataDokterController extends Controller
         DataDokter::where('id', $id)->delete();
         return redirect()->route('master.datadokter');
     }
+    
     public function updateStatus(Request $request)
     {
         $doctorId = $request->input('id');

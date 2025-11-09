@@ -23,11 +23,4 @@
 
 <!-- CSS Chat -->
 
-
-<!-- Helpers -->
-<script src="<?php echo e(asset('aset/vendor/js/helpers.js')); ?>"></script>
-
-<!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-<!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-<script src="<?php echo e(asset('aset/js/config.js')); ?>"></script>
 <?php /**PATH E:\xampp\htdocs\Job_Rs_Master\resources\views/components/admin/style.blade.php ENDPATH**/ ?>

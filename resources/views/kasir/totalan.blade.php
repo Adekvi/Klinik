@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Kasir Total')
-@section('content')
+<x-admin.layout.terminal title="Kasir | Total">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -40,7 +38,8 @@
                                             <th scope="row" style="padding: 4px; text-align: left;">Nama Petugas</th>
                                             <td style="padding: 4px; width: 10px;">:</td>
                                             <td style="padding: 4px;"><input type="text" name="nama_kasir"
-                                                    id="nama_kasir" class="form-control" value="{{ Auth::user()->name }}"
+                                                    id="nama_kasir" class="form-control"
+                                                    value="{{ Auth::user()->name }}"
                                                     style="margin-left: 5px; text-align: end" readonly>
                                             </td>
                                         </tr>
@@ -97,7 +96,8 @@
                                         <div class="info-item mb-2">
                                             <label style="min-width: 120px;">Jenis Pasien</label>
                                             <span>:</span>
-                                            <input type="text" name="jenis_pasien" id="jenis_pasien" class="form-control"
+                                            <input type="text" name="jenis_pasien" id="jenis_pasien"
+                                                class="form-control"
                                                 value="{{ $antrianKasir->booking->pasien->jenis_pasien }}"
                                                 style="margin-left: 5px; text-align: end" readonly>
                                         </div>
@@ -111,21 +111,23 @@
                                         <div class="info-item mb-2">
                                             <label style="min-width: 120px;">No. BPJS</label>
                                             <span>:</span>
-                                            <input type="text" name="nik_bpjs" id="nik_bpjs" class="form-control"
-                                                style="margin-left: 5px; text-align: end"
+                                            <input type="text" name="nik_bpjs" id="nik_bpjs"
+                                                class="form-control" style="margin-left: 5px; text-align: end"
                                                 value="{{ $antrianKasir->booking->pasien->bpjs ?? '-' }}" readonly>
                                         </div>
                                         <div class="info-item mb-2">
                                             <label style="min-width: 120px;">Poli</label>
                                             <span>:</span>
-                                            <p class="form-control" style="margin-left: 5px; text-align: end" readonly>
+                                            <p class="form-control" style="margin-left: 5px; text-align: end"
+                                                readonly>
                                                 {{ $antrianKasir->poli->namapoli }}</p>
                                             {{-- <input type="text" name="" id="id_poli" class="form-control" value="{{ $antrianKasir->poli->namapoli }}" style="margin-left: 5px; text-align: end" readonly> --}}
                                         </div>
                                         <div class="info-item mb-2">
                                             <label style="min-width: 120px;">Dokter</label>
                                             <span>:</span>
-                                            <p class="form-control" style="margin-left: 5px; text-align: end" readonly>
+                                            <p class="form-control" style="margin-left: 5px; text-align: end"
+                                                readonly>
                                                 {{ $antrianKasir->obat->soap->nama_dokter }}</p>
                                         </div>
                                     </div>
@@ -134,7 +136,8 @@
                                     <div class="info-container p-3 border rounded shadow-sm mb-4">
                                         <div class="info-item mb-3" data-pasien-id="{{ $antrianKasir->id }}">
                                             <div class="d-flex align-items-center">
-                                                <h5 class="font-weight-bold" style="min-width: 110px; font-size: 28px">
+                                                <h5 class="font-weight-bold"
+                                                    style="min-width: 110px; font-size: 28px">
                                                     TOTAL</h5>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -202,15 +205,16 @@
                                             <!-- Bagian input Sub Total -->
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" style="background: rgb(228, 228, 228)">
+                                                    <span class="input-group-text"
+                                                        style="background: rgb(228, 228, 228)">
                                                         <b>Rp.</b>
                                                     </span>
                                                 </div>
                                                 <!-- Menampilkan subtotal yang sudah dihitung -->
                                                 <input type="number" value="{{ Rupiah($subTotal) }}"
                                                     name="sub_total_rincian"
-                                                    id="sub_total_rincian-{{ $antrianKasir->id }}" class="form-control"
-                                                    style="text-align: end" readonly>
+                                                    id="sub_total_rincian-{{ $antrianKasir->id }}"
+                                                    class="form-control" style="text-align: end" readonly>
                                             </div>
                                         </div>
 
@@ -219,7 +223,8 @@
                                             <span>:</span>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" style="background: rgb(228, 228, 228)">
+                                                    <span class="input-group-text"
+                                                        style="background: rgb(228, 228, 228)">
                                                         <b>Rp.</b>
                                                     </span>
                                                 </div>
@@ -243,14 +248,15 @@
                                             ?>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" style="background: rgb(228, 228, 228)">
+                                                    <span class="input-group-text"
+                                                        style="background: rgb(228, 228, 228)">
                                                         <b>Rp.</b>
                                                     </span>
                                                 </div>
                                                 @if ($datadokter->isNotEmpty())
                                                     <input type="number" name="konsul_dokter"
-                                                        id="konsul_dokter-{{ $antrianKasir->id }}" class="form-control"
-                                                        style="text-align: end"
+                                                        id="konsul_dokter-{{ $antrianKasir->id }}"
+                                                        class="form-control" style="text-align: end"
                                                         value="{{ Rupiah($datadokter->first()->tarif) }}" readonly>
                                                 @endif
                                             </div>
@@ -261,7 +267,8 @@
                                             <span>:</span>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" style="background: rgb(228, 228, 228)">
+                                                    <span class="input-group-text"
+                                                        style="background: rgb(228, 228, 228)">
                                                         <b>Rp.</b>
                                                     </span>
                                                 </div>
@@ -306,13 +313,14 @@
                                             <div class="input-group">
                                                 @foreach ($pajak as $item)
                                                     <input type="number" name="ppn"
-                                                        id="ppn-{{ $antrianKasir->id }}" value="{{ $item->tarifPpn }}"
-                                                        class="form-control" style="text-align: center; margin-left: 5px"
-                                                        readonly>
+                                                        id="ppn-{{ $antrianKasir->id }}"
+                                                        value="{{ $item->tarifPpn }}" class="form-control"
+                                                        style="text-align: center; margin-left: 5px" readonly>
                                                 @endforeach
                                                 {{-- {{ dd($pajak) }} --}}
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" style="background: rgb(228, 228, 228)">
+                                                    <span class="input-group-text"
+                                                        style="background: rgb(228, 228, 228)">
                                                         <b><strong>%</strong></b>
                                                     </span>
                                                 </div>
@@ -346,7 +354,8 @@
                                                         <td>{{ $no++ }}</td>
                                                         <!-- Tidak perlu nomor iterasi karena hanya satu entri -->
                                                         {{-- KETERANGAN --}}
-                                                        <td class="text-start" data-pasien-id="{{ $obatPasien->id }}">
+                                                        <td class="text-start"
+                                                            data-pasien-id="{{ $obatPasien->id }}">
                                                             @php
                                                                 $namaObat =
                                                                     json_decode(
@@ -456,7 +465,8 @@
                                                     </tr>
                                                 @else
                                                     <tr>
-                                                        <td colspan="7" class="text-center">Tidak ada data obat untuk
+                                                        <td colspan="7" class="text-center">Tidak ada data obat
+                                                            untuk
                                                             pasien ini.</td>
                                                     </tr>
                                                 @endif
@@ -493,7 +503,8 @@
                                                     id="btn-umum-{{ $antrianKasir->id }}"
                                                     onclick="handlePaymentType('umum', {{ $antrianKasir->id }})">UMUM</button>
                                             </div>
-                                            <div class="info-item text-nowrap" data-pasien-id="{{ $antrianKasir->id }}">
+                                            <div class="info-item text-nowrap"
+                                                data-pasien-id="{{ $antrianKasir->id }}">
                                                 <label for="" style="padding-left: 15px;">TOTAL</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -530,8 +541,8 @@
                                                             style="background: rgb(228, 228, 228)"><b>Rp.</b></span>
                                                     </div>
                                                     <input type="number" name="kembalian"
-                                                        id="kembalian-{{ $antrianKasir->id }}" style="text-align: end"
-                                                        class="form-control" readonly>
+                                                        id="kembalian-{{ $antrianKasir->id }}"
+                                                        style="text-align: end" class="form-control" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -552,329 +563,286 @@
         </div>
     </div>
 
-@endsection
-
-@push('style')
-    <style>
-        .info-container {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-            padding: 5px;
-            border-bottom: 1px solid #ddd;
-            /* Tambah border bawah untuk gaya tabel */
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-            /* Hilangkan border bawah untuk item terakhir */
-        }
-
-        .info-item label {
-            font-weight: bold;
-            color: #333;
-            min-width: 110px;
-            /* Atur lebar minimum untuk label agar konsisten */
-        }
-
-        .info-item p {
-            margin: 0;
-            font-size: 14px;
-            color: #555;
-            flex: 1;
-            text-align: right;
-            /* Atur teks paragraf agar rata kanan */
-        }
-
-        .info-item h1,
-        .info-item h5 {
-            margin: 0;
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .info-item span {
-            font-size: 16px;
-            margin-left: 5px;
-            /* Jarak kecil antara kata dan titik dua */
-        }
-
-        .info-item button {
-            margin-right: 5px;
-            /* Jarak antar tombol */
-        }
-
-        .total {
-            font-size: 24px;
-            color: #dc3545;
-        }
-
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
-
-@push('script')
-    <script>
-        // jam dan tgl
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<p>' + now.toLocaleDateString('id-ID', options) + '</p>';
-
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0');
-            jamElement.innerHTML = '<p>' + jamString + '</p>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // TOTAL BAYAR
-        function formatRupiah(angka) {
-            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        }
-
-        function initializeButtons(id) {
-            const jenisPasien = document.getElementById('jenis_pasien').value.toLowerCase();
-            const btnBpjs = document.getElementById('btn-bpjs-' + id);
-            const btnNonKapitasi = document.getElementById('btn-non-kapitasi-' + id);
-            const btnUmum = document.getElementById('btn-umum-' + id);
-
-            if (jenisPasien === 'umum') {
-                btnBpjs.disabled = true;
-                btnNonKapitasi.disabled = false;
-                btnUmum.disabled = false;
-                handlePaymentType('umum', id);
-            } else if (jenisPasien === 'bpjs') {
-                btnBpjs.disabled = false;
-                btnNonKapitasi.disabled = true;
-                btnUmum.disabled = true;
-                handlePaymentType('bpjs', id);
-            } else {
-                btnBpjs.disabled = false;
-                btnNonKapitasi.disabled = false;
-                btnUmum.disabled = false;
-                handlePaymentType('umum', id);
+    @push('style')
+        <style>
+            .info-container {
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                padding: 15px;
+                background-color: #f9f9f9;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
 
-            hitungTotal(id);
-        }
-
-        function hitungTotal(id) {
-            let subTotal = parseFloat(document.getElementById('sub_total_rincian-' + id).value.replace(/\./g, '')) || 0;
-            let administrasi = parseFloat(document.getElementById('administrasi-' + id).value.replace(/\./g, '')) || 0;
-            let konsulDokter = parseFloat(document.getElementById('konsul_dokter-' + id).value.replace(/\./g, '')) || 0;
-            let embalase = parseFloat(document.getElementById('embalase-' + id).value.replace(/\./g, '')) || 0;
-            let ppnPersen = parseFloat(document.getElementById('ppn-' + id).value) || 0;
-
-            console.log('subTotal:', subTotal);
-            console.log('administrasi:', administrasi);
-            console.log('konsulDokter:', konsulDokter);
-            console.log('embalase:', embalase);
-            console.log('ppnPersen:', ppnPersen);
-
-            let totalSebelumPPN = subTotal + administrasi + konsulDokter + embalase;
-            let ppn = Math.floor(totalSebelumPPN * (ppnPersen / 100));
-            let total = totalSebelumPPN + ppn;
-
-            console.log('total:', total);
-
-            document.getElementById('total-' + id).value = formatRupiah(total);
-            document.getElementById('total_hidden-' + id).value = total;
-        }
-
-        function handlePaymentType(type, id) {
-            console.log('ID yang digunakan:', id);
-            console.log('totalbayar ID:', 'totalbayar-' + id);
-            console.log('totalbayar_hidden ID:', 'totalbayar_hidden-' + id);
-
-            const jenisPasien = document.getElementById('jenis_pasien').value.toLowerCase();
-            let totalBayar = 0;
-
-            hitungTotal(id);
-            let totalAsli = parseFloat(document.getElementById('total_hidden-' + id).value) || 0;
-            console.log('totalAsli:', totalAsli);
-
-            if (type === 'bpjs' && jenisPasien === 'bpjs') {
-                totalBayar = 0;
-                document.getElementById('bayar-' + id).value = 0;
-                document.getElementById('bayar-' + id).readOnly = true;
-                document.getElementById('kembalian-' + id).value = 0;
-            } else {
-                totalBayar = totalAsli;
-                document.getElementById('bayar-' + id).readOnly = false;
+            .info-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5px;
+                padding: 5px;
+                border-bottom: 1px solid #ddd;
+                /* Tambah border bawah untuk gaya tabel */
             }
 
-            console.log('totalBayar:', totalBayar);
-            document.getElementById('totalbayar-' + id).value = formatRupiah(totalBayar);
-            document.getElementById('totalbayar_hidden-' + id).value = totalBayar;
-
-            hitungKembalian(id);
-        }
-
-        function hitungKembalian(id) {
-            let totalBayar = parseFloat(document.getElementById('totalbayar_hidden-' + id).value) || 0;
-            let bayar = parseFloat(document.getElementById('bayar-' + id).value) || 0;
-
-            let kembalian = bayar - totalBayar;
-            if (kembalian < 0) {
-                kembalian = 0;
+            .info-item:last-child {
+                border-bottom: none;
+                /* Hilangkan border bawah untuk item terakhir */
             }
 
-            document.getElementById('kembalian-' + id).value = formatRupiah(kembalian);
-        }
-
-        // Fungsi untuk simpan dan membuka tab cetak
-        function simpanDanCetak(id) {
-            const form = document.getElementById('transaksiForm');
-            if (!form) {
-                console.error('Form tidak ditemukan.');
-                alert('Form tidak ditemukan. Silakan periksa halaman.');
-                return;
+            .info-item label {
+                font-weight: bold;
+                color: #333;
+                min-width: 110px;
+                /* Atur lebar minimum untuk label agar konsisten */
             }
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-            if (!csrfToken) {
-                console.error('CSRF token tidak ditemukan.');
-                alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-                return;
+            .info-item p {
+                margin: 0;
+                font-size: 14px;
+                color: #555;
+                flex: 1;
+                text-align: right;
+                /* Atur teks paragraf agar rata kanan */
             }
 
-            // Buat FormData dan sanitasi input
-            const formData = new FormData(form);
-            const numericFields = [
-                'total_hidden',
-                'bayar',
-                'kembalian',
-                'sub_total_rincian',
-                'administrasi',
-                'konsul_dokter',
-                'embalase',
-                'total_obat',
-                'ppn',
-                'totalbayar_hidden'
-            ];
-            numericFields.forEach(field => {
-                const value = formData.get(field);
-                formData.set(field, value ? value.replace(/[^0-9]/g, '') : '0');
-            });
+            .info-item h1,
+            .info-item h5 {
+                margin: 0;
+                color: #28a745;
+                font-weight: bold;
+            }
 
-            console.log('Data yang dikirim:', [...formData.entries()]);
+            .info-item span {
+                font-size: 16px;
+                margin-left: 5px;
+                /* Jarak kecil antara kata dan titik dua */
+            }
 
-            fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
+            .info-item button {
+                margin-right: 5px;
+                /* Jarak antar tombol */
+            }
+
+            .total {
+                font-size: 24px;
+                color: #dc3545;
+            }
+
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
+
+    @push('script')
+        <script>
+            // jam dan tgl
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<p>' + now.toLocaleDateString('id-ID', options) + '</p>';
+
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0');
+                jamElement.innerHTML = '<p>' + jamString + '</p>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // TOTAL BAYAR
+            function formatRupiah(angka) {
+                return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
+
+            function initializeButtons(id) {
+                const jenisPasien = document.getElementById('jenis_pasien').value.toLowerCase();
+                const btnBpjs = document.getElementById('btn-bpjs-' + id);
+                const btnNonKapitasi = document.getElementById('btn-non-kapitasi-' + id);
+                const btnUmum = document.getElementById('btn-umum-' + id);
+
+                if (jenisPasien === 'umum') {
+                    btnBpjs.disabled = true;
+                    btnNonKapitasi.disabled = false;
+                    btnUmum.disabled = false;
+                    handlePaymentType('umum', id);
+                } else if (jenisPasien === 'bpjs') {
+                    btnBpjs.disabled = false;
+                    btnNonKapitasi.disabled = true;
+                    btnUmum.disabled = true;
+                    handlePaymentType('bpjs', id);
+                } else {
+                    btnBpjs.disabled = false;
+                    btnNonKapitasi.disabled = false;
+                    btnUmum.disabled = false;
+                    handlePaymentType('umum', id);
+                }
+
+                hitungTotal(id);
+            }
+
+            function hitungTotal(id) {
+                let subTotal = parseFloat(document.getElementById('sub_total_rincian-' + id).value.replace(/\./g, '')) || 0;
+                let administrasi = parseFloat(document.getElementById('administrasi-' + id).value.replace(/\./g, '')) || 0;
+                let konsulDokter = parseFloat(document.getElementById('konsul_dokter-' + id).value.replace(/\./g, '')) || 0;
+                let embalase = parseFloat(document.getElementById('embalase-' + id).value.replace(/\./g, '')) || 0;
+                let ppnPersen = parseFloat(document.getElementById('ppn-' + id).value) || 0;
+
+                let totalSebelumPPN = subTotal + administrasi + konsulDokter + embalase;
+                let ppn = Math.floor(totalSebelumPPN * (ppnPersen / 100));
+                let total = totalSebelumPPN + ppn;
+
+                document.getElementById('total-' + id).value = formatRupiah(total);
+                document.getElementById('total_hidden-' + id).value = total;
+            }
+
+            function handlePaymentType(type, id) {
+                hitungTotal(id);
+                let totalAsli = parseFloat(document.getElementById('total_hidden-' + id).value) || 0;
+                const jenisPasien = document.getElementById('jenis_pasien').value.toLowerCase();
+                let totalBayar = 0;
+
+                if (type === 'bpjs' && jenisPasien === 'bpjs') {
+                    totalBayar = 0;
+                    document.getElementById('bayar-' + id).value = 0;
+                    document.getElementById('bayar-' + id).readOnly = true;
+                    document.getElementById('kembalian-' + id).value = 0;
+                } else {
+                    totalBayar = totalAsli;
+                    document.getElementById('bayar-' + id).readOnly = false;
+                }
+
+                document.getElementById('totalbayar-' + id).value = formatRupiah(totalBayar);
+                document.getElementById('totalbayar_hidden-' + id).value = totalBayar;
+
+                hitungKembalian(id);
+            }
+
+            function hitungKembalian(id) {
+                let totalBayar = parseFloat(document.getElementById('totalbayar_hidden-' + id).value) || 0;
+                let bayar = parseFloat(document.getElementById('bayar-' + id).value.replace(/\./g, '')) || 0;
+
+                let kembalian = bayar - totalBayar;
+                if (kembalian < 0) kembalian = 0;
+
+                document.getElementById('kembalian-' + id).value = formatRupiah(kembalian);
+            }
+
+            // PERBAIKAN UTAMA: simpanDanCetak(id) + sanitasi field + error handling
+            function simpanDanCetak(id) {
+                const form = document.getElementById('transaksiForm');
+                if (!form) {
+                    alert('Form tidak ditemukan!');
+                    return;
+                }
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                if (!csrfToken) {
+                    alert('CSRF token tidak ditemukan. Refresh halaman.');
+                    return;
+                }
+
+                const formData = new FormData(form);
+
+                // Daftar field numerik dengan suffix -id
+                const numericFields = [
+                    'total_hidden',
+                    'totalbayar_hidden',
+                    'bayar',
+                    'kembalian',
+                    'sub_total_rincian',
+                    'administrasi',
+                    'konsul_dokter',
+                    'embalase',
+                    'ppn'
+                ];
+
+                // Sanitasi: hapus titik, pastikan angka
+                numericFields.forEach(field => {
+                    const fieldName = `${field}-${id}`;
+                    const value = formData.get(fieldName);
+                    if (value !== null) {
+                        const cleanValue = value.toString().replace(/[^0-9]/g, '');
+                        formData.set(fieldName, cleanValue || '0');
                     }
-                })
-                .then(response => {
-                    console.log('Status respons:', response.status);
-                    if (response.status === 419) {
-                        alert('Sesi kedaluwarsa. Silakan refresh halaman atau login ulang.');
-                        return Promise.reject(new Error('Sesi kedaluwarsa'));
-                    }
-                    return response.json().then(data => ({
-                        status: response.status,
-                        data
-                    }));
-                })
-                .then(({
-                    status,
-                    data
-                }) => {
-                    console.log('Respons server:', data);
-                    if (status === 200 && data.success) {
-                        if (data.transaksi_id) {
+                });
+
+                console.log('Mengirim data:', Object.fromEntries(formData));
+
+                fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        // Tangani semua status error
+                        if (!response.ok) {
+                            return response.text().then(text => {
+                                throw new Error(`Server Error ${response.status}: ${text.substring(0, 200)}...`);
+                            });
+                        }
+                        // Coba parse JSON
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            return response.json();
+                        } else {
+                            return response.text().then(text => {
+                                throw new Error('Respons bukan JSON: ' + text.substring(0, 200));
+                            });
+                        }
+                    })
+                    .then(data => {
+                        console.log('Sukses:', data);
+                        if (data.success && data.transaksi_id) {
                             const printUrl = '/kasir/cetakTransaksi/' + data.transaksi_id;
-                            console.log('Membuka URL cetak:', printUrl);
                             const printWindow = window.open(printUrl, '_blank');
                             if (printWindow) {
-                                printWindow.focus();
-                                setTimeout(() => {
-                                    console.log('Mencetak struk...');
-                                    printWindow.print();
-                                }, 200);
-                            } else {
-                                console.error('Gagal membuka jendela cetak.');
-                                alert('Gagal membuka jendela cetak. Pastikan popup tidak diblokir.');
+                                setTimeout(() => printWindow.print(), 500);
                             }
                             alert('Transaksi berhasil disimpan!');
-                            window.location.href = '/kasir/index'; // Redirect ke halaman antrian
+                            window.location.href = '/kasir/index';
                         } else {
-                            console.error('transaksi_id tidak ditemukan di respons:', data);
-                            alert('Gagal mencetak: ID transaksi tidak ditemukan.');
+                            alert('Gagal: ' + (data.message || 'Respons tidak valid'));
                         }
-                    } else {
-                        console.error('Gagal menyimpan transaksi:', data.message);
-                        alert(`Gagal menyimpan transaksi: ${data.message}`);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Tampilkan error tanpa crash
+                        alert('Terjadi kesalahan: ' + error.message);
+                    });
+            }
+
+            // Inisialisasi saat halaman loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                const id = {{ $antrianKasir->id }};
+                initializeButtons(id);
+
+                // Event listener untuk perubahan input
+                ['sub_total_rincian', 'administrasi', 'konsul_dokter', 'embalase', 'ppn'].forEach(field => {
+                    const input = document.getElementById(field + '-' + id);
+                    if (input) {
+                        input.addEventListener('input', () => hitungTotal(id));
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert(`Terjadi kesalahan: ${error.message}`);
                 });
-        }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const id = {{ $antrianKasir->id }};
-            initializeButtons(id);
-
-            // Add event listeners for input changes
-            ['sub_total_rincian', 'administrasi', 'konsul_dokter', 'embalase', 'ppn'].forEach(field => {
-                const input = document.getElementById(field + '-' + id);
-                if (input) {
-                    input.addEventListener('input', () => hitungTotal(id));
+                const bayarInput = document.getElementById('bayar-' + id);
+                if (bayarInput) {
+                    bayarInput.addEventListener('input', () => hitungKembalian(id));
                 }
             });
-        });
+        </script>
+    @endpush
 
-        // Tambahkan event listener untuk setiap pasien
-        document.querySelectorAll('[data-pasien-id]').forEach(function(element) {
-            const id = element.getAttribute('data-pasien-id');
-
-            document.getElementById('administrasi-' + id).addEventListener('input', function() {
-                hitungTotal(id);
-            });
-            document.getElementById('embalase-' + id).addEventListener('input', function() {
-                hitungTotal(id);
-            });
-            document.getElementById('sub_total_rincian-' + id).addEventListener('input', function() {
-                hitungTotal(id);
-            });
-            document.getElementById('ppn-' + id).addEventListener('input', function() {
-                hitungTotal(id);
-            });
-            document.getElementById('bayar-' + id).addEventListener('input', function() {
-                hitungKembalian(id);
-            });
-
-            window.onload = function() {
-                hitungTotal(id);
-                hitungKembalian(id);
-            };
-        });
-    </script>
-@endpush
+</x-admin.layout.terminal>

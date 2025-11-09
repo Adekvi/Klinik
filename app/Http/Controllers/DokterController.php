@@ -55,16 +55,184 @@ class DokterController extends Controller
         $antrianDokter->appends(['search' => $search, 'entries' => $entries]);
 
         $ttd = TtdMedis::where('status', true)->get();
-        // dd($ttd);
 
         // dd($antrianDokter);
 
-        // Group by Poli
+        // Jumlah pasien
+        $today = Carbon::today();
+
+        // PASIEN DILAYANI & BELUM
+        $umumDilayani = AntrianPerawat::where('status', 'P')
+            ->where('id_poli', 1)
+            ->whereDate('created_at', $today)
+            ->count();
+
+        $umumBelumDilayani = AntrianPerawat::where('status', 'M')
+            ->where('id_poli', 1)
+            ->whereDate('created_at', $today)
+            ->count();
+
+        // Poli Gigi
+        $gigiDilayani = AntrianPerawat::where('status', 'P')
+            ->where('id_poli', 2)
+            ->whereDate('created_at', $today)
+            ->count();
+
+        $gigiBelumDilayani = AntrianPerawat::where('status', 'M')
+            ->where('id_poli', 2)
+            ->whereDate('created_at', $today)
+            ->count();
+
+        // SHIFT PAGI POLI UMUM
+        // PASIEN BPJS
+        $countShiftPagiUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today()) // <-- tambah filter hari ini
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftPagiUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // SHIFT PAGI POLI GIGI
+        // PASIEN BPJS
+        $countShiftPagiGigiBPJS = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftPagiGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // SHIFT SIANG POLI UMUM
+        // PASIEN BPJS
+        $countShiftSiangUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftSiangUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // SHIFT SIANG POLI GIGI
+        // PASIEN UMUM
+        $countShiftSiangGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // PASIEN BPJS
+        $countShiftSiangGigiBpjs = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', Carbon::today())
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // dd($countShiftSiangUmumUmum, $countShiftSiangGigiBpjs, $countShiftSiangGigiUmum);
+
+        // TOTAL PASIEN SHIFT PAGI DAN SIANG
+        // POLI UMUM PASIEN UMUM
+        $totalPoliUmumPasienUmum = $countShiftPagiUmumUmum + $countShiftSiangUmumUmum;
+
+        // POLI UMUM PASIEN BPJS
+        $totalPoliUmumPasienBPJS = $countShiftPagiUmumBPJS + $countShiftSiangUmumBPJS;
+
+        // POLI GIGI PASIEN UMUM
+        $totalPoliGigiPasienUmum = $countShiftPagiGigiUmum + $countShiftSiangGigiUmum;
+
+        // POLI GIGI PASIEN BPJS
+        $totalPoliGigiPasienBPJS = $countShiftPagiGigiBPJS + $countShiftSiangGigiBpjs;
+
         $groupedAntrian = $antrianDokter->groupBy('poli.namapoli');
 
-        // dd($groupedAntrian);
+        // dd(vars: $antrianDokter);
 
-        return view('dokter.index', compact('antrianDokter', 'ttd', 'groupedAntrian', 'entries', 'search'));
+        return view('dokter.index', compact(
+            'antrianDokter', 
+            'ttd', 
+            'groupedAntrian',
+            'entries', 
+            'search', 
+            'umumDilayani',
+            'umumBelumDilayani',
+            'gigiDilayani',
+            'gigiBelumDilayani',
+            'countShiftPagiUmumBPJS',
+            'countShiftPagiUmumUmum',
+            'countShiftPagiGigiBPJS',
+            'countShiftPagiGigiUmum',
+            'countShiftSiangUmumBPJS',
+            'countShiftSiangUmumUmum',
+            'countShiftSiangGigiBpjs',
+            'countShiftSiangGigiUmum',
+            'totalPoliUmumPasienUmum',
+            'totalPoliUmumPasienBPJS',
+            'totalPoliGigiPasienUmum',
+            'totalPoliGigiPasienBPJS',
+        ));
     }
 
     public function lewatiAntrianDokter($id)
@@ -141,9 +309,15 @@ class DokterController extends Controller
 
         $results = Aturan::where('aturan_minum', 'LIKE', '%' . $term . '%')
             ->orWhere('takaran', 'LIKE', '%' . $term . '%')
-            ->select('id', 'aturan_minum as text') // Sesuaikan dengan kolom yang diinginkan
+            ->select('id', 'aturan_minum', 'takaran')
             ->take(10)
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'text' => strtoupper($item->takaran) . ' - ' . $item->aturan_minum,
+                ];
+            });
 
         return response()->json($results);
     }
@@ -154,9 +328,15 @@ class DokterController extends Controller
 
         $results = Anjuran::where('kode_anjuran', 'LIKE', '%' . $term . '%')
             ->orWhere('golongan', 'LIKE', '%' . $term . '%')
-            ->select('id', 'kode_anjuran as text') // Sesuaikan dengan kolom yang diinginkan
+            ->select('id', 'kode_anjuran', 'golongan')
             ->take(10)
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'text' => $item->kode_anjuran . ' - ' . $item->golongan,
+                ];
+            });
 
         return response()->json($results);
     }
@@ -182,19 +362,92 @@ class DokterController extends Controller
         return view('antrian.daftar', compact('pasien', 'date', 'time'));
     }
 
-    // Controller Antrian Dokter
     public function panggilAntrian(Request $request)
     {
-        // Dapatkan nomor antrian dari $request->nomor_antrian
-        $nomorAntrian = $request->nomor_antrian;
+        $poli = $request->poli; // contoh: 'umum' atau 'gigi'
+        $today = Carbon::today();
 
-        // Simpan nomor antrian ke dalam sesi atau database sesuai kebutuhan
-        session(['nomor_antrian_dokter' => $nomorAntrian]);
+        // Ambil antrian pertama berdasarkan status terendah ('D' atau 'M')
+        $next = AntrianPerawat::whereHas('poli', function ($q) use ($poli) {
+                $q->whereRaw('LOWER(namapoli) = ?', [strtolower($poli)]);
+            })
+            ->whereDate('created_at', $today)
+            ->whereIn('status', ['D', 'M', 'P', 'B', 'K'])
+            ->orderByRaw("
+                FIELD(status, 'D', 'M', 'P', 'B', 'K', 'WS'),
+                kode_antrian ASC
+            ")
+            ->first();
 
-        // Render tampilan antrian.blade.php dan kirimkan sebagai respon Ajax
+        if (!$next) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada antrian berikutnya']);
+        }
 
-        // $view = View::make('antrian.antrian', compact('nomorAntrian'))->render();
+        // Tentukan status berikutnya
+        $statusLama = $next->status;
+        $statusBaru = match ($statusLama) {
+            'D' => 'M',
+            'M' => 'P',
+            'P' => 'B',
+            'B' => 'K',
+            'K' => 'WS',
+            default => $statusLama
+        };
 
-        return response()->json(['nomorAntrian' => $nomorAntrian]);
+        // Update status di database
+        // $next->update(['status' => $statusBaru]);
+
+        return response()->json([
+            'success' => true,
+            'nomor' => $next->kode_antrian,
+            'poli' => $poli,
+            'status_sebelumnya' => $statusLama,
+            'status_baru' => $statusBaru,
+            'pasien' => $next->booking->pasien->nama_pasien,
+        ]);
     }
+
+    // public function panggilAntrian(Request $request)
+    // {
+    //     $poli = $request->poli; // contoh: 'umum' atau 'gigi'
+    //     $today = Carbon::today();
+
+    //     // Ambil antrian pertama dengan status 'M' (Menunggu)
+    //     $next = AntrianPerawat::whereHas('poli', function ($q) use ($poli) {
+    //             $q->whereRaw('LOWER(namapoli) = ?', [strtolower($poli)]);
+    //         })
+    //         // ->whereDate('created_at', $today)
+    //         ->where('status', 'M') // ✅ gunakan where, bukan whereIn
+    //         ->orderBy('kode_antrian', 'asc')
+    //         ->first();
+
+    //     if (!$next) {
+    //         return response()->json(['success' => false, 'message' => 'Tidak ada antrian berikutnya']);
+    //     }
+
+    //     // Update status menjadi 'P' (sedang diperiksa)
+    //     // $next->update(['status' => 'P']);
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'nomor' => $next->kode_antrian,
+    //         'poli' => $poli
+    //     ]);
+    // }
+
+    // Controller Antrian Dokter
+    // public function panggilAntrian(Request $request)
+    // {
+    //     // Dapatkan nomor antrian dari $request->nomor_antrian
+    //     $nomorAntrian = $request->nomor_antrian;
+
+    //     // Simpan nomor antrian ke dalam sesi atau database sesuai kebutuhan
+    //     session(['nomor_antrian_dokter' => $nomorAntrian]);
+
+    //     // Render tampilan antrian.blade.php dan kirimkan sebagai respon Ajax
+
+    //     // $view = View::make('antrian.antrian', compact('nomorAntrian'))->render();
+
+    //     return response()->json(['nomorAntrian' => $nomorAntrian]);
+    // }
 }

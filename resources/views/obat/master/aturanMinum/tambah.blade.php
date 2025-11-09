@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Tambah</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ url('apoteker/master/aturan-tambah') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ url('apoteker/master-obat/aturan-tambah') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row">

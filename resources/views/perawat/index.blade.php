@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Perawat')
-@section('content')
+<x-admin.layout.terminal title="Perawat">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -37,8 +35,8 @@
                                         aria-labelledby="offcanvasEndLabel" style="width: 600px">
                                         <div class="offcanvas-header">
                                             <h5 id="offcanvasEndLabel" class="offcanvas-title">Status Pasien</h5>
-                                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                                                aria-label="Close"></button>
+                                            <button type="button" class="btn-close text-reset"
+                                                data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                         </div>
                                         <div class="offcanvas-body my-auto mx-0 flex-grow-0">
                                             <div class="text-center mb-3">
@@ -52,8 +50,8 @@
                                                                 style="font-size: 25px">{{ $pasienDilayani }}</span>
                                                         </span>
                                                         <!-- Gambar di bawah -->
-                                                        <img src="{{ asset('aset/img/periksa.jpg') }}" alt="Pasien DIlayani"
-                                                            style="width: 60%; height: auto;">
+                                                        <img src="{{ asset('aset/img/periksa.jpg') }}"
+                                                            alt="Pasien DIlayani" style="width: 60%; height: auto;">
                                                     </div>
                                                     <div class="text-center d-flex flex-column align-items-center">
                                                         <!-- Teks dan ikon di atas -->
@@ -64,7 +62,8 @@
                                                         </span>
                                                         <!-- Gambar di bawah -->
                                                         <img src="{{ asset('aset/img/check.jpg') }}"
-                                                            alt="Pasien Belum Dilayani" style="width: 60%; height: auto;">
+                                                            alt="Pasien Belum Dilayani"
+                                                            style="width: 60%; height: auto;">
                                                     </div>
                                                 </div>
                                             </div>
@@ -118,7 +117,6 @@
                                                     </table>
                                                 </div>
 
-                                                {{-- Shift Siang --}}
                                                 <div id="shiftSiang" class="shift-container">
                                                     <table class="table table-bordered table-responsive">
                                                         <thead class="table-primary">
@@ -173,7 +171,8 @@
                                                     <table class="table table-bordered table-responsive w-100">
                                                         <thead class="table-primary">
                                                             <tr>
-                                                                <th class="text-center">PASIEN SHIFT PAGI DAN SIANG</th>
+                                                                <th class="text-center">PASIEN SHIFT PAGI DAN SIANG
+                                                                </th>
                                                                 <th class="text-center">KET.</th>
                                                             </tr>
                                                         </thead>
@@ -214,8 +213,10 @@
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <a href="{{ url('rekap-harian') }}" class="btn btn-primary w-100">
-                                                        <i class="menu-icon tf-icons fa-solid fa-folder"></i> Menu Rekap
+                                                    <a href="{{ url('rekap-harian') }}"
+                                                        class="btn btn-primary w-100">
+                                                        <i class="menu-icon tf-icons fa-solid fa-folder"></i> Menu
+                                                        Rekap
                                                         Harian
                                                     </a>
                                                 </div>
@@ -283,7 +284,8 @@
                                     <tbody style="text-align: center; text-transform: uppercase;">
                                         @if (count($pasien) === 0)
                                             <tr>
-                                                <td colspan="10" style="text-align: center; font-size: bold">Belum ada
+                                                <td colspan="10" style="text-align: center; font-size: bold">Belum
+                                                    ada
                                                     data
                                                 </td>
                                             </tr>
@@ -295,7 +297,8 @@
                                                     <tr id="row_{{ $item->id }}">
                                                         <td>{{ $no++ }}</td>
                                                         <td>
-                                                            <button data-nomor-antrian-perawat="{{ $item->kode_antrian }}"
+                                                            <button
+                                                                data-nomor-antrian-perawat="{{ $item->kode_antrian }}"
                                                                 data-poli="{{ $item->poli->namapoli }}"
                                                                 class="btn btn-success btn-panggil-perawat mb-1"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
@@ -361,34 +364,31 @@
                                                 <script>
                                                     // Tanda Tangan
                                                     document.addEventListener('DOMContentLoaded', function() {
-                                                        var select = document.getElementById('ak_nama_perawat_bidan');
-                                                        var image = document.getElementById('ttd_perawat_image');
+                                                        const select = document.getElementById('ak_nama_perawat_bidan');
+                                                        const image = document.getElementById('ttd_perawat_image');
 
-                                                        // Pengecekan apakah elemen ada
-                                                        if (!select || !image) {
-                                                            console.error("Elemen tanda tangan atau gambar tidak ditemukan");
-                                                            return;
-                                                        }
+                                                        // Jika salah satu elemen tidak ditemukan, hentikan tanpa error
+                                                        if (!select || !image) return;
 
                                                         select.addEventListener('change', function() {
-                                                            var selectedOption = select.options[select.selectedIndex];
-                                                            var imageSrc = selectedOption.getAttribute('data-image');
+                                                            const selectedOption = select.options[select.selectedIndex];
+                                                            const imageSrc = selectedOption.getAttribute('data-image');
 
                                                             if (imageSrc) {
                                                                 image.src = imageSrc;
                                                                 image.style.display = 'block';
                                                             } else {
-                                                                image.src = '';
+                                                                image.removeAttribute('src');
                                                                 image.style.display = 'none';
-                                                                console.warn("Atribut data-image tidak ditemukan pada opsi yang dipilih");
                                                             }
                                                         });
 
-                                                        // Panggil event change secara manual untuk inisialisasi awal
+                                                        // Jalankan sekali untuk inisialisasi awal
                                                         if (select.options.length > 0) {
                                                             select.dispatchEvent(new Event('change'));
                                                         }
                                                     });
+
 
                                                     document.addEventListener('DOMContentLoaded', function() {
                                                         const btnKajian = document.querySelectorAll('[id^="btnKajian"]');
@@ -447,7 +447,8 @@
                                 <select name="periksa_entries" id="periksa_entries"
                                     class="form-select form-select-sm me-3" style="width: 80px;"
                                     onchange="this.form.submit()">
-                                    <option value="10" {{ request('periksa_entries', 10) == 10 ? 'selected' : '' }}>10
+                                    <option value="10"
+                                        {{ request('periksa_entries', 10) == 10 ? 'selected' : '' }}>10
                                     </option>
                                     <option value="25" {{ request('recent_entries') == 25 ? 'selected' : '' }}>25
                                     </option>
@@ -543,7 +544,8 @@
                             Asesmen
                             Pasien
                         </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="asesmen">
@@ -582,7 +584,8 @@
                                                 <td>
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#detailAsesmen{{ $asesmen['id'] }}"
-                                                        data-toggle="tooltip" data-bs-placement="top" title="Asesmen">
+                                                        data-toggle="tooltip" data-bs-placement="top"
+                                                        title="Asesmen">
                                                         <i class="fas fa-eye"></i> Lihat Asesmen
                                                     </button>
                                                 </td>
@@ -652,9 +655,11 @@
                                                             <td>{{ $asesmen->keluhan_utama ?? 'N/A' }}</td>
                                                             <td>
                                                                 <ul>
-                                                                    <li>Tensi: {{ $asesmen->p_tensi ?? 'N/A' }} mmHg</li>
+                                                                    <li>Tensi: {{ $asesmen->p_tensi ?? 'N/A' }} mmHg
+                                                                    </li>
                                                                     <li>RR: {{ $asesmen->p_rr ?? 'N/A' }} / minute</li>
-                                                                    <li>Nadi: {{ $asesmen->p_nadi ?? 'N/A' }} / minute</li>
+                                                                    <li>Nadi: {{ $asesmen->p_nadi ?? 'N/A' }} / minute
+                                                                    </li>
                                                                     <li>Suhu: {{ $asesmen->p_suhu ?? 'N/A' }} °C</li>
                                                                     <li>TB: {{ $asesmen->p_tb ?? 'N/A' }} cm</li>
                                                                     <li>BB: {{ $asesmen->p_bb ?? 'N/A' }} kg</li>
@@ -699,8 +704,10 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <p style="font-weight: bold; margin-bottom: 0">Resep:</p>
-                                                                <p style="font-weight: bold; margin-bottom: 0">Non Racikan
+                                                                <p style="font-weight: bold; margin-bottom: 0">Resep:
+                                                                </p>
+                                                                <p style="font-weight: bold; margin-bottom: 0">Non
+                                                                    Racikan
                                                                 </p>
                                                                 @php
                                                                     $resep = !empty($asesmen->soap_p)
@@ -716,7 +723,8 @@
                                                                             $aturanMinum = $aturan[$obat] ?? 'N/A';
                                                                         @endphp
                                                                         <ul>
-                                                                            <li>{{ $namaObat }} | {{ $aturanMinum }}
+                                                                            <li>{{ $namaObat }} |
+                                                                                {{ $aturanMinum }}
                                                                             </li>
                                                                         </ul>
                                                                     @endforeach
@@ -738,7 +746,8 @@
                                                                 @if (is_array($obatRacikan) && is_array($takaran) && count($obatRacikan) > 0 && count($obatRacikan) == count($takaran))
                                                                     @foreach ($obatRacikan as $namaObat => $jumlah)
                                                                         <ul>
-                                                                            <li>{{ $namaObat }} - {{ $jumlah }}
+                                                                            <li>{{ $namaObat }} -
+                                                                                {{ $jumlah }}
                                                                                 ({{ $takaran[$namaObat] ?? 'N/A' }})
                                                                             </li>
                                                                         </ul>
@@ -775,9 +784,11 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati Pasien
+                        <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati
+                            Pasien
                         </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <h5>Apakah Anda yakin ingin melewati pasien ini?</h5>
@@ -801,7 +812,8 @@
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Pendaftaran Pasien
+                    <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Pendaftaran
+                        Pasien
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -846,7 +858,8 @@
                     </div>
                     <div class="form-group">
                         <label for="tgllahir">Tanggal Lahir</label>
-                        <input type="date" class="form-control mt-2 mb-2" name="tgllahir" id="tgllahir" required>
+                        <input type="date" class="form-control mt-2 mb-2" name="tgllahir" id="tgllahir"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="jekel">Jenis Kelamin</label>
@@ -895,7 +908,8 @@
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Pendaftaran Pasien</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Pendaftaran Pasien
+                    </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -927,8 +941,8 @@
                     </div>
                     <div class="form-group">
                         <label for="search_pasien">Nama Pasien</label>
-                        <input type="text" class="form-control mt-2 mb-2" name="search_pasien" id="nama_pasienbpjs"
-                            placeholder="Masukkan Nama Pasien" required>
+                        <input type="text" class="form-control mt-2 mb-2" name="search_pasien"
+                            id="nama_pasienbpjs" placeholder="Masukkan Nama Pasien" required>
                         <div id="autocomplete-results"></div>
 
                     </div>
@@ -947,7 +961,8 @@
                     </div>
                     <div class="form-group">
                         <label for="tgllahir">Tanggal Lahir</label>
-                        <input type="date" class="form-control mt-2 mb-2" name="tgllahir" id="tgllahirbpjs" required>
+                        <input type="date" class="form-control mt-2 mb-2" name="tgllahir" id="tgllahirbpjs"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="jekel">Jenis Kelamin</label>
@@ -990,644 +1005,604 @@
         </div>
     </div>
 
-    {{-- modal jumlah pasien --}}
-    <div class="modal fade" id="jmlhpasien" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Jumlah Pasien</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="total" style="margin-top: -10px">
-                        <td><strong>Total Pasien</strong> : </td>
-                        <td><span style="font-size: 15px; font-weight: bold;">{{ $totalpasien }}</span></td>
-                    </div>
-                    <div class="date-time">
-                        <div class="row">
-                            <div class="col-lg-6" style="font-size: 12px; font-weight: bold">
-                                <div class="tanggal" id="tanggal"></div>
-                            </div>
-                            <div class="col-lg-6" style="text-align: end; font-size: 20px; font-weight: bold">
-                                <div class="jam" id="jam"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="stats-container">
-                        <div class="stat-box">
-                            <p class="stat-title">Pasien Umum</p>
-                            <p class="stat-value">{{ $pasienHariniUmum }}</p>
-                        </div>
-                        <div class="stat-box">
-                            <p class="stat-title">Pasien BPJS</p>
-                            <p class="stat-value">{{ $pasienHariniBpjs }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @include('perawat.kunjunganSehat.modalSehat')
     @include('perawat.kunjunganOnline.modalOnline')
 
-@endsection
+    @push('style')
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('style')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <style>
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-    {{-- <script src="{{ asset('assets/responsivevoice.js') }}"></script> --}}
-    <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-    <script src="{{ asset('assets/js/script.js') }}"></script> <!-- Pastikan ini yang terakhir -->
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        {{-- <script src="{{ asset('assets/responsivevoice.js') }}"></script> --}}
+        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
+        <script src="{{ asset('assets/js/script.js') }}"></script>
 
-    <script>
-        // SHIFT
-        document.addEventListener("DOMContentLoaded", function() {
-            function checkShift() {
-                let now = new Date();
-                let hours = now.getHours();
+        <script>
+            // SHIFT
+            document.addEventListener("DOMContentLoaded", function() {
+                function checkShift() {
+                    let now = new Date();
+                    let hours = now.getHours();
 
-                let shiftPagi = document.getElementById("shiftPagi");
-                let shiftSiang = document.getElementById("shiftSiang");
-                let shiftTotal = document.getElementById("shiftReportTotal");
+                    let shiftPagi = document.getElementById("shiftPagi");
+                    let shiftSiang = document.getElementById("shiftSiang");
+                    let shiftTotal = document.getElementById("shiftReportTotal");
 
-                // Pengecekan elemen
-                if (!shiftPagi || !shiftSiang || !shiftTotal) {
-                    console.error("Elemen shift tidak ditemukan: shiftPagi, shiftSiang, atau shiftReportTotal");
-                    return;
+                    // Pengecekan elemen
+                    if (!shiftPagi || !shiftSiang || !shiftTotal) {
+                        console.error("Elemen shift tidak ditemukan: shiftPagi, shiftSiang, atau shiftReportTotal");
+                        return;
+                    }
+
+                    let tanggalHariIni = now.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+
+                    // Atur tanggal di tabel shift pagi dan siang
+                    let tanggalShiftPagi = document.getElementById("tanggalShiftPagi");
+                    let tanggalShiftSiang = document.getElementById("tanggalShiftSiang");
+                    if (tanggalShiftPagi && tanggalShiftSiang) {
+                        tanggalShiftPagi.innerText = tanggalHariIni;
+                        tanggalShiftSiang.innerText = tanggalHariIni;
+                    } else {
+                        console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
+                    }
+
+                    // Reset tampilan semua shift
+                    shiftPagi.style.display = "none";
+                    shiftSiang.style.display = "none";
+                    shiftTotal.style.display = "none";
+
+                    // Tampilkan tabel sesuai shift
+                    if (hours >= 7 && hours < 12) {
+                        shiftPagi.style.display = "block";
+                    } else if (hours >= 12 && hours < 17) {
+                        shiftSiang.style.display = "block";
+                    } else {
+                        shiftTotal.style.display = "block";
+                    }
                 }
 
-                let tanggalHariIni = now.toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
+                checkShift();
+                setInterval(checkShift, 60000);
+            });
 
-                // Atur tanggal di tabel shift pagi dan siang
-                let tanggalShiftPagi = document.getElementById("tanggalShiftPagi");
-                let tanggalShiftSiang = document.getElementById("tanggalShiftSiang");
-                if (tanggalShiftPagi && tanggalShiftSiang) {
-                    tanggalShiftPagi.innerText = tanggalHariIni;
-                    tanggalShiftSiang.innerText = tanggalHariIni;
+            // TANGGAL SHIFT
+            function updateTanggal() {
+                var now = new Date();
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                if (tanggalPagiElement && tanggalSiangElement) {
+                    var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+                    tanggalPagiElement.textContent = tanggalLengkap;
+                    tanggalSiangElement.textContent = tanggalLengkap;
                 } else {
                     console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
                 }
+            }
 
-                // Reset tampilan semua shift
-                shiftPagi.style.display = "none";
-                shiftSiang.style.display = "none";
-                shiftTotal.style.display = "none";
+            // Panggil fungsi saat halaman dimuat
+            document.addEventListener("DOMContentLoaded", updateTanggal);
 
-                // Tampilkan tabel sesuai shift
-                if (hours >= 7 && hours < 12) {
-                    shiftPagi.style.display = "block";
-                } else if (hours >= 12 && hours < 17) {
-                    shiftSiang.style.display = "block";
+            // JAM DAN TANGGAL
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement = document.getElementById('tanggal');
+                var jamElement = document.getElementById('jam');
+
+                if (!tanggalElement || !jamElement) {
+                    console.error("Elemen tanggal atau jam tidak ditemukan: tanggal atau jam");
+                    return;
+                }
+
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            document.addEventListener("DOMContentLoaded", function() {
+                updateClock();
+                setInterval(updateClock, 1000);
+            });
+
+            // Tampilkan modal jumlah pasien
+            function togglePopup() {
+                if (typeof $ !== 'undefined' && $('#jmlhpasien').length) {
+                    $('#jmlhpasien').modal('toggle');
                 } else {
-                    shiftTotal.style.display = "block";
+                    console.error("jQuery atau elemen jmlhpasien tidak ditemukan");
                 }
             }
 
-            checkShift();
-            setInterval(checkShift, 60000);
-        });
+            // CSRF Token Setup
+            document.addEventListener("DOMContentLoaded", function() {
+                if (typeof $ !== 'undefined') {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') || ''
+                        }
+                    });
+                } else {
+                    console.error("jQuery tidak ditemukan untuk pengaturan CSRF");
+                }
+            });
 
-        // TANGGAL SHIFT
-        function updateTanggal() {
-            var now = new Date();
-            var options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
-
-            var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
-            var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
-
-            if (tanggalPagiElement && tanggalSiangElement) {
-                var tanggalLengkap = now.toLocaleDateString('id-ID', options);
-                tanggalPagiElement.textContent = tanggalLengkap;
-                tanggalSiangElement.textContent = tanggalLengkap;
-            } else {
-                console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
-            }
-        }
-
-        // Panggil fungsi saat halaman dimuat
-        document.addEventListener("DOMContentLoaded", updateTanggal);
-
-        // JAM DAN TANGGAL
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement = document.getElementById('tanggal');
-            var jamElement = document.getElementById('jam');
-
-            if (!tanggalElement || !jamElement) {
-                console.error("Elemen tanggal atau jam tidak ditemukan: tanggal atau jam");
-                return;
-            }
-
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
-
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        document.addEventListener("DOMContentLoaded", function() {
-            updateClock();
-            setInterval(updateClock, 1000);
-        });
-
-        // Tampilkan modal jumlah pasien
-        function togglePopup() {
-            if (typeof $ !== 'undefined' && $('#jmlhpasien').length) {
-                $('#jmlhpasien').modal('toggle');
-            } else {
-                console.error("jQuery atau elemen jmlhpasien tidak ditemukan");
-            }
-        }
-
-        // CSRF Token Setup
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof $ !== 'undefined') {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') || ''
-                    }
-                });
-            } else {
-                console.error("jQuery tidak ditemukan untuk pengaturan CSRF");
-            }
-        });
-
-        // Kode pasien umum
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof $ !== 'undefined' && $('#poli_umum').length) {
-                $('#poli_umum').change(function() {
-                    var poli_id = $(this).val();
-                    if (poli_id) {
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                            success: function(res) {
-                                if (res) {
-                                    $("#dokter_umum").empty();
-                                    $.each(res, function(key, value) {
-                                        $("#dokter_umum").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $("#dokter_umum").empty();
+            // Kode pasien umum
+            document.addEventListener("DOMContentLoaded", function() {
+                if (typeof $ !== 'undefined' && $('#poli_umum').length) {
+                    $('#poli_umum').change(function() {
+                        var poli_id = $(this).val();
+                        if (poli_id) {
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                success: function(res) {
+                                    if (res) {
+                                        $("#dokter_umum").empty();
+                                        $.each(res, function(key, value) {
+                                            $("#dokter_umum").append('<option value="' +
+                                                key + '">' + value + '</option>');
+                                        });
+                                    } else {
+                                        $("#dokter_umum").empty();
+                                    }
+                                },
+                                error: function(jqXHR) {
+                                    console.error("Error fetching dokter data: ", jqXHR);
                                 }
-                            },
-                            error: function(jqXHR) {
-                                console.error("Error fetching dokter data: ", jqXHR);
-                            }
-                        });
-                    } else {
-                        $("#dokter_umum").empty();
-                    }
-                });
-            } else {
-                console.error("jQuery atau elemen poli_umum tidak ditemukan");
-            }
-        });
+                            });
+                        } else {
+                            $("#dokter_umum").empty();
+                        }
+                    });
+                } else {
+                    console.error("jQuery atau elemen poli_umum tidak ditemukan");
+                }
+            });
 
-        // Autocomplete pasien umum
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof $ !== 'undefined' && $('#search_pasien').length && $.ui && $.ui.autocomplete) {
-                $('#search_pasien').autocomplete({
-                    source: function(request, response) {
-                        $.ajax({
-                            url: '/search_nama_pasien',
-                            method: 'GET',
-                            data: {
-                                nama: request.term
-                            },
-                            success: function(data) {
-                                response($.map(data, function(item) {
-                                    return {
-                                        label: item.nama_pasien + ' - ' + item
-                                            .nama_kk + ' - ' + item.alamat_asal,
-                                        value: item.no_rm
-                                    };
-                                }));
-                            },
-                            error: function(jqXHR) {
-                                console.error("Error fetching pasien data: ", jqXHR);
-                            }
-                        });
-                    },
-                    minLength: 1,
-                    select: function(event, ui) {
-                        $('#search_pasien').val(ui.item.label.split(' - ')[0]);
-                        var selected_no_rm = ui.item.value;
+            // Autocomplete pasien umum
+            document.addEventListener("DOMContentLoaded", function() {
+                if (typeof $ !== 'undefined' && $('#search_pasien').length && $.ui && $.ui.autocomplete) {
+                    $('#search_pasien').autocomplete({
+                        source: function(request, response) {
+                            $.ajax({
+                                url: '/search_nama_pasien',
+                                method: 'GET',
+                                data: {
+                                    nama: request.term
+                                },
+                                success: function(data) {
+                                    response($.map(data, function(item) {
+                                        return {
+                                            label: item.nama_pasien + ' - ' + item
+                                                .nama_kk + ' - ' + item.alamat_asal,
+                                            value: item.no_rm
+                                        };
+                                    }));
+                                },
+                                error: function(jqXHR) {
+                                    console.error("Error fetching pasien data: ", jqXHR);
+                                }
+                            });
+                        },
+                        minLength: 1,
+                        select: function(event, ui) {
+                            $('#search_pasien').val(ui.item.label.split(' - ')[0]);
+                            var selected_no_rm = ui.item.value;
 
-                        $.ajax({
-                            url: '/get_pasien_details',
-                            method: 'GET',
-                            data: {
-                                no_rm: selected_no_rm
-                            },
-                            success: function(response) {
-                                $('#nik').val(response.nik || '');
-                                $('#nama_kk').val(response.nama_kk || '');
-                                $('#tgllahir').val(response.tgllahir || '');
-                                $('#jekel').val(response.jekel || '');
-                                $('#alamat_asal').val(response.alamat_asal || '');
-                                $('#pekerjaan').val(response.pekerjaan || '');
-                                $('#domisili').val(response.domisili || '');
-                                $('#noHP').val(response.noHP || '');
-                            },
-                            error: function(jqXHR) {
-                                console.error("Error fetching pasien details: ", jqXHR);
-                            }
-                        });
-                        return false;
-                    },
-                    appendTo: "#autocomplete-results"
-                }).focus(function() {
-                    $(this).autocomplete("search", "");
-                });
-            } else {
-                console.error("jQuery, jQuery UI, atau elemen search_pasien tidak ditemukan");
-            }
-        });
+                            $.ajax({
+                                url: '/get_pasien_details',
+                                method: 'GET',
+                                data: {
+                                    no_rm: selected_no_rm
+                                },
+                                success: function(response) {
+                                    $('#nik').val(response.nik || '');
+                                    $('#nama_kk').val(response.nama_kk || '');
+                                    $('#tgllahir').val(response.tgllahir || '');
+                                    $('#jekel').val(response.jekel || '');
+                                    $('#alamat_asal').val(response.alamat_asal || '');
+                                    $('#pekerjaan').val(response.pekerjaan || '');
+                                    $('#domisili').val(response.domisili || '');
+                                    $('#noHP').val(response.noHP || '');
+                                },
+                                error: function(jqXHR) {
+                                    console.error("Error fetching pasien details: ", jqXHR);
+                                }
+                            });
+                            return false;
+                        },
+                        appendTo: "#autocomplete-results"
+                    }).focus(function() {
+                        $(this).autocomplete("search", "");
+                    });
+                } else {
+                    console.error("jQuery, jQuery UI, atau elemen search_pasien tidak ditemukan");
+                }
+            });
 
-        // Simpan data pasien umum
-        function saveData() {
-            var loadingSpinner = $('#loadingSpinner');
-            var btnSimpan = $('#btnSimpan');
-            if (!loadingSpinner.length || !btnSimpan.length) {
-                console.error("Elemen loadingSpinner atau btnSimpan tidak ditemukan");
-                return;
-            }
+            // Simpan data pasien umum
+            function saveData() {
+                var loadingSpinner = $('#loadingSpinner');
+                var btnSimpan = $('#btnSimpan');
+                if (!loadingSpinner.length || !btnSimpan.length) {
+                    console.error("Elemen loadingSpinner atau btnSimpan tidak ditemukan");
+                    return;
+                }
 
-            loadingSpinner.removeClass('d-none');
-            btnSimpan.prop('disabled', true);
+                loadingSpinner.removeClass('d-none');
+                btnSimpan.prop('disabled', true);
 
-            var formData = {
-                poli: document.getElementById('poli_umum')?.value || '',
-                dokter: document.getElementById('dokter_umum')?.value || '',
-                nama_pasien: document.getElementById('search_pasien')?.value || '',
-                nik: document.getElementById('nik')?.value || '',
-                nama_kk: document.getElementById('nama_kk')?.value || '',
-                pekerjaan: document.getElementById('pekerjaan')?.value || '',
-                tgllahir: document.getElementById('tgllahir')?.value || '',
-                jekel: document.getElementById('jekel')?.value || '',
-                alamat_asal: document.getElementById('alamat_asal')?.value || '',
-                domisili: document.getElementById('domisili')?.value || '',
-                noHP: document.getElementById('noHP')?.value || ''
-            };
+                var formData = {
+                    poli: document.getElementById('poli_umum')?.value || '',
+                    dokter: document.getElementById('dokter_umum')?.value || '',
+                    nama_pasien: document.getElementById('search_pasien')?.value || '',
+                    nik: document.getElementById('nik')?.value || '',
+                    nama_kk: document.getElementById('nama_kk')?.value || '',
+                    pekerjaan: document.getElementById('pekerjaan')?.value || '',
+                    tgllahir: document.getElementById('tgllahir')?.value || '',
+                    jekel: document.getElementById('jekel')?.value || '',
+                    alamat_asal: document.getElementById('alamat_asal')?.value || '',
+                    domisili: document.getElementById('domisili')?.value || '',
+                    noHP: document.getElementById('noHP')?.value || ''
+                };
 
-            var errorMessages = [];
-            if (!formData.poli) errorMessages.push("- Poli harus dipilih.");
-            if (!formData.dokter) errorMessages.push("- Dokter harus dipilih.");
-            if (!formData.nama_pasien) errorMessages.push("- Nama Pasien harus diisi.");
-            if (!formData.nik) errorMessages.push("- NIK harus diisi.");
-            if (!formData.nama_kk) errorMessages.push("- Nama Kepala Keluarga harus diisi.");
-            if (!formData.tgllahir) errorMessages.push("- Tanggal Lahir harus diisi.");
-            if (!formData.jekel) errorMessages.push("- Jenis kelamin harus dipilih.");
-            if (!formData.alamat_asal) errorMessages.push("- Alamat Asal harus diisi.");
-            if (!formData.pekerjaan) errorMessages.push("- Pekerjaan harus diisi.");
-            if (!formData.domisili) errorMessages.push("- Alamat Domisili harus diisi.");
-            if (!formData.noHP) errorMessages.push("- No. HP harus diisi.");
+                var errorMessages = [];
+                if (!formData.poli) errorMessages.push("- Poli harus dipilih.");
+                if (!formData.dokter) errorMessages.push("- Dokter harus dipilih.");
+                if (!formData.nama_pasien) errorMessages.push("- Nama Pasien harus diisi.");
+                if (!formData.nik) errorMessages.push("- NIK harus diisi.");
+                if (!formData.nama_kk) errorMessages.push("- Nama Kepala Keluarga harus diisi.");
+                if (!formData.tgllahir) errorMessages.push("- Tanggal Lahir harus diisi.");
+                if (!formData.jekel) errorMessages.push("- Jenis kelamin harus dipilih.");
+                if (!formData.alamat_asal) errorMessages.push("- Alamat Asal harus diisi.");
+                if (!formData.pekerjaan) errorMessages.push("- Pekerjaan harus diisi.");
+                if (!formData.domisili) errorMessages.push("- Alamat Domisili harus diisi.");
+                if (!formData.noHP) errorMessages.push("- No. HP harus diisi.");
 
-            if (errorMessages.length > 0) {
-                loadingSpinner.addClass('d-none');
-                btnSimpan.prop('disabled', false);
-                alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
-                return;
-            }
-
-            $.ajax({
-                url: '/perawat/store-umum',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    if (response.redirect) {
-                        window.location.href = response.redirect;
-                    } else {
-                        console.error('No redirect URL provided in the server response.');
-                    }
-                },
-                error: function(jqXHR) {
+                if (errorMessages.length > 0) {
                     loadingSpinner.addClass('d-none');
                     btnSimpan.prop('disabled', false);
-                    if (jqXHR.status == 422) {
-                        var errors = jqXHR.responseJSON;
-                        var errorMessages = [];
-                        $.each(errors, function(key, value) {
-                            errorMessages.push(value);
-                        });
-                        alert("Terjadi kesalahan: \n - " + errorMessages.join("\n"));
-                    } else {
-                        console.error('Error saat menyimpan data pasien: ', jqXHR);
+                    alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
+                    return;
+                }
+
+                $.ajax({
+                    url: '/perawat/store-umum',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        } else {
+                            console.error('No redirect URL provided in the server response.');
+                        }
+                    },
+                    error: function(jqXHR) {
+                        loadingSpinner.addClass('d-none');
+                        btnSimpan.prop('disabled', false);
+                        if (jqXHR.status == 422) {
+                            var errors = jqXHR.responseJSON;
+                            var errorMessages = [];
+                            $.each(errors, function(key, value) {
+                                errorMessages.push(value);
+                            });
+                            alert("Terjadi kesalahan: \n - " + errorMessages.join("\n"));
+                        } else {
+                            console.error('Error saat menyimpan data pasien: ', jqXHR);
+                        }
                     }
+                });
+            }
+
+            // Kode pasien BPJS
+            document.addEventListener("DOMContentLoaded", function() {
+                if (typeof $ !== 'undefined' && $('#poli_bpjs').length) {
+                    $('#poli_bpjs').change(function() {
+                        var poli_id = $(this).val();
+                        if (poli_id) {
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                success: function(res) {
+                                    if (res) {
+                                        $("#dokter_bpjs").empty();
+                                        $.each(res, function(key, value) {
+                                            $("#dokter_bpjs").append('<option value="' +
+                                                key + '">' + value + '</option>');
+                                        });
+                                    } else {
+                                        $("#dokter_bpjs").empty();
+                                    }
+                                },
+                                error: function(jqXHR) {
+                                    console.error("Error fetching dokter BPJS data: ", jqXHR);
+                                }
+                            });
+                        } else {
+                            $("#dokter_bpjs").empty();
+                        }
+                    });
+                } else {
+                    console.error("jQuery atau elemen poli_bpjs tidak ditemukan");
                 }
             });
-        }
 
-        // Kode pasien BPJS
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof $ !== 'undefined' && $('#poli_bpjs').length) {
-                $('#poli_bpjs').change(function() {
-                    var poli_id = $(this).val();
-                    if (poli_id) {
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                            success: function(res) {
-                                if (res) {
-                                    $("#dokter_bpjs").empty();
-                                    $.each(res, function(key, value) {
-                                        $("#dokter_bpjs").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $("#dokter_bpjs").empty();
+            // Autocomplete pasien BPJS
+            document.addEventListener("DOMContentLoaded", function() {
+                if (typeof $ !== 'undefined' && $('#norm').length && $.ui && $.ui.autocomplete) {
+                    $('#norm').autocomplete({
+                        source: function(request, response) {
+                            $.ajax({
+                                url: '/search_pasien_bpjs',
+                                method: 'GET',
+                                data: {
+                                    nama: request.term
+                                },
+                                success: function(data) {
+                                    response($.map(data, function(item) {
+                                        return {
+                                            label: item.nama_pasien + ' - ' + item
+                                                .bpjs + ' - ' + item.nik,
+                                            value: item.no_rm
+                                        };
+                                    }));
+                                },
+                                error: function(jqXHR) {
+                                    console.error("Error fetching pasien BPJS data: ", jqXHR);
                                 }
-                            },
-                            error: function(jqXHR) {
-                                console.error("Error fetching dokter BPJS data: ", jqXHR);
-                            }
-                        });
-                    } else {
-                        $("#dokter_bpjs").empty();
-                    }
-                });
-            } else {
-                console.error("jQuery atau elemen poli_bpjs tidak ditemukan");
-            }
-        });
+                            });
+                        },
+                        minLength: 2,
+                        select: function(event, ui) {
+                            $('#norm').val(ui.item.label.split(' - ')[1]);
+                            var selected_no_rm = ui.item.value;
 
-        // Autocomplete pasien BPJS
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof $ !== 'undefined' && $('#norm').length && $.ui && $.ui.autocomplete) {
-                $('#norm').autocomplete({
-                    source: function(request, response) {
-                        $.ajax({
-                            url: '/search_pasien_bpjs',
-                            method: 'GET',
-                            data: {
-                                nama: request.term
-                            },
-                            success: function(data) {
-                                response($.map(data, function(item) {
-                                    return {
-                                        label: item.nama_pasien + ' - ' + item
-                                            .bpjs + ' - ' + item.nik,
-                                        value: item.no_rm
-                                    };
-                                }));
-                            },
-                            error: function(jqXHR) {
-                                console.error("Error fetching pasien BPJS data: ", jqXHR);
-                            }
-                        });
-                    },
-                    minLength: 2,
-                    select: function(event, ui) {
-                        $('#norm').val(ui.item.label.split(' - ')[1]);
-                        var selected_no_rm = ui.item.value;
+                            $.ajax({
+                                url: '/get_pasien_bpjs',
+                                method: 'GET',
+                                data: {
+                                    bpjs: selected_no_rm
+                                },
+                                success: function(response) {
+                                    $('#nama_pasienbpjs').val(response.nama_pasien || '');
+                                    $('#nikbpjs').val(response.nik || '');
+                                    $('#nama_kkbpjs').val(response.nama_kk || '');
+                                    $('#tgllahirbpjs').val(response.tgllahir || '');
+                                    $('#jekelbpjs').val(response.jekel || '');
+                                    $('#alamat_asalbpjs').val(response.alamat_asal || '');
+                                    $('#pekerjaanbpjs').val(response.pekerjaan || '');
+                                    $('#domisilibpjs').val(response.domisili || '');
+                                    $('#noHPbpjs').val(response.noHP || '');
+                                },
+                                error: function(jqXHR) {
+                                    console.error("Error fetching pasien BPJS details: ",
+                                        jqXHR);
+                                }
+                            });
+                            return false;
+                        },
+                        appendTo: "#autocompletebpjs-results"
+                    });
+                } else {
+                    console.error("jQuery, jQuery UI, atau elemen norm tidak ditemukan");
+                }
+            });
 
-                        $.ajax({
-                            url: '/get_pasien_bpjs',
-                            method: 'GET',
-                            data: {
-                                bpjs: selected_no_rm
-                            },
-                            success: function(response) {
-                                $('#nama_pasienbpjs').val(response.nama_pasien || '');
-                                $('#nikbpjs').val(response.nik || '');
-                                $('#nama_kkbpjs').val(response.nama_kk || '');
-                                $('#tgllahirbpjs').val(response.tgllahir || '');
-                                $('#jekelbpjs').val(response.jekel || '');
-                                $('#alamat_asalbpjs').val(response.alamat_asal || '');
-                                $('#pekerjaanbpjs').val(response.pekerjaan || '');
-                                $('#domisilibpjs').val(response.domisili || '');
-                                $('#noHPbpjs').val(response.noHP || '');
-                            },
-                            error: function(jqXHR) {
-                                console.error("Error fetching pasien BPJS details: ",
-                                    jqXHR);
-                            }
-                        });
-                        return false;
-                    },
-                    appendTo: "#autocompletebpjs-results"
-                });
-            } else {
-                console.error("jQuery, jQuery UI, atau elemen norm tidak ditemukan");
-            }
-        });
+            // Simpan data pasien BPJS
+            function saveDataBpjs() {
+                var loadingSpinner = $('#loadingSpinnerLama');
+                var btnSimpan = $('#simpanBpjs');
+                if (!loadingSpinner.length || !btnSimpan.length) {
+                    console.error("Elemen loadingSpinnerLama atau simpanBpjs tidak ditemukan");
+                    return;
+                }
 
-        // Simpan data pasien BPJS
-        function saveDataBpjs() {
-            var loadingSpinner = $('#loadingSpinnerLama');
-            var btnSimpan = $('#simpanBpjs');
-            if (!loadingSpinner.length || !btnSimpan.length) {
-                console.error("Elemen loadingSpinnerLama atau simpanBpjs tidak ditemukan");
-                return;
-            }
+                loadingSpinner.removeClass('d-none');
+                btnSimpan.prop('disabled', true);
 
-            loadingSpinner.removeClass('d-none');
-            btnSimpan.prop('disabled', true);
+                var formData = {
+                    poli: document.getElementById('poli_bpjs')?.value || '',
+                    dokter: document.getElementById('dokter_bpjs')?.value || '',
+                    bpjs: document.getElementById('norm')?.value || '',
+                    nama_pasien: document.getElementById('nama_pasienbpjs')?.value || '',
+                    nik: document.getElementById('nikbpjs')?.value || '',
+                    nama_kk: document.getElementById('nama_kkbpjs')?.value || '',
+                    pekerjaan: document.getElementById('pekerjaanbpjs')?.value || '',
+                    tgllahir: document.getElementById('tgllahirbpjs')?.value || '',
+                    jekel: document.getElementById('jekelbpjs')?.value || '',
+                    alamat_asal: document.getElementById('alamat_asalbpjs')?.value || '',
+                    domisili: document.getElementById('domisilibpjs')?.value || '',
+                    noHP: document.getElementById('noHPbpjs')?.value || ''
+                };
 
-            var formData = {
-                poli: document.getElementById('poli_bpjs')?.value || '',
-                dokter: document.getElementById('dokter_bpjs')?.value || '',
-                bpjs: document.getElementById('norm')?.value || '',
-                nama_pasien: document.getElementById('nama_pasienbpjs')?.value || '',
-                nik: document.getElementById('nikbpjs')?.value || '',
-                nama_kk: document.getElementById('nama_kkbpjs')?.value || '',
-                pekerjaan: document.getElementById('pekerjaanbpjs')?.value || '',
-                tgllahir: document.getElementById('tgllahirbpjs')?.value || '',
-                jekel: document.getElementById('jekelbpjs')?.value || '',
-                alamat_asal: document.getElementById('alamat_asalbpjs')?.value || '',
-                domisili: document.getElementById('domisilibpjs')?.value || '',
-                noHP: document.getElementById('noHPbpjs')?.value || ''
-            };
+                var errorMessages = [];
+                if (!formData.poli) errorMessages.push("- Poli harus dipilih.");
+                if (!formData.dokter) errorMessages.push("- Dokter harus dipilih.");
+                if (!formData.bpjs) errorMessages.push("- No. BPJS harus diisi.");
 
-            var errorMessages = [];
-            if (!formData.poli) errorMessages.push("- Poli harus dipilih.");
-            if (!formData.dokter) errorMessages.push("- Dokter harus dipilih.");
-            if (!formData.bpjs) errorMessages.push("- No. BPJS harus diisi.");
-
-            if (errorMessages.length > 0) {
-                loadingSpinner.addClass('d-none');
-                btnSimpan.prop('disabled', false);
-                alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
-                return;
-            }
-
-            $.ajax({
-                url: '/perawat/store-bpjs',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    if (response.redirect) {
-                        window.location.href = response.redirect;
-                    } else {
-                        console.error('No redirect URL provided in the server response.');
-                    }
-                },
-                error: function(jqXHR) {
+                if (errorMessages.length > 0) {
                     loadingSpinner.addClass('d-none');
                     btnSimpan.prop('disabled', false);
-                    if (jqXHR.status == 422) {
-                        var errors = jqXHR.responseJSON;
-                        var errorMessages = [];
-                        $.each(errors, function(key, value) {
-                            errorMessages.push(value);
-                        });
-                        alert("Terjadi kesalahan: \n - " + errorMessages.join("\n"));
-                    } else {
-                        console.error('Error saat menyimpan data pasien BPJS: ', jqXHR);
-                    }
-                }
-            });
-        }
-
-        // GCS Calculation
-        document.addEventListener("DOMContentLoaded", function() {
-            var gcs_e = document.getElementById('gcs_e');
-            var gcs_m = document.getElementById('gcs_m');
-            var gcs_v = document.getElementById('gcs_v');
-            var gcs_total = document.getElementById('gcs_total');
-
-            if (gcs_e && gcs_m && gcs_v && gcs_total) {
-                function calculateTotal() {
-                    var e = parseFloat(gcs_e.value) || 0;
-                    var m = parseFloat(gcs_m.value) || 0;
-                    var v = parseFloat(gcs_v.value) || 0;
-                    var totalInput = e + m + v;
-
-                    if (totalInput > 15) {
-                        var ratio = 15 / totalInput;
-                        e = e * ratio;
-                        m = m * ratio;
-                        v = v * ratio;
-                        totalInput = 15;
-                    }
-
-                    var total = e + m + v;
-                    gcs_total.textContent = Math.round(total);
+                    alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
+                    return;
                 }
 
-                gcs_e.addEventListener('input', calculateTotal);
-                gcs_m.addEventListener('input', calculateTotal);
-                gcs_v.addEventListener('input', calculateTotal);
-                calculateTotal();
-            } else {
-                console.error("Elemen GCS tidak ditemukan: gcs_e, gcs_m, gcs_v, atau gcs_total");
-            }
-        });
-
-        // IMT Calculation (Pasien Baru)
-        document.addEventListener("DOMContentLoaded", function() {
-            var tbInput = document.getElementById('p_tb');
-            var bbInput = document.getElementById('p_bb');
-            var imtInput = document.getElementById('p_imt');
-
-            if (tbInput && bbInput && imtInput) {
-                function hitungIMT() {
-                    var tb = parseFloat(tbInput.value);
-                    var bb = parseFloat(bbInput.value);
-                    if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
-                        var imt = bb / ((tb / 100) * (tb / 100));
-                        imtInput.value = imt.toFixed(2);
-                    } else {
-                        imtInput.value = '';
-                    }
-                }
-
-                tbInput.addEventListener('input', hitungIMT);
-                bbInput.addEventListener('input', hitungIMT);
-                hitungIMT(); // Hitung IMT saat halaman dimuat jika ada nilai awal
-            } else {
-                console.error("Elemen IMT tidak ditemukan: p_tb, p_bb, atau p_imt");
-            }
-        });
-
-        // IMT Calculation (Pasien Lama) - Dinonaktifkan jika elemen tidak ada
-        document.addEventListener("DOMContentLoaded", function() {
-            var tblmInput = document.getElementById('tb');
-            var bblmInput = document.getElementById('bb');
-            var imtlmInput = document.getElementById('l_imt');
-
-            if (tblmInput && bblmInput && imtlmInput) {
-                function hitungIMTLama() {
-                    var tb = parseFloat(tblmInput.value);
-                    var bb = parseFloat(bblmInput.value);
-                    if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
-                        var imt = bb / ((tb / 100) * (tb / 100));
-                        imtlmInput.value = imt.toFixed(2);
-                    } else {
-                        imtlmInput.value = '';
-                    }
-                }
-
-                tblmInput.addEventListener('input', hitungIMTLama);
-                bblmInput.addEventListener('input', hitungIMTLama);
-                hitungIMTLama(); // Hitung IMT saat halaman dimuat jika ada nilai awal
-            } else {
-                console.warn(
-                    "Elemen IMT lama tidak ditemukan: tb, bb, atau l_imt. Fungsi hitungIMTLama dinonaktifkan.");
-            }
-        });
-
-        // Modal Handling
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.modal').forEach(function(modal) {
-                modal.addEventListener('hidden.bs.modal', function() {
-                    modal.classList.remove('show');
-                    document.body.classList.remove('modal-open');
-                    var backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.parentNode.removeChild(backdrop);
+                $.ajax({
+                    url: '/perawat/store-bpjs',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        } else {
+                            console.error('No redirect URL provided in the server response.');
+                        }
+                    },
+                    error: function(jqXHR) {
+                        loadingSpinner.addClass('d-none');
+                        btnSimpan.prop('disabled', false);
+                        if (jqXHR.status == 422) {
+                            var errors = jqXHR.responseJSON;
+                            var errorMessages = [];
+                            $.each(errors, function(key, value) {
+                                errorMessages.push(value);
+                            });
+                            alert("Terjadi kesalahan: \n - " + errorMessages.join("\n"));
+                        } else {
+                            console.error('Error saat menyimpan data pasien BPJS: ', jqXHR);
+                        }
                     }
                 });
-            });
-        });
-
-        // Toggle Step
-        function toggleStep(element) {
-            const step = element.parentElement;
-            if (step) {
-                step.classList.toggle('opened');
-                const icon = element.querySelector('i');
-                if (icon) {
-                    icon.classList.toggle('fa-chevron-down');
-                    icon.classList.toggle('fa-chevron-up');
-                }
-            } else {
-                console.error("Elemen step tidak ditemukan");
             }
-        }
-    </script>
 
-    {{-- <script>
+            // GCS Calculation
+            document.addEventListener("DOMContentLoaded", function() {
+                var gcs_e = document.getElementById('gcs_e');
+                var gcs_m = document.getElementById('gcs_m');
+                var gcs_v = document.getElementById('gcs_v');
+                var gcs_total = document.getElementById('gcs_total');
+
+                if (gcs_e && gcs_m && gcs_v && gcs_total) {
+                    function calculateTotal() {
+                        var e = parseFloat(gcs_e.value) || 0;
+                        var m = parseFloat(gcs_m.value) || 0;
+                        var v = parseFloat(gcs_v.value) || 0;
+                        var totalInput = e + m + v;
+
+                        if (totalInput > 15) {
+                            var ratio = 15 / totalInput;
+                            e = e * ratio;
+                            m = m * ratio;
+                            v = v * ratio;
+                            totalInput = 15;
+                        }
+
+                        var total = e + m + v;
+                        gcs_total.textContent = Math.round(total);
+                    }
+
+                    gcs_e.addEventListener('input', calculateTotal);
+                    gcs_m.addEventListener('input', calculateTotal);
+                    gcs_v.addEventListener('input', calculateTotal);
+                    calculateTotal();
+                } else {
+                    console.error("Elemen GCS tidak ditemukan: gcs_e, gcs_m, gcs_v, atau gcs_total");
+                }
+            });
+
+            // IMT Calculation (Pasien Baru)
+            document.addEventListener("DOMContentLoaded", function() {
+                var tbInput = document.getElementById('p_tb');
+                var bbInput = document.getElementById('p_bb');
+                var imtInput = document.getElementById('p_imt');
+
+                if (tbInput && bbInput && imtInput) {
+                    function hitungIMT() {
+                        var tb = parseFloat(tbInput.value);
+                        var bb = parseFloat(bbInput.value);
+                        if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
+                            var imt = bb / ((tb / 100) * (tb / 100));
+                            imtInput.value = imt.toFixed(2);
+                        } else {
+                            imtInput.value = '';
+                        }
+                    }
+
+                    tbInput.addEventListener('input', hitungIMT);
+                    bbInput.addEventListener('input', hitungIMT);
+                    hitungIMT(); // Hitung IMT saat halaman dimuat jika ada nilai awal
+                } else {
+                    console.error("Elemen IMT tidak ditemukan: p_tb, p_bb, atau p_imt");
+                }
+            });
+
+            // IMT Calculation (Pasien Lama) - Dinonaktifkan jika elemen tidak ada
+            document.addEventListener("DOMContentLoaded", function() {
+                var tblmInput = document.getElementById('tb');
+                var bblmInput = document.getElementById('bb');
+                var imtlmInput = document.getElementById('l_imt');
+
+                if (tblmInput && bblmInput && imtlmInput) {
+                    function hitungIMTLama() {
+                        var tb = parseFloat(tblmInput.value);
+                        var bb = parseFloat(bblmInput.value);
+                        if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
+                            var imt = bb / ((tb / 100) * (tb / 100));
+                            imtlmInput.value = imt.toFixed(2);
+                        } else {
+                            imtlmInput.value = '';
+                        }
+                    }
+
+                    tblmInput.addEventListener('input', hitungIMTLama);
+                    bblmInput.addEventListener('input', hitungIMTLama);
+                    hitungIMTLama(); // Hitung IMT saat halaman dimuat jika ada nilai awal
+                } else {
+                    console.warn(
+                        "Elemen IMT lama tidak ditemukan: tb, bb, atau l_imt. Fungsi hitungIMTLama dinonaktifkan.");
+                }
+            });
+
+            // Modal Handling
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.modal').forEach(function(modal) {
+                    modal.addEventListener('hidden.bs.modal', function() {
+                        modal.classList.remove('show');
+                        document.body.classList.remove('modal-open');
+                        var backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.parentNode.removeChild(backdrop);
+                        }
+                    });
+                });
+            });
+
+            // Toggle Step
+            function toggleStep(element) {
+                const step = element.parentElement;
+                if (step) {
+                    step.classList.toggle('opened');
+                    const icon = element.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('fa-chevron-down');
+                        icon.classList.toggle('fa-chevron-up');
+                    }
+                } else {
+                    console.error("Elemen step tidak ditemukan");
+                }
+            }
+        </script>
+
+        {{-- <script>
         // SHIFT
         document.addEventListener("DOMContentLoaded", function() {
             function checkShift() {
@@ -2188,4 +2163,6 @@
             icon.classList.toggle('fa-chevron-up');
         }
     </script> --}}
-@endpush
+    @endpush
+
+</x-admin.layout.terminal>

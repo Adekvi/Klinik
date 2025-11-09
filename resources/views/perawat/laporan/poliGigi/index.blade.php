@@ -1,14 +1,13 @@
-@extends('layout.ngarep')
-@section('title', 'Perawat | Laporan Kunjungan Pasien')
-@section('kontent')
+<x-user.layout.home title="Perawat | Laporan Kunjungan Pasien">
 
-<div class="breadcrumbs d-flex align-items-center" style="background-image: url('{{ asset('assetss/img/profil.jpg') }}');">
-</div>
+    <div class="breadcrumbs d-flex align-items-center"
+        style="background-image: url('{{ asset('assetss/img/profil.jpg') }}');">
+    </div>
 
-<div class="container-xxl flex-grow-1 container-p-y mt-4">
-    <div class="row">
-        <div class="col-lg-12 mb-4 order-0">
-            <div class="pasien-bpjs">
+    <div class="container-xxl flex-grow-1 container-p-y mt-4">
+        <div class="row">
+            <div class="col-lg-12 mb-4 order-0">
+                <div class="pasien-bpjs">
                     <div class="title">
                         <h5>Poli Umum / <strong>Laporan Kunjungan Pasien BPJS</strong></h5>
                     </div>
@@ -16,31 +15,41 @@
                         <div class="card-body">
                             <h5>Filter Pencarian</h5>
                             <div class="form-check mb-2" style="display: flex; align-items: baseline">
-                                <input class="form-check-input" type="radio" name="filter_option" id="filter_by_full_date">
-                                <input type="date" name="tanggal" id="tanggal" class="form-control" style="width: 45%; margin-left: 20px">
+                                <input class="form-check-input" type="radio" name="filter_option"
+                                    id="filter_by_full_date">
+                                <input type="date" name="tanggal" id="tanggal" class="form-control"
+                                    style="width: 45%; margin-left: 20px">
                             </div>
                             <div class="form-check mb-2" style="display: flex; align-items: baseline">
-                                <input class="form-check-input" type="radio" name="filter_option" id="filter_by_month_year">
+                                <input class="form-check-input" type="radio" name="filter_option"
+                                    id="filter_by_month_year">
                                 <div class="month_year" style="display: flex; margin-left: 20px">
                                     <select name="month" id="month" class="form-control" style="width: 62%">
                                         <!-- Opsi bulan akan ditambahkan secara dinamis oleh JavaScript -->
                                     </select>
-                                    <select name="tahun" id="tahun" class="form-control" style="width: 40%; margin-left: 5px">
+                                    <select name="tahun" id="tahun" class="form-control"
+                                        style="width: 40%; margin-left: 5px">
                                         <!-- Opsi tahun akan ditambahkan secara dinamis oleh JavaScript -->
                                     </select>
                                 </div>
                             </div>
-                            <p style="font-size: 14px; margin-bottom: 0px"><span style="color: red">* </span>Pilih salah satu atau cetak semua data tanpa memilih</p>
+                            <p style="font-size: 14px; margin-bottom: 0px"><span style="color: red">* </span>Pilih salah
+                                satu atau cetak semua data tanpa memilih</p>
                             <div class="button" style="display: flex; align-items: baseline">
-                                <button type="button" id="btnSearch" class="btn btn-primary mt-3"><i class="fas fa-search"></i> Cari</button>
-                                <button type="button" id="btnCetak" class="btn btn-warning mt-3" style="margin-left: 10px"><i class="fas fa-print"></i> Cetak</button>
+                                <button type="button" id="btnSearch" class="btn btn-primary mt-3"><i
+                                        class="fas fa-search"></i> Cari</button>
+                                <button type="button" id="btnCetak" class="btn btn-warning mt-3"
+                                    style="margin-left: 10px"><i class="fas fa-print"></i> Cetak</button>
                                 <div class="dropdown" style="margin-left: 130px">
-                                    <button class="btn btn-secondary dropdown-toggle" style="margin-top: -3px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle" style="margin-top: -3px"
+                                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
                                         <i class="fa-solid fa-file-excel"></i>
                                         Export
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{{ url('/pasien-bpjs/export-excel') }}">Export to Excel</a>
+                                        <a class="dropdown-item" href="{{ url('/pasien-bpjs/export-excel') }}">Export to
+                                            Excel</a>
                                         <a class="dropdown-item" href="#">Export to PDF</a>
                                         <a class="dropdown-item" href="#">Export to Word</a>
                                     </div>
@@ -49,9 +58,10 @@
                         </div>
                     </div>
                     <div class="card">
-                       <div class="card-body">
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="table mt-2 mb-2 table-striped table-bordered" style="width:100%">
+                                <table id="example" class="table mt-2 mb-2 table-striped table-bordered"
+                                    style="width:100%">
                                     <thead class="table-primary" style="align-items: center">
                                         <tr>
                                             <th class="custom-th">NO.</th>
@@ -144,13 +154,13 @@
                                             @endif
                                         @endforeach
                                     </tbody> --}}
-                                </table>                                
+                                </table>
                             </div>
-                       </div>
+                        </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@endsection
+</x-user.layout.home>

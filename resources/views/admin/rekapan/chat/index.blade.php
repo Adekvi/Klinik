@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Kelola Pesan')
-@section('content')
+<x-admin.layout.terminal title="Admin | Kelola Pesan">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -91,7 +89,4 @@
         </div>
     </div>
 
-    {{-- @include('admin.master.datadokter.modaltambah')
-    @include('admin.master.datadokter.modaledit')
-    @include('admin.master.datadokter.modalhapus') --}}
-@endsection
+</x-admin.layout.terminal>

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Perawat | Rekap Diagnosa')
-@section('content')
+<x-admin.layout.terminal title="Perawat | Rekap Diagnosa">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -26,19 +24,21 @@
                                         <form method="GET" action="" class="row g-3 align-items-end">
                                             <div class="col-md-4">
                                                 <label for="start_date">Tanggal Awal</label>
-                                                <input type="date" name="start_date" id="start_date" class="form-control"
-                                                    value="{{ request()->query('start_date') }}">
+                                                <input type="date" name="start_date" id="start_date"
+                                                    class="form-control" value="{{ request()->query('start_date') }}">
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="end_date">Tanggal Akhir</label>
-                                                <input type="date" name="end_date" id="end_date" class="form-control"
-                                                    value="{{ request()->query('end_date') }}">
+                                                <input type="date" name="end_date" id="end_date"
+                                                    class="form-control" value="{{ request()->query('end_date') }}">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-end">
-                                                <button type="submit" class="btn btn-primary" style="margin-right: 10px">
+                                                <button type="submit" class="btn btn-primary"
+                                                    style="margin-right: 10px">
                                                     <i class="fa fa-search me-1"></i> Tampilkan
                                                 </button>
-                                                <a href="{{ route('perawat.diagnosa') }}" class="btn btn-secondary ml-2">
+                                                <a href="{{ route('perawat.diagnosa') }}"
+                                                    class="btn btn-secondary ml-2">
                                                     <i class="fa-solid fa-arrow-rotate-right"></i> Reset
                                                 </a>
                                             </div>
@@ -90,19 +90,24 @@
                                         <!-- Reset ke halaman 1 saat filter -->
                                         <div class="d-flex align-items-center">
                                             <label for="entries" class="me-2">Tampilkan:</label>
-                                            <select name="entries" id="entries" class="form-select form-select-sm me-3"
-                                                style="width: 80px;" onchange="this.form.submit()">
-                                                <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10</option>
-                                                <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25</option>
-                                                <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50</option>
-                                                <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100</option>
+                                            <select name="entries" id="entries"
+                                                class="form-select form-select-sm me-3" style="width: 80px;"
+                                                onchange="this.form.submit()">
+                                                <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
+                                                </option>
+                                                <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
+                                                </option>
+                                                <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50
+                                                </option>
+                                                <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100
+                                                </option>
                                             </select>
                                         </div>
 
                                         <div class="d-flex align-items-center">
-                                            <input type="text" name="search" class="form-control form-control-sm me-2"
-                                                value="{{ $search ?? '' }}" placeholder="Cari Diagnosa"
-                                                style="width: 200px;">
+                                            <input type="text" name="search"
+                                                class="form-control form-control-sm me-2" value="{{ $search ?? '' }}"
+                                                placeholder="Cari Diagnosa" style="width: 200px;">
                                             <button type="submit" class="btn btn-sm btn-primary">
                                                 <i class="fa-solid fa-magnifying-glass"></i> Cari
                                             </button>
@@ -114,11 +119,15 @@
                                 <table id="example" class="table mt-2 mb-2 table-striped table-bordered">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th rowspan="2" style="text-align: center; vertical-align: middle">NO</th>
-                                            <th rowspan="2" style="text-align: center; vertical-align: middle">TANGGAL
+                                            <th rowspan="2" style="text-align: center; vertical-align: middle">NO
                                             </th>
-                                            <th rowspan="2" style="text-align: center; vertical-align: middle">JAM</th>
-                                            <th rowspan="2" style="text-align: center; vertical-align: middle">PENYAKIT
+                                            <th rowspan="2" style="text-align: center; vertical-align: middle">
+                                                TANGGAL
+                                            </th>
+                                            <th rowspan="2" style="text-align: center; vertical-align: middle">JAM
+                                            </th>
+                                            <th rowspan="2" style="text-align: center; vertical-align: middle">
+                                                PENYAKIT
                                             </th>
                                             <th colspan="3" style="text-align: center">JUMLAH KASUS BARU</th>
                                         </tr>
@@ -133,8 +142,10 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td style="white-space: nowrap">
-                                                    {{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y') }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item['created_at'])->format('H:i') }}</td>
+                                                    {{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y') }}
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($item['created_at'])->format('H:i') }}
+                                                </td>
                                                 <td>{{ $item['diagnosa'] }}</td>
                                                 <td>{{ $item['laki_laki'] }}</td>
                                                 <td>{{ $item['perempuan'] }}</td>
@@ -151,4 +162,4 @@
         </div>
     </div>
 
-@endsection
+</x-admin.layout.terminal>

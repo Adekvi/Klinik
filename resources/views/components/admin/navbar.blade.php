@@ -22,11 +22,13 @@
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             <!-- Place this tag where you want the button to render. -->
-            <li class="nav-item" style="margin-right: 20px">
-                <a href="{{ url('/antrian') }}" class="antrian" target="_blank">
-                    <i class="fa-solid fa-up-right-from-square"></i> &nbsp;Tampilan Antrian
-                </a>
-            </li>
+            @if (Auth::user()->role === 'admin')
+                <li class="nav-item" style="margin-right: 20px">
+                    <a href="{{ url('/antrian') }}" class="antrian" target="_blank">
+                        <i class="fa-solid fa-up-right-from-square"></i> &nbsp;Tampilan Antrian
+                    </a>
+                </li>
+            @endif
             <!-- User -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

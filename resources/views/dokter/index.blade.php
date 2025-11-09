@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Dokter')
-@section('content')
+<x-admin.layout.terminal title="Dokter">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
@@ -27,37 +25,205 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="offcanvas-body my-auto mx-0 flex-grow-0">
-                                    <div class="text-center mb-3 mt-3">
+                                    <div class="text-center mb-3">
                                         <h4 class="mb-3"><strong>Rekap Pasien</strong></h4>
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <div class="text-center d-flex flex-column align-items-center">
-                                                <!-- Teks dan ikon di atas -->
-                                                <span class="badge border text-success fs-6 p-3">
-                                                    <i class="fa-solid fa-check-circle"></i> Dilayani:
-                                                    <span id="pasienDilayani">0</span>
-                                                </span>
-                                                <!-- Gambar di bawah -->
-                                                <img src="{{ asset('aset/img/periksa.jpg') }}" alt="Pasien DIlayani"
-                                                    style="width: 60%; height: auto;">
+                                        <hr>
+
+                                        @if (Auth::user()->id_dokter == 1)
+                                            <div class="mb-4">
+                                                <div class="d-flex justify-content-center gap-4">
+                                                    <div class="text-center d-flex flex-column align-items-center">
+                                                        <span class="badge border text-success fs-6 p-3">
+                                                            <i class="fa-solid fa-check-circle"></i> Dilayani:
+                                                            <span id="pasienDilayaniUmum"
+                                                                style="font-size: 25px">{{ $umumDilayani }}</span>
+                                                        </span>
+                                                        <img src="{{ asset('aset/img/periksa.jpg') }}"
+                                                            alt="Pasien Dilayani" style="width: 60%; height: auto;">
+                                                    </div>
+
+                                                    <div class="text-center d-flex flex-column align-items-center">
+                                                        <span class="badge border text-warning fs-6 p-3">
+                                                            <i class="fa-solid fa-times-circle"></i> Belum Dilayani:
+                                                            <span id="pasienBelumDilayaniUmum"
+                                                                style="font-size: 25px">{{ $umumBelumDilayani }}</span>
+                                                        </span>
+                                                        <img src="{{ asset('aset/img/check.jpg') }}"
+                                                            alt="Pasien Belum Dilayani"
+                                                            style="width: 60%; height: auto;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="text-center d-flex flex-column align-items-center">
-                                                <!-- Teks dan ikon di atas -->
-                                                <span class="badge border text-warning fs-6 p-3">
-                                                    <i class="fa-solid fa-times-circle"></i> Belum Dilayani:
-                                                    <span id="pasienBelumDilayani">0</span>
-                                                </span>
-                                                <!-- Gambar di bawah -->
-                                                <img src="{{ asset('aset/img/check.jpg') }}" alt="Pasien Belum Dilayani"
-                                                    style="width: 60%; height: auto;">
+                                        @elseif (Auth::user()->id_dokter == 2)
+                                            <div class="mb-4">
+                                                <div class="d-flex justify-content-center gap-4">
+                                                    <div class="text-center d-flex flex-column align-items-center">
+                                                        <span class="badge border text-success fs-6 p-3">
+                                                            <i class="fa-solid fa-check-circle"></i> Dilayani:
+                                                            <span id="pasienDilayaniGigi"
+                                                                style="font-size: 25px">{{ $gigiDilayani }}</span>
+                                                        </span>
+                                                        <img src="{{ asset('aset/img/periksa.jpg') }}"
+                                                            alt="Pasien Dilayani" style="width: 60%; height: auto;">
+                                                    </div>
+
+                                                    <div class="text-center d-flex flex-column align-items-center">
+                                                        <span class="badge border text-warning fs-6 p-3">
+                                                            <i class="fa-solid fa-times-circle"></i> Belum Dilayani:
+                                                            <span id="pasienBelumDilayaniGigi"
+                                                                style="font-size: 25px">{{ $gigiBelumDilayani }}</span>
+                                                        </span>
+                                                        <img src="{{ asset('aset/img/check.jpg') }}"
+                                                            alt="Pasien Belum Dilayani"
+                                                            style="width: 60%; height: auto;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
+
                                     </div>
+
                                     <div class="col-md-12">
+                                        <div class="shift-container" id="shiftPagi">
+                                            <table class="table table-bordered table-responsive w-100">
+                                                <thead class="table-primary">
+                                                    <tr>
+                                                        <th class="text-center">SHIFT PAGI
+                                                            <br>
+                                                            <span>
+                                                                TOTAL PASIEN SUDAH DIPERIKSA
+                                                                (/hari ini)
+                                                            </span>
+                                                        </th>
+                                                        <th class="text-center"
+                                                            style="text-align: center; vertical-align: middle">KET.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if ($groupedAntrian->isEmpty())
+                                                        <tr>
+                                                            <td colspan="2" class="text-center">Belum ada data</td>
+                                                        </tr>
+                                                    @else
+                                                        @foreach ($groupedAntrian as $namapoli => $antrian)
+                                                            @if ($namapoli === 'Umum')
+                                                                <tr>
+                                                                    <td>Tanggal</td>
+                                                                    <td id="tanggalShiftPagi" class="text-center"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliUmumBpjsTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftPagiUmumBPJS }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien UMUM</td>
+                                                                    <td id="poliUmumUmumTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftPagiUmumUmum }}
+                                                                    </td>
+                                                                </tr>
+                                                            @elseif ($namapoli === 'Gigi')
+                                                                <tr>
+                                                                    <td>Tanggal</td>
+                                                                    <td id="tanggalShiftPagi" class="text-center"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliGigiBpjsTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftPagiGigiBPJS }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien UMUM</td>
+                                                                    <td id="poliGigiUmumTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftPagiGigiUmum }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="shift-container" id="shiftSiang">
+                                            <table class="table table-bordered table-responsive w-100">
+                                                <thead class="table-primary">
+                                                    <tr>
+                                                        <th class="text-center">SHIFT SIANG
+                                                            <br>
+                                                            <span>TOTAL PASIEN SUDAH DIPERIKSA
+                                                                (/hari ini)</span>
+                                                        </th>
+                                                        <th class="text-center"
+                                                            style="text-align: center; vertical-align: middle">KET.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if ($groupedAntrian->isEmpty())
+                                                        <tr>
+                                                            <td colspan="2" class="text-center">Belum ada data</td>
+                                                        </tr>
+                                                    @else
+                                                        @foreach ($groupedAntrian as $namapoli => $antrian)
+                                                            @if ($namapoli === 'Umum')
+                                                                <tr>
+                                                                    <td>Tanggal</td>
+                                                                    <td id="tanggalShiftSiang" class="text-center">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliUmumBpjsTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftSiangUmumBPJS }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien UMUM</td>
+                                                                    <td id="poliUmumUmumTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftSiangUmumUmum }}
+                                                                    </td>
+                                                                </tr>
+                                                            @elseif ($namapoli === 'Gigi')
+                                                                <tr>
+                                                                    <td>Tanggal</td>
+                                                                    <td id="tanggalShiftSiang" class="text-center">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliGigiBpjsTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftSiangGigiBPJS }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pasien UMUM</td>
+                                                                    <td id="poliGigiUmumTotal"
+                                                                        style="text-align: center">
+                                                                        {{ $countShiftSiangGigiUmum }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <div class="shift-container" id="shiftReportTotal">
                                             <table class="table table-bordered table-responsive w-100">
                                                 <thead class="table-primary">
                                                     <tr>
-                                                        <th class="text-center">TOTAL PASIEN SUDAH DIPERIKSA (/hari ini)
+                                                        <th class="text-center">TOTAL PASIEN SUDAH DIPERIKSA (/hari
+                                                            ini)
                                                         </th>
                                                         <th class="text-center">KET.</th>
                                                     </tr>
@@ -71,24 +237,32 @@
                                                         @foreach ($groupedAntrian as $namapoli => $antrian)
                                                             @if ($namapoli === 'Umum')
                                                                 <tr>
-                                                                    <td>Pasien Poli UMUM (Bpjs)</td>
-                                                                    <td id="poliUmumBpjsTotal" style="text-align: center">0
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliUmumBpjsTotal"
+                                                                        style="text-align: center">
+                                                                        0
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Pasien Poli UMUM (Umum)</td>
-                                                                    <td id="poliUmumUmumTotal" style="text-align: center">0
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliUmumUmumTotal"
+                                                                        style="text-align: center">
+                                                                        0
                                                                     </td>
                                                                 </tr>
                                                             @elseif ($namapoli === 'Gigi')
                                                                 <tr>
-                                                                    <td>Pasien Poli GIGI (Bpjs)</td>
-                                                                    <td id="poliGigiBpjsTotal" style="text-align: center">0
+                                                                    <td>Pasien BPJS</td>
+                                                                    <td id="poliGigiBpjsTotal"
+                                                                        style="text-align: center">
+                                                                        0
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Pasien Poli GIGI (Umum)</td>
-                                                                    <td id="poliGigiUmumTotal" style="text-align: center">0
+                                                                    <td>Pasien UMUM</td>
+                                                                    <td id="poliGigiUmumTotal"
+                                                                        style="text-align: center">
+                                                                        0
                                                                     </td>
                                                                 </tr>
                                                             @endif
@@ -99,14 +273,14 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="row g-2">
+                                    {{-- <div class="row g-2">
                                         <div class="col-6">
                                             <button type="button" class="btn btn-outline-secondary w-100"
                                                 data-bs-dismiss="offcanvas">
                                                 Cancel
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -115,7 +289,8 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form method="GET" action="" class="d-flex justify-content-between align-items-center mb-3">
+                        <form method="GET" action=""
+                            class="d-flex justify-content-between align-items-center mb-3">
                             <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
                             <div class="d-flex align-items-center">
                                 <label for="entries" class="me-2">Tampilkan:</label>
@@ -158,7 +333,8 @@
                                 <tbody class="text-center" style="text-transform: uppercase">
                                     @if (count($antrianDokter) === 0)
                                         <tr>
-                                            <td colspan="9" style="text-align: center; font-size: bold">Tidak ada data
+                                            <td colspan="9" style="text-align: center; font-size: bold">Tidak ada
+                                                data
                                             </td>
                                         </tr>
                                     @else
@@ -172,13 +348,15 @@
                                                         data-bs-placement="top" data-bs-html="true"
                                                         data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Panggil Pasien</span>">
                                                         <button data-nomor-antrian="{{ $item->kode_antrian }}"
+                                                            data-poli="{{ $item->poli->namapoli }}"
                                                             class="btn btn-success btn-panggil">
                                                             <i class="fas fa-bell"></i>
                                                         </button>
                                                     </span>
                                                     <a href="{{ url('dokter/index/soap/' . $item->id) }}"
                                                         class="btn btn-primary" data-bs-toggle="tooltip"
-                                                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                                                        data-bs-offset="0,4" data-bs-placement="top"
+                                                        data-bs-html="true"
                                                         data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Asesmen</span>">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
@@ -218,7 +396,8 @@
                         </div>
 
                         <div class="d-flex justify-content-center mt-3 mb-3">
-                            {{ $antrianDokter->links() }} <!-- Laravel's built-in pagination links -->
+                            {{ $antrianDokter->appends(request()->only(['search', 'entries']))->links() }}
+                            <!-- Laravel's built-in pagination links -->
                         </div>
                     </div>
                 </div>
@@ -235,7 +414,8 @@
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Lewati
                             Pasien</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <h5>Apakah Anda yakin ingin melewati pasien ini?</h5>
@@ -255,15 +435,16 @@
 
     {{-- modal riwayat --}}
     @foreach ($antrianDokter as $item)
-        <div class="modal fade" id="detailPasien{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="detailPasien{{ $item->id }}" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Riwayat
                             Pasien
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="modal-body">
@@ -353,7 +534,8 @@
                                         </tr>
                                         <tr>
                                             <th scope="kesadaran">KESADARAN</th>
-                                            <td style="text-align: end"><b>{{ $item->rm->o_kesadaran ?? '-' }}</b></td>
+                                            <td style="text-align: end"><b>{{ $item->rm->o_kesadaran ?? '-' }}</b>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th scope="Kepala">KEPALA</th>
@@ -461,92 +643,167 @@
         </div>
     @endforeach
 
-@endsection
+    @push('style')
+        <style>
+            /* Alert */
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-@push('style')
-    <style>
-        /* Alert */
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                function checkShift() {
+                    let now = new Date();
+                    let hours = now.getHours();
 
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-    <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-    <script>
-        // tanggal dan jam
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+                    let shiftPagi = document.getElementById("shiftPagi");
+                    let shiftSiang = document.getElementById("shiftSiang");
+                    let shiftTotal = document.getElementById("shiftReportTotal");
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        $(document).ready(function() {
-            // Fungsi untuk melakukan polling setiap beberapa detik
-            function autoRefresh() {
-                $.ajax({
-                    url: '{{ route('dokter.index') }}', // Ganti dengan URL yang sesuai untuk mengambil data antrian baru
-                    type: 'GET',
-                    success: function(response) {
-                        // Periksa apakah terdapat data antrian yang baru
-                        if (response.data.length > 0) {
-                            // Kosongkan tabel terlebih dahulu
-                            $('tbody').empty();
-
-                            // Loop data antrian baru dan tambahkan ke tabel
-                            $.each(response.data, function(index, item) {
-                                var row = '<tr>' +
-                                    '<td>' + (index + 1) + '</td>' +
-                                    '<td><strong>' + item.kode_antrian + '</strong><br>' +
-                                    '<button data-nomor-antrian="' + item.kode_antrian +
-                                    '" class="btn btn-success btn-panggil" data-toggle="tooltip" data-bs-placement="top" title="Panggil Pasien"><i class="fas fa-bell"></i></button></td>' +
-                                    '<td>' + item.booking.pasien.no_rm + '</td>' +
-                                    '<td>' + item.booking.pasien.nama_pasien + '</td>' +
-                                    '<td>' + item.booking.pasien.nama_kk + '</td>' +
-                                    '<td>' + item.booking.pasien.domisili + '</td>' +
-                                    '<td>' + item.booking.pasien.pekerjaan + '</td>' +
-                                    '<td>' + item.booking.pasien.jenis_pasien + '</td>' +
-                                    '<td colspan="2"><div>' +
-                                    '<a href="{{ url('dokter/soap/') }}/' + item.id +
-                                    '" class="btn btn-primary" data-toggle="tooltip" data-bs-placement="top" title="Asesmen"><i class="bi bi-pen"></i></a>' +
-                                    '<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailPasien' +
-                                    item.id +
-                                    '" data-toggle="tooltip" data-bs-placement="top" title="Riwayat Pasien" style="font-size: 18px; color: white"><i class="bi bi-info"></i></button>' +
-                                    '<button type="button" class="btn btn-secondary btn-lewati" data-toggle="tooltip" data-bs-placement="top" data-bs-toggle="modal" data-bs-target="#lewati' +
-                                    item.id +
-                                    '" title="Lewati Antrian"><i class="fa-solid fa-forward"></i></button></div></td>' +
-                                    '</tr>';
-                                $('tbody').append(row);
-                            });
-                        }
-                    },
-                    complete: function() {
-                        // Set timeout untuk memanggil fungsi autoRefresh setelah 5 detik
-                        setTimeout(autoRefresh, 5000); // 5000 milliseconds = 5 detik
+                    // Pengecekan elemen
+                    if (!shiftPagi || !shiftSiang || !shiftTotal) {
+                        console.error("Elemen shift tidak ditemukan: shiftPagi, shiftSiang, atau shiftReportTotal");
+                        return;
                     }
-                });
+
+                    let tanggalHariIni = now.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+
+                    // Atur tanggal di tabel shift pagi dan siang
+                    let tanggalShiftPagi = document.getElementById("tanggalShiftPagi");
+                    let tanggalShiftSiang = document.getElementById("tanggalShiftSiang");
+                    if (tanggalShiftPagi && tanggalShiftSiang) {
+                        tanggalShiftPagi.innerText = tanggalHariIni;
+                        tanggalShiftSiang.innerText = tanggalHariIni;
+                    } else {
+                        console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
+                    }
+
+                    // Reset tampilan semua shift
+                    shiftPagi.style.display = "none";
+                    shiftSiang.style.display = "none";
+                    shiftTotal.style.display = "none";
+
+                    // Tampilkan tabel sesuai shift
+                    if (hours >= 7 && hours < 12) {
+                        shiftPagi.style.display = "block";
+                    } else if (hours >= 12 && hours < 17) {
+                        shiftSiang.style.display = "block";
+                    } else {
+                        shiftTotal.style.display = "block";
+                    }
+                }
+
+                checkShift();
+                setInterval(checkShift, 60000);
+            });
+
+            // TANGGAL SHIFT
+            function updateTanggal() {
+                var now = new Date();
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                if (tanggalPagiElement && tanggalSiangElement) {
+                    var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+                    tanggalPagiElement.textContent = tanggalLengkap;
+                    tanggalSiangElement.textContent = tanggalLengkap;
+                } else {
+                    console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
+                }
             }
 
-            // Panggil fungsi autoRefresh pertama kali
-            autoRefresh();
-        });
-    </script>
-@endpush
+            // Panggil fungsi saat halaman dimuat
+            document.addEventListener("DOMContentLoaded", updateTanggal);
+
+            // tanggal dan jam
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            $(document).ready(function() {
+                // Fungsi untuk melakukan polling setiap beberapa detik
+                function autoRefresh() {
+                    $.ajax({
+                        url: '{{ route('dokter.index') }}', // Ganti dengan URL yang sesuai untuk mengambil data antrian baru
+                        type: 'GET',
+                        success: function(response) {
+                            // Periksa apakah terdapat data antrian yang baru
+                            if (response.data.length > 0) {
+                                // Kosongkan tabel terlebih dahulu
+                                $('tbody').empty();
+
+                                // Loop data antrian baru dan tambahkan ke tabel
+                                $.each(response.data, function(index, item) {
+                                    var row = '<tr>' +
+                                        '<td>' + (index + 1) + '</td>' +
+                                        '<td><strong>' + item.kode_antrian + '</strong><br>' +
+                                        '<button data-nomor-antrian="' + item.kode_antrian +
+                                        '" class="btn btn-success btn-panggil" data-toggle="tooltip" data-bs-placement="top" title="Panggil Pasien"><i class="fas fa-bell"></i></button></td>' +
+                                        '<td>' + item.booking.pasien.no_rm + '</td>' +
+                                        '<td>' + item.booking.pasien.nama_pasien + '</td>' +
+                                        '<td>' + item.booking.pasien.nama_kk + '</td>' +
+                                        '<td>' + item.booking.pasien.domisili + '</td>' +
+                                        '<td>' + item.booking.pasien.pekerjaan + '</td>' +
+                                        '<td>' + item.booking.pasien.jenis_pasien + '</td>' +
+                                        '<td colspan="2"><div>' +
+                                        '<a href="{{ url('dokter/soap/') }}/' + item.id +
+                                        '" class="btn btn-primary" data-toggle="tooltip" data-bs-placement="top" title="Asesmen"><i class="bi bi-pen"></i></a>' +
+                                        '<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailPasien' +
+                                        item.id +
+                                        '" data-toggle="tooltip" data-bs-placement="top" title="Riwayat Pasien" style="font-size: 18px; color: white"><i class="bi bi-info"></i></button>' +
+                                        '<button type="button" class="btn btn-secondary btn-lewati" data-toggle="tooltip" data-bs-placement="top" data-bs-toggle="modal" data-bs-target="#lewati' +
+                                        item.id +
+                                        '" title="Lewati Antrian"><i class="fa-solid fa-forward"></i></button></div></td>' +
+                                        '</tr>';
+                                    $('tbody').append(row);
+                                });
+                            }
+                        },
+                        complete: function() {
+                            // Set timeout untuk memanggil fungsi autoRefresh setelah 5 detik
+                            setTimeout(autoRefresh, 5000); // 5000 milliseconds = 5 detik
+                        }
+                    });
+                }
+
+                // Panggil fungsi autoRefresh pertama kali
+                autoRefresh();
+            });
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

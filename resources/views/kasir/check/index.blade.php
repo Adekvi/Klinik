@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Kasir Antrian')
-@section('content')
+<x-admin.layout.terminal title="Kasir Antrian">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -52,7 +50,8 @@
                                         <div class="button mb-3">
                                             <div class="dropdown">
                                                 <button class="btn btn-success dropdown-toggle" type="button"
-                                                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
                                                     <i class="fa-solid fa-file-export"></i> Export
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -148,7 +147,8 @@
                                     } ?>
                                     @if ($antrianKasir->isEmpty())
                                         <tr>
-                                            <td colspan="21" style="text-align: center; font-weight: bold;">Tidak ada data
+                                            <td colspan="21" style="text-align: center; font-weight: bold;">Tidak ada
+                                                data
                                             </td>
                                         </tr>
                                     @else
@@ -174,7 +174,8 @@
                                                 <td>Rp. {{ Rupiah($item->konsul_dokter) }}</td>
                                                 <td>Rp. {{ Rupiah($item->embalase) }}</td>
                                                 <td>{{ $item->total_obat }}</td>
-                                                <td>{{ $item->ppn ? number_format($item->ppn, 0, ',', '') : '-' }} %</td>
+                                                <td>{{ $item->ppn ? number_format($item->ppn, 0, ',', '') : '-' }} %
+                                                </td>
                                                 <td>Rp. {{ Rupiah($item->bayar) }}</td>
                                                 <td>Rp. {{ Rupiah($item->kembalian) }}</td>
                                                 <td>
@@ -198,42 +199,42 @@
         </div>
     </div>
 
-@endsection
+    @push('style')
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    @endpush
 
-@push('style')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-@endpush
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        <script src="{{ asset('assets/responsivevoice.js') }}"></script>
+        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
+        <script src="{{ asset('assets/js/script.js') }}"></script>
 
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-    <script src="{{ asset('assets/responsivevoice.js') }}"></script>
-    <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-    <script src="{{ asset('assets/js/script.js') }}"></script>
+        <script>
+            // tanggal dan jam
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
 
-    <script>
-        // tanggal dan jam
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>
+    @endpush
 
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
-@endpush
+</x-admin.layout.terminal>

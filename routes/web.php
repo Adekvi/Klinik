@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\Master\DataUserController;
 use App\Http\Controllers\Admin\Master\PidioController;
 use App\Http\Controllers\Admin\Master\PotoController;
 use App\Http\Controllers\Admin\Master\PpnController;
+use App\Http\Controllers\Admin\Master\SemuaPasien\PasienBpjsController;
+use App\Http\Controllers\Admin\Master\SemuaPasien\PasienUmumController;
 use App\Http\Controllers\Admin\Master\ShiftController;
 use App\Http\Controllers\Admin\Master\TindakanController;
 use App\Http\Controllers\Admin\Master\TtdController;
@@ -35,8 +37,10 @@ use App\Http\Controllers\Admin\Rekapan\RekapPasienController;
 use App\Http\Controllers\Admin\Rekapan\RujukanController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\Apoteker\Master\JenisobatController;
 use App\Http\Controllers\Apoteker\Master\MasterAnjuranController;
 use App\Http\Controllers\Apoteker\Master\MasterAturanController;
+use App\Http\Controllers\Apoteker\Rekap\DataPasienController as RekapDataPasienController;
 use App\Http\Controllers\ApotekerObatController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DataVideController;
@@ -85,7 +89,16 @@ use Illuminate\Support\Facades\Storage;
 
 // Route::get('/home', [HomeController::class, 'index']);
 Route::get('/', [HomeController::class, 'depan'])->name('/');
-Route::get('/antrian', [HomeController::class, 'dashboard']);
+// Route::get('/antrian', [HomeController::class, 'antrian']);
+
+// antrian
+Route::get('/antrian', [AntrianController::class, 'antrianView'])->name('antrian.view');
+
+Route::get('/daftar', [DokterController::class, 'daftarAntrian'])->name('daftarAntrian.view');
+
+Route::post('/panggil-antrian', [DokterController::class, 'panggilAntrian'])->name('antrian.panggil');
+Route::post('/panggil-antrian-perawat', [PerawatController::class, 'panggilAntrianPerawat'])->name('antrian.panggil-perawat');
+Route::post('/panggil-antrian-obat', [ObatController::class, 'panggilAntrianObat'])->name('antrian.panggil-obat');
 
 // PETUNJUK
 Route::get('petunjuk/index', [PetunjukController::class, 'index'])->name('petunjuk.index');
@@ -97,7 +110,6 @@ Route::get('/search_pasien_bpjs', [PasienController::class, 'searchPasienBpjs'])
 Route::post('/update_pasien', [PasienController::class, 'updatePasien'])->name('update_pasien');
 Route::get('get_pasien_details', [PasienController::class, 'getPasienDetail'])->name('get_pasien_details');
 Route::get('/get_pasien_bpjs', [PasienController::class, 'getPasienDetailBpjs'])->name('get_pasien_bpjs');
-// Route::post('/get-patient-data', [PasienController::class, 'getPatientData'])->name('get-patient-data');
 Route::get('pasien/index', [PasienController::class, 'index'])->name('pasien.index');
 
 // Pasien Baru
@@ -205,7 +217,7 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
     Route::get('dokter/index/tampil', [DokterController::class, 'index'])->name('dokter.index');
     Route::get('dokter/index/soap/{id}', [SoapDokterController::class, 'soap'])->name('dokter.soap');
     Route::post('dokter/store/{id}', [SoapDokterController::class, 'store'])->name('dokter.store');
-    Route::put('soap/update/{id}', [SoapDokterController::class, 'updateSoap'])->name('soap.update');
+    Route::put('soap/update/{id}/{soap_id}', [SoapDokterController::class, 'updateSoap'])->name('soap.update');
 
     // datapasien telah diperiksa
     Route::get('dokter/periksa', [BerandaDokterController::class, 'periksa'])->name('dokter.periksa');
@@ -230,6 +242,9 @@ Route::group(['middleware' => ['auth', 'dokter']], function () {
 
 Route::group(['middleware' => ['auth', 'apoteker']], function () {
     Route::get('apotek/dashboard', [BerandaApotekerController::class, 'index']);
+
+    Route::get('apoteker/pasien-dapat-obat', [RekapDataPasienController::class, 'periksa'])->name('apoteker.pasien-dapat-obat');
+
     // apotek
     Route::get('apotek/index', [ObatController::class, 'index'])->name('apotek.index');
     Route::post('obat/store/{id}', [ObatController::class, 'store'])->name('apotek.store');
@@ -245,25 +260,32 @@ Route::group(['middleware' => ['auth', 'apoteker']], function () {
     Route::get('/gantiObat-RegoGanti', [ObatController::class, 'gantiHargaObat']);
 
     // Master Apoteker
-    Route::get('apoteker/masterObat', [ApotekerObatController::class, 'masterObat'])->name('apoteker.master.obat');
-    Route::post('apoteker/dataobat-tambah', [ApotekerObatController::class, 'tambah'])->name('apoteker.tambah');
-    Route::put('apoteker/dataobat-edit/{id}', [ApotekerObatController::class, 'edit'])->name('apoteker.edit');
-    Route::delete('apoteker/dataobat-hapus/{id}', [ApotekerObatController::class, 'hapus'])->name('apoteker.hapus');
+    Route::get('apoteker/master-obat/obat', [ApotekerObatController::class, 'masterObat'])->name('apoteker.master.obat');
+    Route::post('apoteker/master-obat/obat-tambah', [ApotekerObatController::class, 'tambah'])->name('apoteker.tambah');
+    Route::put('apoteker/master-obat/obat-edit/{id}', [ApotekerObatController::class, 'edit'])->name('apoteker.edit');
+    Route::delete('apoteker/master-obat/obat-hapus/{id}', [ApotekerObatController::class, 'hapus'])->name('apoteker.hapus');
     Route::get('apoteker/master/obat/cari', [ApotekerObatController::class, 'search'])->name('apoteker.obat.cari');
 
+    // MASTER ATURAN MINUM
+    Route::get('apoteker/master-obat/aturan', [MasterAturanController::class, 'index'])->name('apoteker.master-aturan');
+    Route::post('apoteker/master-obat/aturan-tambah', [MasterAturanController::class, 'tambah'])->name('apoteker.master.aturan-store');
+    Route::put('apoteker/master-obat/aturan-edit/{id}', [MasterAturanController::class, 'edit'])->name('apoteker.edit.aturan');
+    Route::delete('apoteker/master-obat/aturan-hapus/{id}', [MasterAturanController::class, 'hapus'])->name('apoteker.hapus.aturan');
+    Route::post('updateStatus-aturan', [MasterAturanController::class, 'updateStatus'])->name('aturan.Status');
+    
     // MASTER ANJURAN MINUM
-    Route::get('apoteker/master-anjuran', [MasterAnjuranController::class, 'index'])->name('apoteker.master-anjuran');
-    Route::post('apoteker/master/anjuran-tambah', [MasterAnjuranController::class, 'tambah'])->name('apoteker.master.anjuran-store');
-    Route::put('apoteker/master/anjuran-edit/{id}', [MasterAnjuranController::class, 'edit'])->name('apoteker.edit.anjuran');
-    Route::delete('apoteker/master/anjuran-hapus/{id}', [MasterAnjuranController::class, 'hapus'])->name('apoteker.hapus.anjuran');
+    Route::get('apoteker/master-obat/anjuran', [MasterAnjuranController::class, 'index'])->name('apoteker.master-anjuran');
+    Route::post('apoteker/master-obat/anjuran-tambah', [MasterAnjuranController::class, 'tambah'])->name('apoteker.master.anjuran-store');
+    Route::put('apoteker/master-obat/anjuran-edit/{id}', [MasterAnjuranController::class, 'edit'])->name('apoteker.edit.anjuran');
+    Route::delete('apoteker/master-obat/anjuran-hapus/{id}', [MasterAnjuranController::class, 'hapus'])->name('apoteker.hapus.anjuran');
     Route::post('updateStatus-anjuran', [MasterAnjuranController::class, 'updateStatus'])->name('anjuran.Status');
 
-    // MASTER ATURAN MINUM
-    Route::get('apoteker/master-aturan', [MasterAturanController::class, 'index'])->name('apoteker.master-aturan');
-    Route::post('apoteker/master/aturan-tambah', [MasterAturanController::class, 'tambah'])->name('apoteker.master.aturan-store');
-    Route::put('apoteker/master/aturan-edit/{id}', [MasterAturanController::class, 'edit'])->name('apoteker.edit.aturan');
-    Route::delete('apoteker/master/aturan-hapus/{id}', [MasterAturanController::class, 'hapus'])->name('apoteker.hapus.aturan');
-    Route::post('updateStatus-aturan', [MasterAturanController::class, 'updateStatus'])->name('aturan.Status');
+    // MASTER JENIS OBAT
+    Route::get('apoteker/master-obat/jenis', [JenisobatController::class, 'index'])->name('apoteker.master-jenis');
+    Route::post('apoteker/master-obat/jenis-tambah', [JenisobatController::class, 'tambah'])->name('apoteker.master.jenis-store');
+    Route::put('apoteker/master-obat/jenis-edit/{id}', [JenisobatController::class, 'edit'])->name('apoteker.edit.jenis');
+    Route::delete('apoteker/master-obat/jenis-hapus/{id}', [JenisobatController::class, 'hapus'])->name('apoteker.hapus.jenis');
+    Route::post('updateStatus-jenis', [JenisobatController::class, 'updateStatus'])->name('jenis.Status');
 
     // UPLOUD OBAT
     Route::post('/apoteker/import', [ApotekerObatController::class, 'uploudObat'])->name('resep.import');
@@ -300,16 +322,6 @@ Route::group(['middleware' => ['auth', 'kasir']], function () {
 
     Route::get('/kasir/laporan/export/excel', [BerandaKasirController::class, 'exportExcel'])->name('kasir.laporan.export.excel');
 });
-
-// antrian
-Route::get('/antrian', [AntrianController::class, 'antrianView'])->name('antrian.view');
-
-Route::get('/daftar', [DokterController::class, 'daftarAntrian'])->name('daftarAntrian.view');
-
-Route::post('/panggil-antrian', [DokterController::class, 'panggilAntrian'])->name('antrian.panggil');
-Route::post('/panggil-antrian-perawat', [PerawatController::class, 'panggilAntrianPerawat'])->name('antrian.panggil-perawat');
-Route::post('/panggil-antrian-obat', [ObatController::class, 'panggilAntrianObat'])->name('antrian.panggil-obat');
-Route::post('/simpan-video', [DataVideController::class, 'saveVideo'])->name('simpan-video');
 
 // Customer service - Chat
 // web.php
@@ -353,14 +365,14 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/semuapasien/download-template', [DataSemuaPasienController::class, 'downloadTemplate'])->name('pasien.downloadTemplate');
 
     // master pasien umum
-    Route::get('admin/master/pasienumum', [DataPasienController::class, 'umum'])->name('master.pasienumum');
-    Route::post('admin/tambah/pasienumum', [DataPasienController::class, 'store'])->name('store.pasienumum');
-    Route::delete('admin/hapus/pasienumum/{id}', [DataPasienController::class, 'delete'])->name('delete.pasienumum');
+    Route::get('admin/master/pasienumum', [PasienUmumController::class, 'umum'])->name('master.pasienumum');
+    Route::put('admin/edit/pasienumum/{id}', [PasienUmumController::class, 'edit'])->name('edit.pasienumum');
+    Route::delete('admin/hapus/pasienumum/{id}', [PasienUmumController::class, 'delete'])->name('delete.pasienumum');
 
     // master pasien bpjs
-    Route::get('admin/master/pasienbpjs', [DataPasienController::class, 'bpjs'])->name('master.pasienbpjs');
-    Route::post('admin/tambah/pasienbpjs', [DataPasienController::class, 'tambah'])->name('tambah.pasienbpjs');
-    Route::delete('admin/tambah/pasienbpjs/{id}', [DataPasienController::class, 'hapus'])->name('delete.pasienbpjs');
+    Route::get('admin/master/pasienbpjs', [PasienBpjsController::class, 'bpjs'])->name('master.pasienbpjs');
+    Route::put('admin/edit/pasienbpjs/{id}', [PasienBpjsController::class, 'edit'])->name('edit.pasienbpjs');
+    Route::delete('admin/tambah/pasienbpjs/{id}', [PasienBpjsController::class, 'hapus'])->name('delete.pasienbpjs');
 
     // master diagnosa
     Route::get('admin/master/diagnosa', [DataDiagnosaController::class, 'index'])->name('master.diagnosa');
@@ -421,6 +433,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('admin/tambah/video', [DataVideController::class, 'store'])->name('master.store');
     Route::put('admin/edit/video/{id}', [DataVideController::class, 'edit'])->name('master.edit');
     Route::delete('admin/hapus/video/{id}', [DataVideController::class, 'delete'])->name('master.hapus');
+    Route::post('updateStatus', [DataVideController::class, 'updateStatus'])->name('update');
 
     // master ttd medis
     Route::get('admin/master/master-ttd', [TtdController::class, 'index'])->name('master.ttd');

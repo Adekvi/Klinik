@@ -1,6 +1,5 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Data Tenaga Medis')
-@section('content')
+<x-admin.layout.terminal title="Admin | Data Tenaga Medis">
+
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
             <div class="col-lg-12 mb-4 order-0">
@@ -60,7 +59,8 @@
                                                     <input type="hidden" name="id" value="{{ $item->id }}">
                                                     <div class="piket">
                                                         <input type="checkbox" name="status"
-                                                            id="status_{{ $item->id }}" onchange="this.form.submit()"
+                                                            id="status_{{ $item->id }}"
+                                                            onchange="this.form.submit()"
                                                             @if ($item->status) checked @endif>
                                                         <label for="status_{{ $item->id }}" class="button"></label>
 
@@ -97,93 +97,96 @@
     @include('admin.master.datadokter.modaltambah')
     @include('admin.master.datadokter.modaledit')
     @include('admin.master.datadokter.modalhapus')
-@endsection
-@push('style')
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-    <style>
-        /* Menyusun elemen dengan flexbox secara vertikal */
-        .piket {
-            display: flex;
-            flex-direction: column;
-            /* Menyusun elemen secara vertikal */
-            align-items: center;
-            /* Menyusun elemen di tengah secara horizontal */
-        }
 
-        /* Tampilan tombol */
-        .button {
-            width: 55px;
-            height: 25px;
-            background-color: #d2d2d2;
-            border-radius: 200px;
-            cursor: pointer;
-            position: relative;
-        }
+    @push('style')
+        {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> --}}
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+        <style>
+            /* Menyusun elemen dengan flexbox secara vertikal */
+            .piket {
+                display: flex;
+                flex-direction: column;
+                /* Menyusun elemen secara vertikal */
+                align-items: center;
+                /* Menyusun elemen di tengah secara horizontal */
+            }
 
-        .button::before {
-            position: absolute;
-            content: "";
-            width: 15px;
-            height: 15px;
-            background-color: #fff;
-            border-radius: 200px;
-            margin: 5px;
-            transition: 0.2s;
-        }
+            /* Tampilan tombol */
+            .button {
+                width: 55px;
+                height: 25px;
+                background-color: #d2d2d2;
+                border-radius: 200px;
+                cursor: pointer;
+                position: relative;
+            }
 
-        input:checked+.button {
-            background-color: blue;
-        }
+            .button::before {
+                position: absolute;
+                content: "";
+                width: 15px;
+                height: 15px;
+                background-color: #fff;
+                border-radius: 200px;
+                margin: 5px;
+                transition: 0.2s;
+            }
 
-        input:checked+.button::before {
-            transform: translateX(30px);
-        }
+            input:checked+.button {
+                background-color: blue;
+            }
 
-        /* Menyembunyikan input checkbox */
-        input {
-            display: none;
-        }
+            input:checked+.button::before {
+                transform: translateX(30px);
+            }
 
-        /* Status text berada di bawah tombol */
-        .status-text {
-            margin-top: 10px;
-            /* Memberikan jarak antara tombol dan status text */
-            font-weight: bold;
-            color: #333;
-        }
+            /* Menyembunyikan input checkbox */
+            input {
+                display: none;
+            }
 
-        .swal2-container {
-            z-index: 9999 !important;
-        }
-    </style>
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
-    <script>
-        new DataTable('#example');
+            /* Status text berada di bawah tombol */
+            .status-text {
+                margin-top: 10px;
+                /* Memberikan jarak antara tombol dan status text */
+                font-weight: bold;
+                color: #333;
+            }
 
-        // Validasi Nik
-        document.addEventListener('DOMContentLoaded', function() {
-            const nikInput = document.getElementById('nik');
-            const nikError = document.getElementById('nik-error');
+            .swal2-container {
+                z-index: 9999 !important;
+            }
+        </style>
+    @endpush
 
-            nikInput.addEventListener('input', function() {
-                const nik = nikInput.value;
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
+        <script>
+            new DataTable('#example');
 
-                // Validasi panjang NIK dan memastikan hanya angka
-                if (nik.length === 16 && /^\d+$/.test(nik)) {
-                    nikInput.classList.remove('is-invalid');
-                    nikError.style.display = 'none';
-                } else {
-                    nikInput.classList.add('is-invalid');
-                    nikError.style.display = 'block';
-                }
+            // Validasi Nik
+            document.addEventListener('DOMContentLoaded', function() {
+                const nikInput = document.getElementById('nik');
+                const nikError = document.getElementById('nik-error');
+
+                nikInput.addEventListener('input', function() {
+                    const nik = nikInput.value;
+
+                    // Validasi panjang NIK dan memastikan hanya angka
+                    if (nik.length === 16 && /^\d+$/.test(nik)) {
+                        nikInput.classList.remove('is-invalid');
+                        nikError.style.display = 'none';
+                    } else {
+                        nikInput.classList.add('is-invalid');
+                        nikError.style.display = 'block';
+                    }
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | Laporan Kunjungan KB')
-@section('content')
+<x-admin.layout.terminal title="Admin | Laporan Kunjungan KB">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -40,8 +38,9 @@
                                     style="margin-left: 10px"><i class="fas fa-print"></i> Cetak</button>
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle"
-                                        style="margin-top: -3px; margin-left: 10px" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        style="margin-top: -3px; margin-left: 10px" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
                                         <i class="fa-solid fa-file-excel"></i>
                                         Export
                                     </button>
@@ -107,7 +106,8 @@
                                                     <td>{{ $counter++ }}</td>
                                                     <td>{{ $item->no_rm }}</td>
                                                     <td>{{ $item->created_at->format('d/m/Y') }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}
+                                                    </td>
                                                     <td>{{ $item->pasien->nomor_bpjs ?? '-' }}</td>
                                                     <td>{{ $item->pasien->nama_pasien ?? '-' }}</td>
                                                     <td>{{ $item->pasien->jenis_kelamin ?? '-' }}</td>
@@ -124,7 +124,8 @@
                                                         {{ $item->rujuk_rumahsakit ?? ' - ' }}
                                                     </td>
                                                     <td>
-                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-toggle="modal"
                                                             data-bs-target="#hapuspoli{{ $item->id }}">
                                                             <i class="fas fa-trash"></i> Hapus</button>
                                                     </td>
@@ -145,123 +146,122 @@
         </div>
     </div>
 
+    @push('style')
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
+        <style>
+            .custom-th {
+                min-width: 80px;
+                /* Atur lebar minimum */
+                max-width: 200px;
+                /* Atur lebar maksimum */
+                white-space: nowrap;
+                /* Mencegah teks untuk melipat jika panjang */
+                overflow: hidden;
+                /* Menyembunyikan teks yang melebihi lebar maksimum */
+                text-overflow: ellipsis;
+                /* Menampilkan elipsis (...) jika teks melebihi lebar maksimum */
+            }
+        </style>
+    @endpush
 
-@endsection
-@push('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
-    <style>
-        .custom-th {
-            min-width: 80px;
-            /* Atur lebar minimum */
-            max-width: 200px;
-            /* Atur lebar maksimum */
-            white-space: nowrap;
-            /* Mencegah teks untuk melipat jika panjang */
-            overflow: hidden;
-            /* Menyembunyikan teks yang melebihi lebar maksimum */
-            text-overflow: ellipsis;
-            /* Menampilkan elipsis (...) jika teks melebihi lebar maksimum */
-        }
-    </style>
-@endpush
-@push('script')
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
+    @push('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tanggalInput = document.getElementById('tanggal');
-            const monthSelect = document.getElementById('month');
-            const tahunSelect = document.getElementById('tahun');
-            const filterByFullDate = document.getElementById('filter_by_full_date');
-            const filterByMonthYear = document.getElementById('filter_by_month_year');
-            const btnSearch = document.getElementById('btnSearch');
-            const btnCetak = document.getElementById('btnCetak');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const tanggalInput = document.getElementById('tanggal');
+                const monthSelect = document.getElementById('month');
+                const tahunSelect = document.getElementById('tahun');
+                const filterByFullDate = document.getElementById('filter_by_full_date');
+                const filterByMonthYear = document.getElementById('filter_by_month_year');
+                const btnSearch = document.getElementById('btnSearch');
+                const btnCetak = document.getElementById('btnCetak');
 
-            // Tambahkan event listener untuk radio button 'Tanggal'
-            filterByFullDate.addEventListener('change', function() {
-                if (this.checked) {
-                    tanggalInput.disabled = false;
-                    monthSelect.disabled = true;
-                    tahunSelect.disabled = true;
-                }
-            });
+                // Tambahkan event listener untuk radio button 'Tanggal'
+                filterByFullDate.addEventListener('change', function() {
+                    if (this.checked) {
+                        tanggalInput.disabled = false;
+                        monthSelect.disabled = true;
+                        tahunSelect.disabled = true;
+                    }
+                });
 
-            // Tambahkan event listener untuk radio button 'Bulan dan Tahun'
-            filterByMonthYear.addEventListener('change', function() {
-                if (this.checked) {
-                    tanggalInput.disabled = true;
-                    monthSelect.disabled = false;
-                    tahunSelect.disabled = false;
-                }
-            });
+                // Tambahkan event listener untuk radio button 'Bulan dan Tahun'
+                filterByMonthYear.addEventListener('change', function() {
+                    if (this.checked) {
+                        tanggalInput.disabled = true;
+                        monthSelect.disabled = false;
+                        tahunSelect.disabled = false;
+                    }
+                });
 
-            btnSearch.addEventListener('click', function() {
-                let searchData;
-                if (filterByMonthYear.checked) {
-                    const selectedMonth = monthSelect.value;
-                    const selectedYear = tahunSelect.value;
-                    searchData = {
-                        type: 'month_year',
-                        month: selectedMonth,
-                        year: selectedYear
-                    };
-                } else if (filterByFullDate.checked) {
-                    const selectedDate = tanggalInput.value;
-                    searchData = {
-                        type: 'full_date',
-                        date: selectedDate
-                    };
-                } else {
-                    console.log('Harap pilih opsi pencarian terlebih dahulu');
-                    return;
-                }
+                btnSearch.addEventListener('click', function() {
+                    let searchData;
+                    if (filterByMonthYear.checked) {
+                        const selectedMonth = monthSelect.value;
+                        const selectedYear = tahunSelect.value;
+                        searchData = {
+                            type: 'month_year',
+                            month: selectedMonth,
+                            year: selectedYear
+                        };
+                    } else if (filterByFullDate.checked) {
+                        const selectedDate = tanggalInput.value;
+                        searchData = {
+                            type: 'full_date',
+                            date: selectedDate
+                        };
+                    } else {
+                        console.log('Harap pilih opsi pencarian terlebih dahulu');
+                        return;
+                    }
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                fetch('/rekapan/rujukan/search', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify(searchData),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        updateTable(data);
-                    })
-                    .catch(error => {
-                        console.error('Terjadi kesalahan saat melakukan pencarian:', error);
-                    });
-            });
-            btnCetak.addEventListener('click', function() {
-                // Panggil fungsi cetak tabel saat tombol cetak diklik
-                cetakHasilFilter();
-            });
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    fetch('/rekapan/rujukan/search', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            body: JSON.stringify(searchData),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            updateTable(data);
+                        })
+                        .catch(error => {
+                            console.error('Terjadi kesalahan saat melakukan pencarian:', error);
+                        });
+                });
+                btnCetak.addEventListener('click', function() {
+                    // Panggil fungsi cetak tabel saat tombol cetak diklik
+                    cetakHasilFilter();
+                });
 
-            function updateTable(data) {
-                const tableBody = document.querySelector('#example tbody');
-                // Kosongkan tabel
-                tableBody.innerHTML = '';
+                function updateTable(data) {
+                    const tableBody = document.querySelector('#example tbody');
+                    // Kosongkan tabel
+                    tableBody.innerHTML = '';
 
-                // Periksa apakah data kosong atau null
-                if (!data || data.length === 0) {
-                    // Tambahkan pesan bahwa data tidak ada
-                    const row = document.createElement('tr');
-                    row.innerHTML = '<td colspan="20" style="text-align: center">Data tidak ada</td>';
-                    tableBody.appendChild(row);
-                    return; // Keluar dari fungsi setelah menambahkan pesan
-                }
-                // Jika ada data, tambahkan baris-baris baru berdasarkan data
-                var no = 1;
-                data.forEach(item => {
-                    if (!item) return;
+                    // Periksa apakah data kosong atau null
+                    if (!data || data.length === 0) {
+                        // Tambahkan pesan bahwa data tidak ada
+                        const row = document.createElement('tr');
+                        row.innerHTML = '<td colspan="20" style="text-align: center">Data tidak ada</td>';
+                        tableBody.appendChild(row);
+                        return; // Keluar dari fungsi setelah menambahkan pesan
+                    }
+                    // Jika ada data, tambahkan baris-baris baru berdasarkan data
+                    var no = 1;
+                    data.forEach(item => {
+                        if (!item) return;
 
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
                         <td>${no++}</td>
                         <td>${item.tanggal}</td>
                         <td>${item.jam}</td>
@@ -299,81 +299,83 @@
                                 <i class="fas fa-trash"></i> Hapus</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
-                });
-
-            }
-
-
-            function cetakHasilFilter() {
-                // Data filter yang akan dikirim
-                let searchData;
-                if (filterByMonthYear.checked) {
-                    const selectedMonth = monthSelect.value;
-                    const selectedYear = tahunSelect.value;
-                    searchData = {
-                        type: 'month_year',
-                        month: selectedMonth,
-                        year: selectedYear
-                    };
-                } else if (filterByFullDate.checked) {
-                    const selectedDate = tanggalInput.value;
-                    searchData = {
-                        type: 'full_date',
-                        date: selectedDate
-                    };
-                } else {
-                    // Jika tidak ada filter yang dipilih, kirim permintaan pencetakan tanpa data filter
-                    searchData = {
-                        type: 'no_filter'
-                    };
-                }
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                // Kirim data filter ke route pencetakan menggunakan AJAX
-                fetch('/rekapan/rujukan/cetak', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken // Sesuaikan dengan cara Anda mendapatkan token CSRF
-                        },
-                        body: JSON.stringify(searchData),
-                    })
-                    .then(response => response.text())
-                    .then(html => {
-                        // Membuka jendela baru dan menuliskan HTML ke dalamnya untuk pencetakan
-                        const newWindow = window.open('', '_blank');
-                        newWindow.document.write(html);
-                        newWindow.document.close();
-                        newWindow.print(); // Melakukan pencetakan pada jendela baru
-                    })
-                    .catch(error => {
-                        console.error('Terjadi kesalahan saat mencetak:', error);
+                        tableBody.appendChild(row);
                     });
-            }
 
-            // Dapatkan tahun saat ini
-            const currentYear = new Date().getFullYear();
-            const startYear = currentYear - 10;
-            const endYear = currentYear;
+                }
 
-            // Buat opsi tahun secara dinamis
-            for (let year = endYear; year >= startYear; year--) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                tahunSelect.appendChild(option);
-            }
 
-            // Buat opsi bulan secara dinamis
-            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
-                "Oktober", "November", "Desember"
-            ];
-            months.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;
-                option.textContent = month;
-                monthSelect.appendChild(option);
+                function cetakHasilFilter() {
+                    // Data filter yang akan dikirim
+                    let searchData;
+                    if (filterByMonthYear.checked) {
+                        const selectedMonth = monthSelect.value;
+                        const selectedYear = tahunSelect.value;
+                        searchData = {
+                            type: 'month_year',
+                            month: selectedMonth,
+                            year: selectedYear
+                        };
+                    } else if (filterByFullDate.checked) {
+                        const selectedDate = tanggalInput.value;
+                        searchData = {
+                            type: 'full_date',
+                            date: selectedDate
+                        };
+                    } else {
+                        // Jika tidak ada filter yang dipilih, kirim permintaan pencetakan tanpa data filter
+                        searchData = {
+                            type: 'no_filter'
+                        };
+                    }
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    // Kirim data filter ke route pencetakan menggunakan AJAX
+                    fetch('/rekapan/rujukan/cetak', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken // Sesuaikan dengan cara Anda mendapatkan token CSRF
+                            },
+                            body: JSON.stringify(searchData),
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            // Membuka jendela baru dan menuliskan HTML ke dalamnya untuk pencetakan
+                            const newWindow = window.open('', '_blank');
+                            newWindow.document.write(html);
+                            newWindow.document.close();
+                            newWindow.print(); // Melakukan pencetakan pada jendela baru
+                        })
+                        .catch(error => {
+                            console.error('Terjadi kesalahan saat mencetak:', error);
+                        });
+                }
+
+                // Dapatkan tahun saat ini
+                const currentYear = new Date().getFullYear();
+                const startYear = currentYear - 10;
+                const endYear = currentYear;
+
+                // Buat opsi tahun secara dinamis
+                for (let year = endYear; year >= startYear; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    tahunSelect.appendChild(option);
+                }
+
+                // Buat opsi bulan secara dinamis
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September",
+                    "Oktober", "November", "Desember"
+                ];
+                months.forEach((month, index) => {
+                    const option = document.createElement('option');
+                    option.value = index + 1;
+                    option.textContent = month;
+                    monthSelect.appendChild(option);
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+
+</x-admin.layout.terminal>

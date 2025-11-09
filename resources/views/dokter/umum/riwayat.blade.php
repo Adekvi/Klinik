@@ -31,7 +31,8 @@
                                             <?php $no = 1; ?>
                                             @if (!$fisik)
                                                 <tr>
-                                                    <td colspan="7" class="text-center">Belum ada riwayat odontogram
+                                                    <td colspan="7" class="text-center">Belum ada riwayat anatomi
+                                                        pasien.
                                                     </td>
                                                 </tr>
                                             @else

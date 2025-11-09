@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anjuran;
 use App\Models\AntrianDokter;
 use App\Models\AntrianObat;
 use App\Models\AntrianPerawat;
+use App\Models\Aturan;
 use App\Models\Booking;
 use App\Models\DataDokter;
 use App\Models\IsianPerawat;
+use App\Models\Jenisobat;
 use App\Models\Kasir;
 use App\Models\Obat;
 use App\Models\Pasien;
@@ -50,18 +53,183 @@ class ObatController extends Controller
 
         $reseps = Resep::all();
 
+        // Di controller
+        $aturanList = Aturan::where('status', 'Aktif')
+            ->get()
+            ->map(function ($a) {
+                return trim($a->aturan_minum . ' ' . $a->takaran);
+            })
+            ->values()
+            ->toArray(); // Pastikan array PHP
+
+        $anjuranList = Anjuran::where('status', 'Aktif')
+            ->select('kode_anjuran', 'golongan')
+            ->get();
+
+        $jenisObatList = Jenisobat::where('status', 'Aktif')
+            ->pluck('jenis')
+            ->toArray();
+
+        
+        // Status pasien
         $today = Carbon::today();
-
-        $totalpasien = Pasien::count();
-
-        $pasienHariniUmum = Pasien::where('jenis_pasien', 'Umum')
-            ->whereDate('created_at', $today)
-            ->count();
-        $pasienHariniBpjs = Pasien::where('jenis_pasien', 'Bpjs')
-            ->whereDate('created_at', $today)
+        $pasienDilayani = AntrianPerawat::where('status', 'S')
+            ->whereDate('updated_at', $today)
             ->count();
 
-        return view('obat.index', compact('obat', 'antrianObat', 'reseps', 'totalpasien', 'pasienHariniUmum', 'pasienHariniBpjs', 'search', 'entries'));
+        // dd($pasienDilayani);
+
+        $pasienBelumDilayani = AntrianPerawat::where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->count();
+
+        // SHIFT PAGI POLI UMUM
+        // PASIEN BPJS
+        $countShiftPagiUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today) // <-- tambah filter hari ini
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftPagiUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // SHIFT PAGI POLI GIGI
+        // PASIEN BPJS
+        $countShiftPagiGigiBPJS = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftPagiGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '07:00:00')
+            ->whereTime('created_at', '<', '13:00:00')
+            ->count();
+
+        // SHIFT SIANG POLI UMUM
+        // PASIEN BPJS
+        $countShiftSiangUmumBPJS = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // PASIEN UMUM
+        $countShiftSiangUmumUmum = AntrianPerawat::where('id_poli', 1)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // SHIFT SIANG POLI GIGI
+        // PASIEN UMUM
+        $countShiftSiangGigiUmum = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // PASIEN BPJS
+        $countShiftSiangGigiBpjs = AntrianPerawat::where('id_poli', 2)
+            ->where('status', 'P')
+            ->whereDate('created_at', $today)
+            ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->whereTime('created_at', '>=', '13:00:00')
+            ->whereTime('created_at', '<', '18:00:00')
+            ->count();
+
+        // dd($countShiftSiangUmumUmum, $countShiftSiangGigiBpjs, $countShiftSiangGigiUmum);
+
+        // TOTAL PASIEN SHIFT PAGI DAN SIANG
+        // POLI UMUM PASIEN UMUM
+        $totalPoliUmumPasienUmum = $countShiftPagiUmumUmum + $countShiftSiangUmumUmum;
+
+        // POLI UMUM PASIEN BPJS
+        $totalPoliUmumPasienBPJS = $countShiftPagiUmumBPJS + $countShiftSiangUmumBPJS;
+
+        // POLI GIGI PASIEN UMUM
+        $totalPoliGigiPasienUmum = $countShiftPagiGigiUmum + $countShiftSiangGigiUmum;
+
+        // POLI GIGI PASIEN BPJS
+        $totalPoliGigiPasienBPJS = $countShiftPagiGigiBPJS + $countShiftSiangGigiBpjs;
+
+        return view('obat.index', compact(
+            'obat', 
+            'antrianObat', 
+            'reseps',  
+            'search', 
+            'entries',
+            'aturanList',
+            'anjuranList',
+            'jenisObatList',
+            'pasienDilayani',
+            'pasienBelumDilayani',
+            'countShiftPagiUmumBPJS',
+            'countShiftPagiUmumUmum',
+            'countShiftPagiGigiBPJS',
+            'countShiftPagiGigiUmum',
+            'countShiftSiangUmumBPJS',
+            'countShiftSiangUmumUmum',
+            'countShiftSiangGigiBpjs',
+            'countShiftSiangGigiUmum',
+            'totalPoliUmumPasienUmum',
+            'totalPoliUmumPasienBPJS',
+            'totalPoliGigiPasienUmum',
+            'totalPoliGigiPasienBPJS',
+        ));
     }
 
     public function store(Request $request, $id)
@@ -267,20 +435,6 @@ class ObatController extends Controller
         return redirect()->route('apotek.index');
     }
 
-    // Controller Antrian Obat
-    public function panggilAntrianObat(Request $request)
-    {
-        // Dapatkan nomor antrian dari $request->nomor_antrian
-        $nomorAntrianObat = $request->nomor_antrian_obat;
-
-        // Simpan nomor antrian ke dalam sesi atau database sesuai kebutuhan
-        session(['nomor_antrian_obat' => $nomorAntrianObat]);
-
-        // Render tampilan antrian.blade.php dan kirimkan sebagai respon Ajax
-
-        return response()->json(['nomorAntrianObat' => $nomorAntrianObat]);
-    }
-
     public function cetakKartu($id)
     {
         $item = AntrianPerawat::with('poli', 'obat')->findOrFail($id);
@@ -353,5 +507,42 @@ class ObatController extends Controller
         }
 
         return view('obat.ModalTambahResep.ModalResep', compact('item', 'semuaObat', 'hargaPokoks'));
+    }
+
+
+    // public function panggilAntrianObat(Request $request)
+    // {
+    //     // Dapatkan nomor antrian dari $request->nomor_antrian
+    //     $nomorAntrianObat = $request->nomor_antrian_obat;
+
+    //     // Simpan nomor antrian ke dalam sesi atau database sesuai kebutuhan
+    //     session(['nomor_antrian_obat' => $nomorAntrianObat]);
+
+    //     // Render tampilan antrian.blade.php dan kirimkan sebagai respon Ajax
+
+    //     return response()->json(['nomorAntrianObat' => $nomorAntrianObat]);
+    // }
+
+    public function panggilAntrianObat(Request $request)
+    {
+        $today = Carbon::today();
+
+        // Cari antrian berikutnya yang status 'B' (Apotek)
+        $next = AntrianPerawat::whereDate('created_at', $today)
+            ->where('status', 'B')
+            ->orderBy('kode_antrian')
+            ->first();
+
+        if (!$next) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada antrian di farmasi']);
+        }
+
+        // Opsional: ubah status jadi 'K' (kasir) atau langsung selesai
+        // $next->update(['status' => 'K']); // jika ada kasir
+
+        return response()->json([
+            'success' => true,
+            'nomor' => $next->kode_antrian
+        ]);
     }
 }

@@ -1,6 +1,4 @@
-@extends('admin.layout.dasbrod')
-@section('title', 'Admin | My Profile')
-@section('content')
+<x-admin-layout.terminal title="Admin | My Profile">
 
     <div class="content-wrapper">
         <!-- Content -->
@@ -12,7 +10,8 @@
                 <div class="col-md-12">
                     <ul class="nav nav-pills flex-column flex-md-row mb-3">
                         <li class="nav-item">
-                            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
+                            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>
+                                Account</a>
                         </li>
                         {{-- <li class="nav-item">
               <a class="nav-link" href="#"
@@ -111,4 +110,4 @@
 
     </div>
 
-@endsection
+</x-admin-layout.terminal>

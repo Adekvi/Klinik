@@ -1,274 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('assets/images/logo_multisari.png') }}" rel="icon">
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <title>Antrian</title>
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <title>Antrian Klinik Multisari II</title>
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
         body {
             height: 100%;
-            margin: 0;
+            width: 100%;
+            overflow: hidden;
             font-family: 'Open Sans', sans-serif;
+            background: rgba(31, 125, 108, 0.95);
+        }
+
+        .app-container {
             display: flex;
             flex-direction: column;
-            background-color: rgba(31, 125, 108, 0.95);
+            height: 100vh;
+            width: 100vw;
         }
 
-        .container-fluid {
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .container-fluid {
-                width: 80%;
-            }
-        }
-
+        /* HEADER */
         .header {
-            width: 100%;
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
+            background: linear-gradient(to right, #008B8B, #62E7CF);
+            color: white;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to right top, #008B8B, rgba(98, 231, 207, 1));
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            flex-shrink: 0;
         }
 
-        .header img {
-            width: 100px;
-            margin-right: 10px;
+        .header .logo img {
+            height: 45px;
         }
 
         .header h4 {
             margin: 0;
-            font-weight: bold;
-            font-family: 'Open Sans', sans-serif;
-            color: white;
+            font-weight: 700;
+            font-size: 1.4rem;
         }
 
-        @media screen and (min-width: 1024px) {
-            body {
-                zoom: 75%;
-            }
+        .header h4 span {
+            color: #FFE033;
         }
 
-        .header .date-time {
+        .date-time {
             text-align: right;
-            color: white;
+            font-size: 0.9rem;
         }
 
-        .header .date-time .tanggal,
-        .header .date-time .jam {
+        .date-time .tanggal {
+            font-weight: 600;
+        }
+
+        .date-time .jam h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
             margin: 0;
-            padding: 0;
-            color: white;
         }
 
-        .header .date-time .jam h1 {
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .main-container {
-            width: 100%;
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            margin-top: 110px;
-            gap: 20px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .video-container {
-            width: 100%;
-            max-width: 670px;
-            background: #FFF;
-            border-radius: 8px;
+            flex-direction: column;
             padding: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
+            gap: 15px;
+            overflow: hidden;
         }
 
-        .info-container {
+        .top-row {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .video-section,
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .video-section {
+            flex: 1;
+            max-width: 55%;
+        }
+
+        .info-section {
+            flex: 1;
+            max-width: 45%;
+            gap: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .media-item {
             width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            display: none;
         }
 
+        .media-item.active {
+            display: block;
+        }
+
+        /* INFO BOX */
         .info-box {
-            width: 100%;
             background: #008B8B;
-            min-height: 110px;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            flex-shrink: 0;
         }
 
-        .inpo-boxs {
-            width: 100%;
-            background: #fff;
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 200px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
+        .info-box h4 {
+            margin: 0;
+            font-size: 1.3rem;
         }
 
-        .table-responsive {
-            width: 100%;
+        .info-box h4 span {
+            color: #FFE033;
+        }
+
+        /* TABLE */
+        .table-container {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-title {
+            background: #008B8B;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .table-title span {
+            color: #FFE033;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
         }
 
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            table-layout: fixed;
         }
 
         .info-table thead {
-            background-color: #008B8B;
+            background: #008B8B;
             color: white;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .info-table th,
         .info-table td {
             padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .info-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .video-container video,
-        .video-container img {
-            width: 100%;
-            height: auto;
-        }
-
-        #stats-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-bottom: 80px;
-        }
-
-        #stats-container>div {
-            flex: 1 1 200px;
-            max-width: 280px;
             text-align: center;
-            max-height: 150px;
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            box-sizing: border-box;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee;
         }
 
-        #stats-container>div:hover {
-            transform: translateY(-10px);
+        .info-table tbody tr {
+            background: #f8f9fa;
         }
 
-        #stats-container>div p {
-            margin: auto;
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: -20px;
+        .info-table tbody tr:nth-child(even) {
+            background: #eef2f7;
         }
 
-        #stats-container>div p:first-child {
-            font-weight: bold;
-            color: #008B8B;
-            font-size: 80px;
-            margin-bottom: 0px;
-            margin-top: -30px;
-        }
-
-        .footer {
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            background-color: #008B8B;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .marquee {
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .marquee span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 25s linear infinite;
-        }
-
-        @keyframes marquee {
-            from {
-                transform: translate(0, 0);
-            }
-
-            to {
-                transform: translate(-100%, 0);
-            }
-        }
-
-        .table-responsive {
-            height: 200px;
-            /* Sesuaikan tinggi container */
-            overflow: hidden;
-            position: relative;
-        }
-
-        @keyframes scroll-up {
+        /* Auto Scroll */
+        @keyframes scrollTable {
             0% {
-                transform: translateY(100%);
+                transform: translateY(0);
             }
 
             100% {
@@ -276,106 +223,220 @@
             }
         }
 
-        .info-table tbody {
+        .scrolling tbody {
             display: block;
-            animation: scroll-up 10s linear infinite;
-            position: relative;
-            top: 0;
+            animation: scrollTable 15s linear infinite;
         }
 
-        .info-table thead,
-        .info-table tbody tr {
+        .scrolling tbody tr {
             display: table;
             width: 100%;
             table-layout: fixed;
         }
 
-        .info-table thead {
-            position: sticky;
-            top: 0;
-            z-index: 1;
+        /* STATS */
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            padding: 0 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .stat-card p:first-child {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #008B8B;
+            margin: 0 0 8px 0;
+            line-height: 1;
+        }
+
+        .stat-card p:last-child {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #008B8B;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .top-row {
+                flex-direction: column;
+            }
+
+            .video-section,
+            .info-section {
+                max-width: 100%;
+            }
+
+            .video-section {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .header h4 {
+                font-size: 1.2rem;
+            }
+
+            .date-time .jam h1 {
+                font-size: 1.5rem;
+            }
+
+            .stats-row {
+                gap: 10px;
+            }
+
+            .stat-card p:first-child {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-card {
+                min-width: 140px;
+                padding: 15px;
+            }
+
+            .info-table th,
+            .info-table td {
+                font-size: 0.8rem;
+                padding: 8px 4px;
+            }
         }
     </style>
-
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="app-container">
+        <!-- HEADER -->
         <header class="header">
-            <div class="welcome">
-                <div class="icon">
-                    <img src="{{ asset('assets/images/logo_multisari.png') }}" alt="Logo" style="width: 50px">
-                </div>
+            <div class="logo">
+                <img src="{{ asset('assets/images/logo_multisari.png') }}" alt="Logo">
             </div>
-            <h4 style="color: white">KLINIK PRATAMA<span style="color: #FFE033"> MULTISARI II</span></h4>
+            <h4>KLINIK PRATAMA <span>MULTISARI II</span></h4>
             <div class="date-time">
                 <div class="tanggal" id="tanggal"></div>
-                <div class="jam" id="jam"></div>
+                <div class="jam">
+                    <h1 id="jam"></h1>
+                </div>
             </div>
         </header>
-        <div class="main-container row">
-            <div class="video-container col-lg-6 col-md-12">
-                <div id="videoContainer">
-                    @foreach ($video as $item)
-                        @if (pathinfo($item->video_path, PATHINFO_EXTENSION) == 'mp4')
-                            <video id="video{{ $loop->index }}" class="mediaItem videoPlayer" controls>
-                                <source src="{{ asset('storage/' . $item->video_path) }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="top-row">
+                <!-- VIDEO SECTION -->
+                <div class="video-section">
+                    <div id="videoContainer"
+                        style="height: 100%; display: flex; align-items: center; justify-content: center;">
+                        @if ($video->isNotEmpty())
+                            @foreach ($video as $item)
+                                @php $ext = pathinfo($item->video_path, PATHINFO_EXTENSION); @endphp
+                                @if (in_array($ext, ['mp4', 'webm', 'ogg']))
+                                    <video class="media-item" controls loop>
+                                        <source src="{{ asset('storage/' . $item->video_path) }}" type="video/mp4">
+                                        Browser tidak mendukung video.
+                                    </video>
+                                @else
+                                    <img src="{{ asset('storage/' . $item->video_path) }}" class="media-item"
+                                        alt="Gambar">
+                                @endif
+                            @endforeach
                         @else
-                            <img src="{{ asset('storage/' . $item->video_path) }}" class="mediaItem"
-                                alt="Uploaded Image">
+                            <p style="color: #666; font-style: italic;">Belum ada media</p>
                         @endif
-                    @endforeach
-                </div>
-            </div>
-            <div class="info-container col-lg-6 col-md-12">
-                <div class="info-box">
-                    <strong>
-                        <h4 style="color: white">Informasi<span style="color: #FFE033"> Terkini?
-                    </strong></span></h4>
-                    <div id="infoContent">
-                        <!-- Konten tambahan bisa Anda tambahkan di sini -->
                     </div>
                 </div>
-                <div class="inpo-boxs">
-                    <strong>
-                        <h4 style="color: #008B8B">Daftar<span style="color: #FFE033"> Antrian Pasien
-                    </strong></span></h4>
-                    <div id="inpoContent2">
-                        <div class="table-responsive">
-                            <table class="info-table table table-striped">
+
+                <!-- INFO SECTION -->
+                <div class="info-section">
+                    <div class="info-box">
+                        <h4>Informasi <span>Terkini</span></h4>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-title">Daftar <span>Antrian Pasien</span></div>
+                        <div class="table-wrapper">
+                            <table class="info-table" style="white-space: nowrap">
                                 <thead>
                                     <tr>
-                                        {{-- <th>No. Antrian</th> --}}
+                                        <th>No.</th>
+                                        <th>No. Antrian</th>
                                         <th>Nama</th>
                                         <th>Jenis Kelamin</th>
                                         <th>Alamat</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="antrianBody">
                                     @if ($data->isEmpty())
                                         <tr>
-                                            {{-- <td>-</td> --}}
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td colspan="4">-</td>
                                         </tr>
                                     @else
                                         @foreach ($data as $item)
-                                            <tr class="text-center">
-                                                {{-- <td>{{ $item->antrianDokter }}</td> --}}
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->kode_antrian }}</td>
                                                 <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                @if ($item->booking->pasien->jekel)
-                                                    <td>{{ $item->booking->pasien->jekel ?? 'Perempuan' }}</td>
-                                                @else
-                                                    <td>{{ $item->booking->pasien->jekel ?? 'Laki-laki' }}</td>
-                                                @endif
+                                                <td>{{ $item->booking->pasien->jekel == 'L' ? 'Laki-laki' : 'Perempuan' }}
                                                 </td>
-                                                {{-- <td>{{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }}
-                                                    Tahun</td> --}}
                                                 <td>{{ $item->booking->pasien->alamat_asal }}</td>
                                                 <td>
                                                     @switch($item->status)
@@ -383,19 +444,30 @@
                                                             Datang
                                                         @break
 
-                                                        @case('B')
-                                                            Periksa
+                                                        @case('M')
+                                                            Menunggu
                                                         @break
 
                                                         @case('P')
-                                                            Obat
+                                                            Periksa
+                                                        @break
+
+                                                        @case('B')
+                                                            Apotek
+                                                        @break
+
+                                                        @case('K')
+                                                            Kasir
+                                                        @break
+
+                                                        @case('WS')
+                                                            Selesai
                                                         @break
 
                                                         @default
-                                                            Pendaftaran
+                                                            -
                                                     @endswitch
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     @endif
@@ -405,145 +477,129 @@
                     </div>
                 </div>
             </div>
+
+            <!-- STATS -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <p class="totalPasien">{{ $totalHariIni }}</p>
+                    <p>Total Pasien</p>
+                </div>
+                <div class="stat-card" data-poli="umum">
+                    <p id="nomorAntrianUmum">{{ $nomorAntrianUmum }}</p>
+                    <p>Poli Umum</p>
+                </div>
+                <div class="stat-card" data-poli="gigi">
+                    <p id="nomorAntrianGigi">{{ $nomorAntrianGigi }}</p>
+                    <p>Poli Gigi</p>
+                </div>
+                <div class="stat-card" data-poli="obat">
+                    <p id="nomorAntrianObat">{{ $nomorAntrianObat }}</p>
+                    <p>Ruang Farmasi</p>
+                </div>
+            </div>
         </div>
 
-        <div id="stats-container">
-            <div id="total">
-                <p class="totalPasien">{{ $totalHariIni }}</p>
-                <p id="pasientotal">Total Pasien</p>
-            </div>
-            {{-- <div id="perawat">
-                <p id="nomorAntrianPerawat">{{ $nomorAntrianPerawat }}</p>
-                <p class="namePerawat">Perawat</p>
-            </div> --}}
-            <div id="umum">
-                <p id="nomorAntrianUmum">
-                    {{ $nomorAntrianUmum }}
-                </p>
-                <p class="namePoli">Poli Umum</p>
-            </div>
-            <div id="gigi">
-                <p id="nomorAntrianGigi">
-                    {{ $nomorAntrianGigi }}
-                </p>
-                <p class="namePoli">Poli Gigi</p>
-            </div>
-            <div id="obat">
-                <p id="nomorAntrianObat">{{ $nomorAntrianObat }}</p>
-                <p class="nameObat">Ruang Farmasi</p>
-            </div>
-        </div>
+        <!-- FOOTER -->
         <footer class="footer">
             <div class="marquee">
-                <span>Selamat datang di klinik multisari II | Jl. Raya Jepara Kudus</span>
+                <span>Selamat datang di Klinik Pratama Multisari II | Jl. Raya Jepara - Kudus | Pelayanan Prima untuk
+                    Kesehatan Anda</span>
             </div>
         </footer>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="{{ asset('assets/js/bootstrap.js') }}"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
+
     <script>
         $(document).ready(function() {
-            function reloadContent() {
-                $.ajax({
-                    url: window.location.href,
-                    type: 'GET',
-                    success: function(response) {
-                        $('#capek').html($(response).find('#capek').html());
-                    },
-                    complete: function() {
-                        setTimeout(reloadContent, 1000);
-                    }
-                });
-            }
-            setTimeout(reloadContent, 1000);
-
+            // Jam & Tanggal
             function updateClock() {
-                var now = new Date();
-                var tanggalElement = document.getElementById('tanggal');
-                var options = {
+                const now = new Date();
+                $('#tanggal').text(now.toLocaleDateString('id-ID', {
                     weekday: 'short',
-                    year: 'numeric',
+                    day: 'numeric',
                     month: 'short',
-                    day: 'numeric'
-                };
-                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
-
-                var jamElement = document.getElementById('jam');
-                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                    now.getMinutes().toString().padStart(2, '0');
-                jamElement.innerHTML = '<h1>' + jamString + '</h1>';
+                    year: 'numeric'
+                }));
+                const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString()
+                    .padStart(2, '0');
+                $('#jam').text(time);
             }
             setInterval(updateClock, 1000);
             updateClock();
 
-            var currentIndex = 0;
-            var mediaItems = document.querySelectorAll("#videoContainer .mediaItem");
-
-            function showMediaItem(index) {
-                mediaItems.forEach(function(item, i) {
-                    item.classList.remove('active');
-                    item.style.display = 'none';
+            // Auto Reload Antrian
+            function reloadAntrian() {
+                $.get(location.href, function(data) {
+                    const $new = $(data);
+                    $('#nomorAntrianUmum').text($new.find('#nomorAntrianUmum').text());
+                    $('#nomorAntrianGigi').text($new.find('#nomorAntrianGigi').text());
+                    $('#nomorAntrianObat').text($new.find('#nomorAntrianObat').text());
+                    $('.totalPasien').text($new.find('.totalPasien').text());
+                    $('#antrianBody').html($new.find('#antrianBody').html());
                 });
-                mediaItems[index].style.display = 'block';
-                setTimeout(function() {
-                    mediaItems[index].classList.add('active');
-                }, 50);
+            }
+            setInterval(reloadAntrian, 2000);
+
+            // Auto Scroll Tabel
+            const $tbody = $('#antrianBody');
+            if ($tbody.find('tr').length > 5) {
+                $tbody.addClass('scrolling');
             }
 
-            function playNextMediaItem() {
-                var currentMediaItem = mediaItems[currentIndex];
-                if (currentMediaItem.tagName === 'VIDEO') {
-                    currentMediaItem.pause();
-                }
-                currentIndex = (currentIndex + 1) % mediaItems.length;
-                var nextMediaItem = mediaItems[currentIndex];
-                showMediaItem(currentIndex);
+            // Video Slider
+            let currentIndex = 0;
+            const $items = $('.media-item');
+            if ($items.length > 0) {
+                function showNext() {
+                    $items.eq(currentIndex).removeClass('active');
+                    if ($items.eq(currentIndex).is('video')) $items.eq(currentIndex)[0].pause();
 
-                if (nextMediaItem.tagName === 'VIDEO') {
-                    nextMediaItem.play().catch(function(error) {
-                        console.log("Autoplay error:", error);
-                    });
-                    nextMediaItem.addEventListener('ended', playNextMediaItem, {
-                        once: true
-                    });
+                    currentIndex = (currentIndex + 1) % $items.length;
+                    const $next = $items.eq(currentIndex).addClass('active');
+                    if ($next.is('video')) {
+                        $next[0].play().catch(() => {});
+                        $next.one('ended', showNext);
+                    } else {
+                        setTimeout(showNext, 5000);
+                    }
+                }
+                $items.first().addClass('active');
+                if ($items.first().is('video')) {
+                    $items.first()[0].play().catch(() => {});
+                    $items.first().one('ended', showNext);
                 } else {
-                    setTimeout(playNextMediaItem, 5000);
+                    setTimeout(showNext, 5000);
                 }
             }
 
-            showMediaItem(currentIndex);
+            // Panggil Antrian (Testing)
+            $('.stat-card[data-poli]').on('click', function() {
+                const poli = $(this).data('poli');
+                const url = poli === 'obat' ? '{{ route('antrian.panggil-obat') }}' :
+                    '{{ route('antrian.panggil') }}';
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    ...(poli !== 'obat' && {
+                        poli
+                    })
+                };
 
-            var currentMediaItem = mediaItems[currentIndex];
-            if (currentMediaItem.tagName === 'VIDEO') {
-                currentMediaItem.play().catch(function(error) {
-                    console.log("Autoplay error:", error);
+                $.post(url, data, function(res) {
+                    if (res.success) {
+                        const id = poli === 'obat' ? '#nomorAntrianObat' :
+                            `#nomorAntrian${poli.charAt(0).toUpperCase() + poli.slice(1)}`;
+                        $(id).text(res.nomor);
+                    } else {
+                        alert(res.message || 'Antrian kosong');
+                    }
                 });
-                currentMediaItem.addEventListener('ended', playNextMediaItem, {
-                    once: true
-                });
-            } else {
-                setTimeout(playNextMediaItem, 5000);
-            }
+            });
         });
-
-        function handleClick(type) {
-            console.log("Clicked on", type);
-            // You can add more functionality here based on which element is clicked
-        }
-
-        // JavaScript
-        // const statCards = document.querySelectorAll('#stats-container > div');
-
-        // statCards.forEach(card => {
-        //     card.addEventListener('click', () => {
-        //         alert(`You clicked on ${card.querySelector('p:first-child').textContent}`);
-        //     });
-        // });
     </script>
-
 </body>
 
 </html>

@@ -15,7 +15,7 @@ body::before {
     height: 100%;
     opacity: 0.4;
     z-index: -1;
-    background: url('/assets/images/footer-bg.jpg');
+    /* background: url('/assetss/img/profil.jpg'); */
     background-size: cover;
     background-position: center;
 }
