@@ -28,18 +28,18 @@
                                         class="form-control mt-2 mb-2" placeholder="Golongan">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Status</label>
                                     <select name="status" id="status" class="form-control mb-2 mt-2">
                                         <option value="">-- Status --</option>
                                         <option value="Aktif" {{ $item->status == 'Aktif' ? 'selected' : '' }}>Aktif
                                         </option>
-                                        <option value="Non-aktif" {{ $item->status == 'Non-aktif' ? 'selected' : '' }}>
-                                            Non-aktif</option>
+                                        <option value="Nonaktif" {{ $item->status == 'Nonaktif' ? 'selected' : '' }}>
+                                            Nonaktif</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="modal-footer">

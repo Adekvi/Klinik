@@ -14,7 +14,7 @@ class MasterAturanController extends Controller
         $entries = $request->input('entries', 10);
         $page = $request->input('page', 1);
 
-        $query = Aturan::orderBy('id', 'asc');
+        $query = Aturan::orderBy('id', 'desc');
 
         if ($search) {
             $query->where('aturan_minum', 'LIKE', "%{$search}%")
@@ -27,17 +27,20 @@ class MasterAturanController extends Controller
         // Menjaga parameter pencarian tetap ada saat navigasi halaman
         $aturan->appends(['search' => $search, 'entries' => $entries]);
 
+        // dd($aturan);
+
         return view('obat.master.aturanMinum.index', compact('aturan', 'search', 'entries'));
     }
 
-    public function updateStatus(Request $request)
+    public function update(Request $request)
     {
         $aturanId = $request->input('id');
         $isChecked = $request->has('status');
 
         $aturan = Aturan::findOrFail($aturanId);
-        // dd($aturan);
-        $aturan->status = $isChecked;
+        
+        // Simpan sebagai string Aktif / Nonaktif
+        $aturan->status = $isChecked ? 'Aktif' : 'Nonaktif';
         $aturan->save();
 
         return redirect()->back()->with('status', 'Status updated successfully');

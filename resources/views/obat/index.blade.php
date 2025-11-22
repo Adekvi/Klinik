@@ -1,4 +1,4 @@
-<x-admin-layout.terminal title="Apoteker">
+<x-admin.layout.terminal title="Apoteker">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -505,4 +505,4 @@
         </script>
     @endpush
 
-</x-admin-layout.terminal>
+</x-admin.layout.terminal>

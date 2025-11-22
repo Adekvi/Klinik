@@ -1,4 +1,4 @@
-<x-admin-layout.terminal title="Dashboard">
+<x-admin.layout.terminal title="Dashboard">
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row mt-4">
@@ -294,44 +294,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <i class="fa-solid fa-user-doctor fa-2x text-danger"></i>
-                                        <div class="dropdown">
-                                            <button class="btn p-0" type="button" id="cardOpt3"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="fw-semibold d-block mb-1">Pasien</span>
-                                    <h3 class="card-title mb-2">0</h3>
-                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                        +100%</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <i class="fa-solid fa-user-nurse fa-2x text-secondary"></i>
-                                        <div class="dropdown">
-                                            <button class="btn p-0" type="button" id="cardOpt3"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="fw-semibold d-block mb-1">Pasien</span>
-                                    <h3 class="card-title mb-2">0</h3>
-                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                        +100%</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             @elseif (Auth::user()->role == 'dokter')
@@ -525,44 +487,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <i class="fa-solid fa-user-doctor fa-2x text-danger"></i>
-                                        <div class="dropdown">
-                                            <button class="btn p-0" type="button" id="cardOpt3"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="fw-semibold d-block mb-1">Pasien</span>
-                                    <h3 class="card-title mb-2">0</h3>
-                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                        +100%</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <i class="fa-solid fa-user-nurse fa-2x text-secondary"></i>
-                                        <div class="dropdown">
-                                            <button class="btn p-0" type="button" id="cardOpt3"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="fw-semibold d-block mb-1">Pasien</span>
-                                    <h3 class="card-title mb-2">0</h3>
-                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                        +100%</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             @elseif (Auth::user()->role == 'kasir')
@@ -659,44 +583,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <i class="fa-solid fa-user-doctor fa-2x text-danger"></i>
-                                        <div class="dropdown">
-                                            <button class="btn p-0" type="button" id="cardOpt3"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="fw-semibold d-block mb-1">Pasien</span>
-                                    <h3 class="card-title mb-2">0</h3>
-                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                        +100%</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <i class="fa-solid fa-user-nurse fa-2x text-secondary"></i>
-                                        <div class="dropdown">
-                                            <button class="btn p-0" type="button" id="cardOpt3"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="fw-semibold d-block mb-1">Pasien</span>
-                                    <h3 class="card-title mb-2">0</h3>
-                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                        +100%</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             @endif
@@ -773,4 +659,4 @@
         </script>
     @endpush
 
-</x-admin-layout.terminal>
+</x-admin.layout.terminal>

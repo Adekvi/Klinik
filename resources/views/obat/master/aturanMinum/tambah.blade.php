@@ -24,16 +24,16 @@
                                     placeholder="Sendok, Tetes, .....">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Status</label>
                                 <select name="status" id="status" class="form-control mb-2 mt-2">
                                     <option value="">-- Status --</option>
                                     <option value="Aktif">Aktif</option>
-                                    <option value="Non-aktif">Non-aktif</option>
+                                    <option value="Nonaktif">Nonaktif</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">

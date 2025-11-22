@@ -324,7 +324,7 @@
                 <li class="menu-item {{ Request::is('rekap-harian') ? 'active' : '' }}">
                     <a href="{{ url('rekap-harian') }}" class="menu-link">
                         <i class="menu-icon tf-icons fa-solid fa-folder"></i>
-                        <div data-i18n="Account Settings">Rekap Perhari</div>
+                        <div data-i18n="Account Settings">Kunjungan Perhari</div>
                     </a>
                 </li>
 
@@ -498,15 +498,15 @@
                 </li>
 
                 <li class="sidebar-title menu-link mt-2 mb-2" style="margin-left: 35px">Menu</li>
-                <li class="menu-item {{ Request::is('kasir/*') ? 'active' : '' }}">
+                <li class="menu-item {{ Request::is('kasir/index*') ? 'active' : '' }}">
                     <a href="{{ url('kasir/index') }}"
-                        class="menu-link {{ Request::is('kasir/*') ? 'active' : '' }}">
+                        class="menu-link {{ Request::is('kasir/index*') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
                         <div data-i18n="Analytics">Kasir</div>
                     </a>
                 </li>
 
-                <li class="menu-item {{ Request::is('kasir/rekap') ? 'active' : '' }}">
+                <li class="menu-item {{ Request::is('kasir/rekap*') ? 'active' : '' }}">
                     <a href="{{ url('kasir/rekap') }}"
                         class="menu-link {{ Request::is('kasir/rekap') ? 'active' : '' }}">
                         <i class="menu-icon tf-icons fa-solid fa-money-bills"></i>

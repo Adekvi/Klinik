@@ -52,7 +52,7 @@
                                             <th>Jenis Obat</th>
                                             <th>Golongan</th>
                                             <th>Keterangan</th>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -68,7 +68,7 @@
                                                     <td>{{ $item->jenis ?? '-' }}</td>
                                                     <td>{{ $item->golongan ?? '-' }}</td>
                                                     <td>{{ $item->keterangan ?? '-' }}</td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <form method="POST" action="{{ url('updateStatus-jenis') }}">
                                                             @csrf
                                                             <input type="hidden" name="id"
@@ -87,7 +87,7 @@
                                                                 </span>
                                                             </div>
                                                         </form>
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         <div class="aksi d-flex justify-content-center">
                                                             <button class="btn btn-primary"

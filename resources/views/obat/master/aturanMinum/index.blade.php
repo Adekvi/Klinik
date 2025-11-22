@@ -1,4 +1,4 @@
-<x-admin.layout.terminal title="Admin | Data Aturan Obat">
+<x-admin.layout.terminal title="Apoteker | Data Aturan Obat">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -51,7 +51,7 @@
                                             <th>No</th>
                                             <th>Aturan Minum</th>
                                             <th>Takaran</th>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -66,8 +66,10 @@
                                                     <td>{{ $aturan->firstItem() + $index }}</td>
                                                     <td>{{ $item->aturan_minum }}</td>
                                                     <td>{{ $item->takaran ?? '-' }}</td>
-                                                    <td>
-                                                        <form method="POST" action="{{ url('updateStatus-aturan') }}">
+                                                    {{-- <td>
+                                                        <form method="POST"
+                                                            action="{{ url('apoteker-updateStatus-aturan') }}"
+                                                            style="display:inline;">
                                                             @csrf
                                                             <input type="hidden" name="id"
                                                                 value="{{ $item->id }}">
@@ -75,17 +77,19 @@
                                                             <div class="status-toggle">
                                                                 <input type="checkbox" name="status"
                                                                     id="status_{{ $item->id }}"
+                                                                    class="status-checkbox"
                                                                     onchange="this.form.submit()"
-                                                                    @if ($item->status) checked @endif>
+                                                                    {{ $item->status === 'Aktif' ? 'checked' : '' }}>
+
                                                                 <label for="status_{{ $item->id }}"
                                                                     class="toggle-label"></label>
                                                                 <span
-                                                                    class="status-text {{ $item->status ? 'active' : 'inactive' }}">
-                                                                    {{ $item->status ? 'Aktif' : 'Non-aktif' }}
+                                                                    class="status-text {{ $item->status === 'Aktif' ? 'active' : 'inactive' }}">
+                                                                    {{ $item->status === 'Aktif' ? 'Aktif' : 'Nonaktif' }}
                                                                 </span>
                                                             </div>
                                                         </form>
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         <div class="aksi d-flex justify-content-center">
                                                             <button class="btn btn-primary"
@@ -136,6 +140,7 @@
                 border-radius: 50px;
                 cursor: pointer;
                 transition: background-color 0.3s ease;
+                display: block;
             }
 
             .toggle-label::before {

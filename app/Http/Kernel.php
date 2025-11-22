@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \RealRashid\SweetAlert\ToSweetAlert::class,
             \App\Http\Middleware\UpdateLastActivity::class,
+            \App\Http\Middleware\ObfuscateHtmlMiddleware::class,
         ],
 
         'api' => [
@@ -69,6 +70,5 @@ class Kernel extends HttpKernel
         'dokter' => \App\Http\Middleware\isDokter::class,
         'perawat' => \App\Http\Middleware\isPerawat::class,
         'kasir' => \App\Http\Middleware\IsKasir::class,
-        ''
     ];
 }

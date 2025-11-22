@@ -271,21 +271,21 @@ Route::group(['middleware' => ['auth', 'apoteker']], function () {
     Route::post('apoteker/master-obat/aturan-tambah', [MasterAturanController::class, 'tambah'])->name('apoteker.master.aturan-store');
     Route::put('apoteker/master-obat/aturan-edit/{id}', [MasterAturanController::class, 'edit'])->name('apoteker.edit.aturan');
     Route::delete('apoteker/master-obat/aturan-hapus/{id}', [MasterAturanController::class, 'hapus'])->name('apoteker.hapus.aturan');
-    Route::post('updateStatus-aturan', [MasterAturanController::class, 'updateStatus'])->name('aturan.Status');
+    Route::post('apoteker-updateStatus-aturan', [MasterAturanController::class, 'update'])->name('aturan.Status');
     
     // MASTER ANJURAN MINUM
     Route::get('apoteker/master-obat/anjuran', [MasterAnjuranController::class, 'index'])->name('apoteker.master-anjuran');
     Route::post('apoteker/master-obat/anjuran-tambah', [MasterAnjuranController::class, 'tambah'])->name('apoteker.master.anjuran-store');
     Route::put('apoteker/master-obat/anjuran-edit/{id}', [MasterAnjuranController::class, 'edit'])->name('apoteker.edit.anjuran');
     Route::delete('apoteker/master-obat/anjuran-hapus/{id}', [MasterAnjuranController::class, 'hapus'])->name('apoteker.hapus.anjuran');
-    Route::post('updateStatus-anjuran', [MasterAnjuranController::class, 'updateStatus'])->name('anjuran.Status');
+    Route::post('apoteker-updateStatus-anjuran', [MasterAnjuranController::class, 'updateStatus'])->name('anjuran.Status');
 
     // MASTER JENIS OBAT
     Route::get('apoteker/master-obat/jenis', [JenisobatController::class, 'index'])->name('apoteker.master-jenis');
     Route::post('apoteker/master-obat/jenis-tambah', [JenisobatController::class, 'tambah'])->name('apoteker.master.jenis-store');
     Route::put('apoteker/master-obat/jenis-edit/{id}', [JenisobatController::class, 'edit'])->name('apoteker.edit.jenis');
     Route::delete('apoteker/master-obat/jenis-hapus/{id}', [JenisobatController::class, 'hapus'])->name('apoteker.hapus.jenis');
-    Route::post('updateStatus-jenis', [JenisobatController::class, 'updateStatus'])->name('jenis.Status');
+    Route::post('apoteker-updateStatus-jenis', [JenisobatController::class, 'updateStatus'])->name('jenis.Status');
 
     // UPLOUD OBAT
     Route::post('/apoteker/import', [ApotekerObatController::class, 'uploudObat'])->name('resep.import');

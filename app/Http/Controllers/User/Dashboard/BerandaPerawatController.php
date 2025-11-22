@@ -25,7 +25,44 @@ class BerandaPerawatController extends Controller
             session(['perawat_active' => false]);
         }
 
-        return view('dashboard');
+        $auth = Auth::user()->id_dokter;
+        
+        $totalPasien = AntrianPerawat::where('status', 'P')
+            ->where('id_dokter', $auth)
+            ->count();
+
+        $today = Carbon::today();
+        $BelumDilayani = AntrianPerawat::where('status', 'M')
+            ->where('id_dokter', $auth)
+            ->whereDate('created_at', $today)
+            ->count();
+
+        $pasienBpjs = AntrianPerawat::where('status', 'P')
+            ->where('id_dokter', $auth)
+             ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'BPJS');
+                });
+            })
+            ->count();
+
+        $pasienUmum = AntrianPerawat::where('status', 'P')
+            ->where('id_dokter', $auth)
+             ->whereHas('booking', function ($query) {
+                $query->whereHas('pasien', function ($query) {
+                    $query->where('jenis_pasien', 'Umum');
+                });
+            })
+            ->count();
+
+        // dd($pasienUmum);
+
+        return view('dashboard', compact(
+            'totalPasien',
+            'BelumDilayani',
+            'pasienBpjs',
+            'pasienUmum',
+        ));
     }
 
     public function pemeriksaan(Request $request)
@@ -187,152 +224,6 @@ class BerandaPerawatController extends Controller
             return redirect()->back()->with('error', 'Gagal mengekspor ke Excel: ' . $e->getMessage());
         }
     }
-
-    // public function exportPdf(Request $request)
-    // {
-    //     $startDate = $request->query('start_date');
-    //     $endDate = $request->query('end_date');
-
-    //     if (!$startDate || !$endDate) {
-    //         return redirect()->back()->with('error', 'Tanggal awal dan akhir harus diisi.');
-    //     }
-
-    //     try {
-    //         $start = Carbon::parse($startDate)->startOfDay();
-    //         $end = Carbon::parse($endDate)->endOfDay();
-    //         if ($end->lt($start)) {
-    //             return redirect()->back()->with('error', 'Tanggal akhir tidak boleh lebih awal dari tanggal awal.');
-    //         }
-
-    //         $data = $this->getProcessedData($start, $end);
-    //         $pdf = PDF::loadView('perawat.laporan.pemeriksaan_pdf', ['harian' => $data])
-    //             ->setPaper('a4', 'landscape');
-    //         return $pdf->download('pemeriksaan_' . $start->format('Ymd') . '_' . $end->format('Ymd') . '.pdf');
-    //     } catch (\Exception $e) {
-    //         Log::error('Error ekspor PDF: ' . $e->getMessage());
-    //         return redirect()->back()->with('error', 'Gagal mengekspor ke PDF: ' . $e->getMessage());
-    //     }
-    // }
-
-    // public function exportWord(Request $request)
-    // {
-    //     $startDate = $request->query('start_date');
-    //     $endDate = $request->query('end_date');
-
-    //     if (!$startDate || !$endDate) {
-    //         return redirect()->back()->with('error', 'Tanggal awal dan akhir harus diisi.');
-    //     }
-
-    //     try {
-    //         $start = Carbon::parse($startDate)->startOfDay();
-    //         $end = Carbon::parse($endDate)->endOfDay();
-    //         if ($end->lt($start)) {
-    //             return redirect()->back()->with('error', 'Tanggal akhir tidak boleh lebih awal dari tanggal awal.');
-    //         }
-
-    //         $data = $this->getProcessedData($start, $end);
-    //         $phpWord = new PhpWord();
-    //         $section = $phpWord->addSection();
-    //         $section->addTitle('Laporan Pemeriksaan', 1);
-    //         $section->addText('Periode: ' . $start->format('d-m-Y') . ' s/d ' . $end->format('d-m-Y'));
-
-    //         $table = $section->addTable(['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 80]);
-    //         $table->addRow();
-    //         $headers = [
-    //             'No',
-    //             'Tanggal',
-    //             'Jam Datang',
-    //             'Lama Daftar',
-    //             'Jam Periksa',
-    //             'Lama Periksa',
-    //             'Jam Selesai',
-    //             'No. RM',
-    //             'Nama Pasien',
-    //             'Status',
-    //             'Tgl Lahir',
-    //             'BPJS',
-    //             'Jenis Pasien',
-    //             'Total Harga',
-    //             'NIK',
-    //             'No HP',
-    //             'Pekerjaan',
-    //             'Nama KK',
-    //             'Alamat Asal',
-    //             'Col 20',
-    //             'Col 21',
-    //             'Col 22',
-    //             'Col 23',
-    //             'Keluhan Utama',
-    //             'Tensi',
-    //             'Nadi',
-    //             'RR',
-    //             'Suhu',
-    //             'SpO2',
-    //             'BB',
-    //             'TB',
-    //             'Kode Diagnosa',
-    //             'Nama Diagnosa',
-    //             'Nama Obat',
-    //             'Rujuk',
-    //             'Nama Dokter',
-    //             'NIK Dokter'
-    //         ];
-    //         foreach ($headers as $header) {
-    //             $table->addCell(2000)->addText($header, ['bold' => true]);
-    //         }
-
-    //         foreach ($data as $index => $item) {
-    //             $table->addRow();
-    //             $table->addCell(2000)->addText($index + 1);
-    //             $table->addCell(2000)->addText(Carbon::parse($item->created_at)->format('d-m-Y'));
-    //             $table->addCell(2000)->addText($item->jam_datang);
-    //             $table->addCell(2000)->addText($item->lama_daftar);
-    //             $table->addCell(2000)->addText($item->jam_periksa);
-    //             $table->addCell(2000)->addText($item->lama_periksa);
-    //             $table->addCell(2000)->addText($item->jam_selesai);
-    //             $table->addCell(2000)->addText($item->booking->pasien->no_rm);
-    //             $table->addCell(2000)->addText($item->booking->pasien->nama_pasien);
-    //             $table->addCell(2000)->addText($item->booking->pasien->status);
-    //             $table->addCell(2000)->addText(Carbon::parse($item->booking->pasien->tgllahir)->format('d/m/Y'));
-    //             $table->addCell(2000)->addText($item->booking->pasien->bpjs ?? '-');
-    //             $table->addCell(2000)->addText($item->booking->pasien->jenis_pasien);
-    //             $table->addCell(2000)->addText('Rp ' . number_format($item->harga_total, 0, ',', '.'));
-    //             $table->addCell(2000)->addText($item->booking->pasien->nik);
-    //             $table->addCell(2000)->addText($item->booking->pasien->noHP);
-    //             $table->addCell(2000)->addText($item->booking->pasien->pekerjaan);
-    //             $table->addCell(2000)->addText($item->booking->pasien->nama_kk);
-    //             $table->addCell(2000)->addText($item->booking->pasien->alamat_asal);
-    //             $table->addCell(2000)->addText('-');
-    //             $table->addCell(2000)->addText('-');
-    //             $table->addCell(2000)->addText('-');
-    //             $table->addCell(2000)->addText('-');
-    //             $table->addCell(2000)->addText($item->obat->soap->keluhan_utama ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->p_tensi ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->p_nadi ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->p_rr ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->p_suhu ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->spo2 ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->p_bb ?? '-');
-    //             $table->addCell(2000)->addText($item->obat->soap->p_tb ?? '-');
-    //             $table->addCell(2000)->addText($item->kd_diagno);
-    //             $table->addCell(2000)->addText($item->nm_diagno);
-    //             $table->addCell(2000)->addText($item->nama_obat);
-    //             $table->addCell(2000)->addText($item->obat->soap->rujuk ?? '-');
-    //             $table->addCell(2000)->addText($item->datadokter->nama_dokter ?? '-');
-    //             $table->addCell(2000)->addText($item->datadokter->nik ?? '-');
-    //         }
-
-    //         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-    //         $fileName = 'pemeriksaan_' . $start->format('Ymd') . '_' . $end->format('Ymd') . '.docx';
-    //         $tempFile = storage_path('app/public/' . $fileName);
-    //         $objWriter->save($tempFile);
-
-    //         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error ekspor Word: ' . $e->getMessage());
-    //         return redirect()->back()->with('error', 'Gagal mengekspor ke Word: ' . $e->getMessage());
-    //     }
-    // }
 
     protected function getProcessedData($start, $end)
     {

@@ -16,6 +16,7 @@ class DataDokterController extends Controller
         // dd($dokter);
         return view('admin.master.datadokter.index', compact('poli', 'dokter'));
     }
+    
     public function store(Request $request)
     {
         $data = $request->all();

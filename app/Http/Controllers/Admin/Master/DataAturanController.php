@@ -39,8 +39,9 @@ class DataAturanController extends Controller
         $isChecked = $request->has('status');
 
         $aturan = Aturan::findOrFail($aturanId);
-        // dd($aturan);
-        $aturan->status = $isChecked;
+        
+        // Simpan sebagai string Aktif / Nonaktif
+        $aturan->status = $isChecked ? 'Aktif' : 'Nonaktif';
         $aturan->save();
 
         return redirect()->back()->with('status', 'Status updated successfully');

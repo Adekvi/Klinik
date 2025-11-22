@@ -213,7 +213,7 @@
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <a href="{{ url('rekap-harian') }}"
+                                                    <a href="{{ url('perawat/rekap/harian') }}"
                                                         class="btn btn-primary w-100">
                                                         <i class="menu-icon tf-icons fa-solid fa-folder"></i> Menu
                                                         Rekap

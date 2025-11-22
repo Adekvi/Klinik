@@ -17,12 +17,17 @@ if (!function_exists('Rupiah')) {
     @endphp
     <tr class="text-center" style="white-space: nowrap">
         <td>{{ ($obat->currentPage() - 1) * $obat->perPage() + $loop->iteration }}</td>
-        <td>{{ $item->golongan ?? '-' }}</td>
+        <td>
+            @if ($item->golongan == null)
+                -
+            @else
+                {{ $item->golongan }}
+            @endif
+        </td>
         <td>{{ $item->jenis_sediaan }}</td>
         <td>{{ $item->nama_obat }}</td>
         <td>{{ $item->harga_pokok ? Rupiah($item->harga_pokok) : '0' }}</td>
         <td>{{ Rupiah($item->harga_jual) }}</td>
-        {{-- <td>{{ $item->stok_awal ?? '0' }}</td> --}}
         <td>{{ $item->masuk ?? '0' }}</td>
         <td>{{ $item->keluar ?? '0' }}</td>
         <td>{{ $item->retur ?? '0' }}</td>

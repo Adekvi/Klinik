@@ -1,4 +1,4 @@
-<x-admin-layout.terminal title="Admin | Data Anjuran Obat">
+<x-admin.layout.terminal title="Admin | Data Anjuran Obat">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -203,4 +203,4 @@
         </script>
     @endpush
 
-</x-admin-layout.terminal>
+</x-admin.layout.terminal>

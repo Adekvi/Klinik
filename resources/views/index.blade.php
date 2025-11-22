@@ -89,10 +89,10 @@
                 </div>
             </div>
         </div>
-        <div class="navigation">
+        {{-- <div class="navigation">
             <span class="prev-btn"><i class="bx bx-chevron-left"></i></span>
             <span class="next-btn"><i class="bx bx-chevron-right"></i></span>
-        </div>
+        </div> --}}
     </section>
 
     <main id="main">

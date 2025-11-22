@@ -51,7 +51,7 @@
                                             <th>No</th>
                                             <th>Kode Anjuran</th>
                                             <th>Golongan</th>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -66,7 +66,7 @@
                                                     <td>{{ $anjuran->firstItem() + $index }}</td>
                                                     <td>{{ $item->kode_anjuran }}</td>
                                                     <td>{{ $item->golongan ?? '-' }}</td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <form method="POST" action="{{ url('updateStatus-anjuran') }}">
                                                             @csrf
                                                             <input type="hidden" name="id"
@@ -85,7 +85,7 @@
                                                                 </span>
                                                             </div>
                                                         </form>
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         <div class="aksi d-flex justify-content-center">
                                                             <button class="btn btn-primary"
