@@ -1329,7 +1329,7 @@
                         errorMessages.push("- No. BPJS harus berisi 13 digit angka.");
                     }
 
-
+//perubahannya disini
                     if (errorMessages.length > 0) {
                         if (loadingSpinner) loadingSpinner.classList.add('d-none');
                         if (btnSimpan) btnSimpan.disabled = false;
