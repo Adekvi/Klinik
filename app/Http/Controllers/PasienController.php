@@ -122,7 +122,7 @@ class PasienController extends Controller
             }
         });
     }
-    
+
     public function storeBpjs(Request $request)
     {
         // Validasi input
@@ -260,10 +260,38 @@ class PasienController extends Controller
         return response()->json($dokter);
     }
 
-    public function searchPasien(Request $request)
+      public function searchPasien(Request $request)
     {
-        $nama = $request->input('nama');
-        $pasien = Pasien::where('nama_pasien', 'like', "%$nama%")->get(['nama_pasien', 'nama_kk', 'alamat_asal']); // Sesuaikan dengan model dan kolom di database Anda
+        $keyword = $request->input('identifier') ?? $request->input('nama');
+
+        if (!$keyword) {
+            return response()->json([]);
+        }
+
+        $pasien = Pasien::where('nama_pasien', 'like', "%$keyword%")
+            ->orWhere('nik', 'like', "%$keyword%")
+            ->orWhere('no_rm', 'like', "%$keyword%")
+            ->orWhere('bpjs', 'like', "%$keyword%")
+            ->get([
+                'no_rm',
+                'nama_pasien',
+                'nama_kk',
+                'alamat_asal',
+                'nik',
+                'tgllahir',
+                'jekel',
+                'pekerjaan',
+                'domisili',
+                'noHP',
+                'bpjs'
+            ]);
+
+        // Tambahkan usia
+        $pasien = $pasien->map(function ($item) {
+            $item->usia = $item->tgllahir ? \Carbon\Carbon::parse($item->tgllahir)->age : '-';
+            return $item;
+        });
+
         return response()->json($pasien);
     }
 
@@ -363,21 +391,16 @@ class PasienController extends Controller
         return response()->json($pasien);
     }
 
-    public function getPasienDetailBpjs(Request $request)
+     public function getPasienDetailBpjs(Request $request)
     {
-        $bpjs = $request->input('bpjs');
-        // Memecah string menjadi array berdasarkan tanda "-"
-        $data_array = explode(' - ', $bpjs);
+        $no_rm = $request->input('no_rm');
 
-        // Menyimpan masing-masing bagian ke dalam variabel terpisah
-        $nama_pasien = $data_array[0];
-        $no_bpjs = $data_array[1];
-        $nik = $data_array[2];
-        // dd($nama_pasien, $nama_kk, $nik);
-        $pasien = Pasien::where('nama_pasien', $nama_pasien)
-            ->where('bpjs', $no_bpjs)
-            ->where('nik', $nik)
-            ->first();
+        $pasien = Pasien::where('no_rm', $no_rm)->first();
+
+        if (!$pasien) {
+            return response()->json(['error' => 'Pasien tidak ditemukan'], 404);
+        }
+
         return response()->json($pasien);
     }
 

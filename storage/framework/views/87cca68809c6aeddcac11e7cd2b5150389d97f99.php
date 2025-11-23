@@ -1,4 +1,9 @@
-<x-admin.layout.terminal title="Perawat">
+<?php if (isset($component)) { $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Admin\Layout\Terminal::class, ['title' => 'Perawat']); ?>
+<?php $component->withName('admin.layout.terminal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -47,10 +52,10 @@
                                                         <span class="badge border text-success fs-6 p-3">
                                                             <i class="fa-solid fa-check-circle"></i> Dilayani:
                                                             <span id="pasienDilayani"
-                                                                style="font-size: 25px">{{ $pasienDilayani }}</span>
+                                                                style="font-size: 25px"><?php echo e($pasienDilayani); ?></span>
                                                         </span>
                                                         <!-- Gambar di bawah -->
-                                                        <img src="{{ asset('aset/img/periksa.jpg') }}"
+                                                        <img src="<?php echo e(asset('aset/img/periksa.jpg')); ?>"
                                                             alt="Pasien DIlayani" style="width: 60%; height: auto;">
                                                     </div>
                                                     <div class="text-center d-flex flex-column align-items-center">
@@ -58,17 +63,17 @@
                                                         <span class="badge border text-warning fs-6 p-3">
                                                             <i class="fa-solid fa-times-circle"></i> Belum Dilayani:
                                                             <span id="pasienBelumDilayani"
-                                                                style="font-size: 25px">{{ $pasienBelumDilayani }}</span>
+                                                                style="font-size: 25px"><?php echo e($pasienBelumDilayani); ?></span>
                                                         </span>
                                                         <!-- Gambar di bawah -->
-                                                        <img src="{{ asset('aset/img/check.jpg') }}"
+                                                        <img src="<?php echo e(asset('aset/img/check.jpg')); ?>"
                                                             alt="Pasien Belum Dilayani"
                                                             style="width: 60%; height: auto;">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                {{-- Shift Pagi --}}
+                                                
                                                 <div id="shiftPagi" class="shift-container">
                                                     <table class="table table-bordered table-responsive">
                                                         <thead class="table-primary">
@@ -85,24 +90,27 @@
                                                             <tr>
                                                                 <td>Pasien Poli UMUM (Bpjs)</td>
                                                                 <td id="poliUmumBpjsPagi" class="text-center">
-                                                                    {{ $countShiftPagiUmumBPJS }}</td>
+                                                                    <?php echo e($countShiftPagiUmumBPJS); ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli UMUM (Umum)</td>
                                                                 <td id="poliUmumUmumPagi" class="text-center">
-                                                                    {{ $countShiftPagiUmumUmum }}
+                                                                    <?php echo e($countShiftPagiUmumUmum); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli GIGI (Bpjs)</td>
                                                                 <td id="poliGigiBpjsPagi" class="text-center">
-                                                                    {{ $countShiftPagiGigiBPJS }}
+                                                                    <?php echo e($countShiftPagiGigiBPJS); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli GIGI (Umum)</td>
                                                                 <td id="poliGigiUmumPagi" class="text-center">
-                                                                    {{ $countShiftPagiGigiUmum }}
+                                                                    <?php echo e($countShiftPagiGigiUmum); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -133,25 +141,29 @@
                                                             <tr>
                                                                 <td>Pasien Poli UMUM (Bpjs)</td>
                                                                 <td id="poliUmumBpjsSiang" class="text-center">
-                                                                    {{ $countShiftSiangUmumBPJS }}
+                                                                    <?php echo e($countShiftSiangUmumBPJS); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli UMUM (Umum)</td>
                                                                 <td id="poliUmumUmumSiang" class="text-center">
-                                                                    {{ $countShiftSiangUmumUmum }}
+                                                                    <?php echo e($countShiftSiangUmumUmum); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli GIGI (Bpjs)</td>
                                                                 <td id="poliGigiBpjsSiang" class="text-center">
-                                                                    {{ $countShiftSiangGigiBpjs }}
+                                                                    <?php echo e($countShiftSiangGigiBpjs); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli GIGI (Umum)</td>
                                                                 <td id="poliGigiUmumSiang" class="text-center">
-                                                                    {{ $countShiftSiangGigiUmum }}
+                                                                    <?php echo e($countShiftSiangGigiUmum); ?>
+
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -180,22 +192,22 @@
                                                             <tr>
                                                                 <td>Pasien Poli UMUM (Bpjs)</td>
                                                                 <td id="poliUmumBpjsTotal" style="text-align: center">
-                                                                    {{ $totalPoliUmumPasienBPJS }}</td>
+                                                                    <?php echo e($totalPoliUmumPasienBPJS); ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli UMUM (Umum)</td>
                                                                 <td id="poliUmumUmumTotal" style="text-align: center">
-                                                                    {{ $totalPoliUmumPasienUmum }}</td>
+                                                                    <?php echo e($totalPoliUmumPasienUmum); ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli GIGI (Bpjs)</td>
                                                                 <td id="poliGigiBpjsTotal" style="text-align: center">
-                                                                    {{ $totalPoliGigiPasienBPJS }}</td>
+                                                                    <?php echo e($totalPoliGigiPasienBPJS); ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Pasien Poli GIGI (Umum)</td>
                                                                 <td id="poliGigiUmumTotal" style="text-align: center">
-                                                                    {{ $totalPoliGigiPasienUmum }}</td>
+                                                                    <?php echo e($totalPoliGigiPasienUmum); ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Laborat (Bpjs)</td>
@@ -213,7 +225,7 @@
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <a href="{{ url('perawat/rekap/harian') }}"
+                                                    <a href="<?php echo e(url('perawat/rekap/harian')); ?>"
                                                         class="btn btn-primary w-100">
                                                         <i class="menu-icon tf-icons fa-solid fa-folder"></i> Menu
                                                         Rekap
@@ -236,26 +248,26 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <form method="GET" action="{{ route('perawat.index') }}"
+                            <form method="GET" action="<?php echo e(route('perawat.index')); ?>"
                                 class="d-flex justify-content-between align-items-center mb-3">
-                                <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                                <input type="hidden" name="page" value="1"> 
                                 <div class="d-flex align-items-center">
                                     <label for="entries" class="me-2">Tampilkan:</label>
                                     <select name="entries" id="entries" class="form-select form-select-sm me-3"
                                         style="width: 80px;" onchange="this.form.submit()">
-                                        <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
+                                        <option value="10" <?php echo e($entries == 10 ? 'selected' : ''); ?>>10
                                         </option>
-                                        <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
+                                        <option value="25" <?php echo e($entries == 25 ? 'selected' : ''); ?>>25
                                         </option>
-                                        <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50
+                                        <option value="50" <?php echo e($entries == 50 ? 'selected' : ''); ?>>50
                                         </option>
-                                        <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100
+                                        <option value="100" <?php echo e($entries == 100 ? 'selected' : ''); ?>>100
                                         </option>
                                     </select>
                                 </div>
 
                                 <div class="d-flex align-items-center">
-                                    <input type="text" name="search" value="{{ $search }}"
+                                    <input type="text" name="search" value="<?php echo e($search); ?>"
                                         class="form-control form-control-sm me-2" style="width: 400px;"
                                         placeholder="Cari Nama / NIK / No. Rm">
                                     <button type="submit" class="btn btn-sm btn-primary">
@@ -282,24 +294,24 @@
                                         </tr>
                                     </thead>
                                     <tbody style="text-align: center; text-transform: uppercase;">
-                                        @if (count($pasien) === 0)
+                                        <?php if(count($pasien) === 0): ?>
                                             <tr>
                                                 <td colspan="10" style="text-align: center; font-size: bold">Belum
                                                     ada
                                                     data
                                                 </td>
                                             </tr>
-                                        @else
+                                        <?php else: ?>
                                             <?php $no = 1; ?>
-                                            @foreach ($pasien as $item)
-                                                {{-- {{ dd($item) }} --}}
-                                                @if ($item->status == 'D')
-                                                    <tr id="row_{{ $item->id }}">
-                                                        <td>{{ $no++ }}</td>
+                                            <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                
+                                                <?php if($item->status == 'D'): ?>
+                                                    <tr id="row_<?php echo e($item->id); ?>">
+                                                        <td><?php echo e($no++); ?></td>
                                                         <td>
                                                             <button
-                                                                data-nomor-antrian-perawat="{{ $item->kode_antrian }}"
-                                                                data-poli="{{ $item->poli->namapoli }}"
+                                                                data-nomor-antrian-perawat="<?php echo e($item->kode_antrian); ?>"
+                                                                data-poli="<?php echo e($item->poli->namapoli); ?>"
                                                                 class="btn btn-success btn-panggil-perawat mb-1"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true">
@@ -309,7 +321,7 @@
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <button type="button" class="btn btn-secondary mb-1"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#lewati{{ $item->id }}">
+                                                                    data-bs-target="#lewati<?php echo e($item->id); ?>">
                                                                     <i class="fa-solid fa-forward"></i>
                                                                 </button>
                                                             </span>
@@ -317,7 +329,7 @@
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <button type="button" class="btn btn-primary mb-1"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#periksa{{ $item->id }}">
+                                                                    data-bs-target="#periksa<?php echo e($item->id); ?>">
                                                                     <i class="fas fa-pen"></i>
                                                                 </button>
                                                             </span>
@@ -325,26 +337,27 @@
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <button type="button" class="btn btn-info mb-1"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#riwayatModal{{ $item->id }}">
+                                                                    data-bs-target="#riwayatModal<?php echo e($item->id); ?>">
                                                                     <i class="fas fa-info"></i>
                                                                 </button>
                                                             </span>
-                                                            <a href="{{ url('cetak-antrianPerawat/' . $item->id) }}"
+                                                            <a href="<?php echo e(url('cetak-antrianPerawat/' . $item->id)); ?>"
                                                                 class="btn btn-warning mb-1" target="_blank"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <i class="fas fa-print"></i>
                                                             </a>
                                                         </td>
-                                                        <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                        <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                        <td>{{ $item->kode_antrian }}</td>
-                                                        <td>{{ $item->poli->namapoli }}</td>
-                                                        <td>{{ $item->dokter->nama_dokter }}</td>
-                                                        <td>{{ $item->booking->pasien->domisili }}</td>
-                                                        <td>{{ $item->booking->pasien->jenis_pasien }}</td>
+                                                        <td><?php echo e($item->booking->pasien->no_rm); ?></td>
+                                                        <td><?php echo e($item->booking->pasien->nama_pasien); ?></td>
+                                                        <td><?php echo e($item->kode_antrian); ?></td>
+                                                        <td><?php echo e($item->poli->namapoli); ?></td>
+                                                        <td><?php echo e($item->dokter->nama_dokter); ?></td>
+                                                        <td><?php echo e($item->booking->pasien->domisili); ?></td>
+                                                        <td><?php echo e($item->booking->pasien->jenis_pasien); ?></td>
                                                         <td>
-                                                            {{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }}
+                                                            <?php echo e(\Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age); ?>
+
                                                             Tahun
                                                         </td>
                                                         <td>
@@ -353,9 +366,9 @@
                                                             </button>
                                                         </td>
                                                     </tr>
-                                                @endif
-                                                @include('perawat.modalPerawat.ModalAnamnesis')
-                                                @include('perawat.modalPerawat.ModalKajianAwal')
+                                                <?php endif; ?>
+                                                <?php echo $__env->make('perawat.modalPerawat.ModalAnamnesis', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                                <?php echo $__env->make('perawat.modalPerawat.ModalKajianAwal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                                 <script>
                                                     // Tanda Tangan
                                                     document.addEventListener('DOMContentLoaded', function() {
@@ -414,13 +427,14 @@
                                                         });
                                                     });
                                                 </script>
-                                            @endforeach
-                                        @endif
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="halaman d-flex justify-content-end">
-                                {{ $pasien->appends(request()->only(['search', 'entries']))->links() }}
+                                <?php echo e($pasien->appends(request()->only(['search', 'entries']))->links()); ?>
+
                             </div>
                         </div>
                     </div>
@@ -434,29 +448,29 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form method="GET" action="{{ route('perawat.index') }}"
+                        <form method="GET" action="<?php echo e(route('perawat.index')); ?>"
                             class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                            <input type="hidden" name="page" value="1"> 
                             <div class="d-flex align-items-center">
                                 <label for="periksa_entries" class="me-2">Tampilkan:</label>
                                 <select name="periksa_entries" id="periksa_entries"
                                     class="form-select form-select-sm me-3" style="width: 80px;"
                                     onchange="this.form.submit()">
                                     <option value="10"
-                                        {{ request('periksa_entries', 10) == 10 ? 'selected' : '' }}>10
+                                        <?php echo e(request('periksa_entries', 10) == 10 ? 'selected' : ''); ?>>10
                                     </option>
-                                    <option value="25" {{ request('recent_entries') == 25 ? 'selected' : '' }}>25
+                                    <option value="25" <?php echo e(request('recent_entries') == 25 ? 'selected' : ''); ?>>25
                                     </option>
-                                    <option value="50" {{ request('recent_entries') == 50 ? 'selected' : '' }}>50
+                                    <option value="50" <?php echo e(request('recent_entries') == 50 ? 'selected' : ''); ?>>50
                                     </option>
-                                    <option value="100" {{ request('recent_entries') == 100 ? 'selected' : '' }}>
+                                    <option value="100" <?php echo e(request('recent_entries') == 100 ? 'selected' : ''); ?>>
                                         100
                                     </option>
                                 </select>
                             </div>
 
                             <div class="d-flex align-items-center">
-                                <input type="text" name="periksa_search" value="{{ request('periksa_search') }}"
+                                <input type="text" name="periksa_search" value="<?php echo e(request('periksa_search')); ?>"
                                     class="form-control form-control-sm me-2" style="width: 400px;"
                                     placeholder="Cari Nama / NIK / No. Rm">
                                 <button type="submit" class="btn btn-sm btn-primary">
@@ -482,27 +496,29 @@
                                     </tr>
                                 </thead>
                                 <tbody style="text-align: center; text-transform: uppercase;">
-                                    @if (count($periksa) == 0)
+                                    <?php if(count($periksa) == 0): ?>
                                         <tr>
                                             <td colspan="9" style="text-align: center">Tidak Ada Data Pasien</td>
                                         </tr>
-                                    @else
+                                    <?php else: ?>
                                         <?php $no = 1; ?>
-                                        @foreach ($periksa as $item)
-                                            @if ($item->status == 'M')
-                                                <tr id="row_{{ $item->id }}">
-                                                    <td>{{ $no++ }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y / H:i') }}
+                                        <?php $__currentLoopData = $periksa; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($item->status == 'M'): ?>
+                                                <tr id="row_<?php echo e($item->id); ?>">
+                                                    <td><?php echo e($no++); ?></td>
+                                                    <td><?php echo e(\Carbon\Carbon::parse($item->created_at)->format('d-m-Y / H:i')); ?>
+
                                                     </td>
-                                                    <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                    <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                    <td>{{ $item->kode_antrian }}</td>
-                                                    <td>{{ $item->poli->namapoli }}</td>
-                                                    <td>{{ $item->dokter->nama_dokter }}</td>
-                                                    <td>{{ $item->booking->pasien->domisili }}</td>
-                                                    <td>{{ $item->booking->pasien->jenis_pasien }}</td>
+                                                    <td><?php echo e($item->booking->pasien->no_rm); ?></td>
+                                                    <td><?php echo e($item->booking->pasien->nama_pasien); ?></td>
+                                                    <td><?php echo e($item->kode_antrian); ?></td>
+                                                    <td><?php echo e($item->poli->namapoli); ?></td>
+                                                    <td><?php echo e($item->dokter->nama_dokter); ?></td>
+                                                    <td><?php echo e($item->booking->pasien->domisili); ?></td>
+                                                    <td><?php echo e($item->booking->pasien->jenis_pasien); ?></td>
                                                     <td>
-                                                        {{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }}
+                                                        <?php echo e(\Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age); ?>
+
                                                         Tahun
                                                     </td>
                                                     <td>
@@ -511,15 +527,16 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @endif
-                                            @include('perawat.modalPerawat.ModalKajianAwal')
-                                        @endforeach
-                                    @endif
+                                            <?php endif; ?>
+                                            <?php echo $__env->make('perawat.modalPerawat.ModalKajianAwal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
                         <div class="page d-flex justify-content-end">
-                            {{ $periksa->appends(request()->only(['periksa_search', 'periksa_entries']))->links() }}
+                            <?php echo e($periksa->appends(request()->only(['periksa_search', 'periksa_entries']))->links()); ?>
+
                         </div>
                     </div>
                 </div>
@@ -527,11 +544,11 @@
         </div>
     </div>
 
-    {{-- TAMPIL MODAL RIWAYAT 1 --}}
-    @foreach ($pasien as $item)
-        {{-- MODAL ISIAN PERAWAT --}}
-        <div class="modal fade" id="riwayatModal{{ $item->id }}" tabindex="-1"
-            aria-labelledby="exampleModalLabel{{ $item->id }}" aria-hidden="true">
+    
+    <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        
+        <div class="modal fade" id="riwayatModal<?php echo e($item->id); ?>" tabindex="-1"
+            aria-labelledby="exampleModalLabel<?php echo e($item->id); ?>" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -553,11 +570,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
+                                    <?php
                                         $iteration = 1;
                                         $asesmenDitemukan = false;
-                                    @endphp
-                                    @php
+                                    ?>
+                                    <?php
                                         $sortedSoap = [];
                                         if (!empty($soap)) {
                                             $idPasien = $item->booking->id_pasien;
@@ -568,29 +585,30 @@
                                                 ->all();
                                         }
                                         // dd($sortedSoap);
-                                    @endphp
-                                    @if (!empty($sortedSoap))
-                                        @foreach ($sortedSoap as $asesmen)
-                                            @php $asesmenDitemukan = true; @endphp
+                                    ?>
+                                    <?php if(!empty($sortedSoap)): ?>
+                                        <?php $__currentLoopData = $sortedSoap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asesmen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $asesmenDitemukan = true; ?>
                                             <tr>
-                                                <td>{{ $iteration++ }}</td>
-                                                <td>{{ date_format(date_create($asesmen['created_at']), 'd-m-Y/H:i:s') }}
+                                                <td><?php echo e($iteration++); ?></td>
+                                                <td><?php echo e(date_format(date_create($asesmen['created_at']), 'd-m-Y/H:i:s')); ?>
+
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#detailAsesmen{{ $asesmen['id'] }}"
+                                                        data-bs-target="#detailAsesmen<?php echo e($asesmen['id']); ?>"
                                                         data-toggle="tooltip" data-bs-placement="top"
                                                         title="Asesmen">
                                                         <i class="fas fa-eye"></i> Lihat Asesmen
                                                     </button>
                                                 </td>
                                             </tr>
-                                        @endforeach
-                                    @elseif (!$asesmenDitemukan)
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php elseif(!$asesmenDitemukan): ?>
                                         <tr>
                                             <td colspan="3" style="text-align: center">Belum ada Asesmen</td>
                                         </tr>
-                                    @endif
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -601,20 +619,21 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-    {{-- TAMPIL MODAL RIWAYAT 2 --}}
-    @if (!empty($soap))
-        @foreach ($soap as $asesmen)
-            <div class="modal fade" id="detailAsesmen{{ $asesmen->id }}" tabindex="-1"
-                aria-labelledby="exampleModalLabelAsesmen{{ $asesmen->id }}" aria-hidden="true">
+    
+    <?php if(!empty($soap)): ?>
+        <?php $__currentLoopData = $soap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asesmen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="modal fade" id="detailAsesmen<?php echo e($asesmen->id); ?>" tabindex="-1"
+                aria-labelledby="exampleModalLabelAsesmen<?php echo e($asesmen->id); ?>" aria-hidden="true">
                 <div class="modal-dialog modal-lg" style="display: contents">
                     <div class="modal-content" style="margin-top: 20px; width: 95%; margin-left: 3%;">
                         <div class="modal-header bg-primary">
                             <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">
                                 Detail Asesmen
                                 Tanggal:
-                                {{ $asesmen->created_at ? date_format(date_create($asesmen->created_at), 'd-m-Y') : 'N/A' }}
+                                <?php echo e($asesmen->created_at ? date_format(date_create($asesmen->created_at), 'd-m-Y') : 'N/A'); ?>
+
                             </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
@@ -632,9 +651,10 @@
                                     </thead>
                                     <tbody style="text-align: center;">
                                         <tr>
-                                            <td>{{ $asesmen->created_at ? date_format(date_create($asesmen->created_at), 'Y-m-d H:i:s') : 'N/A' }}
+                                            <td><?php echo e($asesmen->created_at ? date_format(date_create($asesmen->created_at), 'Y-m-d H:i:s') : 'N/A'); ?>
+
                                             </td>
-                                            <td>{{ $asesmen->nama_dokter ?? 'N/A' }}</td>
+                                            <td><?php echo e($asesmen->nama_dokter ?? 'N/A'); ?></td>
                                             <td style="text-align: left">
                                                 <table class="table">
                                                     <thead>
@@ -647,21 +667,21 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $asesmen->keluhan_utama ?? 'N/A' }}</td>
+                                                            <td><?php echo e($asesmen->keluhan_utama ?? 'N/A'); ?></td>
                                                             <td>
                                                                 <ul>
-                                                                    <li>Tensi: {{ $asesmen->p_tensi ?? 'N/A' }} mmHg
+                                                                    <li>Tensi: <?php echo e($asesmen->p_tensi ?? 'N/A'); ?> mmHg
                                                                     </li>
-                                                                    <li>RR: {{ $asesmen->p_rr ?? 'N/A' }} / minute</li>
-                                                                    <li>Nadi: {{ $asesmen->p_nadi ?? 'N/A' }} / minute
+                                                                    <li>RR: <?php echo e($asesmen->p_rr ?? 'N/A'); ?> / minute</li>
+                                                                    <li>Nadi: <?php echo e($asesmen->p_nadi ?? 'N/A'); ?> / minute
                                                                     </li>
-                                                                    <li>Suhu: {{ $asesmen->p_suhu ?? 'N/A' }} °C</li>
-                                                                    <li>TB: {{ $asesmen->p_tb ?? 'N/A' }} cm</li>
-                                                                    <li>BB: {{ $asesmen->p_bb ?? 'N/A' }} kg</li>
+                                                                    <li>Suhu: <?php echo e($asesmen->p_suhu ?? 'N/A'); ?> °C</li>
+                                                                    <li>TB: <?php echo e($asesmen->p_tb ?? 'N/A'); ?> cm</li>
+                                                                    <li>BB: <?php echo e($asesmen->p_bb ?? 'N/A'); ?> kg</li>
                                                                 </ul>
                                                             </td>
                                                             <td>
-                                                                @php
+                                                                <?php
                                                                     $diagnosaPrimer = !empty($asesmen->soap_a_primer)
                                                                         ? json_decode($asesmen->soap_a_primer, true)
                                                                         : [];
@@ -676,27 +696,27 @@
                                                                     $diagnosaSekunder = is_array($diagnosaSekunder)
                                                                         ? array_values($diagnosaSekunder)
                                                                         : [];
-                                                                @endphp
+                                                                ?>
                                                                 <p style="font-weight: bold">Diagnosa Primer</p>
-                                                                @if (!empty($diagnosaPrimer))
-                                                                    @foreach ($diagnosaPrimer as $diag)
+                                                                <?php if(!empty($diagnosaPrimer)): ?>
+                                                                    <?php $__currentLoopData = $diagnosaPrimer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <ul>
-                                                                            <li>{{ $diag }}</li>
+                                                                            <li><?php echo e($diag); ?></li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                                 <p style="font-weight: bold">Diagnosa Sekunder</p>
-                                                                @if (!empty($diagnosaSekunder))
-                                                                    @foreach ($diagnosaSekunder as $diagn)
+                                                                <?php if(!empty($diagnosaSekunder)): ?>
+                                                                    <?php $__currentLoopData = $diagnosaSekunder; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diagn): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <ul>
-                                                                            <li>{{ $diagn }}</li>
+                                                                            <li><?php echo e($diagn); ?></li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td>
                                                                 <p style="font-weight: bold; margin-bottom: 0">Resep:
@@ -704,58 +724,60 @@
                                                                 <p style="font-weight: bold; margin-bottom: 0">Non
                                                                     Racikan
                                                                 </p>
-                                                                @php
+                                                                <?php
                                                                     $resep = !empty($asesmen->soap_p)
                                                                         ? json_decode($asesmen->soap_p, true)
                                                                         : [];
                                                                     $aturan = !empty($asesmen->soap_p_aturan)
                                                                         ? json_decode($asesmen->soap_p_aturan, true)
                                                                         : [];
-                                                                @endphp
-                                                                @if (is_array($resep) && is_array($aturan) && count($resep) == count($aturan) && !empty($resep))
-                                                                    @foreach ($resep as $obat => $namaObat)
-                                                                        @php
+                                                                ?>
+                                                                <?php if(is_array($resep) && is_array($aturan) && count($resep) == count($aturan) && !empty($resep)): ?>
+                                                                    <?php $__currentLoopData = $resep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $obat => $namaObat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php
                                                                             $aturanMinum = $aturan[$obat] ?? 'N/A';
-                                                                        @endphp
+                                                                        ?>
                                                                         <ul>
-                                                                            <li>{{ $namaObat }} |
-                                                                                {{ $aturanMinum }}
+                                                                            <li><?php echo e($namaObat); ?> |
+                                                                                <?php echo e($aturanMinum); ?>
+
                                                                             </li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
 
                                                                 <p style="font-weight: bold; margin-bottom: 0">Racikan
                                                                     (Puyer)
                                                                 </p>
-                                                                @php
+                                                                <?php
                                                                     $obatRacikan = !empty($asesmen->soap_r)
                                                                         ? json_decode($asesmen->soap_r, true)
                                                                         : [];
                                                                     $takaran = !empty($asesmen->soap_r_takaran)
                                                                         ? json_decode($asesmen->soap_r_takaran, true)
                                                                         : [];
-                                                                @endphp
-                                                                @if (is_array($obatRacikan) && is_array($takaran) && count($obatRacikan) > 0 && count($obatRacikan) == count($takaran))
-                                                                    @foreach ($obatRacikan as $namaObat => $jumlah)
+                                                                ?>
+                                                                <?php if(is_array($obatRacikan) && is_array($takaran) && count($obatRacikan) > 0 && count($obatRacikan) == count($takaran)): ?>
+                                                                    <?php $__currentLoopData = $obatRacikan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $namaObat => $jumlah): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <ul>
-                                                                            <li>{{ $namaObat }} -
-                                                                                {{ $jumlah }}
-                                                                                ({{ $takaran[$namaObat] ?? 'N/A' }})
+                                                                            <li><?php echo e($namaObat); ?> -
+                                                                                <?php echo e($jumlah); ?>
+
+                                                                                (<?php echo e($takaran[$namaObat] ?? 'N/A'); ?>)
                                                                             </li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </td>
-                                            <td>{{ $asesmen->edukasi ?? 'N/A' }}</td>
+                                            <td><?php echo e($asesmen->edukasi ?? 'N/A'); ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -769,12 +791,12 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    @endif
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    <?php endif; ?>
 
-    {{-- TAMPILKAN LEWATI --}}
-    @foreach ($pasien as $item)
-        <div class="modal fade" id="lewati{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    
+    <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="lewati<?php echo e($item->id); ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -790,16 +812,16 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <form action="{{ url('perawat/lewati/' . $item->id) }}" method="POST"
+                        <form action="<?php echo e(url('perawat/lewati/' . $item->id)); ?>" method="POST"
                             enctype="multipart/form-data">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="btn btn-primary">Lewati</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <!-- Modal PASIEN UMUM -->
     <div class="modal fade" id="pasienumum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -817,18 +839,16 @@
                         <label for="no_rm">Poli</label>
                         <select name="poli" id="poli_umum" class="form-control mt-2 mb-2">
                             <option value="#" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_umum" class="form-control mt-2 mb-2">
                             <option value="#">Pilih Dokter</option>
-                            {{-- @foreach ($dokter as $item)
-                    <option value="{{ $item->id }}">{{ $item->nama_dokter }}</option>
-                @endforeach --}}
+                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -840,11 +860,25 @@
                     </div>
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="nik" id="nik" placeholder="Masukkan NIK" required>
-                        @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="form-group">
                         <label for="nama_kk">Nama Kepala Keluarga</label>
@@ -886,7 +920,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                    
                     <button type="button" class="btn btn-primary" id="btnSimpan" onclick="saveData()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status"
                             aria-hidden="true"></span>
@@ -912,18 +946,16 @@
                         <label for="no_rm">Poli</label>
                         <select name="poli" id="poli_bpjs" class="form-control mt-2 mb-2">
                             <option value="#" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_bpjs" class="form-control mt-2 mb-2">
                             <option value="#">Pilih Dokter</option>
-                            {{-- @foreach ($dokter as $item)
-                            <option value="{{ $item->id }}">{{ $item->nama_dokter }}</option>
-                        @endforeach --}}
+                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -943,11 +975,25 @@
                     </div>
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="nik" id="nikbpjs" placeholder="Masukkan NIK" required>
-                        @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="form-group">
                         <label for="nama_kk">Nama Kepala Keluarga</label>
@@ -1000,10 +1046,10 @@
         </div>
     </div>
 
-    @include('perawat.kunjunganSehat.modalSehat')
-    @include('perawat.kunjunganOnline.modalOnline')
+    <?php echo $__env->make('perawat.kunjunganSehat.modalSehat', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('perawat.kunjunganOnline.modalOnline', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    @push('style')
+    <?php $__env->startPush('style'); ?>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <style>
             /* Alert */
@@ -1011,16 +1057,16 @@
                 z-index: 9999 !important;
             }
         </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('script')
+    <?php $__env->startPush('script'); ?>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-        {{-- <script src="{{ asset('assets/responsivevoice.js') }}"></script> --}}
-        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-        <script src="{{ asset('assets/js/script.js') }}"></script>
+        
+        <script src="<?php echo e(asset('assets/js/antrian.script.js')); ?>"></script>
+        <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
 
         <script>
             // SHIFT
@@ -1158,7 +1204,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: "GET",
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     if (res) {
                                         $("#dokter_umum").empty();
@@ -1326,7 +1372,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: "GET",
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     if (res) {
                                         $("#dokter_bpjs").empty();
@@ -1597,567 +1643,13 @@
             }
         </script>
 
-        {{-- <script>
-        // SHIFT
-        document.addEventListener("DOMContentLoaded", function() {
-            function checkShift() {
-                let now = new Date();
-                let hours = now.getHours();
+        
+    <?php $__env->stopPush(); ?>
 
-                let shiftPagi = document.getElementById("shiftPagi");
-                let shiftSiang = document.getElementById("shiftSiang");
-                let shiftTotal = document.getElementById("shiftReportTotal"); // Tambahkan elemen total shift
-
-                let tanggalHariIni = now.toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
-
-                // Atur tanggal di tabel shift pagi dan siang
-                document.getElementById("tanggalShiftPagi").innerText = tanggalHariIni;
-                document.getElementById("tanggalShiftSiang").innerText = tanggalHariIni;
-
-                // Reset tampilan semua shift
-                shiftPagi.style.display = "none";
-                shiftSiang.style.display = "none";
-                shiftTotal.style.display = "none";
-
-                // Tampilkan tabel sesuai shift
-                if (hours >= 7 && hours < 12) {
-                    // Shift Pagi (07:00 - 12:00)
-                    shiftPagi.style.display = "block";
-                } else if (hours >= 12 && hours < 17) {
-                    // Shift Siang (12:00 - 17:00)
-                    shiftSiang.style.display = "block";
-                } else {
-                    // Setelah 17:00, tampilkan total pasien
-                    shiftTotal.style.display = "block";
-                }
-            }
-
-            checkShift(); // Jalankan saat halaman dimuat
-            setInterval(checkShift, 60000); // Perbarui setiap 1 menit
-        });
-
-        // TANGGAL SHIFT
-        function updateTanggal() {
-            var now = new Date();
-
-            // Opsi format tanggal dan hari
-            var options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
-
-            // Mengambil elemen HTML untuk shift pagi dan siang
-            var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
-            var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
-
-            // Format tanggal lengkap dengan nama hari
-            var tanggalLengkap = now.toLocaleDateString('id-ID', options);
-
-            // Menampilkan tanggal pada elemen yang sesuai
-            tanggalPagiElement.textContent = tanggalLengkap;
-            tanggalSiangElement.textContent = tanggalLengkap;
-        }
-
-        // Panggil fungsi saat halaman dimuat
-        updateTanggal();
-
-        // jam dan tgl
-        function updateClock() {
-            var now = new Date();
-            var tanggalElement =
-                document.getElementById('tanggal');
-            var options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            };
-            tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
-
-            var jamElement = document.getElementById('jam');
-            var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                now.getMinutes().toString().padStart(2, '0') + ':' +
-                now.getSeconds().toString().padStart(2, '0');
-            jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Tampilkan modal jumlah pasien
-        function togglePopup() {
-            $('#jmlhpasien').modal('toggle');
-            // Anda bisa menambahkan logika tambahan di sini jika diperlukan
-        }
-
-        $(document).ready(function() {
-            // Set up CSRF token for every AJAX request
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-        });
-
-        // Kode pasien umum
-        $(document).ready(function() {
-            $('#poli_umum').change(function() {
-                var poli_id = $(this).val();
-                if (poli_id) {
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                        success: function(res) {
-                            if (res) {
-                                $("#dokter_umum").empty();
-                                $.each(res, function(key, value) {
-                                    $("#dokter_umum").append('<option value="' + key +
-                                        '">' + value + '</option>');
-                                });
-                            } else {
-                                $("#dokter_umum").empty();
-                            }
-                        }
-                    });
-                } else {
-                    $("#dokter_umum").empty();
-                }
-            });
-        });
-
-        $(document).ready(function() {
-            $('#search_pasien').autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: '/search_nama_pasien',
-                        method: 'GET',
-                        data: {
-                            nama: request.term
-                        },
-                        success: function(data) {
-                            response($.map(data, function(item) {
-                                return {
-                                    label: item.nama_pasien + ' - ' + item
-                                        .nama_kk + ' - ' + item.alamat_asal,
-                                    value: item.no_rm
-                                };
-                            }));
-                        }
-                    });
-                },
-                minLength: 1,
-                select: function(event, ui) {
-                    $('#search_pasien').val(ui.item.label.split(' - ')[0]);
-                    var selected_no_rm = ui.item.value;
-
-                    $.ajax({
-                        url: '/get_pasien_details',
-                        method: 'GET',
-                        data: {
-                            no_rm: selected_no_rm
-                        },
-                        success: function(response) {
-                            // $('#no_rm').val(response.no_rm);
-                            $('#nik').val(response.nik);
-                            $('#nama_kk').val(response.nama_kk);
-                            $('#tgllahir').val(response.tgllahir);
-                            $('#jekel').val(response.jekel);
-                            $('#alamat_asal').val(response.alamat_asal);
-                            $('#pekerjaan').val(response.pekerjaan);
-                            $('#domisili').val(response.domisili);
-                            $('#noHP').val(response.noHP);
-                        }
-                    });
-                    return false;
-                },
-                appendTo: "#autocomplete-results" // Menetapkan elemen yang akan menampung hasil autocomplete
-            }).focus(function() {
-                $(this).autocomplete("search", "");
-            });
-        });
-
-        function saveData() {
-            // Menampilkan efek loading
-            $('#loadingSpinner').removeClass('d-none');
-            $('#btnSimpan').prop('disabled', true); // Menonaktifkan tombol selama proses loading
-            var formData = {
-                poli: document.getElementById('poli_umum').value,
-                dokter: document.getElementById('dokter_umum').value,
-                nama_pasien: document.getElementById('search_pasien').value,
-                // no_rm: document.getElementById('no_rm').value,
-                nik: document.getElementById('nik').value,
-                nama_kk: document.getElementById('nama_kk').value,
-                pekerjaan: document.getElementById('pekerjaan').value,
-                tgllahir: document.getElementById('tgllahir').value,
-                jekel: document.getElementById('jekel').value,
-                alamat_asal: document.getElementById('alamat_asal').value,
-                domisili: document.getElementById('domisili').value,
-                noHP: document.getElementById('noHP').value,
-            };
-
-            // Melakukan validasi
-            var errorMessages = [];
-
-            // Validasi khusus
-            if (!formData.poli) {
-                errorMessages.push("- Poli harus dipilih.");
-            }
-            if (!formData.dokter) {
-                errorMessages.push("- Dokter harus dipilih.");
-            }
-            // if (!formData.no_rm) {
-            //     errorMessages.push("- No. RM harus diisi.");
-            // }
-            if (!formData.nama_pasien) {
-                errorMessages.push("- Nama Pasien harus diisi.");
-            }
-            if (!formData.nik) {
-                errorMessages.push("- NIK harus diisi.");
-            }
-            if (!formData.nama_kk) {
-                errorMessages.push("- Nama Kepala Keluarga harus diisi.");
-            }
-            if (!formData.tgllahir) {
-                errorMessages.push("- Tanggal Lahir harus diisi.");
-            }
-            if (!formData.jekel) {
-                errorMessages.push("- Jenis kelamin harus dipilih.");
-            }
-            if (!formData.alamat_asal) {
-                errorMessages.push("- Alamat Asal harus diisi.");
-            }
-            if (!formData.pekerjaan) {
-                errorMessages.push("- Pekerjaan harus diisi.");
-            }
-            if (!formData.domisili) {
-                errorMessages.push("- Alamat Domisili harus diisi.");
-            }
-            if (!formData.noHP) {
-                errorMessages.push("- No. HP harus diisi.");
-            }
-            // Jika ada error, menampilkan pesan kesalahan
-            if (errorMessages.length > 0) {
-                $('#loadingSpinner').addClass('d-none');
-                $('#btnSimpan').prop('disabled', false);
-                alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
-                return; // Menghentikan eksekusi fungsi jika ada error
-            }
-
-            // console.log(formData);
-            $.ajax({
-                url: '/perawat/store-umum', // Ganti dengan URL backend Anda
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    // Check if the server response contains the 'redirect' key
-                    if (response.redirect) {
-                        // Redirect to the specified URL
-                        window.location.href = response.redirect;
-                    } else {
-                        // If no redirect URL is provided, you can handle it accordingly
-                        console.error('No redirect URL provided in the server response.');
-                    }
-
-                },
-                error: function(jqXHR) {
-                    // Menyembunyikan efek loading
-                    $('#loadingSpinner').addClass('d-none');
-                    $('#btnSimpan').prop('disabled', false); // Mengaktifkan tombol setelah proses loading
-
-                    if (jqXHR.status == 422) {
-                        var errors = jqXHR.responseJSON;
-                        var errorMessages = [];
-                        $.each(errors, function(key, value) {
-                            errorMessages.push(value);
-                        });
-                        // Menampilkan pesan kesalahan dengan alert
-                        alert("Terjadi kesalahan: \n - " + errorMessages.join("\n"));
-                    } else {
-                        console.error('Error saat menyimpan data pasien: ', jqXHR);
-                        // Handle error sesuai kebutuhan Anda
-                    }
-                }
-            });
-        }
-        //end code pasien umum
-
-        // kode pasien bpjs
-        $(document).ready(function() {
-            $('#poli_bpjs').change(function() {
-                var poli_id = $(this).val();
-                if (poli_id) {
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                        success: function(res) {
-                            if (res) {
-                                $("#dokter_bpjs").empty();
-                                $.each(res, function(key, value) {
-                                    $("#dokter_bpjs").append('<option value="' + key +
-                                        '">' + value + '</option>');
-                                });
-                            } else {
-                                $("#dokter_bpjs").empty();
-                            }
-                        }
-                    });
-                } else {
-                    $("#dokter_bpjs").empty();
-                }
-            });
-        });
-
-        $(document).ready(function() {
-            $('#norm').autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: '/search_pasien_bpjs',
-                        method: 'GET',
-                        data: {
-                            nama: request.term
-                        },
-                        success: function(data) {
-                            response($.map(data, function(item) {
-                                return {
-                                    label: item.nama_pasien + ' - ' + item
-                                        .bpjs + ' - ' + item.nik,
-                                    value: item.no_rm
-                                };
-                            }));
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("AJAX error: " + status + ' - ' + error);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#norm').val(ui.item.label.split(' - ')[1]);
-                    var selected_no_rm = ui.item.value;
-
-                    $.ajax({
-                        url: '/get_pasien_bpjs',
-                        method: 'GET',
-                        data: {
-                            bpjs: selected_no_rm
-                        },
-                        success: function(response) {
-                            // Menampilkan response dari controller di modal
-                            $('#nama_pasienbpjs').val(response.nama_pasien);
-                            $('#nikbpjs').val(response.nik);
-                            $('#nama_kkbpjs').val(response.nama_kk);
-                            $('#tgllahirbpjs').val(response.tgllahir);
-                            $('#jekelbpjs').val(response.jekel);
-                            $('#alamat_asalbpjs').val(response.alamat_asal);
-                            $('#pekerjaanbpjs').val(response.pekerjaan);
-                            $('#domisilibpjs').val(response.domisili);
-                            $('#noHPbpjs').val(response.noHP);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("AJAX error: " + status + ' - ' + error);
-                        }
-                    });
-                    return false;
-                },
-                appendTo: "#autocompletebpjs-results" // Menetapkan elemen yang akan menampung hasil autocomplete
-            });
-        });
-
-        function saveDataBpjs() {
-            // Menampilkan efek loading
-            $('#loadingSpinnerLama').removeClass('d-none');
-            $('#simpanBpjs').prop('disabled', true); // Menonaktifkan tombol selama proses loading
-            var formData = {
-                poli: document.getElementById('poli_bpjs').value,
-                dokter: document.getElementById('dokter_bpjs').value,
-                bpjs: document.getElementById('norm').value,
-                nama_pasien: document.getElementById('nama_pasienbpjs').value,
-                nik: document.getElementById('nikbpjs').value,
-                nama_kk: document.getElementById('nama_kkbpjs').value,
-                pekerjaan: document.getElementById('pekerjaanbpjs').value,
-                tgllahir: document.getElementById('tgllahirbpjs').value,
-                jekel: document.getElementById('jekelbpjs').value,
-                alamat_asal: document.getElementById('alamat_asalbpjs').value,
-                domisili: document.getElementById('domisilibpjs').value,
-                noHP: document.getElementById('noHPbpjs').value,
-            };
-            console.log(formData);
-            // Melakukan validasi
-            var errorMessages = [];
-
-            // Validasi khusus
-            if (!formData.poli) {
-                errorMessages.push("- Poli harus dipilih.");
-            }
-            if (!formData.dokter) {
-                errorMessages.push("- Dokter harus dipilih.");
-            }
-            if (!formData.bpjs) {
-                errorMessages.push("- No. BPJS harus diisi.");
-            }
-
-            // Jika ada error, menampilkan pesan kesalahan
-            if (errorMessages.length > 0) {
-                $('#loadingSpinnerLama').addClass('d-none');
-                $('#simpanBpjs').prop('disabled', false);
-                alert("Terjadi kesalahan: \n" + errorMessages.join("\n"));
-                return; // Menghentikan eksekusi fungsi jika ada error
-            }
-            // console.log(formData);
-            $.ajax({
-                url: '/perawat/store-bpjs', // Ganti dengan URL backend Anda
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    // Check if the server response contains the 'redirect' key
-                    if (response.redirect) {
-                        // Redirect to the specified URL
-                        window.location.href = response.redirect;
-                    } else {
-                        // If no redirect URL is provided, you can handle it accordingly
-                        console.error('No redirect URL provided in the server response.');
-                    }
-
-                },
-                error: function(jqXHR) {
-                    // Menyembunyikan efek loading
-                    $('#loadingSpinnerLama').addClass('d-none');
-                    $('#simpanBpjs').prop('disabled', false); // Mengaktifkan tombol setelah proses loading
-
-                    if (jqXHR.status == 422) {
-                        var errors = jqXHR.responseJSON;
-                        var errorMessages = [];
-                        $.each(errors, function(key, value) {
-                            errorMessages.push(value);
-                        });
-                        // Menampilkan pesan kesalahan dengan alert
-                        alert("Terjadi kesalahan: \n - " + errorMessages.join("\n"));
-                    } else {
-                        console.error('Error saat menyimpan data pasien: ', jqXHR);
-                        // Handle error sesuai kebutuhan Anda
-                    }
-                }
-            });
-        }
-
-        // Get the input fields
-        var gcs_e = document.getElementById('gcs_e');
-        var gcs_m = document.getElementById('gcs_m');
-        var gcs_v = document.getElementById('gcs_v');
-        var gcs_total = document.getElementById('gcs_total');
-
-        // Function to calculate the total GCS score
-        function calculateTotal() {
-            var e = parseFloat(gcs_e.value) || 0;
-            var m = parseFloat(gcs_m.value) || 0;
-            var v = parseFloat(gcs_v.value) || 0;
-
-            var totalInput = e + m + v;
-
-            // Jika total input melebihi 15, normalkan nilai sehingga totalnya menjadi 15
-            if (totalInput > 15) {
-                var ratio = 15 / totalInput;
-                e = e * ratio;
-                m = m * ratio;
-                v = v * ratio;
-                totalInput = 15; // Update totalInput untuk mencerminkan nilai yang sudah dinormalisasi
-            }
-
-            // Hitung total akhir
-            var total = e + m + v;
-            gcs_total.textContent = Math.round(total); // Membulatkan hasil ke bilangan bulat
-        }
-
-        // Listen for input changes and recalculate total
-        gcs_e.addEventListener('input', calculateTotal);
-        gcs_m.addEventListener('input', calculateTotal);
-        gcs_v.addEventListener('input', calculateTotal);
-
-        // Initial calculation
-        calculateTotal();
-
-        // Mendapatkan nilai tinggi badan dan berat badan dari inputan
-        var tbInput = document.getElementById('p_tb');
-        var bbInput = document.getElementById('p_bb');
-        var imtInput = document.getElementById('p_imt');
-
-        // Event listener untuk menghitung IMT setiap kali input berubah
-        tbInput.addEventListener('input', hitungIMT);
-        bbInput.addEventListener('input', hitungIMT);
-
-        function hitungIMT() {
-            // Mengambil nilai tinggi badan dan berat badan dari inputan
-            var tb = parseFloat(tbInput.value);
-            var bb = parseFloat(bbInput.value);
-
-            // Memastikan bahwa tinggi badan dan berat badan valid
-            if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
-                // Menghitung IMT
-                var imt = bb / ((tb / 100) * (tb / 100));
-                // Menetapkan nilai IMT ke inputan IMT
-                imtInput.value = imt.toFixed(2); // Memformat menjadi dua desimal
-            } else {
-                // Jika ada input yang tidak valid, atur nilai IMT menjadi kosong
-                imtInput.value = '';
-            }
-        }
-
-        // Mendapatkan nilai tinggi badan dan berat badan dari inputan
-        var tblmInput = document.getElementById('tb');
-        var bblmInput = document.getElementById('bb');
-        var imtlmInput = document.getElementById('l_imt');
-
-        // Event listener untuk menghitung IMT setiap kali input berubah
-        tblmInput.addEventListener('input', hitungIMTLama);
-        bblmInput.addEventListener('input', hitungIMTLama);
-
-        function hitungIMTLama() {
-            // Mengambil nilai tinggi badan dan berat badan dari inputan
-            var tb = parseFloat(tblmInput.value);
-            var bb = parseFloat(bblmInput.value);
-
-            // Memastikan bahwa tinggi badan dan berat badan valid
-            if (!isNaN(tb) && !isNaN(bb) && tb > 0 && bb > 0) {
-                // Menghitung IMT
-                var imt = bb / ((tb / 100) * (tb / 100));
-                // Menetapkan nilai IMT ke inputan IMT
-                imtlmInput.value = imt.toFixed(2); // Memformat menjadi dua desimal
-            } else {
-                // Jika ada input yang tidak valid, atur nilai IMT menjadi kosong
-                imtlmInput.value = '';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Menambahkan event listener untuk penutupan modal kedua
-            document.querySelectorAll('.modal').forEach(function(modal) {
-                modal.addEventListener('hidden.bs.modal', function() {
-                    // Menghapus kelas 'show' dari modal yang terakhir ditutup
-                    modal.classList.remove('show');
-                    // Menghapus kelas 'modal-open' dari body
-                    document.body.classList.remove('modal-open');
-                    // Menghapus backdrop secara langsung dari DOM
-                    var backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.parentNode.removeChild(backdrop);
-                    }
-                });
-            });
-        });
-
-        function toggleStep(element) {
-            const step = element.parentElement;
-            step.classList.toggle('opened');
-            const icon = element.querySelector('i');
-            icon.classList.toggle('fa-chevron-down');
-            icon.classList.toggle('fa-chevron-up');
-        }
-    </script> --}}
-    @endpush
-
-</x-admin.layout.terminal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc)): ?>
+<?php $component = $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc; ?>
+<?php unset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\Klinik\resources\views/perawat/index.blade.php ENDPATH**/ ?>
