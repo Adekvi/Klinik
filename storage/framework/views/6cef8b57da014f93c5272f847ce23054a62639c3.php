@@ -1,83 +1,306 @@
-<x-admin.layout.terminal title="Perawat">
+<?php if (isset($component)) { $__componentOriginal1e84a5d9305f6227b2d9c78c854797728c150b58 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\User\Layout\Home::class, ['title' => 'Beranda']); ?>
+<?php $component->withName('user.layout.home'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
 
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="row mt-4">
-            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">@yield('title') /</span> Pendaftaran Pasien
-            </h4>
+    <?php $__env->startPush('stack'); ?>
+        <style>
+            #testimonials {
+                background-color: #f8f9fa;
+                /* Warna latar lembut */
+                padding: 60px 0;
+                text-align: center;
+            }
 
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                        {{-- <li class="nav-item">
-                                <a class="nav-link" href="pages-account-settings-account.html"><i
-                                        class="bx bx-user me-1"></i> Account</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="pages-account-settings-notifications.html"><i
-                                        class="bx bx-bell me-1"></i> Notifications</a>
-                            </li> --}}
-                        <li class="nav-item">
-                            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>
-                                Pendaftaran</a>
-                        </li>
-                    </ul>
-                    <div class="row">
-                        <div class="col-md-6 col-12 mb-md-0 mb-4">
-                            <div class="card">
-                                <h5 class="card-header">Pasien Baru</h5>
-                                <div class="card-body">
-                                    <p>Selamat datang! Silakan lakukan pendaftaran sebagai pasien baru dengan mengisi
-                                        data
-                                        lengkap Anda untuk mendapatkan layanan terbaik dari kami.</p>
-                                    <!-- Connections -->
-                                    <div class="d-flex justify-content-center mb-3">
-                                        <div class="text-center d-flex flex-column align-items-center">
-                                            <!-- Teks dan ikon di atas -->
-                                            <button
-                                                class="btn btn-outline-primary d-flex align-items-center justify-content-center p-2 mb-2"
-                                                data-bs-target="#pasienbaru" data-bs-toggle="modal">
-                                                <i class="bx bx-plus-circle me-2"></i> Pasien Baru
-                                            </button>
-                                            <!-- Gambar di bawah -->
-                                            <img src="{{ asset('aset/img/baru.png') }}" alt="Pasien Baru"
-                                                style="width: 60%; height: auto;">
-                                        </div>
-                                    </div>
+            .alur-img {
+                max-width: 80%;
+                /* Gambar akan menyesuaikan 80% dari lebar container */
+                height: auto;
+                /* Proporsional */
+                margin: 0 auto;
+                /* Tengah */
+                transition: transform 0.3s ease;
+                /* Animasi saat hover */
+            }
 
-                                    <!-- /Connections -->
-                                </div>
-                            </div>
+            .alur-img:hover {
+                transform: scale(1.05);
+                /* Sedikit zoom saat di-hover */
+            }
+
+            @media (min-width: 1200px) {
+                .alur-img {
+                    max-width: 60%;
+                    /* Lebih besar di layar lebar */
+                }
+            }
+
+            @media (max-width: 768px) {
+                .alur-img {
+                    max-width: 95%;
+                    /* Agar tetap muat di layar kecil */
+                }
+            }
+        </style>
+    <?php $__env->stopPush(); ?>
+
+    <section class="banner">
+        <div class="slider" style="margin-top: -62px">
+            <div class="slide active">
+                <img src="<?php echo e(asset('aset/img/1.jpg')); ?>" alt="" />
+                <div class="left-info">
+                    <div class="penetrate-blur">
+                        <h1 style="font-family: Montserrat">Selamat</h1>
+                    </div>
+                    <div class="content">
+                        <h3>KLINIK PRATAMA MULTISARI II.</h3>
+                        <p>Silahkan Daftarkan dan lengkapi Identitas Anda di form Pendaftaran Jangan Sampai salah untuk
+                            memasukkan identitas.</p>
+                        <?php if (! (Auth::check() &&
+                                (Auth::user()->role == 'dokter' || Auth::user()->role == 'obat' || Auth::user()->role == 'apoteker'))): ?>
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#pasienbaru">Pasien Baru</button>
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#pasienlama">Pasien Lama</button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="right-info">
+                    <h1 style="font-family: Montserrat">Datang!</h1>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="<?php echo e(asset('aset/img/2.jpg')); ?>" alt="" />
+                <div class="left-info">
+                    <div class="penetrate-blur">
+                        <h1 style="font-family: Montserrat">KLI</h1>
+                        <h3 style="font-family: Montserrat">Pratama</h3>
+                    </div>
+                    <div class="content">
+                        <h3>KLINIK PRATAMA MULTISARI II.</h3>
+                        <p>Silahkan Daftarkan dan lengkapi Identitas Anda di form Pendaftaran Jangan Sampai salah untuk
+                            memasukkan identitas.</p>
+                        <?php if (! (Auth::check() &&
+                                (Auth::user()->role == 'dokter' || Auth::user()->role == 'obat' || Auth::user()->role == 'apoteker'))): ?>
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#pasienbaru">Pasien Baru</button>
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#pasienlama">Pasien Lama</button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="right-info">
+                    <h1 style="font-family: Montserrat">NIK</h1>
+                    <h3 style="font-family: Montserrat">Multisari II</h3>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    <main id="main">
+        <!-- ======= Get Started Section ======= -->
+        <section id="testimonials" class="testimonials section-bg">
+            <div class="container" data-aos="fade-up">
+                <div class="section-header text-center mb-5">
+                    <h2>Alur <span style="color: #1d4580">Pendaftaran</span></h2>
+                </div>
+
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="<?php echo e(asset('assetss/img/klinik1.png')); ?>" alt="Gambar Pendaftaran"
+                        class="alur-img img-fluid">
+                </div>
+            </div>
+        </section>
+
+        <section id="get-started" class="get-started section-bg">
+            <div class="container">
+                <div class="row justify-content-between">
+
+                    <div class="col-lg-6 d-flex align-items-center" data-aos="fade-up" style="margin-top: -100px">
+                        <div class="content">
+                            <h3>
+                                Tentang <span style="color: #1d4580">Klinik</span>
+                            </h3>
+                            <p>
+                                <strong>
+                                    Klinik Pratama Multisari II adalah sebuah fasilitas kesehatan yang terletak di Jalan
+                                    <span style="color: #1d4580">Jepara-Kudus, Desa Sengonbugel, RT. 03/01, Kecamatan
+                                        Mayong, Kabupaten Jepara. </span>Klinik ini menyediakan layanan kesehatan primer
+                                    bagi masyarakat sekitar dengan berbagai jenis pelayanan medis. Dengan lokasi yang
+                                    strategis, klinik ini mudah diakses oleh masyarakat sekitar dan menjadi pilihan
+                                    utama
+                                    untuk perawatan kesehatan rutin maupun mendesak.
+                                </strong>
+                            </p>
                         </div>
-                        <div class="col-md-6 col-12">
-                            <div class="card">
-                                <h5 class="card-header">Pasien Lama</h5>
-                                <div class="card-body">
-                                    <p>Halo kembali! Silakan masuk menggunakan nomor rekam medis Anda untuk mempercepat
-                                        proses pendaftaran dan mendapatkan layanan yang lebih mudah.</p>
-                                    <!-- Social Accounts -->
-                                    <div class="d-flex justify-content-center mb-3">
-                                        <div class="text-center d-flex flex-column align-items-center">
-                                            <!-- Teks dan ikon di atas -->
-                                            <button
-                                                class="btn btn-outline-primary d-flex align-items-center justify-content-center p-2 mb-2"
-                                                data-bs-target="#pasienlama" data-bs-toggle="modal">
-                                                <i class="bx bx-plus-circle me-2"></i> Pasien Lama
-                                            </button>
-                                            <!-- Gambar di bawah -->
-                                            <img src="{{ asset('aset/img/baru.png') }}" alt="Pasien Baru"
-                                                style="width: 60%; height: auto;">
-                                        </div>
-                                    </div>
+                    </div>
 
-                                    <!-- /Social Accounts -->
-                                </div>
-                            </div>
+                    <div class="row col-lg-6">
+                        <div class="video-container position-relative">
+                            <video src="<?php echo e(asset('assetss/img/profil.mp4')); ?>" loop autoplay muted></video>
+                            <h3>Profil Singkat</h3>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section><!-- End Get Started Section -->
+
+        <section id="testimonials" class="testimonials">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-header" style="margin-top: -20px">
+                    <h2>Berita <span style="color: #1d4580"> Terbaru</span></h2>
+                    <button id="btnFoto" class="btn btn-primary rounded-pill active">Foto</button>
+                    <button id="btnVideo" class="btn btn-primary rounded-pill">Video</button>
+                </div>
+
+                
+                <div id="fotoContainer" class="slides-2 swiper" style="margin-top: -60px;">
+                    <div class="swiper-wrapper">
+                        <div id="fotoContent" class="Content">
+                            <div class="swiper-slide">
+                                <div class="testimonial-wrap">
+                                    <?php $__currentLoopData = $poto; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="testimonial-item"
+                                            style="background-image: url('<?php echo e(Storage::url($item->foto)); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; position: relative; width: 25%; float: left">
+                                            <!-- Judul dan Tanggal -->
+                                            <div
+                                                style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(255, 255, 255, 0.7); padding: 10px;">
+                                                <h4 id="tgl<?php echo e($item->id); ?>" style="margin: 0; text-align: center;">
+                                                    <?php echo e($item->tgl); ?></h4>
+                                                <p id="judul<?php echo e($item->id); ?>"
+                                                    style="font-size: 16px; margin: 0; text-align: center;">
+                                                    <?php echo e($item->judul); ?></p>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+
+                
+                <div id="videoContainer" class="slides-2 swiper"
+                    style="display: none; margin-top: -60px; margin-left: 67px">
+                    <div class="swiper-wrapper">
+                        <div id="videoContent" class="Content">
+                            <?php $__currentLoopData = $pidio; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div style="position: relative; width: 31%; float: left; margin-right: 20px;">
+                                    <video width="100%" height="auto" autoplay muted loop
+                                        style="object-fit: cover; border-radius: 10px;">
+                                        <source src="<?php echo e(Storage::url($item->vidio)); ?>" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <div
+                                        style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(255, 255, 255, 0.7); padding: 7px;">
+                                        <h4 id="tgl<?php echo e($item->id); ?>" style="margin: 0; text-align: center;">
+                                            <b><?php echo e($item->tgl); ?></b>
+                                        </h4>
+                                        <p id="judul<?php echo e($item->id); ?>"
+                                            style="font-size: 16px; margin: 0; text-align: center;">
+                                            <b><?php echo e($item->judul); ?></b>
+                                        </p>
+                                    </div>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+                <div class="section-header" style="margin-top: -40px; margin-bottom: -50px">
+                    <h2>Kontak <span style="color: #1d4580"> Kami</span></h2>
+                </div>
+
+                <div class="row gy-4">
+                    <div class="col-lg-6">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <h3>Our Address</h3>
+                            <p>Jalan Jepara-Kudus, Desa Sengonbugel, RT. 03/01,<br> Kecamatan Mayong, Kabupaten Jepara,
+                                Jawa
+                                Tengah</p>
+                        </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-envelope"></i>
+                            <h3>Email Us</h3>
+                            <p>contact@example.com</p>
+                        </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-phone"></i>
+                            <h3>Call Us</h3>
+                            <p>(0291)7520234</p>
+                        </div>
+                    </div><!-- End Info Item -->
+
+                </div>
+
+                <div class="row gy-4 mt-1">
+
+                    <div class="col-lg-12">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.2751660416316!2d110.73278357356244!3d-6.736247965862465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70ddea889431cf%3A0xc53ad31280ac5949!2sKlinik%20Pratama%20Multisari%202!5e0!3m2!1sid!2sid!4v1714118504230!5m2!1sid!2sid"
+                            style="border:0; width: 100%; height: 384px; border-radius: 10px" allowfullscreen=""
+                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                    </div><!-- End Google Maps -->
+
+                </div>
+
+            </div>
+        </section>
+
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var mySwiper = new Swiper('.slides-2', {
+                    // Atur konfigurasi Swiper di sini
+                    slidesPerView: 'auto',
+                    spaceBetween: 30,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const btnFoto = document.getElementById("btnFoto");
+                const btnVideo = document.getElementById("btnVideo");
+                const fotoContainer = document.getElementById("fotoContainer");
+                const videoContainer = document.getElementById("videoContainer");
+
+                btnFoto.addEventListener("click", function() {
+                    btnFoto.classList.add("active");
+                    btnVideo.classList.remove("active");
+                    fotoContainer.style.display = "block";
+                    videoContainer.style.display = "none";
+                });
+
+                btnVideo.addEventListener("click", function() {
+                    btnFoto.classList.remove("active");
+                    btnVideo.classList.add("active");
+                    fotoContainer.style.display = "none";
+                    videoContainer.style.display = "block";
+                });
+            });
+        </script>
+
+    </main>
 
     <!-- Modal PASIEN BARU -->
     <div class="modal fade" id="pasienbaru" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -87,16 +310,19 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">Pendaftaran
                         Pasien
-                        Baru</h1>
+                        Baru
+                    </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="kategori" id="kategori_pasien">
                     <input type="hidden" name="status" id="status_pasien" value="baru">
-                    <div style="font-size: 15px; background: rgb(241, 241, 241); padding: 5px; border-radius: 5px">
-                        <span style="color: green;">Informasi:</span>
+                    <!-- Karena modal ini untuk Pasien Baru -->
+                    <div style="font-size: 15px; background:  rgb(241, 241, 241); padding: 5px; border-radius: 5px">
+                        <span style="color: green;">Infomasi :</span>
                         <ul style="margin-bottom: 0px">
-                            <li>Pasien yang baru mendaftar silakan mengisi lengkap untuk melanjutkan pemeriksaan.</li>
+                            <li>Pasien yang baru mendaftar silahkan mengisi lengkap untuk melanjutkan pemeriksaan.</li>
+                            
                         </ul>
                     </div>
                     <div class="text-center mt-3">
@@ -128,15 +354,29 @@
                     </div>
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="nik" id="nik" placeholder="Masukkan NIK">
-                        @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="invalid-feedback" id="nik-error" style="display: none;">NIK harus berisi 16
                             karakter
                             angka.</div>
-                        <div class="text mt-2 mb-2" id="nik-info" style="display: none;">*NIK Tidak Wajib Diisi!
+                        <div class="text mt-2 mb-2" id="nik-info" style="display: none">*NIK Tidak Wajib Diisi!
                         </div>
                     </div>
                     <div class="form-group">
@@ -151,21 +391,35 @@
                     </div>
                     <div class="form-group">
                         <label for="jekel">Jenis Kelamin</label>
-                        <select class="form-control mt-2 mb-2 @error('jekel') is-invalid @enderror" name="jekel"
+                        <select class="form-control mt-2 mb-2 <?php $__errorArgs = ['jekel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="jekel"
                             id="jekel" required>
                             <option value="">Pilih Jenis Kelamin</option>
                             <option value="L">Laki-Laki</option>
                             <option value="P">Perempuan</option>
                         </select>
-                        @error('jekel')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['jekel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="invalid-feedback" id="jekel-error" style="display: none;">Jenis kelamin tidak
                             sesuai
                             dengan NIK.</div>
                     </div>
                     <div class="form-group">
-                        <label for="alamat_asal">Alamat Asal</label>
+                        <label for="alamat">Alamat Asal</label>
                         <input type="text" class="form-control mt-2 mb-2" name="alamat_asal" id="alamat_asal"
                             placeholder="Masukkan Alamat Asal" required>
                     </div>
@@ -177,7 +431,7 @@
                             <option value="Bpjs">Bpjs</option>
                         </select>
                     </div>
-                    <div class="form-group" id="nobpjs" style="display: none;">
+                    <div class="form-group" id="nobpjs">
                         <label for="norm">No. BPJS</label>
                         <div class="cari" style="display: flex; align-items: center">
                             <input type="text" class="form-control mt-2 mb-2" name="norm" id="norm"
@@ -192,44 +446,58 @@
                         <label for="pekerjaan">Pekerjaan</label>
                         <input type="text" class="form-control mt-2 mb-2" name="pekerjaan" id="pekerjaan"
                             placeholder="Masukkan Pekerjaan">
-                        <div class="text mt-2 mb-2" id="pekerjaan-info" style="display: none;">*Pekerjaan Tidak Wajib
+                        <div class="text mt-2 mb-2" id="pekerjaan-info" style="display: none">*Pekerjaan Tidak Wajib
                             Diisi!</div>
                     </div>
                     <div class="form-group">
-                        <label for="domisili">Alamat Domisili</label>
+                        <label for="alamat">Alamat Domisili</label>
                         <input type="text" class="form-control mt-2 mb-2" name="domisili" id="domisili"
                             placeholder="Masukkan Alamat Domisili" required>
                     </div>
                     <div class="form-group">
                         <label for="noHP">No. HP</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('noHP') is-invalid @enderror"
-                            name="noHP" id="noHP" placeholder="08123456789" required>
-                        @error('noHP')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['noHP'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                            name="noHP" id="noHP" placeholder="Masukkan No. HP" required>
+                        <?php $__errorArgs = ['noHP'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="invalid-feedback" id="noHP-error" style="display: none;">No.HP harus berisi 10
                             sampai
                             13 karakter angka.</div>
                     </div>
                     <div class="form-group mt-2">
-                        <label for="poli_umum">Poli</label>
+                        <label for="no_rm">Poli</label>
                         <select name="poli" id="poli_umum" class="form-control mt-2 mb-2">
-                            <option value="" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <option value="#" disabled selected>Pilih Poli</option>
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="dokter_umum">Dokter</label>
+                        <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_umum" class="form-control mt-2 mb-2" disabled>
-                            <option value="">Pilih Dokter</option>
+                            <option value="#">Pilih Dokter</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary" id="btnSimpan">
+                    <button type="button" class="btn btn-primary" id="btnSimpan" onclick="saveData()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status"
                             aria-hidden="true"></span>
                         Simpan
@@ -265,9 +533,9 @@
                         <label for="poli">Poli</label>
                         <select name="poli" id="poli_bpjs" class="form-control mt-2 mb-2" required>
                             <option value="" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -279,14 +547,7 @@
                     <div class="form-group">
                         <label for="identifier">No. RM / No. BPJS / KTP / Nama Pasien</label>
                             <div class="cari mt-2 mb-2" style="position: relative;">
-                            {{-- <input type="text" class="form-control mb-2" name="identifier" id="id_bpjs"
-                                placeholder="Masukkan No. RM atau No.BPJS atau KTP atau Nama Pasien" required>
-                            <button id="searchBtn" class="btn btn-primary search mb-2"
-                                style="margin-left: 9px; height: 40px;">
-                                <i class="fas fa-search"></i>
-                                <span id="loading" style="display: none;"><i
-                                        class="fas fa-spinner fa-spin"></i></span>
-                            </button> --}}
+                            
                                 <select id="id_bpjs" class="form-control" style="width: 100%;">
                                 </select>
 
@@ -395,7 +656,32 @@
         </div>
     </div>
 
-    @push('style')
+
+    <!-- Modal Login -->
+    <div class="modal fade" id="login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="pasienlama" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white; margin-top: -5px">Anda
+                        Belum Login!</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <h5 class="mt-2 mb-3">Silahkan login terlebih dahulu sebelum melanjutkan pendaftaran</h5>
+                        <a href="<?php echo e(url('login/index')); ?>" class="btn btn-primary">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php $__env->startPush('style'); ?>
+        
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -412,39 +698,15 @@
                 /* Warna teks abu-abu */
             }
 
-            .swal2-container {
-                z-index: 9999 !important;
-            }
-            .autocomplete-results {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                border: 1px solid #ced4da;
-                border-radius: 4px;
-                max-height: 250px;
-                overflow-y: auto;
-                z-index: 99999;
-                display: none;
-            }
-
-            .autocomplete-item {
-                padding: 8px 10px;
-                cursor: pointer;
-                border-bottom: 1px solid #efefef;
-            }
-
-            .autocomplete-item:hover {
-                background: #f1f1f1;
-            }
-
             .modal-body {
                 max-height: 70vh;
                 overflow-y: auto;
                 padding-right: 10px;
             }
-
+            .select2-results__options {
+                max-height: 200px !important;
+                overflow-y: auto !important;
+            }
             .select2-container .select2-dropdown {
                 z-index: 99999 !important;
             }
@@ -453,10 +715,6 @@
                 overflow-y: auto !important;
             }
 
-            .select2-results__options {
-                max-height: 200px !important;
-                overflow-y: auto !important;
-            }
             /* Tinggi Select2 biar sama seperti input form-control */
             .select2-container .select2-selection--single {
                 height: 40px !important;
@@ -478,99 +736,77 @@
                 right: 6px !important;
             }
 
-
         </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('script')
+    <?php $__env->startPush('script'); ?>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         <!-- Memuat JavaScript Bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
+            function showMessage(msgId, button) {
+                // Hide all messages
+                document.getElementById('msgDewasa').style.display = 'none';
+                document.getElementById('msgAnak').style.display = 'none';
+                document.getElementById('msgTanpaIdentitas').style.display = 'none';
+
+                // Remove active class from all buttons
+                document.getElementById('btnDewasa').classList.remove('active');
+                document.getElementById('btnAnak').classList.remove('active');
+                document.getElementById('btnTanpaIdentitas').classList.remove('active');
+
+                // Show the selected message
+                document.getElementById(msgId).style.display = 'block';
+
+                // Add active class to the clicked button
+                button.classList.add('active');
+            }
+
+            function showOptionalFields() {
+                document.getElementById('nik-info').style.display = 'block';
+                document.getElementById('pekerjaan-info').style.display = 'block';
+            }
+
+            function showOptionalFieldsForTanpaIdentitas() {
+                document.getElementById('nik-info').style.display = 'block';
+                document.getElementById('pekerjaan-info').style.display = 'none';
+            }
+
+            function hideOptionalFields() {
+                document.getElementById('nik-info').style.display = 'none';
+                document.getElementById('pekerjaan-info').style.display = 'none';
+            }
+
+            function convertToDate(input) {
+                var parts = input.split('/');
+                return parts[2] + '-' + parts[1] + '-' + parts[0]; // Convert to yyyy-mm-dd
+            }
+
+            // Format tanggal dd/mm/yyyy
+            document.getElementById('tgllahir').addEventListener('input', function(e) {
+                var input = e.target.value;
+                var formattedInput = input.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
+
+                if (formattedInput !== input) {
+                    e.target.value = formattedInput;
+                }
+            });
+
+            document.getElementById('tgllahir').addEventListener('blur', function(e) {
+                var input = e.target.value;
+                if (!/^\d{2}\/\d{2}\/\d{4}$/.test(input)) {
+                    e.target.value = '';
+                    alert('Format tanggal harus dd/mm/yyyy');
+                }
+            });
+
+            // No. RM Pasien
             document.addEventListener('DOMContentLoaded', function() {
-                // BUTTON KATEGORI
-                const btnDewasa = document.getElementById('btnDewasa');
-                const btnAnak = document.getElementById('btnAnak');
-                const btnTanpaIdentitas = document.getElementById('btnTanpaIdentitas');
-
-                if (btnDewasa) {
-                    btnDewasa.addEventListener('click', function() {
-                        document.getElementById('kategori_pasien').value = 'dewasa';
-                        document.getElementById('msgDewasa').style.display = 'block';
-                        document.getElementById('msgAnak').style.display = 'none';
-                        document.getElementById('msgTanpaIdentitas').style.display = 'none';
-
-                        // Aktifkan field NIK dan nama KK untuk dewasa
-                        document.getElementById('nik').disabled = false;
-                        document.getElementById('nama_kk').disabled = false;
-                    });
-                } else {
-                    console.error('Elemen btnDewasa tidak ditemukan');
-                }
-
-                if (btnAnak) {
-                    btnAnak.addEventListener('click', function() {
-                        document.getElementById('kategori_pasien').value = 'anak';
-                        document.getElementById('msgAnak').style.display = 'block';
-                        document.getElementById('msgDewasa').style.display = 'none';
-                        document.getElementById('msgTanpaIdentitas').style.display = 'none';
-
-                        // Aktifkan field NIK dan nama KK untuk anak
-                        document.getElementById('nik').disabled = false;
-                        document.getElementById('nama_kk').disabled = false;
-                    });
-                } else {
-                    console.error('Elemen btnAnak tidak ditemukan');
-                }
-
-                if (btnTanpaIdentitas) {
-                    btnTanpaIdentitas.addEventListener('click', function() {
-                        document.getElementById('kategori_pasien').value = 'tanpa_identitas';
-                        document.getElementById('msgTanpaIdentitas').style.display = 'block';
-                        document.getElementById('msgDewasa').style.display = 'none';
-                        document.getElementById('msgAnak').style.display = 'none';
-
-                        // Nonaktifkan field NIK dan kosongkan nilainya
-                        document.getElementById('nik').disabled = true;
-                        document.getElementById('nik').value = '';
-
-                        // Nonaktifkan nama KK dan set default
-                        document.getElementById('nama_kk').disabled = true;
-                        document.getElementById('nama_kk').value = 'TIDAK DIKETAHUI';
-                    });
-                } else {
-                    console.error('Elemen btnTanpaIdentitas tidak ditemukan');
-                }
-
-                // Format tanggal dd/mm/yyyy
-                const tgllahirInput = document.getElementById('tgllahir');
-                if (tgllahirInput) {
-                    tgllahirInput.addEventListener('input', function(e) {
-                        let input = e.target.value.replace(/[^0-9]/g, '');
-                        if (input.length >= 8) {
-                            const formattedInput = input.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
-                            e.target.value = formattedInput;
-                        } else {
-                            e.target.value = input;
-                        }
-                    });
-
-                    tgllahirInput.addEventListener('blur', function(e) {
-                        const input = e.target.value;
-                        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(input)) {
-                            e.target.value = '';
-                            alert('Format tanggal harus dd/mm/yyyy');
-                        }
-                    });
-                } else {
-                    console.error('Elemen tgllahir tidak ditemukan');
-                }
-
-                // No. RM Pasien
                 fetch('/pasien/latest-no-rm')
                     .then(response => response.json())
                     .then(data => {
@@ -579,13 +815,51 @@
                     .catch(error => {
                         console.error('Error fetching the latest No. RM:', error);
                     });
+            });
 
-                // Validasi NIK
+            // Validasi NIK
+            document.addEventListener('DOMContentLoaded', function() {
                 const nikInput = document.getElementById('nik');
                 const nikError = document.getElementById('nik-error');
-                if (nikInput && nikError) {
-                    nikInput.addEventListener('input', function() {
-                        const nik = nikInput.value;
+
+                nikInput.addEventListener('input', function() {
+                    const nik = nikInput.value;
+
+                    // Validasi panjang NIK dan memastikan hanya angka
+                    if (nik.length === 16 && /^\d+$/.test(nik)) {
+                        nikInput.classList.remove('is-invalid');
+                        nikError.style.display = 'none';
+                    } else {
+                        nikInput.classList.add('is-invalid');
+                        nikError.style.display = 'block';
+                    }
+                });
+            });
+
+            // Validasi Jenis Kelamin Berdasarkan NIK
+            document.addEventListener('DOMContentLoaded', function() {
+                const nikInput = document.getElementById('nik');
+                const jekelInput = document.getElementById('jekel');
+                const nikError = document.getElementById('nik-error');
+                const jekelError = document.getElementById('jekel-error');
+
+                nikInput.addEventListener('input', validateNIK);
+                jekelInput.addEventListener('change', validateNIK);
+
+                function validateNIK() {
+                    const nik = nikInput.value;
+                    const jekel = jekelInput.value;
+
+                    if (nik.length > 0) {
+                        const dayPart = parseInt(nik.substr(6, 2));
+                        let genderFromNIK = '';
+                        if (dayPart < 40) {
+                            genderFromNIK = 'L';
+                        } else {
+                            genderFromNIK = 'P';
+                        }
+
+                        // Validasi panjang NIK dan memastikan hanya angka
                         if (nik.length === 16 && /^\d+$/.test(nik)) {
                             nikInput.classList.remove('is-invalid');
                             nikError.style.display = 'none';
@@ -593,160 +867,93 @@
                             nikInput.classList.add('is-invalid');
                             nikError.style.display = 'block';
                         }
-                    });
-                } else {
-                    console.error('Elemen nik atau nik-error tidak ditemukan');
-                }
 
-                // Validasi Jenis Kelamin Berdasarkan NIK
-                const jekelInput = document.getElementById('jekel');
-                const jekelError = document.getElementById('jekel-error');
-                if (nikInput && jekelInput && nikError && jekelError) {
-                    nikInput.addEventListener('input', validateNIK);
-                    jekelInput.addEventListener('change', validateNIK);
-
-                    function validateNIK() {
-                        const nik = nikInput.value;
-                        const jekel = jekelInput.value;
-
-                        if (nik.length > 0) {
-                            const dayPart = parseInt(nik.substr(6, 2));
-                            let genderFromNIK = '';
-                            if (dayPart < 40) {
-                                genderFromNIK = 'L';
-                            } else {
-                                genderFromNIK = 'P';
-                            }
-
-                            if (nik.length === 16 && /^\d+$/.test(nik)) {
-                                nikInput.classList.remove('is-invalid');
-                                nikError.style.display = 'none';
-                            } else {
-                                nikInput.classList.add('is-invalid');
-                                nikError.style.display = 'block';
-                            }
-
-                            if (jekel === genderFromNIK) {
-                                jekelInput.classList.remove('is-invalid');
-                                jekelError.style.display = 'none';
-                            } else {
-                                jekelInput.classList.add('is-invalid');
-                                jekelError.style.display = 'block';
-                            }
+                        // Validasi jenis kelamin berdasarkan NIK
+                        if (jekel === genderFromNIK) {
+                            jekelInput.classList.remove('is-invalid');
+                            jekelError.style.display = 'none';
                         } else {
-                            nikInput.classList.remove('is-invalid');
-                            nikError.style.display = 'none';
-                            if (jekel) {
-                                jekelInput.classList.remove('is-invalid');
-                                jekelError.style.display = 'none';
-                            } else {
-                                jekelInput.classList.add('is-invalid');
-                                jekelError.style.display = 'block';
-                            }
+                            jekelInput.classList.add('is-invalid');
+                            jekelError.style.display = 'block';
+                        }
+                    } else {
+                        // Jika NIK kosong, tidak perlu menampilkan error
+                        nikInput.classList.remove('is-invalid');
+                        nikError.style.display = 'none';
+
+                        // Validasi jenis kelamin tanpa memperhitungkan NIK
+                        if (jekel) {
+                            jekelInput.classList.remove('is-invalid');
+                            jekelError.style.display = 'none';
+                        } else {
+                            jekelInput.classList.add('is-invalid');
+                            jekelError.style.display = 'block';
                         }
                     }
-                } else {
-                    console.error('Elemen untuk validasi NIK atau jenis kelamin tidak ditemukan');
                 }
+            });
 
-                // Jenis pasien Bpjs
+            // Jenis pasien Bpjs
+            document.addEventListener('DOMContentLoaded', function() {
                 const jenisPasienSelect = document.getElementById('jenis_pasien');
                 const nobpjs = document.getElementById('nobpjs');
                 const normInput = document.getElementById('norm');
                 const nobpjsError = document.getElementById('nobpjsError');
-                if (jenisPasienSelect && nobpjs && normInput && nobpjsError) {
-                    console.log('Elemen jenis_pasien ditemukan, menambahkan event listener');
-                    jenisPasienSelect.addEventListener('change', function() {
-                        console.log('Jenis pasien dipilih:', this.value);
-                        if (this.value === 'Bpjs') {
-                            console.log('Menampilkan field No. BPJS');
-                            nobpjs.style.display = 'block';
-                        } else {
-                            console.log('Menyembunyikan field No. BPJS');
-                            nobpjs.style.display = 'none';
-                            nobpjsError.style.display = 'none';
-                            normInput.classList.remove('is-invalid');
-                        }
-                    });
 
-                    nobpjs.style.display = 'none';
+                jenisPasienSelect.addEventListener('change', function() {
+                    if (this.value === 'Bpjs') {
+                        nobpjs.style.display = 'block';
+                    } else {
+                        nobpjs.style.display = 'none';
+                        nobpjsError.style.display = 'none'; // Hide error message if the field is hidden
+                        normInput.classList.remove('is-invalid'); // Remove invalid class if the field is hidden
+                    }
+                });
 
-                    normInput.addEventListener('input', function() {
-                        const bpjs = normInput.value;
-                        if (bpjs.length === 13 && /^\d+$/.test(bpjs)) {
-                            nobpjsError.style.display = 'none';
-                            normInput.classList.remove('is-invalid');
-                        } else {
-                            nobpjsError.style.display = 'block';
-                            normInput.classList.add('is-invalid');
-                        }
-                    });
-                } else {
-                    console.error('Elemen jenis_pasien, nobpjs, norm, atau nobpjsError tidak ditemukan');
-                }
+                // Hide the No. BPJS field by default
+                nobpjs.style.display = 'none';
 
-                // Validasi No. HP
+                normInput.addEventListener('input', function() {
+                    if (normInput.value.length === 13) {
+                        nobpjsError.style.display = 'none';
+                        normInput.classList.remove('is-invalid');
+                    } else {
+                        nobpjsError.style.display = 'block';
+                        normInput.classList.add('is-invalid');
+                    }
+                });
+            });
+
+            // Validasi No. Hp
+            document.addEventListener('DOMContentLoaded', function() {
                 const noHPInput = document.getElementById('noHP');
                 const noHPError = document.getElementById('noHP-error');
-                if (noHPInput && noHPError) {
-                    noHPInput.addEventListener('input', function() {
-                        const noHP = noHPInput.value;
-                        if ((noHP.length >= 10 && noHP.length <= 13) && /^\d+$/.test(noHP)) {
-                            noHPInput.classList.remove('is-invalid');
-                            noHPError.style.display = 'none';
-                        } else {
-                            noHPInput.classList.add('is-invalid');
-                            noHPError.style.display = 'block';
-                        }
-                    });
-                } else {
-                    console.error('Elemen noHP atau noHP-error tidak ditemukan');
-                }
 
-                // Event listener untuk tombol Simpan
-                const btnSimpan = document.getElementById('btnSimpan');
-                if (btnSimpan) {
-                    btnSimpan.addEventListener('click', function() {
-                        console.log('Tombol Simpan diklik');
-                        saveData();
-                    });
-                } else {
-                    console.error('Elemen btnSimpan tidak ditemukan');
+                noHPInput.addEventListener('input', function() {
+                    const noHP = noHPInput.value;
+
+                    // Validasi panjang no. hp dan memastikan hanya angka
+                    if ((noHP.length === 10 || noHP.length === 11 || noHP.length === 12 || noHP.length ===
+                            13) && /^\d+$/.test(noHP)) {
+                        noHPInput.classList.remove('is-invalid');
+                        noHPError.style.display = 'none';
+                    } else {
+                        noHPInput.classList.add('is-invalid');
+                        noHPError.style.display = 'block';
+                    }
+                });
+            });
+
+            // On the redirected page, use JavaScript to show the alert
+            $(document).ready(function() {
+                var successMessage = '<?php echo e(session('success')); ?>';
+                if (successMessage) {
+                    alert(successMessage); // Or use a more user-friendly alert system
                 }
             });
 
-            function showOptionalFields() {
-                const nikInfo = document.getElementById('nik-info');
-                if (nikInfo) nikInfo.style.display = 'block';
-            }
-
-            function showOptionalFieldsForTanpaIdentitas() {
-                const nikInfo = document.getElementById('nik-info');
-                if (nikInfo) nikInfo.style.display = 'block';
-            }
-
-            function hideOptionalFields() {
-                const nikInfo = document.getElementById('nik-info');
-                const pekerjaanInfo = document.getElementById('pekerjaan-info');
-                const pekerjaan = document.getElementById('pekerjaan');
-                if (nikInfo) nikInfo.style.display = 'none';
-                if (pekerjaanInfo && pekerjaan) {
-                    pekerjaanInfo.style.display = 'none';
-                    pekerjaan.setAttribute('required', 'true');
-                }
-            }
-
-            function convertToDate(input) {
-                const parts = input.split('/');
-                return parts[2] + '-' + parts[1] + '-' + parts[0]; // Convert to yyyy-mm-dd
-            }
-
+            // Fungsi untuk memperbarui token CSRF
             function refreshCsrfToken(callback) {
-                if (!window.jQuery) {
-                    console.error('jQuery tidak dimuat');
-                    alert('Terjadi kesalahan: jQuery tidak dimuat.');
-                    return;
-                }
                 $.ajax({
                     url: '/refresh-csrf',
                     method: 'GET',
@@ -769,11 +976,8 @@
                 });
             }
 
+            // Fungsi untuk menjaga sesi tetap aktif
             function keepSessionAlive() {
-                if (!window.jQuery) {
-                    console.error('jQuery tidak dimuat');
-                    return;
-                }
                 setInterval(function() {
                     $.ajax({
                         url: '/keep-alive',
@@ -785,73 +989,84 @@
                             console.error('Gagal menjaga sesi:', xhr.responseText);
                         }
                     });
-                }, 15 * 60 * 1000);
+                }, 15 * 60 * 1000); // Setiap 15 menit
             }
 
+            // Fungsi untuk menangani sesi kadaluarsa
             function handleSessionExpired() {
                 alert('Sesi telah berakhir. Anda akan diarahkan ke halaman login.');
                 window.location.href = '/login';
             }
 
             $(document).ready(function() {
-                if (!window.jQuery) {
-                    console.error('jQuery tidak dimuat');
-                    alert('Terjadi kesalahan: jQuery tidak dimuat.');
-                    return;
-                }
-
+                // Setup CSRF token sekali saja
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
 
+                // Mulai keep-alive
                 keepSessionAlive();
 
-                const poliBpjs = document.getElementById('poli_bpjs');
-                if (poliBpjs) {
-                    poliBpjs.addEventListener('change', function() {
-                        const poli_id = this.value;
-                        if (poli_id) {
-                            $.ajax({
-                                type: 'GET',
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
-                                success: function(res) {
-                                    const dokterBpjs = document.getElementById('dokter_bpjs');
-                                    if (dokterBpjs) {
-                                        dokterBpjs.innerHTML =
-                                            '<option value="">Pilih Dokter</option>';
-                                        if (res) {
-                                            $.each(res, function(key, value) {
-                                                dokterBpjs.insertAdjacentHTML('beforeend',
-                                                    '<option value="' + key + '">' +
-                                                    value + '</option>');
-                                            });
-                                        }
-                                    }
-                                },
-                                error: function(xhr) {
-                                    if (xhr.status === 419) {
-                                        refreshCsrfToken(function() {
-                                            $.ajax(this);
-                                        });
-                                    } else if (xhr.status === 401) {
-                                        handleSessionExpired();
-                                    } else {
-                                        console.error('Error:', xhr.responseText);
-                                        const dokterBpjs = document.getElementById('dokter_bpjs');
-                                        if (dokterBpjs) dokterBpjs.innerHTML =
-                                            '<option value="">Pilih Dokter</option>';
-                                    }
-                                }
-                            });
-                        } else {
-                            const dokterBpjs = document.getElementById('dokter_bpjs');
-                            if (dokterBpjs) dokterBpjs.innerHTML = '<option value="">Pilih Dokter</option>';
+                // Alert Pasien Daftar
+                $.ajax({
+                    url: 'pasien/index',
+                    method: 'GET',
+                    data: {},
+                    success: function(response) {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
                         }
-                    });
-                }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 419) {
+                            refreshCsrfToken(function() {
+                                $.ajax(this);
+                            });
+                        } else if (xhr.status === 401) {
+                            handleSessionExpired();
+                        } else {
+                            console.error('Error:', xhr.responseText);
+                        }
+                    }
+                });
 
+                // PASIEN BPJS Poli
+                $('#poli_bpjs').change(function() {
+                    var poli_id = $(this).val();
+                    if (poli_id) {
+                        $.ajax({
+                            type: "GET",
+                            url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
+                            success: function(res) {
+                                $("#dokter_bpjs").empty();
+                                if (res) {
+                                    $.each(res, function(key, value) {
+                                        $("#dokter_bpjs").append('<option value="' + key +
+                                            '">' + value + '</option>');
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    refreshCsrfToken(function() {
+                                        $.ajax(this);
+                                    });
+                                } else if (xhr.status === 401) {
+                                    handleSessionExpired();
+                                } else {
+                                    console.error('Error:', xhr.responseText);
+                                    $("#dokter_bpjs").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        $("#dokter_bpjs").empty();
+                    }
+                });
+
+                // PASIEN BARU Poli
                 const poliUmum = document.getElementById('poli_umum');
                 if (poliUmum) {
                     poliUmum.addEventListener('change', function() {
@@ -859,7 +1074,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     const dokterUmum = document.getElementById('dokter_umum');
                                     if (dokterUmum) {
@@ -903,67 +1118,90 @@
                     });
                 }
 
-                const searchBtn = document.getElementById('searchBtn');
-                if (searchBtn) {
-                    searchBtn.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        const identifier = document.getElementById('id_bpjs') ? document.getElementById(
-                            'id_bpjs').value.trim() : '';
-                        console.log("Nilai input:", identifier);
+                // Pencarian Pasien BPJS
+                $('#searchBtn').on('click', function(event) {
+                    event.preventDefault();
+                    var identifier = $('#id_bpjs').val().trim();
+                    console.log("Nilai input:", identifier);
 
-                        if (!identifier) {
-                            alert("Harap masukkan No. RM, No. BPJS, NIK, atau Nama Pasien.");
-                            return;
+                    if (!identifier) {
+                        alert("Harap masukkan No. RM, No. BPJS, NIK, atau Nama Pasien.");
+                        return;
+                    }
+
+                    $('#loading').show();
+                    $(this).children('i').hide();
+
+                    $.ajax({
+                        url: '/search_pasien_bpjs',
+                        method: 'GET',
+                        data: {
+                            nama: identifier
+                        },
+                        success: function(response) {
+                            $('#loading').hide();
+                            $('#searchBtn i').show();
+
+                            if (response.error) {
+                                alert(response.error);
+                                $('#infoPasien').hide();
+                            } else {
+                                $('#noRM').val(response.no_rm);
+                                $('#namaPasien').val(response.nama_pasien);
+                                $('#nikPasien').val(response.nik || '');
+                                $('#tgllahirPasien').val(response.tgllahir);
+                                $('#jekelPasien').val(response.jekel);
+                                $('#namaKK').val(response.nama_kk);
+                                $('#alamatPasien').val(response.alamat_asal);
+                                $('#pekerjaanPasien').val(response.pekerjaan);
+                                $('#noHp').val(response.noHP);
+                                $('#alamatDomisili').val(response.domisili);
+                                $('#jenisPasien').val(response.jenis_pasien);
+                                $('#bpjsPasien').val(response.bpjs || '');
+                                $('#infoPasien').show();
+                            }
+                        },
+                        error: function(xhr) {
+                            $('#loading').hide();
+                            $('#searchBtn i').show();
+                            if (xhr.status === 419) {
+                                refreshCsrfToken(function() {
+                                    $.ajax(this);
+                                });
+                            } else if (xhr.status === 401) {
+                                handleSessionExpired();
+                            } else {
+                                console.error("Error:", xhr.responseText);
+                                alert('Terjadi kesalahan. Silakan coba lagi.');
+                            }
                         }
+                    });
+                });
 
-                        const loading = document.getElementById('loading');
-                        if (loading) loading.style.display = 'block';
-                        this.querySelector('i').style.display = 'none';
-
+                // Autocomplete Pasien BPJS
+                $('#identifier').autocomplete({
+                    source: function(request, response) {
                         $.ajax({
                             url: '/search_pasien_bpjs',
                             method: 'GET',
                             data: {
-                                nama: identifier
+                                identifier: request.term
                             },
-                            success: function(response) {
-                                if (loading) loading.style.display = 'none';
-                                const searchBtnIcon = document.querySelector('#searchBtn i');
-                                if (searchBtnIcon) searchBtnIcon.style.display = 'inline';
-
-                                if (response.error) {
-                                    alert(response.error);
-                                    const infoPasien = document.getElementById('infoPasien');
-                                    if (infoPasien) infoPasien.style.display = 'none';
+                            success: function(data) {
+                                if (data.error) {
+                                    alert(data.error);
+                                    response([]);
                                 } else {
-                                    const fields = {
-                                        noRM: 'no_rm',
-                                        namaPasien: 'nama_pasien',
-                                        nikPasien: 'nik',
-                                        tgllahirPasien: 'tgllahir',
-                                        jekelPasien: 'jekel',
-                                        namaKK: 'nama_kk',
-                                        alamatPasien: 'alamat_asal',
-                                        pekerjaanPasien: 'pekerjaan',
-                                        noHp: 'noHP',
-                                        alamatDomisili: 'domisili',
-                                        jenisPasien: 'jenis_pasien',
-                                        bpjsPasien: 'bpjs'
-                                    };
-                                    Object.keys(fields).forEach(id => {
-                                        const element = document.getElementById(id);
-                                        if (element) {
-                                            element.value = response[fields[id]] || '';
-                                        }
-                                    });
-                                    const infoPasien = document.getElementById('infoPasien');
-                                    if (infoPasien) infoPasien.style.display = 'block';
+                                    response($.map(data, function(item) {
+                                        return {
+                                            label: item.nama_pasien + ' - ' + item
+                                                .bpjs + ' - ' + item.nik,
+                                            value: item.no_rm
+                                        };
+                                    }));
                                 }
                             },
                             error: function(xhr) {
-                                if (loading) loading.style.display = 'none';
-                                const searchBtnIcon = document.querySelector('#searchBtn i');
-                                if (searchBtnIcon) searchBtnIcon.style.display = 'inline';
                                 if (xhr.status === 419) {
                                     refreshCsrfToken(function() {
                                         $.ajax(this);
@@ -972,112 +1210,59 @@
                                     handleSessionExpired();
                                 } else {
                                     console.error("Error:", xhr.responseText);
-                                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                                    response([]);
                                 }
                             }
                         });
-                    });
-                }
+                    },
+                    minLength: 2,
+                    select: function(event, ui) {
+                        $('#identifier').val(ui.item.label.split(' - ')[0]);
+                        var selected_no_rm = ui.item.value;
 
-                if (jQuery().autocomplete) {
-                    $('#identifier').autocomplete({
-                        source: function(request, response) {
-                            $.ajax({
-                                url: '/search_pasien_bpjs',
-                                method: 'GET',
-                                data: {
-                                    identifier: request.term
-                                },
-                                success: function(data) {
-                                    if (data.error) {
-                                        alert(data.error);
-                                        response([]);
-                                    } else {
-                                        response($.map(data, function(item) {
-                                            return {
-                                                label: item.nama_pasien + ' - ' + (
-                                                    item.bpjs || '') + ' - ' + (
-                                                    item.nik || ''),
-                                                value: item.no_rm
-                                            };
-                                        }));
-                                    }
-                                },
-                                error: function(xhr) {
-                                    if (xhr.status === 419) {
-                                        refreshCsrfToken(function() {
-                                            $.ajax(this);
-                                        });
-                                    } else if (xhr.status === 401) {
-                                        handleSessionExpired();
-                                    } else {
-                                        console.error("Error:", xhr.responseText);
-                                        response([]);
-                                    }
+                        $.ajax({
+                            url: '/get_pasien_bpjs',
+                            method: 'GET',
+                            data: {
+                                no_rm: selected_no_rm
+                            },
+                            success: function(response) {
+                                if (response.error) {
+                                    alert(response.error);
+                                } else {
+                                    $('#noRM').val(response.no_rm);
+                                    $('#namaPasien').val(response.nama_pasien);
+                                    $('#nikPasien').val(response.nik);
+                                    $('#tgllahirPasien').val(response.tgllahir);
+                                    $('#jekelPasien').val(response.jekel);
+                                    $('#namaKK').val(response.nama_kk);
+                                    $('#alamatPasien').val(response.alamat_asal);
+                                    $('#pekerjaanPasien').val(response.pekerjaan);
+                                    $('#noHp').val(response.noHP);
+                                    $('#alamatDomisili').val(response.domisili);
+                                    $('#jenisPasien').val(response.jenis_pasien);
+                                    $('#bpjsPasien').val(response.bpjs);
+                                    $('#infoPasien').show();
                                 }
-                            });
-                        },
-                        minLength: 2,
-                        select: function(event, ui) {
-                            $('#identifier').val(ui.item.label.split(' - ')[0]);
-                            const selected_no_rm = ui.item.value;
-
-                            $.ajax({
-                                url: '/get_pasien_bpjs',
-                                method: 'GET',
-                                data: {
-                                    no_rm: selected_no_rm
-                                },
-                                success: function(response) {
-                                    if (response.error) {
-                                        alert(response.error);
-                                    } else {
-                                        const fields = {
-                                            noRM: 'no_rm',
-                                            namaPasien: 'nama_pasien',
-                                            nikPasien: 'nik',
-                                            tgllahirPasien: 'tgllahir',
-                                            jekelPasien: 'jekel',
-                                            namaKK: 'nama_kk',
-                                            alamatPasien: 'alamat_asal',
-                                            pekerjaanPasien: 'pekerjaan',
-                                            noHp: 'noHP',
-                                            alamatDomisili: 'domisili',
-                                            jenisPasien: 'jenis_pasien',
-                                            bpjsPasien: 'bpjs'
-                                        };
-                                        Object.keys(fields).forEach(id => {
-                                            const element = document.getElementById(id);
-                                            if (element) {
-                                                element.value = response[fields[id]] ||
-                                                    '';
-                                            }
-                                        });
-                                        const infoPasien = document.getElementById(
-                                            'infoPasien');
-                                        if (infoPasien) infoPasien.style.display = 'block';
-                                    }
-                                },
-                                error: function(xhr) {
-                                    if (xhr.status === 419) {
-                                        refreshCsrfToken(function() {
-                                            $.ajax(this);
-                                        });
-                                    } else if (xhr.status === 401) {
-                                        handleSessionExpired();
-                                    } else {
-                                        console.error("Error:", xhr.responseText);
-                                    }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    refreshCsrfToken(function() {
+                                        $.ajax(this);
+                                    });
+                                } else if (xhr.status === 401) {
+                                    handleSessionExpired();
+                                } else {
+                                    console.error("Error:", xhr.responseText);
                                 }
-                            });
-                            return false;
-                        },
-                        appendTo: "#autocompletebpjs-results"
-                    });
-                } else {
-                    console.error('jQuery UI Autocomplete tidak dimuat');
-                }
+                            }
+                        });
+                        return false;
+                    },
+                    appendTo: "#autocompletebpjs-results"
+                });
             });
+
             $(document).ready(function () {
 
                 // === Select2 untuk pencarian pasien ===
@@ -1087,7 +1272,7 @@
                     allowClear: true,
                     width: '100%',
                     ajax: {
-                        url: "{{ route('search_nama_pasien') }}",
+                        url: "<?php echo e(route('search_nama_pasien')); ?>",
                         dataType: 'json',
                         delay: 150,
                         data: function(params) {
@@ -1159,7 +1344,8 @@
                     });
                 });
             });
-            function saveDataBpjs() {
+            // Fungsi Simpan Data Pasien Lama
+              function saveDataBpjs() {
                 const loadingSpinnerLama = document.getElementById('loadingSpinnerLama');
                 const simpanBpjs = document.getElementById('simpanBpjs');
                 if (loadingSpinnerLama) loadingSpinnerLama.classList.remove('d-none');
@@ -1351,7 +1537,7 @@
                             if (response.redirect) {
                                 alert("Data tersimpan! Data pasien berhasil disimpan.");
                                 window.open(response.redirect, '_blank');
-                                window.location.href = "{{ route('perawat.index') }}";
+                                window.location.href = "<?php echo e(route('perawat.index')); ?>";
                             } else if (response.error) {
                                 console.error('Gagal menyimpan:', response.error);
                                 alert("Gagal menyimpan: " + response.error);
@@ -1393,6 +1579,12 @@
                 attemptSave();
             }
         </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-admin.layout.terminal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal1e84a5d9305f6227b2d9c78c854797728c150b58)): ?>
+<?php $component = $__componentOriginal1e84a5d9305f6227b2d9c78c854797728c150b58; ?>
+<?php unset($__componentOriginal1e84a5d9305f6227b2d9c78c854797728c150b58); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\Klinik\resources\views/index.blade.php ENDPATH**/ ?>

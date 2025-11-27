@@ -1,21 +1,19 @@
-<x-admin.layout.terminal title="Perawat">
+<?php if (isset($component)) { $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Admin\Layout\Terminal::class, ['title' => 'Perawat']); ?>
+<?php $component->withName('admin.layout.terminal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row mt-4">
-            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">@yield('title') /</span> Pendaftaran Pasien
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"><?php echo $__env->yieldContent('title'); ?> /</span> Pendaftaran Pasien
             </h4>
 
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                        {{-- <li class="nav-item">
-                                <a class="nav-link" href="pages-account-settings-account.html"><i
-                                        class="bx bx-user me-1"></i> Account</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="pages-account-settings-notifications.html"><i
-                                        class="bx bx-bell me-1"></i> Notifications</a>
-                            </li> --}}
+                        
                         <li class="nav-item">
                             <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>
                                 Pendaftaran</a>
@@ -39,7 +37,7 @@
                                                 <i class="bx bx-plus-circle me-2"></i> Pasien Baru
                                             </button>
                                             <!-- Gambar di bawah -->
-                                            <img src="{{ asset('aset/img/baru.png') }}" alt="Pasien Baru"
+                                            <img src="<?php echo e(asset('aset/img/baru.png')); ?>" alt="Pasien Baru"
                                                 style="width: 60%; height: auto;">
                                         </div>
                                     </div>
@@ -64,7 +62,7 @@
                                                 <i class="bx bx-plus-circle me-2"></i> Pasien Lama
                                             </button>
                                             <!-- Gambar di bawah -->
-                                            <img src="{{ asset('aset/img/baru.png') }}" alt="Pasien Baru"
+                                            <img src="<?php echo e(asset('aset/img/baru.png')); ?>" alt="Pasien Baru"
                                                 style="width: 60%; height: auto;">
                                         </div>
                                     </div>
@@ -128,11 +126,25 @@
                     </div>
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="nik" id="nik" placeholder="Masukkan NIK">
-                        @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="invalid-feedback" id="nik-error" style="display: none;">NIK harus berisi 16
                             karakter
                             angka.</div>
@@ -151,15 +163,29 @@
                     </div>
                     <div class="form-group">
                         <label for="jekel">Jenis Kelamin</label>
-                        <select class="form-control mt-2 mb-2 @error('jekel') is-invalid @enderror" name="jekel"
+                        <select class="form-control mt-2 mb-2 <?php $__errorArgs = ['jekel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="jekel"
                             id="jekel" required>
                             <option value="">Pilih Jenis Kelamin</option>
                             <option value="L">Laki-Laki</option>
                             <option value="P">Perempuan</option>
                         </select>
-                        @error('jekel')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['jekel'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="invalid-feedback" id="jekel-error" style="display: none;">Jenis kelamin tidak
                             sesuai
                             dengan NIK.</div>
@@ -202,11 +228,25 @@
                     </div>
                     <div class="form-group">
                         <label for="noHP">No. HP</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('noHP') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['noHP'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="noHP" id="noHP" placeholder="08123456789" required>
-                        @error('noHP')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['noHP'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="invalid-feedback" id="noHP-error" style="display: none;">No.HP harus berisi 10
                             sampai
                             13 karakter angka.</div>
@@ -215,9 +255,9 @@
                         <label for="poli_umum">Poli</label>
                         <select name="poli" id="poli_umum" class="form-control mt-2 mb-2">
                             <option value="" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -265,9 +305,9 @@
                         <label for="poli">Poli</label>
                         <select name="poli" id="poli_bpjs" class="form-control mt-2 mb-2" required>
                             <option value="" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -279,14 +319,7 @@
                     <div class="form-group">
                         <label for="identifier">No. RM / No. BPJS / KTP / Nama Pasien</label>
                             <div class="cari mt-2 mb-2" style="position: relative;">
-                            {{-- <input type="text" class="form-control mb-2" name="identifier" id="id_bpjs"
-                                placeholder="Masukkan No. RM atau No.BPJS atau KTP atau Nama Pasien" required>
-                            <button id="searchBtn" class="btn btn-primary search mb-2"
-                                style="margin-left: 9px; height: 40px;">
-                                <i class="fas fa-search"></i>
-                                <span id="loading" style="display: none;"><i
-                                        class="fas fa-spinner fa-spin"></i></span>
-                            </button> --}}
+                            
                                 <select id="id_bpjs" class="form-control" style="width: 100%;">
                                 </select>
 
@@ -395,7 +428,7 @@
         </div>
     </div>
 
-    @push('style')
+    <?php $__env->startPush('style'); ?>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -480,9 +513,9 @@
 
 
         </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('script')
+    <?php $__env->startPush('script'); ?>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -815,7 +848,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     const dokterBpjs = document.getElementById('dokter_bpjs');
                                     if (dokterBpjs) {
@@ -859,7 +892,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     const dokterUmum = document.getElementById('dokter_umum');
                                     if (dokterUmum) {
@@ -1087,7 +1120,7 @@
                     allowClear: true,
                     width: '100%',
                     ajax: {
-                        url: "{{ route('search_nama_pasien') }}",
+                        url: "<?php echo e(route('search_nama_pasien')); ?>",
                         dataType: 'json',
                         delay: 150,
                         data: function(params) {
@@ -1329,7 +1362,7 @@
                         errorMessages.push("- No. BPJS harus berisi 13 digit angka.");
                     }
 
-                    //perubahannya disini
+//perubahannya disini
                     if (errorMessages.length > 0) {
                         if (loadingSpinner) loadingSpinner.classList.add('d-none');
                         if (btnSimpan) btnSimpan.disabled = false;
@@ -1351,7 +1384,7 @@
                             if (response.redirect) {
                                 alert("Data tersimpan! Data pasien berhasil disimpan.");
                                 window.open(response.redirect, '_blank');
-                                window.location.href = "{{ route('perawat.index') }}";
+                                window.location.href = "<?php echo e(route('perawat.index')); ?>";
                             } else if (response.error) {
                                 console.error('Gagal menyimpan:', response.error);
                                 alert("Gagal menyimpan: " + response.error);
@@ -1393,6 +1426,12 @@
                 attemptSave();
             }
         </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-admin.layout.terminal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc)): ?>
+<?php $component = $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc; ?>
+<?php unset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\Klinik\resources\views/perawat/daftar.blade.php ENDPATH**/ ?>
