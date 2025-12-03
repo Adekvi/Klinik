@@ -1,22 +1,25 @@
 @foreach ($pidio as $item)
-    <div class="modal fade" id="editpoli{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal fade" id="editpoli{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Edit Video</h1>
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Video</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('admin/edit/pidio/'. $item->id) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ url('admin/edit/pidio/' . $item->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="judul">Judul</label>
-                            <input type="text" class="form-control mt-2 mb-2" name="judul" id="judul" placeholder="Masukkan Judul" value="{{ $item->judul }}">
+                            <input type="text" class="form-control mt-2 mb-2" name="judul" id="judul"
+                                placeholder="Masukkan Judul" value="{{ $item->judul }}">
                         </div>
                         <div class="form-group">
                             <label for="tgl">Tanggal</label>
-                            <input type="date" class="form-control mt-2 mb-2" name="tgl" id="tgl" placeholder="Masukkan Tanggal" value="{{ $item->tgl }}">
+                            <input type="date" class="form-control mt-2 mb-2" name="tgl" id="tgl"
+                                placeholder="Masukkan Tanggal" value="{{ $item->tgl }}">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputVideo">Video</label>

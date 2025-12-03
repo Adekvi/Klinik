@@ -355,7 +355,7 @@
                                                     </tr>
                                                 @endif
                                                 @include('perawat.modalPerawat.ModalAnamnesis')
-                                                @include('perawat.modalPerawat.ModalKajianAwal')
+                                                {{-- @include('perawat.modalPerawat.ModalKajianAwal') --}}
                                                 <script>
                                                     // Tanda Tangan
                                                     document.addEventListener('DOMContentLoaded', function() {
@@ -1004,7 +1004,6 @@
     @include('perawat.kunjunganOnline.modalOnline')
 
     @push('style')
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <style>
             /* Alert */
             .swal2-container {
@@ -1016,7 +1015,8 @@
     @push('script')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="{{ asset('aset/js/popper/popper.min.js') }}"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script> --}}
         <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
         {{-- <script src="{{ asset('assets/responsivevoice.js') }}"></script> --}}
         <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
@@ -1123,6 +1123,7 @@
                     now.getSeconds().toString().padStart(2, '0');
                 jamElement.innerHTML = '<h6>' + jamString + '</h6>';
             }
+
             document.addEventListener("DOMContentLoaded", function() {
                 updateClock();
                 setInterval(updateClock, 1000);

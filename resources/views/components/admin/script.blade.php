@@ -24,6 +24,8 @@
 
 <script src="{{ asset('aset/js/script.js') }}"></script>
 
+<script src="{{ asset('aset/js/select2/select2.min.js') }}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 

@@ -55,6 +55,8 @@ class DataPasienController extends Controller
 
         $ttd = TtdMedis::all();
 
+        // dd($pasienObat);
+
         // Group berdasarkan nama poli
 
         return view('obat.rekap-pasien', compact(

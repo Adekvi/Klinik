@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \RealRashid\SweetAlert\ToSweetAlert::class,
             \App\Http\Middleware\UpdateLastActivity::class,
             \App\Http\Middleware\ObfuscateHtmlMiddleware::class,
+            \App\Http\Middleware\IdleLogout::class,
         ],
 
         'api' => [

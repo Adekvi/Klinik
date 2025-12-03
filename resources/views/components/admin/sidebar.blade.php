@@ -1,9 +1,14 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <div class="app-brand demo">
-        <a class="navbar-brand brand-logo-mini" href="{{ url('admin/dashboard') }}">
-            <img src="{{ asset('assets/images/logo_multisari.png') }}" alt=""
-                style="width: 80px; padding-block-end: inherit; margin-left: 50px; margin-top: 20px;">
+    <div class="app-brand demo d-flex flex-column align-items-center justify-content-center"
+        style="min-height: 100px; padding: 12px 0;">
+        <a href="{{ url('admin/dashboard') }}" class="app-brand-link">
+            <img src="{{ asset('assets/images/logo_multisari.png') }}" alt="Logo" style="width: 80px;">
         </a>
+        <div class="mt-2 text-center">
+            <small style="font-weight: 600; font-size: 15px;" class="text-dark">
+                Klinik Multisari II Jepara
+            </small>
+        </div>
     </div>
 
     <ul class="menu-inner py-1">

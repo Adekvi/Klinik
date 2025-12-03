@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'role',
         'id_dokter',
+        'foto',
     ];
 
     /**

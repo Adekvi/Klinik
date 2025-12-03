@@ -260,19 +260,23 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             // new DataTable('#example');
-            $(document).ready(function() {
-                $('#search').on('input', function() {
-                    var query = $(this).val();
-                    $.ajax({
-                        url: "{{ route('apoteker.obat.cari') }}",
-                        method: "GET",
-                        data: {
-                            query: query
-                        },
-                        success: function(data) {
-                            $('#obat-table').html(data);
-                        }
-                    });
+            $('#search').on('input', function() {
+                var query = $(this).val();
+
+                if (query == "") {
+                    location.reload();
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('apoteker.obat.cari') }}",
+                    data: {
+                        query: query
+                    },
+                    success: function(data) {
+                        $('#obat-table').html(data.html);
+                        $('.pagination').hide();
+                    }
                 });
             });
 

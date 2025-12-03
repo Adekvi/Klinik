@@ -5,7 +5,13 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
                     <div class="title text-start">
-                        <h4><strong>@yield('title')</strong></h4>
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Rekap Obat Masuk</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card" style="width: 40%; margin-bottom: 20px">
                         <div class="card-body">

@@ -116,8 +116,48 @@
                                                         $jenisObat =
                                                             json_decode($item->obat->obat_Ro_jenisObat, true) ?? [];
 
-                                                        // Pastikan anjuranMinum tidak kosong
-                                                        $olehNgombe = $anjuranMinum; // Gunakan langsung dari obat_Ro_anjuran
+                                                        // Fallback nama obat
+                                                        if (empty($semuaObat)) {
+                                                            $semuaObat =
+                                                                json_decode($item->obat->soap->soap_p, true) ?? [];
+                                                        }
+
+                                                        if (empty($jenisObat)) {
+                                                            $jenisObat =
+                                                                json_decode($item->obat->soap->soap_p_jenis, true) ??
+                                                                [];
+                                                        }
+
+                                                        // Fallback aturan minum
+                                                        if (empty($aturanMinum)) {
+                                                            $aturanMinum =
+                                                                json_decode($item->obat->soap->soap_p_aturan, true) ??
+                                                                [];
+                                                        }
+
+                                                        // Fallback anjuran
+                                                        if (empty($anjuranMinum)) {
+                                                            $anjuranMinum =
+                                                                json_decode($item->obat->soap->soap_p_anjuran, true) ??
+                                                                [];
+                                                        }
+
+                                                        // Fallback jumlah
+                                                        if (empty($jumlahObat)) {
+                                                            $jumlahObat =
+                                                                json_decode($item->obat->soap->soap_p_jumlah, true) ??
+                                                                [];
+                                                        }
+
+                                                        dd(
+                                                            $item->obat->soap->soap_p,
+                                                            $item->obat->soap->soap_p_jenis,
+                                                            $item->obat->soap->soap_p_aturan,
+                                                            $item->obat->soap->soap_p_anjuran,
+                                                            $item->obat->soap->soap_p_jumlah,
+                                                        );
+
+                                                        $olehNgombe = $anjuranMinum;
 
                                                         $hargaJualData = $reseps->keyBy('nama_obat');
                                                     @endphp
@@ -200,15 +240,12 @@
                                                                 $isCustom = true;
 
                                                                 foreach ($aturanList as $opt) {
-                                                                    // Cocokkan jika aturanAwal adalah bagian dari opsi
-                                                                    // Misal: "2x1/2" cocok dengan "2x1/2 SENDOK"
-                                                                    if (str_starts_with($opt, $aturanAwal . ' ')) {
+                                                                    if ($opt === $aturanAwal) {
                                                                         $matchedAturan = $opt;
                                                                         $isCustom = false;
                                                                         break;
                                                                     }
-                                                                    // Atau jika persis sama
-                                                                    if ($opt === $aturanAwal) {
+                                                                    if (str_starts_with($opt, $aturanAwal)) {
                                                                         $matchedAturan = $opt;
                                                                         $isCustom = false;
                                                                         break;
@@ -225,7 +262,7 @@
                                                                 <div class="input-group d-flex align-items-center">
 
                                                                     <!-- Dropdown Aturan -->
-                                                                    <select name="obat_Ro[{{ $index }}][sehari]"
+                                                                    <select name="obat_Ro[{{ $index }}][aturan]"
                                                                         id="sehari_{{ $item->id }}_{{ $index }}"
                                                                         class="form-control sehari-select"
                                                                         onchange="toggleCustomAturan(this, '{{ $item->id }}_{{ $index }}')">
@@ -243,7 +280,7 @@
 
                                                                     <!-- Input Custom -->
                                                                     <input type="text"
-                                                                        name="obat_Ro[{{ $index }}][sehari]"
+                                                                        name="obat_Ro[{{ $index }}][aturan_custom]"
                                                                         id="custom_sehari_{{ $item->id }}_{{ $index }}"
                                                                         class="form-control custom-input {{ $isCustom ? '' : 'd-none' }}"
                                                                         placeholder="ex: 3x1 KAPSUL"
@@ -261,9 +298,12 @@
                                                                             <option value="{{ $anj->kode_anjuran }}"
                                                                                 {{ $anjuranAwal === $anj->kode_anjuran ? 'selected' : '' }}>
                                                                                 {{ $anj->kode_anjuran }}
-                                                                                ({{ $anj->golongan }})
                                                                             </option>
                                                                         @endforeach
+                                                                        <option value="custom"
+                                                                            {{ $isCustom ? 'selected' : '' }}>
+                                                                            Lainnya
+                                                                        </option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -282,6 +322,18 @@
                                                             json_decode($item->obat->obat_Ro_jumlah, true) ?? [];
                                                         $jenisObat =
                                                             json_decode($item->obat->obat_Ro_jenisObat, true) ?? [];
+
+                                                        if (empty($jumlahObat)) {
+                                                            $jumlahObat =
+                                                                json_decode($item->obat->soap->soap_p_jumlah, true) ??
+                                                                [];
+                                                        }
+
+                                                        if (empty($jenisObat)) {
+                                                            $jenisObat =
+                                                                json_decode($item->obat->soap->soap_p_jenis, true) ??
+                                                                [];
+                                                        }
                                                     @endphp
 
                                                     @if (!empty($semuaObat))
@@ -346,13 +398,14 @@
                                                     data-pasien-id="{{ $item->id }}" id="hargaTablet">
                                                     @php
                                                         $hargaJualData = $reseps->keyBy('nama_obat');
-                                                        $regoObat = json_decode($item->obat->soap->soap_p, true) ?? [];
-                                                        $regoObatRacikan =
-                                                            json_decode($item->obat->soap->soap_r, true) ?? [];
-                                                        $regoDewedewe = array_merge(
-                                                            (array) $regoObat,
-                                                            array_filter((array) $regoObatRacikan),
+
+                                                        $regoObat = json_decode(
+                                                            $item->obat->soap->soap_p ?? '[]',
+                                                            true,
                                                         );
+
+                                                        // Kalau ingin aman, pastikan array
+                                                        $regoDewedewe = is_array($regoObat) ? $regoObat : [];
                                                     @endphp
                                                     @if (is_array($regoDewedewe) && count($regoDewedewe) > 0)
                                                         @foreach ($regoDewedewe as $index => $namaObat)
@@ -391,19 +444,22 @@
                                                 <div class="harga-total-container"
                                                     data-pasien-id="{{ $item->id }}">
                                                     @php
+                                                        $soap = $item->obat->soap ?? null;
+
+                                                        $semuaObat = json_decode($soap->soap_p ?? '[]', true);
+                                                        $allJumlah = json_decode($soap->soap_p_jumlah ?? '[]', true);
+                                                    @endphp
+                                                    {{-- @php
                                                         $obatData = json_decode($item->obat->soap->soap_p, true) ?? [];
                                                         $obatRacikanData =
-                                                            json_decode($item->obat->soap->soap_r, true) ?? [];
+                                                            json_decode($item->obat->soap->obatRacikan, true) ?? [];
                                                         $jmlhP =
                                                             json_decode($item->obat->soap->soap_p_jumlah, true) ?? [];
                                                         $jmlhR =
-                                                            json_decode(
-                                                                $item->obat->soap->soap_r_jumlahObatRacikan,
-                                                                true,
-                                                            ) ?? [];
+                                                            json_decode($item->obat->soap->obatRacikan, true) ?? [];
                                                         $semuaObat = array_merge($obatData, $obatRacikanData);
                                                         $allJumlah = array_merge($jmlhP, $jmlhR);
-                                                    @endphp
+                                                    @endphp --}}
                                                     @if (is_array($semuaObat) && count($semuaObat) > 0)
                                                         @foreach ($semuaObat as $index => $namaObat)
                                                             @php
@@ -446,7 +502,7 @@
                             <div class="col-4">
                                 <div class="form-group mt-3">
                                     <label for="racikan">Obat Racikan</label>
-                                    <textarea name="obat_racikan" id="obat_racikan" class="form-control mt-2" rows="3" disabled>{{ $item->obat->soap->ObatRacikan ?? 'Tidak ada obat racikan' }}</textarea>
+                                    <textarea name="obat_racikan" id="obat_racikan" class="form-control obat-racikan mt-2" rows="3" readonly>{{ $item->obat->soap->ObatRacikan ?? 'Tidak ada obat racikan' }}</textarea>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -468,7 +524,8 @@
                                         <input type="text" name="totalSemuaHarga"
                                             data-pasien-id="{{ $item->id }}"
                                             id="totalSemuaHarga_{{ $item->id }}"
-                                            class="form-control mt-2 text-end" readonly placeholder="Total Semua">
+                                            class="form-control mt-2 text-end total-harga" readonly
+                                            placeholder="Total Semua">
                                     </div>
                                 </div>
                             </div>
@@ -567,7 +624,7 @@
 
         /* Styling select anjuran */
         .anjuran-select {
-            width: 100px;
+            width: 50px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
@@ -575,7 +632,7 @@
 
         /* Styling select aturan minum */
         .sehari-select {
-            width: 100px;
+            width: 150px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
@@ -724,7 +781,7 @@
 
         /* Styling tambahan untuk input kustom */
         .input-group .custom-input {
-            width: 100px;
+            width: 60px;
             font-size: 14px;
             border-radius: 4px;
             padding: 6px;
@@ -736,6 +793,13 @@
             align-items: center;
             gap: 8px;
             width: 100%;
+        }
+
+        .harga-tablet-input,
+        .harga-total-input,
+        .obat-racika,
+        .total-harga {
+            pointer-events: none;
         }
 
         /* Responsivitas */

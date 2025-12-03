@@ -1,12 +1,13 @@
 @foreach ($poto as $item)
-    <div class="modal fade" id="hapuspoli{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal fade" id="hapuspoli{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Hapus Foto</h1>
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Foto</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('admin/hapus/foto/'. $item->id ) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('admin/hapus/foto/' . $item->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('DELETE')
                     <div class="modal-body">

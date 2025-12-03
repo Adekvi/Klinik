@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="offcanvas-body my-auto mx-0 flex-grow-0">
                                     <div class="text-center mb-3 mt-3">
-                                        <h4 class="mb-3"><strong>Rekap Pasien</strong></h4>
+                                        <h4 class="mb-3"><strong>Antrian Pasien</strong></h4>
                                         <div class="d-flex justify-content-between mb-3">
                                             <div class="text-center d-flex flex-column align-items-center">
                                                 <!-- Teks dan ikon di atas -->
@@ -242,35 +242,40 @@
                                                 <td>{{ $loop->iteration + ($antrianObat->currentPage() - 1) * $antrianObat->perPage() }}
                                                 </td>
                                                 <td>
-                                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        data-bs-offset="0,4" data-bs-html="true"
-                                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Panggil Pasien</span>">
-                                                        <button data-nomor-antrian-obat="{{ $item->kode_antrian }}"
-                                                            class="btn btn-warning btn-panggil-obat">
-                                                            <i class="fas fa-bell"></i>
-                                                        </button>
-                                                    </span>
-                                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        data-bs-offset="0,4" data-bs-html="true"
-                                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Lewati Antrian</span>">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#lewati{{ $item->id }}">
-                                                            <i class="fa-solid fa-forward"></i></button>
-                                                        </button>
-                                                    </span>
-                                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        data-bs-offset="0,4" data-bs-html="true"
-                                                        data-bs-original-title="<i class='bx bx-bell bx-xs'></i> <span>Tambah Obat</span>">
-                                                        <button type="button" class="btn btn-primary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#tambahObat{{ $item->id }}">
-                                                            <i class="fa-solid fa-pills"></i>
-                                                        </button>
-                                                    </span>
+                                                    {{-- <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-html="true"
+                                                        title="<i class='bx bx-bell bx-xs'></i> Panggil Pasien">
+                                                       
+                                                    </span> --}}
+                                                    <button data-nomor-antrian-obat="{{ $item->kode_antrian }}"
+                                                        class="btn btn-warning btn-panggil-obat">
+                                                        <i class="fas fa-bell"></i>
+                                                    </button>
+
+                                                    {{-- <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-html="true"
+                                                        title="<i class='bx bx-bell bx-xs'></i> Lewati Antrian">
+                                                        
+                                                    </span> --}}
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#lewati{{ $item->id }}">
+                                                        <i class="fa-solid fa-forward"></i>
+                                                    </button>
+
+                                                    {{-- <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-html="true"
+                                                        title="<i class='bx bx-bell bx-xs'></i> Tambah Obat">
+                                                        
+                                                    </span> --}}
+                                                    <button type="button" class="btn btn-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#tambahObat{{ $item->id }}">
+                                                        <i class="fa-solid fa-pills"></i>
+                                                    </button>
                                                 </td>
                                                 <td>{{ $item->kode_antrian }}</td>
-                                                <td>{{ $item->obat->soap->nama_dokter }}</td>
+                                                <td>{{ $item->obat->soap->nama_dokter ?? '-' }}</td>
                                                 <td>{{ $item->booking->pasien->no_rm }}</td>
                                                 <td>{{ $item->booking->pasien->nama_pasien }}</td>
                                                 <td>{{ $item->booking->pasien->domisili }}</td>
@@ -369,7 +374,9 @@
     @endforeach
 
     @push('style')
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- jQuery UI CSS -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <style>
             /* Alert */
             .swal2-container {
@@ -379,10 +386,16 @@
     @endpush
 
     @push('script')
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://code.responsivevoice.org/responsivevoice.js?key=auvTMQpf"></script>
         <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
         <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+
             // SHIFT
             document.addEventListener("DOMContentLoaded", function() {
                 function checkShift() {

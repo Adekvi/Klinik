@@ -1,12 +1,9 @@
-{{-- @foreach ($obat as $item)
-    
-@endforeach --}}
 <div class="modal fade" id="tambahobat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="pasienbaru" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Tambah Obat</h1>
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Obat</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ url('admin/tambah/obat') }}" method="post" enctype="multipart/form-data">
@@ -27,14 +24,14 @@
                                     class="form-control mt-2 mb-2" placeholder="Jenis Sediaan">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="nama_obat">Nama Obat</label>
                                 <input type="text" class="form-control mt-2 mb-2" name="nama_obat" id="nama_obat"
                                     placeholder="Masukkan Nama Obat" required>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Margin</label>
                                 <div class="input-group">
@@ -52,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="harga_pokok">Harga Beli</label>
                                 <div class="input-group">
@@ -68,7 +65,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-4">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="harga_jual">Harga Jual</label>
                                 <div class="input-group">
@@ -82,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Stok Awal</label>
                                 <div class="input-group">

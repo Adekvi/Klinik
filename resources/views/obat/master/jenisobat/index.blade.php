@@ -50,8 +50,8 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Jenis Obat</th>
-                                            <th>Golongan</th>
-                                            <th>Keterangan</th>
+                                            {{-- <th>Golongan</th>
+                                            <th>Keterangan</th> --}}
                                             {{-- <th>Status</th> --}}
                                             <th>Aksi</th>
                                         </tr>
@@ -66,8 +66,8 @@
                                                 <tr>
                                                     <td>{{ $jenis->firstItem() + $index }}</td>
                                                     <td>{{ $item->jenis ?? '-' }}</td>
-                                                    <td>{{ $item->golongan ?? '-' }}</td>
-                                                    <td>{{ $item->keterangan ?? '-' }}</td>
+                                                    {{-- <td>{{ $item->golongan ?? '-' }}</td>
+                                                    <td>{{ $item->keterangan ?? '-' }}</td> --}}
                                                     {{-- <td>
                                                         <form method="POST" action="{{ url('updateStatus-jenis') }}">
                                                             @csrf

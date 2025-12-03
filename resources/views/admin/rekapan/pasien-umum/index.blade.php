@@ -5,7 +5,13 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-umum">
                     <div class="title">
-                        <h5>Poli Umum / <strong>Laporan Kunjungan Pasien Umum</strong></h5>
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h5>Poli Umum / <strong>Laporan Kunjungan Pasien Umum</strong></h5>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card" style="width: 40%; margin-bottom: 20px">
                         <div class="card-body">
@@ -212,6 +218,29 @@
 
         <script>
             new DataTable('#example');
+
+            // jam dan tgl
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
             document.addEventListener('DOMContentLoaded', function() {
                 const tanggalInput = document.getElementById('tanggal');
                 const monthSelect = document.getElementById('month');

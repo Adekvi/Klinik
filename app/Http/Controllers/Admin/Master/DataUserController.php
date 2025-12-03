@@ -17,6 +17,7 @@ class DataUserController extends Controller
         $dokter = DataDokter::with('poli')->get();
         return view('admin.master.user.index', compact('user', 'dokter'));
     }
+    
     public function store(Request $request)
     {
         $data = $request->all();

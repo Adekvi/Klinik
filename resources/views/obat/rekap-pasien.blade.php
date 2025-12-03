@@ -5,7 +5,7 @@
 
             <div class="col-md-12">
                 <div class="card-title">
-                    <h4 class="mt-4"><strong>Rekap Pasien Telah Diperiksa</strong></h4>
+                    <h4 class="mt-4"><strong>Rekap Pasien Telah Diberi Resep</strong></h4>
                 </div>
                 <div class="card">
                     <div class="card-body">
@@ -74,21 +74,21 @@
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center" style="text-transform: uppercase">
+                                <tbody style="text-transform: uppercase">
                                     @if (count($pasienObat) === 0)
                                         <tr>
                                             <td colspan="12" style="text-align: center">Tidak Ada Data Pasien</td>
                                         </tr>
                                     @else
-                                        <?php $no = 1; ?>
                                         @foreach ($pasienObat as $item)
                                             @if ($item->status == 'S')
                                                 <tr id="row_{{ $item->id }}">
-                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ $loop->iteration + ($pasienObat->currentPage() - 1) * $pasienObat->perPage() }}
+                                                    </td>
                                                     <td>{{ date_format(date_create($item['created_at']), 'd-m-Y') }}
                                                     </td>
                                                     <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                    <td>{{ $item->booking->pasien->nik }}</td>
+                                                    <td>{{ $item->booking->pasien->nik ?: '-' }}</td>
                                                     <td>{{ $item->booking->pasien->nama_pasien }}</td>
                                                     <td>{{ $item->booking->pasien->tgllahir }}</td>
                                                     <td>
@@ -109,8 +109,10 @@
                                                     </td>
                                                     <td>{{ $item->poli->namapoli }}</td>
                                                     <td>{{ $item->dokter->nama_dokter }}</td>
-                                                    <td>{{ $item->booking->pasien->domisili }}</td>
-                                                    <td>{{ $item->booking->pasien->jenis_pasien }}</td>
+                                                    <td class="text-center">
+                                                        {{ $item->booking->pasien->domisili ?: '-' }}</td>
+                                                    <td class="text-center">
+                                                        {{ $item->booking->pasien->jenis_pasien ?: '-' }}</td>
                                                     <td>
                                                         <button type="button" class="btn btn-success mb-1"
                                                             data-toggle="tooltip" data-bs-placement="top"
@@ -124,9 +126,9 @@
                                     @endif
                                 </tbody>
                             </table>
-                            <div class="pagination mt-3 d-flex justify-content-end">
-                                {{ $pasienObat->appends(request()->input())->onEachSide(1)->links() }}
-                            </div>
+                        </div>
+                        <div class="pagination mt-2 d-flex justify-content-end">
+                            {{ $pasienObat->appends(request()->input())->onEachSide(1)->links() }}
                         </div>
                     </div>
                 </div>

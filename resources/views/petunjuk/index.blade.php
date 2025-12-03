@@ -302,9 +302,213 @@
                             </div>
                         </div>
                     </div>
+                @elseif (Auth::user()->role == 'apoteker')
+                    <div class="col-md-6">
+                        <small class="text-light fw-semibold">Langkah-langkah Penggunaan E-RM</small>
+
+                        <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow">
+
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-apotek-1">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-apotek-1">
+                                        Login
+                                    </button>
+                                </h2>
+                                <div id="collapse-apotek-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Apoteker masuk ke sistem E-RM menggunakan akun yang diberikan oleh admin.
+                                        Sistem akan mengarahkan ke halaman dashboard setelah login berhasil.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-apotek-2">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-apotek-2">
+                                        Dashboard
+                                    </button>
+                                </h2>
+                                <div id="collapse-apotek-2" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Dashboard menampilkan daftar resep yang masuk dari dokter atau perawat,
+                                        termasuk detail pasien, obat yang diresepkan, dan status pemrosesan resep.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card active">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-apotek-3">
+                                    <button type="button" class="accordion-button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-apotek-3">
+                                        Validasi Resep
+                                    </button>
+                                </h2>
+                                <div id="collapse-apotek-3" class="accordion-collapse collapse show"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Apoteker memeriksa detail resep pasien, mengecek kelengkapan,
+                                        kesesuaian dosis, interaksi obat, dan memastikan obat tersedia di gudang.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card active">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-apotek-4">
+                                    <button type="button" class="accordion-button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-apotek-4">
+                                        Penyerahan Obat
+                                    </button>
+                                </h2>
+                                <div id="collapse-apotek-4" class="accordion-collapse collapse show"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Setelah resep divalidasi, apoteker menyerahkan obat kepada pasien
+                                        sesuai prosedur. Sistem E-RM memungkinkan pencatatan obat keluar
+                                        dan pembaruan stok secara otomatis.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-apotek-5">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-apotek-5">
+                                        Logout
+                                    </button>
+                                </h2>
+                                <div id="collapse-apotek-5" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Setelah semua proses selesai, apoteker logout untuk menjaga keamanan sistem dan
+                                        data pasien.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                @elseif (Auth::user()->role == 'kasir')
+                    <div class="col-md-6">
+                        <small class="text-light fw-semibold">Langkah-langkah Penggunaan E-RM</small>
+
+                        <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow">
+
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-kasir-1">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-kasir-1">
+                                        Login
+                                    </button>
+                                </h2>
+                                <div id="collapse-kasir-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Kasir masuk menggunakan kredensial akun yang telah diberikan oleh admin.
+                                        Setelah berhasil login, sistem menampilkan dashboard kasir.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-kasir-2">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-kasir-2">
+                                        Dashboard
+                                    </button>
+                                </h2>
+                                <div id="collapse-kasir-2" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Dashboard berisi daftar transaksi pasien, tagihan layanan, status pembayaran,
+                                        dan menu untuk mencetak nota atau invoice.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card active">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-kasir-3">
+                                    <button type="button" class="accordion-button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-kasir-3">
+                                        Verifikasi Tagihan
+                                    </button>
+                                </h2>
+                                <div id="collapse-kasir-3" class="accordion-collapse collapse show"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Kasir memeriksa rincian biaya pasien: tindakan medis, resep obat,
+                                        biaya administrasi, hingga layanan tambahan lain yang tercatat di E-RM.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card active">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-kasir-4">
+                                    <button type="button" class="accordion-button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-kasir-4">
+                                        Proses Pembayaran
+                                    </button>
+                                </h2>
+                                <div id="collapse-kasir-4" class="accordion-collapse collapse show"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Kasir menerima pembayaran pasien, memilih metode pembayaran,
+                                        mencatat transaksi ke sistem, dan mencetak bukti pembayaran atau invoice.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item card">
+                                <h2 class="accordion-header text-body d-flex justify-content-between"
+                                    id="acc-kasir-5">
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-kasir-5">
+                                        Logout
+                                    </button>
+                                </h2>
+                                <div id="collapse-kasir-5" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionIcon">
+                                    <div class="accordion-body">
+                                        Kasir logout untuk memastikan keamanan data transaksi dan informasi pasien.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 @endif
             @endif
         </div>
     </div>
+
+    @push('script')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const video = document.querySelector("video");
+
+                if (video) {
+                    video.muted = true;
+                    video.play().catch(() => {
+                        // fallback kalau browser tetap menolak autoplay
+                        video.setAttribute("playsinline", "");
+                        video.muted = true;
+                        video.play();
+                    });
+                }
+            });
+        </script>
+    @endpush
 
 </x-admin.layout.terminal>

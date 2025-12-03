@@ -5,235 +5,221 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
                     <div class="card-title">
-                        <h5 style="margin-bottom: 10px"><strong>Data Akses User</strong></h5>
-                        <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                            data-bs-target="#tambahuser"><i class="bi bi-plus-lg"></i>Tambah User</button>
-                    </div>
-                    {{-- <div class="tb-pasien">
-                    <div class="table-responsive">
-                        <table id="example" class="table table-striped table-bordered mt-2 mb-2" style="width:100%; overflow-x: auto">
-                            <thead>
-                                <tr>
-                                    <th colspan="7" style="text-align: center; font-weight: bold">Akses Pasien</th>
-                                </tr>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Password</th>
-                                    <th>Role Akses</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php $counter = 1 @endphp
-                                @foreach ($user as $item)
-                                    @if ($item->role === 'user')
-                                    <tr>
-                                        <td>{{ $counter++ }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->username }}</td>
-                                        <td>{{ $item->email }}</td>
-                                        <td>{{ substr(md5($item->password), 0, 10) }}</td>
-                                        <td>{{ $item->role }}</td>
-                                        <td>
-                                            <div class="aksi d-flex" >
-                                                <button class="btn btn-primary" data-bs-target="#edituser{{ $item->id }}" data-bs-toggle="modal"><i class="fas fa-pen"></i> Edit</button>
-                                                <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#hapususer{{ $item->id }}"><i class="fas fa-trash"></i> Hapus</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div> --}}
-                    <div class="tb-perawat mt-3">
-                        <h5 class="text-center"><strong>Akses User Perawat</strong></h5>
-                        <div class="table-responsive">
-                            <table id="example2" class="table table-striped table-bordered mt-2 mb-2"
-                                style="width:100%">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th colspan="5" style="text-align: center; font-weight: bold">Akses Perawat
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Perawat</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $counter = 1 @endphp
-                                    @foreach ($user as $item)
-                                        @if ($item->role === 'perawat')
-                                            <tr>
-                                                <td>{{ $counter++ }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->username }}</td>
-                                                <td>{{ $item->password }}</td>
-                                                <td>
-                                                    <div class="aksi d-flex">
-                                                        <button class="btn btn-primary"
-                                                            data-bs-target="#editperawat{{ $item->id }}"
-                                                            data-bs-toggle="modal"><i class="fas fa-pen"></i>
-                                                            Edit</button>
-                                                        <button type="button" class="btn btn-danger mx-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#hapususer{{ $item->id }}"><i
-                                                                class="fas fa-trash"></i> Hapus</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Data Akses User</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="tb-dokter mt-3">
-                        <h5 class="text-center"><strong>Akses User Dokter</strong></h5>
-                        <div class="table-responsive">
-                            <table id="example3" class="table table-striped table-bordered mt-2 mb-2"
-                                style="width:100%">
-                                <thead class="table-info">
-                                    <tr>
-                                        <th colspan="6" style="text-align: center; font-weight: bold">Akses Dokter
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Dokter</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Profesi</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $counter = 1 @endphp
-                                    @foreach ($user as $item)
-                                        @if ($item->role === 'dokter')
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                                data-bs-target="#tambahuser"><i class="fas fa-plus"></i> Tambah User</button>
+                            <hr>
+                            <div class="tb-perawat mt-3">
+                                <h5 class="text-center"><strong>Akses User Perawat</strong></h5>
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-striped table-bordered mt-2 mb-2"
+                                        style="width:100%">
+                                        <thead class="table-primary">
                                             <tr>
-                                                <td>{{ $counter++ }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->username }}</td>
-                                                <td>{{ $item->password }}</td>
-                                                <td>{{ $item->dokter->profesi }}</td>
-                                                <td>
-                                                    <div class="aksi d-flex">
-                                                        <button class="btn btn-primary"
-                                                            data-bs-target="#editperawat{{ $item->id }}"
-                                                            data-bs-toggle="modal"><i class="fas fa-pen"></i>
-                                                            Edit</button>
-                                                        <button type="button" class="btn btn-danger mx-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#hapususer{{ $item->id }}"><i
-                                                                class="fas fa-trash"></i> Hapus</button>
-                                                    </div>
-                                                </td>
+                                                <th colspan="5" style="text-align: center; font-weight: bold">Akses
+                                                    Perawat
+                                                </th>
                                             </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Perawat</th>
+                                                <th>Username</th>
+                                                <th>Password</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $counter = 1 @endphp
+                                            @foreach ($user as $item)
+                                                @if ($item->role === 'perawat')
+                                                    <tr>
+                                                        <td>{{ $counter++ }}</td>
+                                                        <td>{{ $item->name }}</td>
+                                                        <td>{{ $item->username }}</td>
+                                                        <td>{{ $item->password }}</td>
+                                                        <td>
+                                                            <div class="aksi d-flex">
+                                                                <button class="btn btn-primary"
+                                                                    data-bs-target="#editperawat{{ $item->id }}"
+                                                                    data-bs-toggle="modal"><i class="fas fa-pen"></i>
+                                                                    Edit</button>
+                                                                <button type="button" class="btn btn-danger mx-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#hapususer{{ $item->id }}"><i
+                                                                        class="fas fa-trash"></i> Hapus</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="tb-dokter mt-3">
-                        <h5 class="text-center"><strong>Akses User Apoteker</strong></h5>
-                        <div class="table-responsive">
-                            <table id="example4" class="table table-striped table-bordered mt-2 mb-2"
-                                style="width:100%">
-                                <thead class="table-success">
-                                    <tr>
-                                        <th colspan="5" style="text-align: center; font-weight: bold">Akses Apoteker
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Apoteker</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $counter = 1 @endphp
-                                    @foreach ($user as $item)
-                                        @if ($item->role === 'apoteker')
+                    <div class="card dokter mb-3">
+                        <div class="card-body">
+                            <div class="tb-dokter mt-3">
+                                <h5 class="text-center"><strong>Akses User Dokter</strong></h5>
+                                <div class="table-responsive">
+                                    <table id="example3" class="table table-striped table-bordered mt-2 mb-2"
+                                        style="width:100%">
+                                        <thead class="table-info">
                                             <tr>
-                                                <td>{{ $counter++ }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->username }}</td>
-                                                <td>{{ $item->password }}</td>
-                                                <td>
-                                                    <div class="aksi d-flex">
-                                                        <button class="btn btn-primary"
-                                                            data-bs-target="#editperawat{{ $item->id }}"
-                                                            data-bs-toggle="modal"><i class="fas fa-pen"></i>
-                                                            Edit</button>
-                                                        <button type="button" class="btn btn-danger mx-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#hapususer{{ $item->id }}"><i
-                                                                class="fas fa-trash"></i> Hapus</button>
-                                                    </div>
-                                                </td>
+                                                <th colspan="6" style="text-align: center; font-weight: bold">Akses
+                                                    Dokter
+                                                </th>
                                             </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Dokter</th>
+                                                <th>Username</th>
+                                                <th>Password</th>
+                                                <th>Profesi</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $counter = 1 @endphp
+                                            @foreach ($user as $item)
+                                                @if ($item->role === 'dokter')
+                                                    <tr>
+                                                        <td>{{ $counter++ }}</td>
+                                                        <td>{{ $item->name }}</td>
+                                                        <td>{{ $item->username }}</td>
+                                                        <td>{{ $item->password }}</td>
+                                                        <td>{{ $item->dokter->profesi }}</td>
+                                                        <td>
+                                                            <div class="aksi d-flex">
+                                                                <button class="btn btn-primary"
+                                                                    data-bs-target="#editperawat{{ $item->id }}"
+                                                                    data-bs-toggle="modal"><i class="fas fa-pen"></i>
+                                                                    Edit</button>
+                                                                <button type="button" class="btn btn-danger mx-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#hapususer{{ $item->id }}"><i
+                                                                        class="fas fa-trash"></i> Hapus</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="tb-dokter mt-3">
-                        <h5 class="text-center"><strong>Akses User Kasir</strong></h5>
-                        <div class="table-responsive">
-                            <table id="example4" class="table table-striped table-bordered mt-2 mb-2"
-                                style="width:100%">
-                                <thead class="table-warning">
-                                    <tr>
-                                        <th colspan="5" style="text-align: center; font-weight: bold">Akses Kasir
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Kasir</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $counter = 1 @endphp
-                                    @foreach ($user as $item)
-                                        @if ($item->role === 'kasir')
+                    <div class="card apotek mb-3">
+                        <div class="card-body">
+                            <div class="tb-dokter mt-3">
+                                <h5 class="text-center"><strong>Akses User Apoteker</strong></h5>
+                                <div class="table-responsive">
+                                    <table id="example4" class="table table-striped table-bordered mt-2 mb-2"
+                                        style="width:100%">
+                                        <thead class="table-success">
                                             <tr>
-                                                <td>{{ $counter++ }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->username }}</td>
-                                                <td>{{ $item->password }}</td>
-                                                <td>
-                                                    <div class="aksi d-flex">
-                                                        <button class="btn btn-primary"
-                                                            data-bs-target="#editperawat{{ $item->id }}"
-                                                            data-bs-toggle="modal"><i class="fas fa-pen"></i>
-                                                            Edit</button>
-                                                        <button type="button" class="btn btn-danger mx-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#hapususer{{ $item->id }}"><i
-                                                                class="fas fa-trash"></i> Hapus</button>
-                                                    </div>
-                                                </td>
+                                                <th colspan="5" style="text-align: center; font-weight: bold">Akses
+                                                    Apoteker
+                                                </th>
                                             </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Apoteker</th>
+                                                <th>Username</th>
+                                                <th>Password</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $counter = 1 @endphp
+                                            @foreach ($user as $item)
+                                                @if ($item->role === 'apoteker')
+                                                    <tr>
+                                                        <td>{{ $counter++ }}</td>
+                                                        <td>{{ $item->name }}</td>
+                                                        <td>{{ $item->username }}</td>
+                                                        <td>{{ $item->password }}</td>
+                                                        <td>
+                                                            <div class="aksi d-flex">
+                                                                <button class="btn btn-primary"
+                                                                    data-bs-target="#editperawat{{ $item->id }}"
+                                                                    data-bs-toggle="modal"><i class="fas fa-pen"></i>
+                                                                    Edit</button>
+                                                                <button type="button" class="btn btn-danger mx-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#hapususer{{ $item->id }}"><i
+                                                                        class="fas fa-trash"></i> Hapus</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card kasir mb-3">
+                        <div class="card-body">
+                            <div class="tb-dokter mt-3">
+                                <h5 class="text-center"><strong>Akses User Kasir</strong></h5>
+                                <div class="table-responsive">
+                                    <table id="example4" class="table table-striped table-bordered mt-2 mb-2"
+                                        style="width:100%">
+                                        <thead class="table-warning">
+                                            <tr>
+                                                <th colspan="5" style="text-align: center; font-weight: bold">Akses
+                                                    Kasir
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Kasir</th>
+                                                <th>Username</th>
+                                                <th>Password</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $counter = 1 @endphp
+                                            @foreach ($user as $item)
+                                                @if ($item->role === 'kasir')
+                                                    <tr>
+                                                        <td>{{ $counter++ }}</td>
+                                                        <td>{{ $item->name }}</td>
+                                                        <td>{{ $item->username }}</td>
+                                                        <td>{{ $item->password }}</td>
+                                                        <td>
+                                                            <div class="aksi d-flex">
+                                                                <button class="btn btn-primary"
+                                                                    data-bs-target="#editperawat{{ $item->id }}"
+                                                                    data-bs-toggle="modal"><i class="fas fa-pen"></i>
+                                                                    Edit</button>
+                                                                <button type="button" class="btn btn-danger mx-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#hapususer{{ $item->id }}"><i
+                                                                        class="fas fa-trash"></i> Hapus</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -261,6 +247,60 @@
             new DataTable('#example2');
             new DataTable('#example3');
             new DataTable('#example4');
+
+            function updateTanggal() {
+                var now = new Date();
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                if (tanggalPagiElement && tanggalSiangElement) {
+                    var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+                    tanggalPagiElement.textContent = tanggalLengkap;
+                    tanggalSiangElement.textContent = tanggalLengkap;
+                } else {
+                    console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
+                }
+            }
+
+            // Panggil fungsi saat halaman dimuat
+            document.addEventListener("DOMContentLoaded", updateTanggal);
+
+            // JAM DAN TANGGAL
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement = document.getElementById('tanggal');
+                var jamElement = document.getElementById('jam');
+
+                if (!tanggalElement || !jamElement) {
+                    console.error("Elemen tanggal atau jam tidak ditemukan: tanggal atau jam");
+                    return;
+                }
+
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                updateClock();
+                setInterval(updateClock, 1000);
+            });
         </script>
     @endpush
 

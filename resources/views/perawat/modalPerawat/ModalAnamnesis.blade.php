@@ -3,14 +3,14 @@
      aria-labelledby="periksa" aria-hidden="true">
      <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
+             <div class="modal-header">
+                 <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0);">Asesmen
+                     Keperawatan - Asesmen Awal</h1>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
              <form id="myForm1" action="{{ url('perawat/store/' . $item->id) }}" method="POST"
                  enctype="multipart/form-data">
                  @csrf
-                 <div class="modal-header">
-                     <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0);">Asesmen
-                         Keperawatan - Asesmen Awal</h1>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                 </div>
                  <div class="modal-body">
                      {{-- 3 Bulan --}}
                      @php
@@ -46,30 +46,78 @@
                          $isKajianFilled = !empty($item->ak_nama_perawat_bidan);
                      @endphp
 
+                     <div class="row">
+                         <div class="col-md-7">
+                             <div class="card mb-3">
+                                 <div class="card-body p-3"
+                                     style="border: 0.2px solid rgb(148, 147, 147); border-radius: 5px">
+                                     <div class="mb-3 d-flex">
+                                         <div style="width: 120px;" class="fw-bold text-secondary"><strong>Nama
+                                                 Pasien</strong>
+                                         </div>
+                                         <span class="me-1" style="width: 30px;">:</span>
+                                         <div class="text-capitalize fw-semibold">
+                                             {{ strtolower($item->booking->pasien->nama_pasien) }}
+                                             ({{ $item->booking->pasien->jekel }})
+                                         </div>
+                                     </div>
+                                     <div class="mb-3 d-flex">
+                                         <div style="width: 120px;" class="fw-bold text-secondary">
+                                             <strong>Umur</strong>
+                                         </div>
+                                         <span class="me-1" style="width: 30px;">:</span>
+                                         <div class="text-capitalize fw-semibold">
+                                             {{ Carbon::parse($item->booking->pasien->tgllahir)->age }} Tahun
+                                         </div>
+                                     </div>
+                                     <div class="mb-3 d-flex">
+                                         <div style="width: 120px;" class="fw-bold text-secondary"><strong>Jenis
+                                                 Pasien</strong>
+                                         </div>
+                                         <span class="me-1" style="width: 30px;">:</span>
+                                         <div class="text-capitalize fw-semibold">
+                                             {{ $item->booking->pasien->jenis_pasien }}
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     <hr>
+
                      <div class="periksa d-flex justify-content-between align-items-start">
-                         <!-- Bagian Kiri: Tombol -->
+
+                         <!-- Tombol -->
                          <div class="d-flex gap-2">
                              <button type="button" class="btn btn-outline-primary" id="btnAsesmen{{ $item->id }}">
                                  Asesmen Awal
                              </button>
+
                              <button type="button" class="btn btn-outline-info" id="btnKajian{{ $item->id }}">
                                  Kajian Awal
                              </button>
+
+                             <button type="button" class="btn btn-outline-secondary" id="btnHamil{{ $item->id }}">
+                                 Hamil
+                             </button>
+                             {{-- @include('perawat.modalPerawat.formHamil', ['id' => $item->id]) --}}
                          </div>
 
-                         <!-- Bagian Kanan: Status -->
+                         <!-- Status -->
                          <div class="d-flex flex-column text-end">
                              <span id="statusAsesmen{{ $item->id }}" class="badge border text-warning bg-white">
                                  <i class="fa-solid fa-circle-exclamation"></i>
                                  {{ $isAsesmenFilled ? 'Asesmen Terisi' : 'Belum Melakukan Asesmen' }}
                              </span>
+
                              <span id="statusKajian{{ $item->id }}" class="badge border text-danger bg-white mt-1">
                                  <i class="fa-solid fa-circle-exclamation"></i>
                                  {{ $isKajianFilled ? 'Kajian Terisi' : 'Belum Melakukan Kajian Awal' }}
                              </span>
                          </div>
-                     </div>
 
+                     </div>
+                     <hr>
                      @if ($createdAtRM && $now->greaterThanOrEqualTo($nextKajianDate))
                          <input type="hidden" name="idrm" value="{{ $item->rm->id }}">
                          <input type="hidden" name="id_pasien" value="{{ $item->booking->pasien->id }}">
@@ -585,300 +633,301 @@
                                      </div>
                                  </div>
                              </div>
+                         </div>
 
-                             <div class="anamnesis-o" style="margin-bottom: 30px">
-                                 <h5 style="text-align: center; font-size: 20px;"><strong>Pemeriksaan Fisik Umum
-                                         (0)</strong></h5>
-                                 <div class="row">
-                                     <div class="col-lg-6">
-                                         <div class="form-group">
-                                             <label for="keadaan_umum">Keadaan Umum</label>
-                                             <input type="text" name="keadaan_umum" id="keadaan_umum"
-                                                 class="form-control mt-2 mb-2 " placeholder="Isi Keadaan Umum"
-                                                 value="{{ $item->rm->o_keadaan_umum ?? '' }}">
-                                         </div>
-                                     </div>
-                                     <div class="col-lg-6">
-                                         <div class="form-group mt-2 mb-2">
-                                             {{-- <p onclick="toggleInput('kesadaran')" style="margin-bottom: 5px;">6. Kesadaran</p> --}}
-                                             <label for="kesadaran">Kesadaran</label>
-                                             <select name="kesadaran" id="kesadaran" class="form-control">
-                                                 <option value="Compos Mentis">Compos Mentis</option>
-                                                 <option value="Somnolence">Somnolence</option>
-                                                 <option value="Sopor">Sopor</option>
-                                                 <option value="Coma">Coma</option>
-                                             </select>
-                                         </div>
+                         <div class="anamnesis-o" style="margin-bottom: 30px">
+                             <h5 style="text-align: center; font-size: 20px;"><strong>Pemeriksaan Fisik Umum
+                                     (0)</strong></h5>
+                             <div class="row">
+                                 <div class="col-lg-6">
+                                     <div class="form-group">
+                                         <label for="keadaan_umum">Keadaan Umum</label>
+                                         <input type="text" name="keadaan_umum" id="keadaan_umum"
+                                             class="form-control mt-2 mb-2 " placeholder="Isi Keadaan Umum"
+                                             value="{{ $item->rm->o_keadaan_umum ?? '' }}">
                                      </div>
                                  </div>
-                                 <div class="col-lg-6 mb-3">
-                                     <div class="row">
-                                         <div class="col-12">
-                                             <label for="gcs">GCS</label>
-                                             <div class="input-group d-flex mt-2">
-                                                 <input type="text" name="gcs_e" id="gcs_e"
-                                                     value="{{ $item->isian->gcs_e ?? '' }}" class="form-control"
-                                                     aria-describedby="basic-addon2" placeholder="E">
-                                                 <input type="text" name="gcs_m" id="gcs_m"
-                                                     value="{{ $item->isian->gcs_m ?? '' }}" class="form-control"
-                                                     aria-describedby="basic-addon2" placeholder="M">
-                                                 <input type="text" name="gcs_v" id="gcs_v"
-                                                     value="{{ $item->isian->gcs_v ?? '' }}" class="form-control"
-                                                     aria-describedby="basic-addon2" placeholder="V">
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" id="basic-addon2"
-                                                         style="background: rgb(228, 228, 228)">
-                                                         Total: &nbsp; <span id="gcs_total"> <b>0</b></span>
-                                                     </span>
-                                                 </div>
+                                 <div class="col-lg-6">
+                                     <div class="form-group mt-2 mb-2">
+                                         {{-- <p onclick="toggleInput('kesadaran')" style="margin-bottom: 5px;">6. Kesadaran</p> --}}
+                                         <label for="kesadaran">Kesadaran</label>
+                                         <select name="kesadaran" id="kesadaran" class="form-control">
+                                             <option value="Compos Mentis">Compos Mentis</option>
+                                             <option value="Somnolence">Somnolence</option>
+                                             <option value="Sopor">Sopor</option>
+                                             <option value="Coma">Coma</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-lg-6 mb-3">
+                                 <div class="row">
+                                     <div class="col-12">
+                                         <label for="gcs">GCS</label>
+                                         <div class="input-group d-flex mt-2">
+                                             <input type="text" name="gcs_e" id="gcs_e"
+                                                 value="{{ $item->isian->gcs_e ?? '' }}" class="form-control"
+                                                 aria-describedby="basic-addon2" placeholder="E">
+                                             <input type="text" name="gcs_m" id="gcs_m"
+                                                 value="{{ $item->isian->gcs_m ?? '' }}" class="form-control"
+                                                 aria-describedby="basic-addon2" placeholder="M">
+                                             <input type="text" name="gcs_v" id="gcs_v"
+                                                 value="{{ $item->isian->gcs_v ?? '' }}" class="form-control"
+                                                 aria-describedby="basic-addon2" placeholder="V">
+                                             <div class="input-group-append">
+                                                 <span class="input-group-text" id="basic-addon2"
+                                                     style="background: rgb(228, 228, 228)">
+                                                     Total: &nbsp; <span id="gcs_total"> <b>0</b></span>
+                                                 </span>
                                              </div>
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="row" style="text-align: start">
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px">Kepala</p>
-                                         <div id="kepala">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="kepala" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-kepala_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="kepala"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-kepala_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-kepala_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-kepala_{{ $item->id }}"
-                                                 name="alasan-kepala" class="form-control mt-2 mb-2">
-                                         </div>
+                             </div>
+                             <div class="row" style="text-align: start">
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px">Kepala</p>
+                                     <div id="kepala">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="kepala" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-kepala_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="kepala"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-kepala_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
                                      </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Mata</p>
-                                         <div id="mata">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="mata" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-mata_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="mata"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-mata_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-mata_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-mata_{{ $item->id }}"
-                                                 name="alasan-mata" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Leher</p>
-                                         <div id="leher">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="leher" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-leher_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="leher"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-leher_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-leher_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-leher_{{ $item->id }}"
-                                                 name="alasan-leher" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">THT (Telinga Hidung Tenggorokan)</p>
-                                         <div id="tht">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="tht" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-tht_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="tht"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-tht_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-tht_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-tht_{{ $item->id }}"
-                                                 name="alasan-tht" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Thorax</p>
-                                         <div id="thorax">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="thorax" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-thorax_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="thorax"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-thorax_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-thorax_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-thorax_{{ $item->id }}"
-                                                 name="alasan-thorax" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Paru</p>
-                                         <div id="paru">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="paru" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-paru_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="paru"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-paru_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-paru_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-paru_{{ $item->id }}"
-                                                 name="alasan-paru" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Jantung</p>
-                                         <div id="jantung">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="jantung" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-jantung_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="jantung"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-jantung_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-jantung_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-jantung_{{ $item->id }}"
-                                                 name="alasan-jantung" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Abdomen</p>
-                                         <div id="abdomen">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="abdomen" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-abdomen_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="abdomen"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-abdomen_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-abdomen_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-abdomen_{{ $item->id }}"
-                                                 name="alasan-abdomen" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Ekstremitas / Anggota Gerak</p>
-                                         <div id="ekstremitas">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="ekstremitas" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-ekstremitas_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="ekstremitas"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-ekstremitas_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-ekstremitas_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-ekstremitas_{{ $item->id }}"
-                                                 name="alasan-ekstremitas" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <p style="margin-bottom: 5px;">Kulit</p>
-                                         <div id="kulit">
-                                             <label for="jawaban-normal">
-                                                 <input type="radio" name="kulit" id="jawaban-normal"
-                                                     value="Normal" checked
-                                                     onclick="toggleChange('alasan-kulit_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px;"> Normal
-                                             </label>
-                                             <label for="jawaban-abnormal">
-                                                 <input class="mx-3" type="radio" name="kulit"
-                                                     id="jawaban-abnormal" value="Abnormal"
-                                                     onclick="toggleChange('alasan-kulit_{{ $item->id }}', this)"
-                                                     style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
-                                                 Abnormal
-                                             </label>
-                                         </div>
-                                         <div id="alasan-kulit_{{ $item->id }}" style="display: none;">
-                                             <input type="text" id="alasan-kulit_{{ $item->id }}"
-                                                 name="alasan-kulit" class="form-control mt-2 mb-2">
-                                         </div>
-                                     </div>
-                                     <div class="form-group mt-2 mb-2">
-                                         <label for="lain-lain">Lain - Lain</label>
-                                         <input type="text" name="lain" id="lain"
-                                             class="form-control mt-2 mb-2" placeholder="Lain-lain">
+                                     <div id="alasan-kepala_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-kepala_{{ $item->id }}"
+                                             name="alasan-kepala" class="form-control mt-2 mb-2">
                                      </div>
                                  </div>
-                             </div>
-
-                             <div class="form-group">
-                                 <h5 for="id_ttd_medis" style="margin-top: 30px; text-align: center">
-                                     <strong>Tanda Tangan Perawat</strong>
-                                 </h5>
-                                 <select type="text" name="id_ttd_medis" id="id_ttd_medis{{ $item->id }}"
-                                     class="form-control mt-2 mb-2" required>
-                                     <option value="">Nama Perawat</option>
-                                     <!-- Iterate through your perawat data to populate the dropdown -->
-                                     @foreach ($ttd as $perawat)
-                                         <option value="{{ $perawat->id }}">{{ $perawat->nama }}
-                                         </option>
-                                     @endforeach
-                                 </select>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Mata</p>
+                                     <div id="mata">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="mata" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-mata_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="mata"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-mata_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-mata_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-mata_{{ $item->id }}"
+                                             name="alasan-mata" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Leher</p>
+                                     <div id="leher">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="leher" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-leher_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="leher"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-leher_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-leher_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-leher_{{ $item->id }}"
+                                             name="alasan-leher" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">THT (Telinga Hidung Tenggorokan)</p>
+                                     <div id="tht">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="tht" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-tht_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="tht"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-tht_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-tht_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-tht_{{ $item->id }}" name="alasan-tht"
+                                             class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Thorax</p>
+                                     <div id="thorax">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="thorax" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-thorax_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="thorax"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-thorax_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-thorax_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-thorax_{{ $item->id }}"
+                                             name="alasan-thorax" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Paru</p>
+                                     <div id="paru">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="paru" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-paru_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="paru"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-paru_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-paru_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-paru_{{ $item->id }}"
+                                             name="alasan-paru" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Jantung</p>
+                                     <div id="jantung">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="jantung" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-jantung_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="jantung"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-jantung_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-jantung_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-jantung_{{ $item->id }}"
+                                             name="alasan-jantung" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Abdomen</p>
+                                     <div id="abdomen">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="abdomen" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-abdomen_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="abdomen"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-abdomen_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-abdomen_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-abdomen_{{ $item->id }}"
+                                             name="alasan-abdomen" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Ekstremitas / Anggota Gerak</p>
+                                     <div id="ekstremitas">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="ekstremitas" id="jawaban-normal"
+                                                 value="Normal" checked
+                                                 onclick="toggleChange('alasan-ekstremitas_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="ekstremitas"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-ekstremitas_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-ekstremitas_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-ekstremitas_{{ $item->id }}"
+                                             name="alasan-ekstremitas" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <p style="margin-bottom: 5px;">Kulit</p>
+                                     <div id="kulit">
+                                         <label for="jawaban-normal">
+                                             <input type="radio" name="kulit" id="jawaban-normal" value="Normal"
+                                                 checked
+                                                 onclick="toggleChange('alasan-kulit_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px;"> Normal
+                                         </label>
+                                         <label for="jawaban-abnormal">
+                                             <input class="mx-3" type="radio" name="kulit"
+                                                 id="jawaban-abnormal" value="Abnormal"
+                                                 onclick="toggleChange('alasan-kulit_{{ $item->id }}', this)"
+                                                 style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
+                                             Abnormal
+                                         </label>
+                                     </div>
+                                     <div id="alasan-kulit_{{ $item->id }}" style="display: none;">
+                                         <input type="text" id="alasan-kulit_{{ $item->id }}"
+                                             name="alasan-kulit" class="form-control mt-2 mb-2">
+                                     </div>
+                                 </div>
+                                 <div class="form-group mt-2 mb-2">
+                                     <label for="lain-lain">Lain - Lain</label>
+                                     <input type="text" name="lain" id="lain"
+                                         class="form-control mt-2 mb-2" placeholder="Lain-lain">
+                                 </div>
                              </div>
                          </div>
+
+                         <div class="form-group">
+                             <h5 for="id_ttd_medis" style="margin-top: 30px; text-align: center">
+                                 <strong>Tanda Tangan Perawat</strong>
+                             </h5>
+                             <select type="text" name="id_ttd_medis" id="id_ttd_medis{{ $item->id }}"
+                                 class="form-control mt-2 mb-2" required>
+                                 <option value="">Nama Perawat</option>
+                                 <!-- Iterate through your perawat data to populate the dropdown -->
+                                 @foreach ($ttd as $perawat)
+                                     <option value="{{ $perawat->id }}">{{ $perawat->nama }}
+                                     </option>
+                                 @endforeach
+                             </select>
+                         </div>
+
                          <div id="formKajian{{ $item->id }}" style="display: none">
                              <div class="kebiasaan">
                                  <h5 class="text-center"
@@ -968,7 +1017,8 @@
 
                              <div class="riwayat-lahir mt-4">
                                  <h5 class="text-center" style="font-size: 20px; font-weight: bold"
-                                     onclick="toggleStep(this)">Riwayat Lahir</h5>
+                                     onclick="toggleStep(this)">
+                                     Riwayat Lahir</h5>
                                  <div id="p_anak_riwayat_lahir" class="form-group mb-4 text-center"
                                      style="font-size: 20px">
                                      <label for="p_anak_riwayat_lahir_spontan">
@@ -984,7 +1034,8 @@
                                  </div>
                                  <div id="p_anak_riwayat_lahir">
                                      <label for="p_anak_riwayat_lahir"
-                                         onclick="toggleInput('p_anak_riwayat_lahir)">Riwayat Lahir Bulan</label>
+                                         onclick="toggleInput('p_anak_riwayat_lahir)">Riwayat
+                                         Lahir Bulan</label>
                                      <div class="form-group mb-2 mt-2" style="font-size: 20px">
                                          <label for="p_anak_riwayat_lahir_cukup_bulan">
                                              <input type="radio" name="p_anak_riwayat_lahir_cukup_bulan"
@@ -1291,7 +1342,8 @@
                                  </div>
                                  <div class="form-group">
                                      <label for="ak_rencana_tindakan"
-                                         onclick="toggleInput('ak_rencana_tindakan')">Rencana Tindakan</label>
+                                         onclick="toggleInput('ak_rencana_tindakan')">Rencana
+                                         Tindakan</label>
                                      <input type="text" name="ak_rencana_tindakan" id="ak_rencana_tindakan"
                                          class="form-control mt-2 mb-2" placeholder="Rencana Tindakan">
                                  </div>
@@ -1556,7 +1608,8 @@
                                      onclick="toggleStep(this)">Asesmen Resiko Jatuh</h5>
                                  <div class="form-group" style="font-size: 18px;">
                                      <label for="jatuh_sempoyong"
-                                         onclick="toggleInput('jatuh_sempoyong')">Perhatikan cara berjalan pasien
+                                         onclick="toggleInput('jatuh_sempoyong')">Perhatikan cara
+                                         berjalan pasien
                                          saat
                                          akan duduk dikursi apakah pasien tampak tidak seimbang / sempoyongan /
                                          libung
@@ -1568,7 +1621,8 @@
                                          <input type="radio" name="jatuh_sempoyong" id="jatuh_sempoyong-tidak"
                                              value="Tidak"
                                              style="transform: scale(1.5); margin-right: 10px; margin-left: 30px"
-                                             checked> Tidak
+                                             checked>
+                                         Tidak
                                      </div>
                                  </div>
                                  <div class="form-group" style="font-size: 18px;">
@@ -1583,16 +1637,19 @@
                                          <input type="radio" name="jatuh_pegangan" id="jatuh_pegangan-tidak"
                                              value="Tidak"
                                              style="transform: scale(1.5); margin-right: 10px; margin-left: 30px"
-                                             checked> Tidak
+                                             checked>
+                                         Tidak
                                      </div>
                                  </div>
                                  <div class="form-group" style="font-size: 18px">
                                      <label for="jatuh_hasil_kajian"
-                                         onclick="toggleInput('jatuh_hasil_kajian')">Hasil Kajian</label>
+                                         onclick="toggleInput('jatuh_hasil_kajian')">Hasil
+                                         Kajian</label>
                                      <div class="col text-center mb-2 mt-2">
                                          <input type="radio" name="jatuh_hasil_kajian"
                                              id="jatuh_hasil_kajian-tidak_beresiko" value="tidak-beresiko"
-                                             style="transform: scale(1.5); margin-right: 10px"> Tidak Beresiko
+                                             style="transform: scale(1.5); margin-right: 10px"> Tidak
+                                         Beresiko
                                          <input type="radio" name="jatuh_hasil_kajian"
                                              id="jatuh_hasil_kajian-resiko_rendah" value="resiko-rendah"
                                              style="transform: scale(1.5); margin-right: 10px; margin-left: 30px">
@@ -1723,6 +1780,26 @@
                      imtNInput.value = "";
                  }
              }
+         });
+
+         //  modal kedua
+         document.addEventListener("DOMContentLoaded", function() {
+             const btn = document.getElementById("btnHamil{{ $item->id }}");
+             const modal2 = document.getElementById("modalHamil{{ $item->id }}");
+             const modal1 = document.getElementById("periksa{{ $item->id }}");
+
+             // Buka modal 2 ketika tombol diklik
+             if (btn && modal2) {
+                 btn.addEventListener("click", function() {
+                     new bootstrap.Modal(modal2).show();
+                 });
+             }
+
+             // Jika modal 2 ditutup → tutup modal 1
+             modal2.addEventListener('hidden.bs.modal', function() {
+                 const bootstrapModal1 = bootstrap.Modal.getInstance(modal1);
+                 if (bootstrapModal1) bootstrapModal1.hide();
+             });
          });
      </script>
  @endpush

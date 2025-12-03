@@ -14,11 +14,6 @@ class Soap extends Model
     {
         return $this->belongsTo(Pasien::class, 'id_pasien', 'id');
     }
-
-    public function booking()
-    {
-        return $this->belongsTo(Booking::class, 'id_booking', 'id');
-    }
     public function poli()
     {
         return $this->belongsTo(Poli::class, 'id_poli', 'KdPoli');

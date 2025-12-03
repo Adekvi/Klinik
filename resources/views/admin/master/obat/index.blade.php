@@ -5,64 +5,74 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
                     <div class="card-title">
-                        <h5 style="margin-bottom: 20px"><strong>Data Obat</strong></h5>
-                        <div class="mb-1" style="display: flex; justify-content: space-between">
-                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                                data-bs-target="#tambahobat"><i class="bi bi-plus-lg"></i> Tambah Obat</button>
-                        </div>
-                    </div>
-
-                    <div class="page d-flex" style="justify-content: space-between">
-                        <form method="GET" action="{{ route('master.obat') }}"
-                            class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
-                            <div class="d-flex align-items-center">
-                                <label for="entries" class="me-2">Tampilkan:</label>
-                                <select name="entries" id="entries" class="form-select form-select-sm me-3"
-                                    style="width: 80px;" onchange="this.form.submit()">
-                                    <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10
-                                    </option>
-                                    <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25
-                                    </option>
-                                    <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50
-                                    </option>
-                                    <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100
-                                    </option>
-                                </select>
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Data Obat</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
                             </div>
-                        </form>
-
-                        <div class="cari mb-2">
-                            <input type="text" name="search" id="search" class="form-control"
-                                placeholder="Cari..." style="width: 100%">
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                                data-bs-target="#tambahobat"><i class="fas fa-plus"></i> Tambah Obat</button>
+                            <hr>
 
-                    <div class="table-responsive">
-                        <table id="example" class="table table-striped table-bordered" style="width:100%">
-                            <thead class="table-primary text-center" style="white-space: nowrap">
-                                <tr>
-                                    <th>NO</th>
-                                    <th>GOLONGAN</th>
-                                    <th>JENIS SEDIAAN</th>
-                                    <th>NAMA OBAT</th>
-                                    <th>HARGA BELI</th>
-                                    <th>HARGA JUAL</th>
-                                    <th>MASUK</th>
-                                    <th>KELUAR</th>
-                                    <th>RETUR</th>
-                                    <th>STOK OBAT</th>
-                                    <th>AKSI</th>
-                                </tr>
-                            </thead>
-                            <tbody id="obat-table">
-                                @include('admin.master.obat.table', ['obat' => $obat])
-                            </tbody>
-                        </table>
-                    </div>
+                            <div class="page d-flex" style="justify-content: space-between">
+                                <form method="GET" action="{{ route('master.obat') }}"
+                                    class="d-flex justify-content-between align-items-center mb-3">
+                                    <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                                    <div class="d-flex align-items-center">
+                                        <label for="entries" class="me-2">Tampilkan:</label>
+                                        <select name="entries" id="entries" class="form-select form-select-sm me-3"
+                                            style="width: 80px;" onchange="this.form.submit()">
+                                            <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>
+                                                10
+                                            </option>
+                                            <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25
+                                            </option>
+                                            <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50
+                                            </option>
+                                            <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
 
-                    <div class="halaman d-flex justify-content-end mt-3">
-                        {{ $obat->appends(['entries' => $entries])->links() }}
+                                <div class="cari mb-2">
+                                    <input type="text" name="search" id="search" class="form-control"
+                                        placeholder="Cari..." style="width: 100%">
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead class="table-primary text-center" style="white-space: nowrap">
+                                        <tr>
+                                            <th>NO</th>
+                                            <th>GOLONGAN</th>
+                                            <th>JENIS SEDIAAN</th>
+                                            <th>NAMA OBAT</th>
+                                            <th>HARGA BELI</th>
+                                            <th>HARGA JUAL</th>
+                                            <th>MASUK</th>
+                                            <th>KELUAR</th>
+                                            <th>RETUR</th>
+                                            <th>STOK OBAT</th>
+                                            <th>AKSI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="obat-table">
+                                        @include('admin.master.obat.table', ['obat' => $obat])
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="halaman mt-2 d-flex justify-content-end mt-3">
+                                {{ $obat->appends(['entries' => $entries])->links() }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -119,6 +129,34 @@
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
+            // Panggil fungsi saat halaman dimuat
+            document.addEventListener("DOMContentLoaded", updateClock);
+
+            // JAM DAN TANGGAL
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement = document.getElementById('tanggal');
+                var jamElement = document.getElementById('jam');
+
+                if (!tanggalElement || !jamElement) {
+                    console.error("Elemen tanggal atau jam tidak ditemukan: tanggal atau jam");
+                    return;
+                }
+
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+
             // new DataTable('#example');
             $(document).ready(function() {
                 $('#search').on('input', function() {
@@ -141,19 +179,19 @@
                     Swal.fire({
                         title: 'Peringatan Stok Rendah!',
                         html: `
-                    <div style="text-align: left;">
-                        <strong>*Obat dengan stok di bawah 50 :</strong>
-                        <ul style="list-style: none; padding: 0; margin-top: 10px">
-                            @foreach ($lowStockObat as $item)
-                                <li style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                    <label style="flex: 1; word-wrap: break-word; margin-right: 10px;">{{ $item->nama_obat }}</label>
-                                    <span style="min-width: 50px; text-align: right;">:</span>
-                                    <strong style="min-width: 100px; text-align: right;">{{ $item->stok }}</strong>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                `,
+                            <div style="text-align: left;">
+                                <strong>*Obat dengan stok di bawah 50 :</strong>
+                                <ul style="list-style: none; padding: 0; margin-top: 10px">
+                                    @foreach ($lowStockObat as $item)
+                                        <li style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                            <label style="flex: 1; word-wrap: break-word; margin-right: 10px;">{{ $item->nama_obat }}</label>
+                                            <span style="min-width: 50px; text-align: right;">:</span>
+                                            <strong style="min-width: 100px; text-align: right;">{{ $item->stok }}</strong>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        `,
                         icon: 'warning',
                         confirmButtonText: 'Tutup',
                         customClass: {

@@ -1,12 +1,14 @@
 @foreach ($potongan as $item)
-    <div class="modal fade" id="hapuspoli{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal fade" id="hapuspoli{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Hapus Data</h1>
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Hapus Data</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('admin/master/margin-hapus/'. $item->id ) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('admin/master/margin-hapus/' . $item->id) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('DELETE')
                     <div class="modal-body">

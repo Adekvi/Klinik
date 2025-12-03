@@ -5,95 +5,110 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="datadokter">
                     <div class="card-title">
-                        <h5 style="margin-bottom: 20px"><strong>Data Tenaga Medis</strong></h5>
-                        <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                            data-bs-target="#tambahdokter"><i class="bi bi-plus-lg"></i>Tambah Tenaga Medis</button>
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Data Tenaga Medis</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <div class="tb-umum">
-                            <table class="table table-striped table-bordered" style="white-space: nowrap">
-                                <thead class="table-primary text-center">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Poli</th>
-                                        <th>Nik</th>
-                                        <th>Nama Tenaga Medis</th>
-                                        <th>Profesi</th>
-                                        <th>Tarif Jasa</th>
-                                        <th>Status Akun</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    if (!function_exists('Rupiah')) {
-                                        function Rupiah($angka)
-                                        {
-                                            return 'Rp ' . number_format($angka, 2, ',', '.');
-                                        }
-                                    }
-                                    ?>
-                                    @foreach ($dokter as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            @if (!empty($item->poli->namapoli))
-                                                <td>{{ $item->poli->namapoli }}</td>
-                                            @else
-                                                <td style="text-align: center"> - </td>
-                                            @endif
-                                            @if (!empty($item->nik))
-                                                <td>{{ $item->nik }}</td>
-                                            @else
-                                                <td style="text-align: center"> - </td>
-                                            @endif
-                                            <td>{{ $item->nama_dokter }}</td>
-                                            <td>{{ $item->profesi }}</td>
-                                            @if (!empty($item->tarif))
-                                                <td>{{ Rupiah($item->tarif) }}</td>
-                                            @else
-                                                <td style="text-align: center"> - </td>
-                                            @endif
-                                            <td>
-                                                <form method="POST" action="{{ url('updateStatus-dokter') }}">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{ $item->id }}">
-                                                    <div class="piket">
-                                                        <input type="checkbox" name="status"
-                                                            id="status_{{ $item->id }}"
-                                                            onchange="this.form.submit()"
-                                                            @if ($item->status) checked @endif>
-                                                        <label for="status_{{ $item->id }}" class="button"></label>
+                    <div class="card">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                                data-bs-target="#tambahdokter"><i class="fas fa-plus"></i> Tambah Tenaga Medis</button>
+                            <hr>
+                            <div class="table-responsive">
+                                <div class="tb-umum">
+                                    <table class="table table-striped table-bordered" style="white-space: nowrap">
+                                        <thead class="table-primary text-center">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Poli</th>
+                                                <th>Nik</th>
+                                                <th>Nama Tenaga Medis</th>
+                                                <th>Profesi</th>
+                                                <th>Tarif Jasa</th>
+                                                <th>Status Akun</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if (!function_exists('Rupiah')) {
+                                                function Rupiah($angka)
+                                                {
+                                                    return 'Rp ' . number_format($angka, 2, ',', '.');
+                                                }
+                                            }
+                                            ?>
+                                            @foreach ($dokter as $item)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    @if (!empty($item->poli->namapoli))
+                                                        <td>{{ $item->poli->namapoli }}</td>
+                                                    @else
+                                                        <td style="text-align: center"> - </td>
+                                                    @endif
+                                                    @if (!empty($item->nik))
+                                                        <td>{{ $item->nik }}</td>
+                                                    @else
+                                                        <td style="text-align: center"> - </td>
+                                                    @endif
+                                                    <td>{{ $item->nama_dokter }}</td>
+                                                    <td>{{ $item->profesi }}</td>
+                                                    @if (!empty($item->tarif))
+                                                        <td>{{ Rupiah($item->tarif) }}</td>
+                                                    @else
+                                                        <td style="text-align: center"> - </td>
+                                                    @endif
+                                                    <td>
+                                                        <form method="POST" action="{{ url('updateStatus-dokter') }}">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $item->id }}">
+                                                            <div class="piket">
+                                                                <input type="checkbox" name="status"
+                                                                    id="status_{{ $item->id }}"
+                                                                    onchange="this.form.submit()"
+                                                                    @if ($item->status) checked @endif>
+                                                                <label for="status_{{ $item->id }}"
+                                                                    class="button"></label>
 
-                                                        <!-- Status text berada di bawah tombol toggle -->
-                                                        <div class="status-text">
-                                                            <span
-                                                                id="statusText">{{ $item->status ? 'Aktif' : 'Non-Aktif' }}</span>
+                                                                <!-- Status text berada di bawah tombol toggle -->
+                                                                <div class="status-text">
+                                                                    <span
+                                                                        id="statusText">{{ $item->status ? 'Aktif' : 'Non-Aktif' }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <div class="aksi d-flex">
+                                                            <button class="btn btn-primary"
+                                                                data-bs-target="#editdokter{{ $item->id }}"
+                                                                data-bs-toggle="modal"><i class="fas fa-info"></i>
+                                                                Edit</button>
+                                                            <button type="button" class="btn btn-danger mx-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#hapusdokter{{ $item->id }}"><i
+                                                                    class="fas fa-trash"></i> Hapus</button>
                                                         </div>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <div class="aksi d-flex">
-                                                    <button class="btn btn-primary"
-                                                        data-bs-target="#editdokter{{ $item->id }}"
-                                                        data-bs-toggle="modal"><i class="fas fa-info"></i> Edit</button>
-                                                    <button type="button" class="btn btn-danger mx-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#hapusdokter{{ $item->id }}"><i
-                                                            class="fas fa-trash"></i> Hapus</button>
-                                                </div>
-                                            </td>
-                                            @include('admin.master.datadokter.modaledit')
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                    </td>
+                                                    @include('admin.master.datadokter.modaledit')
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     @include('admin.master.datadokter.modaltambah')
     @include('admin.master.datadokter.modaledit')
     @include('admin.master.datadokter.modalhapus')
@@ -166,6 +181,60 @@
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
         <script>
+            function updateTanggal() {
+                var now = new Date();
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                if (tanggalPagiElement && tanggalSiangElement) {
+                    var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+                    tanggalPagiElement.textContent = tanggalLengkap;
+                    tanggalSiangElement.textContent = tanggalLengkap;
+                } else {
+                    console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
+                }
+            }
+
+            // Panggil fungsi saat halaman dimuat
+            document.addEventListener("DOMContentLoaded", updateTanggal);
+
+            // JAM DAN TANGGAL
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement = document.getElementById('tanggal');
+                var jamElement = document.getElementById('jam');
+
+                if (!tanggalElement || !jamElement) {
+                    console.error("Elemen tanggal atau jam tidak ditemukan: tanggal atau jam");
+                    return;
+                }
+
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                updateClock();
+                setInterval(updateClock, 1000);
+            });
+
             new DataTable('#example');
 
             // Validasi Nik

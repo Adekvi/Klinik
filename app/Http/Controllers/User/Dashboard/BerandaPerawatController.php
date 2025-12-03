@@ -65,6 +65,13 @@ class BerandaPerawatController extends Controller
         ));
     }
 
+    public function profil()
+    {
+        $profil = Auth::user();
+
+        return view('admin.profil.myprofil', compact('profil'));
+    }
+
     public function pemeriksaan(Request $request)
     {
         try {

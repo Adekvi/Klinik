@@ -3,8 +3,8 @@
         tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Hapus Tenaga Medis</h1>
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel"">Hapus Tenaga Medis</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ url('admin/hapus/datadokter/' . $item->id) }}" method="POST"

@@ -5,43 +5,52 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
                     <div class="card-title">
-                        <h5 style="margin-bottom: 20px"><strong>Setting Margin</strong></h5>
-                        {{-- <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                            data-bs-target="#poto"><i class="bi bi-plus-lg"></i>Tambah Margin</button> --}}
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Setting Margin</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tb-umum">
-                        <table id="example" class="table table-striped table-responsive"
-                            style="width:100%; text-align: center">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Margin</th>
-                                    <th>Keterangan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($potongan as $item)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            {{ $item->margin }} %
-                                        </td>
-                                        <td>{{ $item->keterangan ?? '-' }}</td>
-                                        <td>
-                                            <div class="aksi d-flex justify-content-center">
-                                                <button class="btn btn-primary"
-                                                    data-bs-target="#editpoli{{ $item->id }}"
-                                                    data-bs-toggle="modal"><i class="fas fa-info"></i> Edit</button>
-                                                {{-- <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="tb-umum">
+                                <table id="example" class="table table-striped table-responsive"
+                                    style="width:100%; text-align: center">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Margin</th>
+                                            <th>Keterangan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($potongan as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    {{ $item->margin }} %
+                                                </td>
+                                                <td>{{ $item->keterangan ?? '-' }}</td>
+                                                <td>
+                                                    <div class="aksi d-flex justify-content-center">
+                                                        <button class="btn btn-primary"
+                                                            data-bs-target="#editpoli{{ $item->id }}"
+                                                            data-bs-toggle="modal"><i class="fas fa-info"></i>
+                                                            Edit</button>
+                                                        {{-- <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
                                                     data-bs-target="#hapuspoli{{ $item->id }}"><i
                                                         class="fa fa-trash"></i> Hapus</button> --}}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,6 +72,28 @@
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap4.js"></script>
         <script>
             new DataTable('#example');
+
+            // jam dan tgl
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement =
+                    document.getElementById('tanggal');
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamElement = document.getElementById('jam');
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
         </script>
     @endpush
 

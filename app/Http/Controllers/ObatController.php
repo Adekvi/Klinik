@@ -70,6 +70,8 @@ class ObatController extends Controller
             ->pluck('jenis')
             ->toArray();
 
+        // dd(vars: $antrianObat);
+        // dd($aturanList, $anjuranList, $jenisObatList);
         
         // Status pasien
         $today = Carbon::today();
@@ -193,6 +195,9 @@ class ObatController extends Controller
 
         // dd($countShiftSiangUmumUmum, $countShiftSiangGigiBpjs, $countShiftSiangGigiUmum);
 
+        // $soap = Obat::where('id_pasien',17735)->get();
+        // dd($soap);
+
         // TOTAL PASIEN SHIFT PAGI DAN SIANG
         // POLI UMUM PASIEN UMUM
         $totalPoliUmumPasienUmum = $countShiftPagiUmumUmum + $countShiftSiangUmumUmum;
@@ -237,6 +242,7 @@ class ObatController extends Controller
         try {
             // Mengambil semua data dari form
             $data = $request->all();
+            // dd($data);
             Log::info('Data yang diterima dari form: ', $data);
 
             // dd($data);
@@ -363,10 +369,25 @@ class ObatController extends Controller
             }
 
             // Hitung shift berdasarkan tabel shift
-            $currentTime = Carbon::now()->format('H:i:s');
-            $shift = Shift::whereTime('jam_mulai', '<=', $currentTime)
-                ->whereTime('jam_selesai', '>=', $currentTime)
-                ->first();
+           $currentTime = Carbon::now()->format('H:i:s');
+
+            $shift = Shift::where(function ($q) use ($currentTime) {
+                // normal shift
+                $q->where(function ($q2) use ($currentTime) {
+                    $q2->whereColumn('jam_mulai', '<', 'jam_selesai')
+                        ->whereTime('jam_mulai', '<=', $currentTime)
+                        ->whereTime('jam_selesai', '>=', $currentTime);
+                })
+                // overnight shift
+                ->orWhere(function ($q2) use ($currentTime) {
+                    $q2->whereColumn('jam_mulai', '>', 'jam_selesai')
+                        ->where(function ($q3) use ($currentTime) {
+                            $q3->whereTime('jam_mulai', '<=', $currentTime)
+                                ->orWhereTime('jam_selesai', '>=', $currentTime);
+                        });
+                });
+            })
+            ->first();
 
             if (!$shift) {
                 Log::warning('Shift tidak ditemukan untuk waktu saat ini', ['current_time' => $currentTime]);

@@ -152,9 +152,12 @@ class ApotekerObatController extends Controller
                 ->orWhere('masuk', 'like', '%' . $query . '%')
                 ->orWhere('keluar', 'like', '%' . $query . '%')
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->limit(200)
+                ->get();
 
-            return response()->json(view('obat.master.table', compact('obat'))->render());
+            return response()->json([
+                'html' => view('obat.master.dataobat.table', compact('obat'))->render(),
+            ]);
         }
 
         // Jika bukan permintaan AJAX, kembalikan tampilan normal

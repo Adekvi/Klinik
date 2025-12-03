@@ -1,4 +1,4 @@
-<x-admin-layout.terminal title="Admin | Rekap Obat Keluar">
+<x-admin.layout.terminal title="Admin | Rekap Obat Keluar">
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -353,4 +353,4 @@
         </script>
     @endpush
 
-</x-admin-layout.terminal>
+</x-admin.layout.terminal>

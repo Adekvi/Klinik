@@ -81,7 +81,8 @@ class StokObatApotekerController extends Controller
         $page = $request->input('page', 1);
 
         $query = Obat::with(['booking.pasien', 'soap.poli', 'resep', 'antrianPerawat'])
-            ->where('status', 'O');
+            ->where('status', 'O')
+            ->orderBy('id', 'desc');
 
         if($search){
            $query->whereHas('booking.pasien', function ($q) use ($search) {

@@ -3,7 +3,13 @@
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
             <div class="title text-start">
-                <h4><strong>@yield('title')</strong></h4>
+                <div class="judul d-flex justify-content-between align-items-center">
+                    <h4><strong>Rekap Obat Keluar</strong></h4>
+                    <div class="date-time d-flex align-items-center gap-2 text-center">
+                        <div class="tanggal text-muted" id="tanggal"></div>
+                        <div class="jam text-muted" id="jam"></div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
@@ -130,7 +136,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-success">
-                                                            <i class="fa-solid fa-circle-check"></i>
+                                                            <i class="fa-solid fa-circle-check"></i> Success
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -139,7 +145,7 @@
                                     </tbody>
                                 </table>
 
-                                <div class="halaman d-flex justify-content-end">
+                                <div class="halaman mt-3 d-flex justify-content-end">
                                     {{ $obat->appends(request()->only(['search', 'entries']))->links() }}
                                 </div>
                             </div>
@@ -340,6 +346,10 @@
             .info-item p {
                 margin: 0;
             }
+
+            .swal2-container {
+                z-index: 9999 !important;
+            }
         </style>
     @endpush
 
@@ -347,6 +357,56 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // TANGGAL SHIFT
+                function updateTanggal() {
+                    var now = new Date();
+
+                    // Opsi format tanggal dan hari
+                    var options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric'
+                    };
+
+                    // Mengambil elemen HTML untuk shift pagi dan siang
+                    var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                    var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                    // Format tanggal lengkap dengan nama hari
+                    var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+
+                    // Menampilkan tanggal pada elemen yang sesuai
+                    tanggalPagiElement.textContent = tanggalLengkap;
+                    tanggalSiangElement.textContent = tanggalLengkap;
+                }
+
+                // Panggil fungsi saat halaman dimuat
+                updateTanggal();
+
+                // jam dan tgl
+                function updateClock() {
+                    var now = new Date();
+                    var tanggalElement =
+                        document.getElementById('tanggal');
+                    var options = {
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    };
+                    tanggalElement.innerHTML = '<p>' + now.toLocaleDateString('id-ID', options) + '</p>';
+
+                    var jamElement = document.getElementById('jam');
+                    var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                        now.getMinutes().toString().padStart(2, '0');
+                    jamElement.innerHTML = '<p>' + jamString + '</p>';
+                }
+                setInterval(updateClock, 1000);
+                updateClock();
+            });
+
             // new DataTable('#example');
             document.addEventListener('DOMContentLoaded', function() {
                 const tanggalInput = document.getElementById('tanggal');

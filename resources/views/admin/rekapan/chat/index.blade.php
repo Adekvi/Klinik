@@ -5,9 +5,13 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="datadokter">
                     <div class="card-title">
-                        <h5 style="margin-bottom: 20px"><strong>Kelola Pesan</strong></h5>
-                        {{-- <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                            data-bs-target="#tambahdokter"><i class="bi bi-plus-lg"></i>Tambah Tenaga Medis</button> --}}
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Kelola Pesan</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
@@ -88,5 +92,63 @@
             </div>
         </div>
     </div>
+
+    @push('script')
+        <script>
+            function updateTanggal() {
+                var now = new Date();
+                var options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+
+                var tanggalPagiElement = document.getElementById('tanggalShiftPagi');
+                var tanggalSiangElement = document.getElementById('tanggalShiftSiang');
+
+                if (tanggalPagiElement && tanggalSiangElement) {
+                    var tanggalLengkap = now.toLocaleDateString('id-ID', options);
+                    tanggalPagiElement.textContent = tanggalLengkap;
+                    tanggalSiangElement.textContent = tanggalLengkap;
+                } else {
+                    console.error("Elemen tanggal shift tidak ditemukan: tanggalShiftPagi atau tanggalShiftSiang");
+                }
+            }
+
+            // Panggil fungsi saat halaman dimuat
+            document.addEventListener("DOMContentLoaded", updateTanggal);
+
+            // JAM DAN TANGGAL
+            function updateClock() {
+                var now = new Date();
+                var tanggalElement = document.getElementById('tanggal');
+                var jamElement = document.getElementById('jam');
+
+                if (!tanggalElement || !jamElement) {
+                    console.error("Elemen tanggal atau jam tidak ditemukan: tanggal atau jam");
+                    return;
+                }
+
+                var options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                };
+                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
+
+                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                updateClock();
+                setInterval(updateClock, 1000);
+            });
+        </script>
+    @endpush
 
 </x-admin.layout.terminal>

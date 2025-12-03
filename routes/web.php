@@ -130,6 +130,12 @@ Route::get('/pasien/latest-no-rm', [PasienController::class, 'getLatestNoRm']);
 Route::post('/pasien-lama/store', [PasienController::class, 'storeOld']);
 Route::post('/get-patient-data', [PasienController::class, 'getPatientData']);
 
+// Profile
+Route::get('admin/my-profile', [ProfileController::class, 'index'])->name('admin.profile');
+Route::put('admin/my-profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
+// Informasi
+Route::get('admin/info', [InfoController::class, 'index'])->name('admin.info');
+
 Route::group(['middleware' => ['auth', 'perawat']], function () {
 
     Route::get('perawat/dashboard', [BerandaPerawatController::class, 'index']);
@@ -332,12 +338,6 @@ Route::post('/chat/sendMessage', [ChatController::class, 'sendMessage']);
 Route::group(['middleware' => ['auth', 'admin']], function () {
     // dashboard
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
-    // Profile
-    Route::get('admin/my-profile', [ProfileController::class, 'index'])->name('admin.profile');
-
-    // Informasi
-    Route::get('admin/info', [InfoController::class, 'index'])->name('admin.info');
 
     // Aktifitas User
     Route::get('admin/aktifitas-user/status-user', [InfoController::class, 'controlUser']);

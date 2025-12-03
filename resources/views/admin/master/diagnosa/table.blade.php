@@ -8,7 +8,7 @@
                 <button data-bs-target="#editdiagnosa{{ $item->id }}" data-bs-toggle="modal" class="btn btn-primary"><i
                         class="fas fa-info"></i> Edit</button>
                 <button type="button" data-bs-target="#hapusdiagnosa{{ $item->id }}" data-bs-toggle="modal"
-                    class="btn btn-danger mx-2">Hapus</button>
+                    class="btn btn-danger mx-2"><i class="fas fa-trash"></i> Hapus</button>
             </div>
         </td>
     </tr>

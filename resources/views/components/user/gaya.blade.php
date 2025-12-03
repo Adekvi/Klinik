@@ -2,7 +2,9 @@
   <link href="{{ asset('assets/images/logo_multisari.png') }}" rel="icon">
   <link href="{{ asset('assetss/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
   <!-- CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('aset/css/bootstrap/bootstrap.min.css') }}" />
+
+  {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
   <!-- Vendor CSS Files -->
   <link href="{{ asset('assetss/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -35,6 +37,9 @@
 
   {{-- landing --}}
   <link rel="stylesheet" href="{{ asset('aset/css/style.css') }}" />
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('aset/css/boxicon.css') }}" />
+  <link rel="stylesheet" href="{{ asset('aset/css/glightbox.css') }}" />
+  <link rel="stylesheet" href="{{ asset('aset/css/aos.css') }}" />
+  {{-- <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" /> --}}
+  {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"> --}}

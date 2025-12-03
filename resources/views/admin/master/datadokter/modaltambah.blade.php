@@ -3,8 +3,8 @@
     aria-labelledby="pasienbaru" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Tambah Tenaga Medis</h1>
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Tenaga Medis</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ url('admin/tambah/datadokter') }}" method="post" enctype="multipart/form-data">

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin\Rekapan;
 
 use App\Exports\RekapPasienBpjsExport;
-use App\Exports\RekapPasienExport;
 use App\Exports\RekapPasienGigiBpjsExport;
 use App\Exports\RekapPasienGigiUmumExport;
 use App\Exports\RekapPasienUmumExport;
 use App\Http\Controllers\Controller;
-use App\Models\Obat;
 use App\Models\Soap;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -118,7 +116,7 @@ class RekapPasienController extends Controller
 
     public function exportExcelBpjs()
     {
-        return Excel::download(new RekapPasienBpjsExport, 'umum-pasien-bpjs.xlsx');
+        return Excel::download(new RekapPasienBpjsExport(), 'umum-pasien-bpjs.xlsx');
     }
 
     // POLI UMUM PASIEN UMUM
@@ -221,7 +219,7 @@ class RekapPasienController extends Controller
 
     public function exportExcelUmum()
     {
-        return Excel::download(new RekapPasienUmumExport, 'umum-pasien-umum.xlsx');
+        return Excel::download(new RekapPasienUmumExport(), 'umum-pasien-umum.xlsx');
     }
 
     // POLI GIGI PASIEN BPJS
@@ -323,7 +321,7 @@ class RekapPasienController extends Controller
 
     public function exportExcelGigiBpjs()
     {
-        return Excel::download(new RekapPasienGigiBpjsExport, 'gigi-pasien-bpjs.xlsx');
+        return Excel::download(new RekapPasienGigiBpjsExport(), 'gigi-pasien-bpjs.xlsx');
     }
 
     // POLI GIGI PASIEN UMUM
@@ -424,6 +422,6 @@ class RekapPasienController extends Controller
 
     public function exportExcelGigiUmum()
     {
-        return Excel::download(new RekapPasienGigiUmumExport, 'gigi-pasien-umum.xlsx');
+        return Excel::download(new RekapPasienGigiUmumExport(), 'gigi-pasien-umum.xlsx');
     }
 }

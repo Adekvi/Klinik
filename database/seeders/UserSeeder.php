@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
                 'username' => 'superadmin',
                 'password' => '1',
                 'role' => 'admin',
+                'foto' => null,
             ]
         ];
         foreach ($users as $key => $user) {

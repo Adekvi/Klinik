@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->foreign('id_dokter')->references('id')
                     ->on('data_dokters')
                     ->onDelete('cascade');
+            $table->string('foto')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

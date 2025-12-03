@@ -5,12 +5,19 @@
             <div class="col-lg-12 mb-4 order-0">
                 <div class="pasien-bpjs">
                     <div class="card-title">
-                        <h5 class="mb-4"><strong>Data Jenis Obat</strong></h5>
-                        <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                            data-bs-target="#poto"><i class="fas fa-plus"></i>Tambah</button>
+                        <div class="judul d-flex justify-content-between align-items-center">
+                            <h4><strong>Data Jenis Obat</strong></h4>
+                            <div class="date-time d-flex align-items-center gap-2 text-center">
+                                <div class="tanggal text-muted" id="tanggal"></div>
+                                <div class="jam text-muted" id="jam"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                                data-bs-target="#poto"><i class="fas fa-plus"></i> Tambah</button>
+                            <hr>
                             <div class="tb-umum">
                                 <form method="GET" action=""
                                     class="d-flex justify-content-between align-items-center mb-3">
@@ -100,7 +107,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="halaman d-flex justify-content-end mt-2">
+                            <div class="halaman mt-2 d-flex justify-content-end mt-2">
                                 {{ $jenis->appends(request()->only(['search', 'entries']))->links() }}
                             </div>
                         </div>

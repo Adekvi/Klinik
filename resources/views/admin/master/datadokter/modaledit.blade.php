@@ -1,10 +1,10 @@
 @foreach ($dokter as $item)
     <div class="modal fade" id="editdokter{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Edit Tenaga Medis</h1>
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Tenaga Medis</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ url('admin/edit/datadokter/' . $item->id) }}" method="post"
@@ -24,15 +24,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        {{-- <div class="form-group">
-                        <label for="poli">Poli</label>
-                        <select name="poli" id="poli" class="form-control mt-2 mb-2">
-                            @foreach ($poli as $poliItem)
-                                <option value="{{ $poliItem->KdPoli }}" {{ $item->id_poli == $poliItem->KdPoli ? 'selected' : '' }}>{{ $poliItem->namapoli }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
                         <div class="form-group">
                             <label for="nik">NIK</label>
                             <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"

@@ -1,39 +1,39 @@
 @foreach ($obat as $item)
     <div class="modal fade" id="editobat{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: white">Edit Data Stok Obat</h1>
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Data Stok Obat</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ url('admin/edit/obat/' . $item->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Golongan</label>
-                                <input type="text" name="golongan" id="golongan" class="form-control mt-2 mb-2"
-                                    placeholder="Golongan" value="{{ $item->golongan }}">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Jenis Sediaan</label>
-                                <input type="text" name="jenis_sediaan" id="jenis_sediaan"
-                                    class="form-control mt-2 mb-2" placeholder="Jenis Sediaan"
-                                    value="{{ $item->jenis_sediaan }}">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="nama_obat">Nama Obat</label>
-                                <input type="text" class="form-control mt-2 mb-2" name="nama_obat" id="nama_obat"
-                                    placeholder="Masukkan Nama Obat" required value="{{ $item->nama_obat }}">
-                            </div>
-                        </div>
                         <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Golongan</label>
+                                    <input type="text" name="golongan" id="golongan" class="form-control mt-2 mb-2"
+                                        placeholder="Golongan" value="{{ $item->golongan }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Jenis Sediaan</label>
+                                    <input type="text" name="jenis_sediaan" id="jenis_sediaan"
+                                        class="form-control mt-2 mb-2" placeholder="Jenis Sediaan"
+                                        value="{{ $item->jenis_sediaan }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="nama_obat">Nama Obat</label>
+                                    <input type="text" class="form-control mt-2 mb-2" name="nama_obat" id="nama_obat"
+                                        placeholder="Masukkan Nama Obat" required value="{{ $item->nama_obat }}">
+                                </div>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="harga_pokok">Harga Beli</label>
@@ -59,17 +59,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="form-group">
-                                <label for="stok_awal">Stok</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control mt-2 mb-2" name="stok_awal" id="stok_awal{{ $item->id }}" value="{{ $item->stok_awal ?? 0 }}" readonly>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                                            <b>Total</b>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> --}}
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
