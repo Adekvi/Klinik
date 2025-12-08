@@ -45,10 +45,12 @@
                                         Export
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{{ url('/gigi-bpjs/export-excel') }}">Export to
-                                            Excel</a>
-                                        <a class="dropdown-item" href="#">Export to PDF</a>
-                                        <a class="dropdown-item" href="#">Export to Word</a>
+                                        {{-- <a class="dropdown-item" href="{{ url('/gigi-bpjs/export-excel') }}">Export to
+                                            Excel</a> --}}
+                                        <button id="btnExportExcel" class="dropdown-item">Export to Excel</button>
+
+                                        {{-- <a class="dropdown-item" href="#">Export to PDF</a>
+                                        <a class="dropdown-item" href="#">Export to Word</a> --}}
                                     </div>
                                 </div>
                             </div>
@@ -389,6 +391,21 @@
                     monthSelect.appendChild(option);
                 });
             });
+        </script>
+        <script>
+            document.getElementById('btnExportExcel').addEventListener('click', function () {
+
+                let search = document.getElementById('search')?.value || "";
+                let filterOption = document.querySelector('input[name="filter_option"]:checked')?.id || "";
+                let tanggal = document.getElementById('tanggal')?.value || "";
+                let month = document.getElementById('month')?.value || "";
+                let tahun = document.getElementById('tahun')?.value || "";
+
+                let url = `/gigi-bpjs/export-excel?search=${search}&filter_option=${filterOption}&tanggal=${tanggal}&month=${month}&tahun=${tahun}`;
+
+                window.location.href = url;
+            });
+
         </script>
     @endpush
 

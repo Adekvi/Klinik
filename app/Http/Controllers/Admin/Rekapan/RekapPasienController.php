@@ -114,10 +114,20 @@ class RekapPasienController extends Controller
         return $html;
     }
 
-    public function exportExcelBpjs()
+    public function exportExcelBpjs(Request $request)
     {
-        return Excel::download(new RekapPasienBpjsExport(), 'umum-pasien-bpjs.xlsx');
+        return Excel::download(
+            new RekapPasienBpjsExport(
+                $request->search,
+                $request->filter_option,
+                $request->tanggal,
+                $request->month,
+                $request->tahun
+            ),
+            'umum-pasien-bpjs.xlsx'
+        );
     }
+
 
     // POLI UMUM PASIEN UMUM
     public function indexUmum()
@@ -217,9 +227,17 @@ class RekapPasienController extends Controller
         return $html;
     }
 
-    public function exportExcelUmum()
+    public function exportExcelUmum(Request $request)
     {
-        return Excel::download(new RekapPasienUmumExport(), 'umum-pasien-umum.xlsx');
+        return Excel::download(
+            new RekapPasienUmumExport(
+                  $request->search,
+                    $request->filter_option,
+                    $request->tanggal,
+                    $request->month,
+                    $request->tahun
+            ),
+            'umum-pasien-umum.xlsx');
     }
 
     // POLI GIGI PASIEN BPJS
@@ -319,9 +337,15 @@ class RekapPasienController extends Controller
         return $html;
     }
 
-    public function exportExcelGigiBpjs()
+    public function exportExcelGigiBpjs(Request $request)
     {
-        return Excel::download(new RekapPasienGigiBpjsExport(), 'gigi-pasien-bpjs.xlsx');
+        return Excel::download(new RekapPasienGigiBpjsExport(
+            $request->search,
+            $request->filter_option,
+            $request->tanggal,
+            $request->month,
+            $request->tahun
+        ), 'gigi-pasien-bpjs.xlsx');
     }
 
     // POLI GIGI PASIEN UMUM
@@ -420,8 +444,14 @@ class RekapPasienController extends Controller
         return $html;
     }
 
-    public function exportExcelGigiUmum()
+    public function exportExcelGigiUmum(Request $request)
     {
-        return Excel::download(new RekapPasienGigiUmumExport(), 'gigi-pasien-umum.xlsx');
+        return Excel::download(new RekapPasienGigiUmumExport(
+            $request->search,
+            $request->filter_option,
+            $request->tanggal,
+            $request->month,
+            $request->tahun
+        ), 'gigi-pasien-umum.xlsx');
     }
 }

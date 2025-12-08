@@ -1,4 +1,9 @@
-<x-admin.layout.terminal title="Admin | Rekap Pasien Poli Umum">
+<?php if (isset($component)) { $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Admin\Layout\Terminal::class, ['title' => 'Admin | Rekap Pasien Poli Umum']); ?>
+<?php $component->withName('admin.layout.terminal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
@@ -51,11 +56,9 @@
                                         Export
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {{-- <a class="dropdown-item" href="{{ url('/pasien-bpjs/export-excel') }}">Export to
-                                            Excel</a> --}}
+                                        
                                         <button id="btnExportExcel" class="dropdown-item">Export to Excel</button>
-                                        {{-- <a class="dropdown-item" href="#">Export to PDF</a>
-                                        <a class="dropdown-item" href="#">Export to Word</a> --}}
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -89,83 +92,86 @@
                                             <th class="custom-th">AKSI</th>
                                         </tr>
                                     </thead>
-                                    {{-- {{ dd($umumBpjs) }} --}}
+                                    
                                     <tbody>
-                                        @php
+                                        <?php
                                             $pasienCounts = [];
-                                        @endphp
+                                        ?>
 
-                                        @foreach ($umumBpjs as $item)
-                                            @if ($item->pasien->jenis_pasien == 'Bpjs')
-                                                @php
+                                        <?php $__currentLoopData = $umumBpjs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($item->pasien->jenis_pasien == 'Bpjs'): ?>
+                                                <?php
                                                     $pasienId = $item->pasien->id;
                                                     if (!isset($pasienCounts[$pasienId])) {
                                                         $pasienCounts[$pasienId] = 1;
                                                     } else {
                                                         $pasienCounts[$pasienId]++;
                                                     }
-                                                @endphp
-                                            @endif
-                                        @endforeach
+                                                ?>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                        @php $counter = 1; @endphp
+                                        <?php $counter = 1; ?>
 
-                                        @foreach ($umumBpjs as $item)
-                                            @if ($item->pasien->jenis_pasien == 'Bpjs')
-                                                @php
+                                        <?php $__currentLoopData = $umumBpjs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($item->pasien->jenis_pasien == 'Bpjs'): ?>
+                                                <?php
                                                     $pasienId = $item->pasien->id;
                                                     $statusPasien = $pasienCounts[$pasienId] > 1 ? 'Lama' : 'Baru';
-                                                @endphp
+                                                ?>
                                                 <tr>
-                                                    <td>{{ $counter++ }}</td>
-                                                    <td>{{ date('d/m/Y', strtotime($item->created_at)) }}</td>
-                                                    <td>{{ date('H:i:s', strtotime($item->created_at)) }}</td>
-                                                    <td>{{ $item->pasien->no_rm }}</td>
-                                                    <td>{{ $item->pasien->nama_pasien }}</td>
-                                                    <td>{{ $statusPasien }}</td>
-                                                    <td>{{ date('d/m/Y', strtotime($item->pasien->tgllahir)) }}</td>
-                                                    <td>{{ $item->pasien->bpjs }}</td>
-                                                    <td>{{ $item->pasien->nik }}</td>
-                                                    <td>{{ $item->pasien->noHP }}</td>
-                                                    <td>{{ $item->pasien->pekerjaan }}</td>
-                                                    <td>{{ $item->pasien->nama_kk }}</td>
-                                                    <td>{{ $item->pasien->alamat_asal }}</td>
-                                                    <td>{{ $item->keluhan_utama }}</td>
-                                                    <td>Td : {{ $item->p_tensi }} mmHg, <br> N : {{ $item->p_nadi }}
+                                                    <td><?php echo e($counter++); ?></td>
+                                                    <td><?php echo e(date('d/m/Y', strtotime($item->created_at))); ?></td>
+                                                    <td><?php echo e(date('H:i:s', strtotime($item->created_at))); ?></td>
+                                                    <td><?php echo e($item->pasien->no_rm); ?></td>
+                                                    <td><?php echo e($item->pasien->nama_pasien); ?></td>
+                                                    <td><?php echo e($statusPasien); ?></td>
+                                                    <td><?php echo e(date('d/m/Y', strtotime($item->pasien->tgllahir))); ?></td>
+                                                    <td><?php echo e($item->pasien->bpjs); ?></td>
+                                                    <td><?php echo e($item->pasien->nik); ?></td>
+                                                    <td><?php echo e($item->pasien->noHP); ?></td>
+                                                    <td><?php echo e($item->pasien->pekerjaan); ?></td>
+                                                    <td><?php echo e($item->pasien->nama_kk); ?></td>
+                                                    <td><?php echo e($item->pasien->alamat_asal); ?></td>
+                                                    <td><?php echo e($item->keluhan_utama); ?></td>
+                                                    <td>Td : <?php echo e($item->p_tensi); ?> mmHg, <br> N : <?php echo e($item->p_nadi); ?>
+
                                                         x/m,
-                                                        <br> R : {{ $item->p_rr }} x/m, <br> S : {{ $item->p_suhu }}
+                                                        <br> R : <?php echo e($item->p_rr); ?> x/m, <br> S : <?php echo e($item->p_suhu); ?>
+
                                                         C,
-                                                        <br> SpO2 : {{ $item->spo2 }} %, <br> BB :
-                                                        {{ $item->p_bb }}
-                                                        kg, <br> TB : {{ $item->p_tb }} cm
+                                                        <br> SpO2 : <?php echo e($item->spo2); ?> %, <br> BB :
+                                                        <?php echo e($item->p_bb); ?>
+
+                                                        kg, <br> TB : <?php echo e($item->p_tb); ?> cm
                                                     </td>
                                                     <td>
-                                                        @php
+                                                        <?php
                                                             $diagnosa = json_decode($item->soap_a_primer, true);
-                                                        @endphp
-                                                        @foreach ($diagnosa as $diagno)
-                                                            - {{ $diagno }} <br>
-                                                        @endforeach
+                                                        ?>
+                                                        <?php $__currentLoopData = $diagnosa; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diagno): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            - <?php echo e($diagno); ?> <br>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </td>
                                                     <td>
-                                                        @php
+                                                        <?php
                                                             $resep = json_decode($item->soap_p, true);
-                                                        @endphp
-                                                        @foreach ($resep as $key => $value)
-                                                            - {{ $key }} <br>
-                                                        @endforeach
+                                                        ?>
+                                                        <?php $__currentLoopData = $resep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            - <?php echo e($key); ?> <br>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </td>
-                                                    <td>{{ $item->rujuk ?? '-' }}</td>
+                                                    <td><?php echo e($item->rujuk ?? '-'); ?></td>
                                                     <td>
                                                         <button type="button" class="btn btn-danger"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#hapuspoli{{ $item->id }}">
+                                                            data-bs-target="#hapuspoli<?php echo e($item->id); ?>">
                                                             <i class="fas fa-trash"></i> Hapus
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @endif
-                                        @endforeach
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -176,7 +182,7 @@
         </div>
     </div>
 
-    @push('style')
+    <?php $__env->startPush('style'); ?>
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
         <style>
             .custom-th {
@@ -192,9 +198,9 @@
                 /* Menampilkan elipsis (...) jika teks melebihi lebar maksimum */
             }
         </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('script')
+    <?php $__env->startPush('script'); ?>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -444,6 +450,12 @@
             });
 
         </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-admin.layout.terminal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc)): ?>
+<?php $component = $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc; ?>
+<?php unset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\Klinik\resources\views/admin/rekapan/pasien-bpjs/index.blade.php ENDPATH**/ ?>

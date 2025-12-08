@@ -1,17 +1,16 @@
-<x-admin.layout.terminal title="Admin | Rekap Pasien Poli Umum">
+<?php if (isset($component)) { $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Admin\Layout\Terminal::class, ['title' => 'Admin | Rekap Pasien Poli Gigi']); ?>
+<?php $component->withName('admin.layout.terminal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
 
     <div class="container-xxl flex-grow-1 container-p-y mt-4">
         <div class="row">
             <div class="col-lg-12 mb-4 order-0">
-                <div class="pasien-bpjs">
+                <div class="pasien-umum">
                     <div class="title">
-                        <div class="judul d-flex justify-content-between align-items-center">
-                            <h5>Poli Umum / <strong>Laporan Kunjungan Pasien BPJS</strong></h5>
-                            <div class="date-time d-flex align-items-center gap-2 text-center">
-                                <div class="tanggal text-muted" id="tanggal"></div>
-                                <div class="jam text-muted" id="jam"></div>
-                            </div>
-                        </div>
+                        <h5>Poli Gigi / <strong>Laporan Kunjungan Pasien Umum</strong></h5>
                     </div>
                     <div class="card" style="width: 40%; margin-bottom: 20px">
                         <div class="card-body">
@@ -51,11 +50,10 @@
                                         Export
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {{-- <a class="dropdown-item" href="{{ url('/pasien-bpjs/export-excel') }}">Export to
-                                            Excel</a> --}}
+                                        
                                         <button id="btnExportExcel" class="dropdown-item">Export to Excel</button>
-                                        {{-- <a class="dropdown-item" href="#">Export to PDF</a>
-                                        <a class="dropdown-item" href="#">Export to Word</a> --}}
+
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +64,7 @@
                             <div class="table-responsive">
                                 <table id="example" class="table mt-2 mb-2 table-striped table-bordered"
                                     style="width:100%">
-                                    <thead class="table-primary" style="align-items: center">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th class="custom-th">NO.</th>
                                             <th class="custom-th">TANGGAL</th>
@@ -75,7 +73,8 @@
                                             <th class="custom-th">NAMA PASIEN</th>
                                             <th class="custom-th">JENIS PASIEN</th>
                                             <th class="custom-th">TANGGAL LAHIR</th>
-                                            <th class="custom-th">NOMOR BPJS</th>
+                                            <th class="custom-th">PASIEN UMUM</th>
+                                            <th class="custom-th">HARGA</th>
                                             <th class="custom-th">NOMOR NIK</th>
                                             <th class="custom-th">NOMOR HP</th>
                                             <th class="custom-th">PEKERJAAN</th>
@@ -89,83 +88,7 @@
                                             <th class="custom-th">AKSI</th>
                                         </tr>
                                     </thead>
-                                    {{-- {{ dd($umumBpjs) }} --}}
                                     <tbody>
-                                        @php
-                                            $pasienCounts = [];
-                                        @endphp
-
-                                        @foreach ($umumBpjs as $item)
-                                            @if ($item->pasien->jenis_pasien == 'Bpjs')
-                                                @php
-                                                    $pasienId = $item->pasien->id;
-                                                    if (!isset($pasienCounts[$pasienId])) {
-                                                        $pasienCounts[$pasienId] = 1;
-                                                    } else {
-                                                        $pasienCounts[$pasienId]++;
-                                                    }
-                                                @endphp
-                                            @endif
-                                        @endforeach
-
-                                        @php $counter = 1; @endphp
-
-                                        @foreach ($umumBpjs as $item)
-                                            @if ($item->pasien->jenis_pasien == 'Bpjs')
-                                                @php
-                                                    $pasienId = $item->pasien->id;
-                                                    $statusPasien = $pasienCounts[$pasienId] > 1 ? 'Lama' : 'Baru';
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $counter++ }}</td>
-                                                    <td>{{ date('d/m/Y', strtotime($item->created_at)) }}</td>
-                                                    <td>{{ date('H:i:s', strtotime($item->created_at)) }}</td>
-                                                    <td>{{ $item->pasien->no_rm }}</td>
-                                                    <td>{{ $item->pasien->nama_pasien }}</td>
-                                                    <td>{{ $statusPasien }}</td>
-                                                    <td>{{ date('d/m/Y', strtotime($item->pasien->tgllahir)) }}</td>
-                                                    <td>{{ $item->pasien->bpjs }}</td>
-                                                    <td>{{ $item->pasien->nik }}</td>
-                                                    <td>{{ $item->pasien->noHP }}</td>
-                                                    <td>{{ $item->pasien->pekerjaan }}</td>
-                                                    <td>{{ $item->pasien->nama_kk }}</td>
-                                                    <td>{{ $item->pasien->alamat_asal }}</td>
-                                                    <td>{{ $item->keluhan_utama }}</td>
-                                                    <td>Td : {{ $item->p_tensi }} mmHg, <br> N : {{ $item->p_nadi }}
-                                                        x/m,
-                                                        <br> R : {{ $item->p_rr }} x/m, <br> S : {{ $item->p_suhu }}
-                                                        C,
-                                                        <br> SpO2 : {{ $item->spo2 }} %, <br> BB :
-                                                        {{ $item->p_bb }}
-                                                        kg, <br> TB : {{ $item->p_tb }} cm
-                                                    </td>
-                                                    <td>
-                                                        @php
-                                                            $diagnosa = json_decode($item->soap_a_primer, true);
-                                                        @endphp
-                                                        @foreach ($diagnosa as $diagno)
-                                                            - {{ $diagno }} <br>
-                                                        @endforeach
-                                                    </td>
-                                                    <td>
-                                                        @php
-                                                            $resep = json_decode($item->soap_p, true);
-                                                        @endphp
-                                                        @foreach ($resep as $key => $value)
-                                                            - {{ $key }} <br>
-                                                        @endforeach
-                                                    </td>
-                                                    <td>{{ $item->rujuk ?? '-' }}</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#hapuspoli{{ $item->id }}">
-                                                            <i class="fas fa-trash"></i> Hapus
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -176,7 +99,7 @@
         </div>
     </div>
 
-    @push('style')
+    <?php $__env->startPush('style'); ?>
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap4.css">
         <style>
             .custom-th {
@@ -192,9 +115,9 @@
                 /* Menampilkan elipsis (...) jika teks melebihi lebar maksimum */
             }
         </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('script')
+    <?php $__env->startPush('script'); ?>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -203,28 +126,6 @@
 
         <script>
             new DataTable('#example');
-            // jam dan tgl
-            function updateClock() {
-                var now = new Date();
-                var tanggalElement =
-                    document.getElementById('tanggal');
-                var options = {
-                    weekday: 'short',
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                };
-                tanggalElement.innerHTML = '<h6>' + now.toLocaleDateString('id-ID', options) + '</h6>';
-
-                var jamElement = document.getElementById('jam');
-                var jamString = now.getHours().toString().padStart(2, '0') + ':' +
-                    now.getMinutes().toString().padStart(2, '0') + ':' +
-                    now.getSeconds().toString().padStart(2, '0');
-                jamElement.innerHTML = '<h6>' + jamString + '</h6>';
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-
             document.addEventListener('DOMContentLoaded', function() {
                 const tanggalInput = document.getElementById('tanggal');
                 const monthSelect = document.getElementById('month');
@@ -274,7 +175,7 @@
                     }
 
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    fetch('/rekapan/bpjs/search', {
+                    fetch('/rekapan/gigi-umum/search', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -300,61 +201,33 @@
                     // Kosongkan tabel
                     tableBody.innerHTML = '';
 
-                    // Periksa apakah data kosong atau null
-                    if (!data || data.length === 0) {
-                        // Tambahkan pesan bahwa data tidak ada
+                    // Periksa apakah data kosong
+                    if (data.length === 0) {
+                        // Jika data kosong, tambahkan satu baris dengan pesan "data tidak ada"
                         const row = document.createElement('tr');
-                        row.innerHTML = '<td colspan="20" style="text-align: center">Data tidak ada</td>';
+                        row.innerHTML =
+                            '<td colspan="20" style="text-align: center">Data tidak ada</td>'; // colspan diset ke 6 karena ada 6 kolom
                         tableBody.appendChild(row);
-                        return; // Keluar dari fungsi setelah menambahkan pesan
+                    } else {
+                        // Jika ada data, tambahkan baris-baris baru berdasarkan data
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                            <td>${item.tanggal}</td>
+                            <td>${item.no_rm}</td>
+                            <td>${item.nama_pasien}</td>
+                            <td>${item.jenis_pasien}</td>
+                            <td>${item.nama_poli}</td>
+                            <td>
+                                <button type="button" class="btn btn-info mb-1"  data-bs-toggle="modal" data-bs-target="#riwayat${item.id}">
+                                    <i class="fas fa-info"></i> Keterangan Obat</button>
+                                <button type="button" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#hapuspoli${item.id}">
+                                    <i class="fas fa-trash"></i> Hapus</button>
+                            </td>
+                        `;
+                            tableBody.appendChild(row);
+                        });
                     }
-                    // Jika ada data, tambahkan baris-baris baru berdasarkan data
-                    var no = 1;
-                    data.forEach(item => {
-                        if (!item) return;
-
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                        <td>${no++}</td>
-                        <td>${item.tanggal}</td>
-                        <td>${item.jam}</td>
-                        <td>${item.no_rm}</td>
-                        <td>${item.nama_pasien}</td>
-                        <td>${item.jenis_pasien}</td>
-                        <td>${item.tgllahir}</td>
-                        <td>${item.nomor_bpjs}</td>
-                        <td>${item.nik}</td>
-                        <td>${item.noHP}</td>
-                        <td>${item.pekerjaan}</td>
-                        <td>${item.nama_kk}</td>
-                        <td>${item.alamat_asal}</td>
-                        <td>${item.keluhan_utama}</td>
-                        <td>
-                        Td : ${item.p_tensi} mmHg, <br>
-                            N : ${item.p_nadi} x/m, <br>
-                            R : ${item.p_rr} x/m, <br>
-                            S : ${item.p_suhu} C, <br>
-                            SpO2 :${item.spo2} %<br>
-                            BB : ${item.p_bb} kg, <br>
-                            TB : ${item.p_tb} cm, <br>
-                        </td>
-                        <td>
-                            ${item.soap_a_primer}
-                        </td>
-                        <td>
-                            ${item.soap_p}
-                        </td>
-                        <td style="text-align: center;">
-                            ${item.rujuk ?? ' - '}
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#hapuspoli${item.id}">
-                                <i class="fas fa-trash"></i> Hapus</button>
-                        </td>
-                    `;
-                        tableBody.appendChild(row);
-                    });
-
                 }
 
                 function cetakHasilFilter() {
@@ -382,7 +255,7 @@
                     }
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                     // Kirim data filter ke route pencetakan menggunakan AJAX
-                    fetch('/rekapan/bpjs/cetak', {
+                    fetch('/rekapan/gigi-umum/cetak', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -427,9 +300,8 @@
                     monthSelect.appendChild(option);
                 });
             });
-
         </script>
-        <script>
+          <script>
             document.getElementById('btnExportExcel').addEventListener('click', function () {
 
                 let search = document.getElementById('search')?.value || "";
@@ -438,12 +310,18 @@
                 let month = document.getElementById('month')?.value || "";
                 let tahun = document.getElementById('tahun')?.value || "";
 
-                let url = `/pasien-bpjs/export-excel?search=${search}&filter_option=${filterOption}&tanggal=${tanggal}&month=${month}&tahun=${tahun}`;
+                let url = `/gigi-umum/export-excel?search=${search}&filter_option=${filterOption}&tanggal=${tanggal}&month=${month}&tahun=${tahun}`;
 
                 window.location.href = url;
             });
 
         </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-admin.layout.terminal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc)): ?>
+<?php $component = $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc; ?>
+<?php unset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\Klinik\resources\views/admin/rekapan/pasien-gigi/gigi-umum/index.blade.php ENDPATH**/ ?>
