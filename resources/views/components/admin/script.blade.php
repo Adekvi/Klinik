@@ -33,3 +33,17 @@
 <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
 {{-- <script src="{{ asset('aset/js/chat.js') }}"></script> --}}
+
+{{-- Livewire --}}
+<script>
+    window.addEventListener('open-periksa-modal', function() {
+        const modalEl = document.getElementById('periksaModal');
+        if (!modalEl) {
+            console.error('Modal #periksaModal tidak ditemukan');
+            return;
+        }
+
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    });
+</script>

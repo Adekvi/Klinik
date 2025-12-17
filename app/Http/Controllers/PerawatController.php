@@ -47,6 +47,8 @@ class PerawatController extends Controller
         // Menjaga parameter pencarian tetap ada saat navigasi halaman
         $pasien->appends(['search' => $search, 'entries' => $entries]);
 
+        // dd($pasien);
+
         // Query untuk pasien dengan status 'M' (Menunggu)
         $periksaSearch = $request->input('periksa_search');
         $periksaEntries = $request->input('periksa_entries', 10); // Default 10

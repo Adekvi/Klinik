@@ -10,8 +10,6 @@ class AntrianPerawat extends Model
     use HasFactory;
     protected $guarded = [];
 
-    // Gagal mengekspor ke Excel: Call to undefined relationship [datadokter] on model [App\Models\AntrianPerawat].
-
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'id_booking', 'id');
@@ -30,7 +28,7 @@ class AntrianPerawat extends Model
     }
     public function isian()
     {
-        return $this->belongsTo(IsianPerawat::class, 'id_isian', 'id');
+        return $this->hasOne(IsianPerawat::class, 'id_booking', 'id_booking');
     }
     public function obat()
     {
@@ -53,7 +51,6 @@ class AntrianPerawat extends Model
         return $this->belongsTo(Kasir::class, 'id');
     }
 
-    // Model AntrianPerawat
     public function ttd()
     {
         return $this->belongsTo(TtdMedis::class, 'id_ttd_medis'); // foreign key di AntrianPerawat

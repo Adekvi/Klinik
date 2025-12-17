@@ -149,13 +149,13 @@
                                                                 [];
                                                         }
 
-                                                        dd(
-                                                            $item->obat->soap->soap_p,
-                                                            $item->obat->soap->soap_p_jenis,
-                                                            $item->obat->soap->soap_p_aturan,
-                                                            $item->obat->soap->soap_p_anjuran,
-                                                            $item->obat->soap->soap_p_jumlah,
-                                                        );
+                                                        // dd(
+                                                        //     $item->obat->soap->soap_p,
+                                                        //     $item->obat->soap->soap_p_jenis,
+                                                        //     $item->obat->soap->soap_p_aturan,
+                                                        //     $item->obat->soap->soap_p_anjuran,
+                                                        //     $item->obat->soap->soap_p_jumlah,
+                                                        // );
 
                                                         $olehNgombe = $anjuranMinum;
 

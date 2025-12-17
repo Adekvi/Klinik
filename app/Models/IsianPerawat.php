@@ -37,9 +37,9 @@ class IsianPerawat extends Model
     {
         return $this->belongsTo(RmDa1::class, 'id_rm', 'id');
     }
-    public function antrianPerawat()
+    public function antrian()
     {
-        return $this->hasMany(AntrianPerawat::class, 'id');
+        return $this->belongsTo(AntrianPerawat::class, 'id_booking', 'id_booking');
     }
     public function ttdMedis()
     {

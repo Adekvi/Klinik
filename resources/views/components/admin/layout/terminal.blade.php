@@ -14,6 +14,9 @@
     <meta name="description" content="" />
 
     <x-admin.style />
+
+    @livewireStyles
+
     @stack('style')
 
 </head>
@@ -83,7 +86,11 @@
     </div>
 
     @stack('script')
+
     <x-admin.script />
+
+    @livewireScripts
+
     @include('sweetalert::alert')
 
 </body>

@@ -118,6 +118,7 @@
 
                      </div>
                      <hr>
+
                      @if ($createdAtRM && $now->greaterThanOrEqualTo($nextKajianDate))
                          <input type="hidden" name="idrm" value="{{ $item->rm->id }}">
                          <input type="hidden" name="id_pasien" value="{{ $item->booking->pasien->id }}">

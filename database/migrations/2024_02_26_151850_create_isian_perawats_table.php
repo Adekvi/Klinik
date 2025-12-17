@@ -49,6 +49,21 @@ class CreateIsianPerawatsTable extends Migration
                                 ->onDelete('cascade');
                         $table->string('p_form_isian_pilihan')->nullable();
                         $table->string('p_form_isian_pilihan_uraian')->nullable();
+                        // isian
+                        $table->string('p_tensi')->nullable();
+                        $table->string('p_rr')->nullable();
+                        $table->string('p_nadi')->nullable();
+                        $table->string('spo2')->nullable();
+                        $table->string('p_suhu')->nullable();
+                        $table->integer('p_tb')->nullable();
+                        $table->integer('p_bb')->nullable();
+                        $table->integer('p_lngkr_kepala_anak')->nullable();
+                        $table->integer('p_lngkr_lengan_anc')->nullable();
+                        $table->string('p_imt')->nullable();
+                        $table->integer('gcs_e')->nullable();
+                        $table->integer('gcs_m')->nullable();
+                        $table->integer('gcs_v')->nullable();
+                        // kajian
                         $table->string('p_dws_rokok')->nullable();
                         $table->string('p_dws_alkohol')->nullable();
                         $table->string('p_obat_tidur')->nullable();
@@ -65,19 +80,6 @@ class CreateIsianPerawatsTable extends Migration
                         $table->string('p_anak_riwayat_lahir_vaksin_dpt')->nullable();
                         $table->string('p_anak_riwayat_lahir_vaksin_campak')->nullable();
                         $table->string('p_anak_riwayat_lahir_vaksin_polio')->nullable();
-                        $table->string('p_tensi')->nullable();
-                        $table->string('p_rr')->nullable();
-                        $table->string('p_nadi')->nullable();
-                        $table->string('spo2')->nullable();
-                        $table->string('p_suhu')->nullable();
-                        $table->integer('p_tb')->nullable();
-                        $table->integer('p_bb')->nullable();
-                        $table->integer('p_lngkr_kepala_anak')->nullable();
-                        $table->integer('p_lngkr_lengan_anc')->nullable();
-                        $table->string('p_imt')->nullable();
-                        $table->integer('gcs_e')->nullable();
-                        $table->integer('gcs_m')->nullable();
-                        $table->integer('gcs_v')->nullable();
                         $table->string('ak_nutrisi_bb')->nullable();
                         $table->string('ak_nutrisi_tb')->nullable();
                         $table->string('ak_nutrisi_imt')->nullable();
