@@ -113,8 +113,6 @@ class PasienController extends Controller
             // Kondisikan redirect berdasarkan status login
             session()->flash('success', 'Anda Berhasil Mendaftar, Silahkan Menuju ke Loket Perawat');
             if (!Auth::check()) {
-                // Pengguna belum login (pendaftaran mandiri)
-                // return response()->json(['redirect' => route('/')]);
                 return response()->json(['redirect' => route('pasien.show', ['id_antrian' => $antrian->id])]);;
             } else {
                 // Pengguna sudah login
@@ -260,7 +258,7 @@ class PasienController extends Controller
         return response()->json($dokter);
     }
 
-      public function searchPasien(Request $request)
+    public function searchPasien(Request $request)
     {
         $keyword = $request->input('identifier') ?? $request->input('nama');
 
@@ -391,7 +389,7 @@ class PasienController extends Controller
         return response()->json($pasien);
     }
 
-     public function getPasienDetailBpjs(Request $request)
+    public function getPasienDetailBpjs(Request $request)
     {
         $no_rm = $request->input('no_rm');
 

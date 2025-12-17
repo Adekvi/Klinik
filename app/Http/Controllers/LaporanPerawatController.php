@@ -27,6 +27,7 @@ class LaporanPerawatController extends Controller
         // Query semua pasien
         $query = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
             ->where('status', 'M')
+            ->whereDate('created_at', Carbon::today())
             // ->orderByRaw("CASE WHEN status = 'D' THEN 1 ELSE 2 END")
             ->orderBy('urutan', 'asc') // Menambahkan pengurutan berdasarkan urutan
             ->orderBy('created_at', 'asc');
@@ -45,18 +46,9 @@ class LaporanPerawatController extends Controller
         // Menjaga parameter pencarian tetap ada saat navigasi halaman
         $pasien->appends(['search' => $search, 'entries' => $entries]);
 
-        // $pasien = AntrianPerawat::with(['booking.pasien', 'poli', 'rm', 'isian'])
-        //     ->orderByRaw("CASE WHEN status = 'D' THEN 1 ELSE 2 END")
-        //     ->orderBy('urutan', 'asc') // Menambahkan pengurutan berdasarkan urutan
-        //     ->orderBy('created_at', 'asc')
-        //     ->paginate(10);
-
         // dd($pasien);
 
         $log = AntrianPerawat::all();
-        // Count untuk shift pagi berdasarkan id_poli = 1
-        // Count untuk shift pagi berdasarkan id_poli = 1 dan id_pasien = 1
-        // Count untuk shift pagi berdasarkan jenis_pasien == 'BPJS'
 
         // SHIFT PAGI POLI UMUM
         // PASIEN BPJS

@@ -8,7 +8,8 @@
                         <div class="judul d-flex justify-content-between align-items-center">
                             <h5><strong>
                                     Rekap Kunjungan Harian
-                                </strong></h5>
+                                </strong>
+                            </h5>
                             <div class="date-time d-flex align-items-center gap-2 text-center">
                                 <div class="tanggal text-muted" id="tanggal"></div>
                                 <div class="jam text-muted" id="jam"></div>
@@ -21,7 +22,7 @@
                                 <div class="judul">
                                     <h5 class="text-muted">
                                         <strong>
-                                            <li>Pilih Tanggal</li>
+                                            Pilih Tanggal
                                         </strong>
                                     </h5>
                                 </div>
@@ -87,7 +88,7 @@
 
                             <h5 class="mb-3 text-muted">
                                 <strong>
-                                    <li>Data Pasien</li>
+                                    Data Pasien
                                 </strong>
                             </h5>
                             <div class="sortir">

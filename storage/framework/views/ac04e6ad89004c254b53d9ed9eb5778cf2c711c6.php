@@ -1,4 +1,9 @@
-<x-admin.layout.terminal title="Perawat">
+<?php if (isset($component)) { $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Admin\Layout\Terminal::class, ['title' => 'Perawat']); ?>
+<?php $component->withName('admin.layout.terminal'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row demo-vertical-spacing">
@@ -49,7 +54,7 @@
                                                             <span id="pasienDilayani" style="font-size: 25px">0</span>
                                                         </span>
                                                         <!-- Gambar di bawah -->
-                                                        <img src="{{ asset('aset/img/periksa.jpg') }}"
+                                                        <img src="<?php echo e(asset('aset/img/periksa.jpg')); ?>"
                                                             alt="Pasien DIlayani" style="width: 60%; height: auto;">
                                                     </div>
                                                     <div class="text-center d-flex flex-column align-items-center">
@@ -60,14 +65,14 @@
                                                                 style="font-size: 25px">0</span>
                                                         </span>
                                                         <!-- Gambar di bawah -->
-                                                        <img src="{{ asset('aset/img/check.jpg') }}"
+                                                        <img src="<?php echo e(asset('aset/img/check.jpg')); ?>"
                                                             alt="Pasien Belum Dilayani"
                                                             style="width: 60%; height: auto;">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                {{-- Shift Pagi --}}
+                                                
                                                 <div id="shiftPagi" class="shift-container">
                                                     <table class="table table-bordered table-responsive">
                                                         <thead class="table-primary">
@@ -198,7 +203,7 @@
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <a href="{{ url('perawat/rekap/harian') }}"
+                                                    <a href="<?php echo e(url('perawat/rekap/harian')); ?>"
                                                         class="btn btn-primary w-100">
                                                         <i class="menu-icon tf-icons fa-solid fa-folder"></i> Menu
                                                         Rekap
@@ -220,26 +225,26 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <form method="GET" action="{{ route('perawat.index') }}"
+                            <form method="GET" action="<?php echo e(route('perawat.index')); ?>"
                                 class="d-flex justify-content-between align-items-center mb-3">
-                                <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                                <input type="hidden" name="page" value="1"> 
                                 <div class="d-flex align-items-center">
                                     <label for="entries" class="me-2">Tampilkan:</label>
                                     <select name="entries" id="entries" class="form-select form-select-sm me-3"
                                         style="width: 80px;" onchange="this.form.submit()">
-                                        <option value="10" {{ $entries == 10 ? 'selected' : '' }}>10
+                                        <option value="10" <?php echo e($entries == 10 ? 'selected' : ''); ?>>10
                                         </option>
-                                        <option value="25" {{ $entries == 25 ? 'selected' : '' }}>25
+                                        <option value="25" <?php echo e($entries == 25 ? 'selected' : ''); ?>>25
                                         </option>
-                                        <option value="50" {{ $entries == 50 ? 'selected' : '' }}>50
+                                        <option value="50" <?php echo e($entries == 50 ? 'selected' : ''); ?>>50
                                         </option>
-                                        <option value="100" {{ $entries == 100 ? 'selected' : '' }}>100
+                                        <option value="100" <?php echo e($entries == 100 ? 'selected' : ''); ?>>100
                                         </option>
                                     </select>
                                 </div>
 
                                 <div class="d-flex align-items-center">
-                                    <input type="text" name="search" value="{{ $search }}"
+                                    <input type="text" name="search" value="<?php echo e($search); ?>"
                                         class="form-control form-control-sm me-2" style="width: 400px;"
                                         placeholder="Cari Nama / NIK / No. Rm">
                                     <button type="submit" class="btn btn-sm btn-primary">
@@ -266,23 +271,23 @@
                                         </tr>
                                     </thead>
                                     <tbody style="text-align: center; text-transform: uppercase;" id="daftarAntrianD">
-                                        @if (count($pasien) === 0)
+                                        <?php if(count($pasien) === 0): ?>
                                             <tr>
                                                 <td colspan="10" style="text-align: center; font-size: bold">Belum
                                                     ada data
                                                 </td>
                                             </tr>
-                                        @else
+                                        <?php else: ?>
                                             <?php $no = 1; ?>
-                                            @foreach ($pasien as $item)
-                                                {{-- {{ dd($item) }} --}}
-                                                @if ($item->status == 'D')
-                                                    <tr id="row_{{ $item->id }}">
-                                                        <td>{{ $no++ }}</td>
+                                            <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                
+                                                <?php if($item->status == 'D'): ?>
+                                                    <tr id="row_<?php echo e($item->id); ?>">
+                                                        <td><?php echo e($no++); ?></td>
                                                         <td>
                                                             <button
-                                                                data-nomor-antrian-perawat="{{ $item->kode_antrian }}"
-                                                                data-poli="{{ $item->poli->namapoli }}"
+                                                                data-nomor-antrian-perawat="<?php echo e($item->kode_antrian); ?>"
+                                                                data-poli="<?php echo e($item->poli->namapoli); ?>"
                                                                 class="btn btn-success btn-panggil-perawat mb-1"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true">
@@ -292,12 +297,12 @@
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <button type="button" class="btn btn-secondary mb-1"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#lewati{{ $item->id }}">
+                                                                    data-bs-target="#lewati<?php echo e($item->id); ?>">
                                                                     <i class="fa-solid fa-forward"></i>
                                                                 </button>
                                                             </span>
                                                             <button type="button" class="btn btn-primary mb-1"
-                                                                onclick="Livewire.emit('openAsesmenModal', {{ $item->id }})">
+                                                                onclick="Livewire.emit('openAsesmenModal', <?php echo e($item->id); ?>)">
                                                                 <i class="fas fa-pen"></i>
                                                             </button>
 
@@ -305,26 +310,27 @@
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <button type="button" class="btn btn-info mb-1"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#riwayatModal{{ $item->id }}">
+                                                                    data-bs-target="#riwayatModal<?php echo e($item->id); ?>">
                                                                     <i class="fas fa-info"></i>
                                                                 </button>
                                                             </span>
-                                                            <a href="{{ url('cetak-antrianPerawat/' . $item->id) }}"
+                                                            <a href="<?php echo e(url('cetak-antrianPerawat/' . $item->id)); ?>"
                                                                 class="btn btn-warning mb-1" target="_blank"
                                                                 data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="top" data-bs-html="true">
                                                                 <i class="fas fa-print"></i>
                                                             </a>
                                                         </td>
-                                                        <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                        <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                        <td>{{ $item->kode_antrian }}</td>
-                                                        <td>{{ $item->poli->namapoli }}</td>
-                                                        <td>{{ $item->dokter->nama_dokter }}</td>
-                                                        <td>{{ $item->booking->pasien->domisili }}</td>
-                                                        <td>{{ $item->booking->pasien->jenis_pasien }}</td>
+                                                        <td><?php echo e($item->booking->pasien->no_rm); ?></td>
+                                                        <td><?php echo e($item->booking->pasien->nama_pasien); ?></td>
+                                                        <td><?php echo e($item->kode_antrian); ?></td>
+                                                        <td><?php echo e($item->poli->namapoli); ?></td>
+                                                        <td><?php echo e($item->dokter->nama_dokter); ?></td>
+                                                        <td><?php echo e($item->booking->pasien->domisili); ?></td>
+                                                        <td><?php echo e($item->booking->pasien->jenis_pasien); ?></td>
                                                         <td>
-                                                            {{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }}
+                                                            <?php echo e(\Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age); ?>
+
                                                             Tahun
                                                         </td>
                                                         <td>
@@ -333,16 +339,31 @@
                                                             </button>
                                                         </td>
                                                     </tr>
-                                                @endif
-                                            @endforeach
-                                        @endif
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="halaman d-flex justify-content-end">
-                                {{ $pasien->appends(request()->only(['search', 'entries']))->links() }}
+                                <?php echo e($pasien->appends(request()->only(['search', 'entries']))->links()); ?>
+
                             </div>
-                            <livewire:perawat.asesmen-pasien-modal />
+                            <?php
+if (! isset($_instance)) {
+    $html = \Livewire\Livewire::mount('perawat.asesmen-pasien-modal', [])->html();
+} elseif ($_instance->childHasBeenRendered('JMJkoi4')) {
+    $componentId = $_instance->getRenderedChildComponentId('JMJkoi4');
+    $componentTag = $_instance->getRenderedChildComponentTagName('JMJkoi4');
+    $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
+    $_instance->preserveRenderedChild('JMJkoi4');
+} else {
+    $response = \Livewire\Livewire::mount('perawat.asesmen-pasien-modal', []);
+    $html = $response->html();
+    $_instance->logRenderedChild('JMJkoi4', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+}
+echo $html;
+?>
                         </div>
                     </div>
                 </div>
@@ -355,29 +376,29 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form method="GET" action="{{ route('perawat.index') }}"
+                        <form method="GET" action="<?php echo e(route('perawat.index')); ?>"
                             class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="hidden" name="page" value="1"> {{-- Reset ke halaman 1 saat pencarian --}}
+                            <input type="hidden" name="page" value="1"> 
                             <div class="d-flex align-items-center">
                                 <label for="periksa_entries" class="me-2">Tampilkan:</label>
                                 <select name="periksa_entries" id="periksa_entries"
                                     class="form-select form-select-sm me-3" style="width: 80px;"
                                     onchange="this.form.submit()">
                                     <option value="10"
-                                        {{ request('periksa_entries', 10) == 10 ? 'selected' : '' }}>10
+                                        <?php echo e(request('periksa_entries', 10) == 10 ? 'selected' : ''); ?>>10
                                     </option>
-                                    <option value="25" {{ request('recent_entries') == 25 ? 'selected' : '' }}>25
+                                    <option value="25" <?php echo e(request('recent_entries') == 25 ? 'selected' : ''); ?>>25
                                     </option>
-                                    <option value="50" {{ request('recent_entries') == 50 ? 'selected' : '' }}>50
+                                    <option value="50" <?php echo e(request('recent_entries') == 50 ? 'selected' : ''); ?>>50
                                     </option>
-                                    <option value="100" {{ request('recent_entries') == 100 ? 'selected' : '' }}>
+                                    <option value="100" <?php echo e(request('recent_entries') == 100 ? 'selected' : ''); ?>>
                                         100
                                     </option>
                                 </select>
                             </div>
 
                             <div class="d-flex align-items-center">
-                                <input type="text" name="periksa_search" value="{{ request('periksa_search') }}"
+                                <input type="text" name="periksa_search" value="<?php echo e(request('periksa_search')); ?>"
                                     class="form-control form-control-sm me-2" style="width: 400px;"
                                     placeholder="Cari Nama / NIK / No. Rm">
                                 <button type="submit" class="btn btn-sm btn-primary">
@@ -403,27 +424,29 @@
                                     </tr>
                                 </thead>
                                 <tbody style="text-align: center; text-transform: uppercase;" id="daftarAntrianM">
-                                    @if ($periksa->isEmpty())
+                                    <?php if($periksa->isEmpty()): ?>
                                         <tr>
                                             <td colspan="9" style="text-align: center">Tidak Ada Data Pasien</td>
                                         </tr>
-                                    @else
+                                    <?php else: ?>
                                         <?php $no = 1; ?>
-                                        @foreach ($periksa as $item)
-                                            @if ($item->status == 'M')
-                                                <tr id="row_{{ $item->id }}">
-                                                    <td>{{ $no++ }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y / H:i') }}
+                                        <?php $__currentLoopData = $periksa; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($item->status == 'M'): ?>
+                                                <tr id="row_<?php echo e($item->id); ?>">
+                                                    <td><?php echo e($no++); ?></td>
+                                                    <td><?php echo e(\Carbon\Carbon::parse($item->created_at)->format('d-m-Y / H:i')); ?>
+
                                                     </td>
-                                                    <td>{{ $item->booking->pasien->no_rm }}</td>
-                                                    <td>{{ $item->booking->pasien->nama_pasien }}</td>
-                                                    <td>{{ $item->kode_antrian }}</td>
-                                                    <td>{{ $item->poli->namapoli }}</td>
-                                                    <td>{{ $item->dokter->nama_dokter }}</td>
-                                                    <td>{{ $item->booking->pasien->domisili }}</td>
-                                                    <td>{{ $item->booking->pasien->jenis_pasien }}</td>
+                                                    <td><?php echo e($item->booking->pasien->no_rm); ?></td>
+                                                    <td><?php echo e($item->booking->pasien->nama_pasien); ?></td>
+                                                    <td><?php echo e($item->kode_antrian); ?></td>
+                                                    <td><?php echo e($item->poli->namapoli); ?></td>
+                                                    <td><?php echo e($item->dokter->nama_dokter); ?></td>
+                                                    <td><?php echo e($item->booking->pasien->domisili); ?></td>
+                                                    <td><?php echo e($item->booking->pasien->jenis_pasien); ?></td>
                                                     <td>
-                                                        {{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }}
+                                                        <?php echo e(\Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age); ?>
+
                                                         Tahun
                                                     </td>
                                                     <td>
@@ -432,15 +455,16 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @endif
-                                            {{-- @include('perawat.modalPerawat.ModalKajianAwal') --}}
-                                        @endforeach
-                                    @endif
+                                            <?php endif; ?>
+                                            
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
                         <div class="page d-flex justify-content-end">
-                            {{ $periksa->appends(request()->only(['periksa_search', 'periksa_entries']))->links() }}
+                            <?php echo e($periksa->appends(request()->only(['periksa_search', 'periksa_entries']))->links()); ?>
+
                         </div>
                     </div>
                 </div>
@@ -448,11 +472,11 @@
         </div>
     </div>
 
-    {{-- TAMPIL MODAL RIWAYAT 1 --}}
-    @foreach ($pasien as $item)
-        {{-- MODAL ISIAN PERAWAT --}}
-        <div class="modal fade" id="riwayatModal{{ $item->id }}" tabindex="-1"
-            aria-labelledby="exampleModalLabel{{ $item->id }}" aria-hidden="true">
+    
+    <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        
+        <div class="modal fade" id="riwayatModal<?php echo e($item->id); ?>" tabindex="-1"
+            aria-labelledby="exampleModalLabel<?php echo e($item->id); ?>" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -474,11 +498,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
+                                    <?php
                                         $iteration = 1;
                                         $asesmenDitemukan = false;
-                                    @endphp
-                                    @php
+                                    ?>
+                                    <?php
                                         $sortedSoap = [];
                                         if (!empty($soap)) {
                                             $idPasien = $item->booking->id_pasien;
@@ -489,29 +513,30 @@
                                                 ->all();
                                         }
                                         // dd($sortedSoap);
-                                    @endphp
-                                    @if (!empty($sortedSoap))
-                                        @foreach ($sortedSoap as $asesmen)
-                                            @php $asesmenDitemukan = true; @endphp
+                                    ?>
+                                    <?php if(!empty($sortedSoap)): ?>
+                                        <?php $__currentLoopData = $sortedSoap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asesmen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $asesmenDitemukan = true; ?>
                                             <tr>
-                                                <td>{{ $iteration++ }}</td>
-                                                <td>{{ date_format(date_create($asesmen['created_at']), 'd-m-Y/H:i:s') }}
+                                                <td><?php echo e($iteration++); ?></td>
+                                                <td><?php echo e(date_format(date_create($asesmen['created_at']), 'd-m-Y/H:i:s')); ?>
+
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#detailAsesmen{{ $asesmen['id'] }}"
+                                                        data-bs-target="#detailAsesmen<?php echo e($asesmen['id']); ?>"
                                                         data-toggle="tooltip" data-bs-placement="top"
                                                         title="Asesmen">
                                                         <i class="fas fa-eye"></i> Lihat Asesmen
                                                     </button>
                                                 </td>
                                             </tr>
-                                        @endforeach
-                                    @elseif (!$asesmenDitemukan)
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php elseif(!$asesmenDitemukan): ?>
                                         <tr>
                                             <td colspan="3" style="text-align: center">Belum ada Asesmen</td>
                                         </tr>
-                                    @endif
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -522,20 +547,21 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-    {{-- TAMPIL MODAL RIWAYAT 2 --}}
-    @if (!empty($soap))
-        @foreach ($soap as $asesmen)
-            <div class="modal fade" id="detailAsesmen{{ $asesmen->id }}" tabindex="-1"
-                aria-labelledby="exampleModalLabelAsesmen{{ $asesmen->id }}" aria-hidden="true">
+    
+    <?php if(!empty($soap)): ?>
+        <?php $__currentLoopData = $soap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asesmen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="modal fade" id="detailAsesmen<?php echo e($asesmen->id); ?>" tabindex="-1"
+                aria-labelledby="exampleModalLabelAsesmen<?php echo e($asesmen->id); ?>" aria-hidden="true">
                 <div class="modal-dialog modal-lg" style="display: contents">
                     <div class="modal-content" style="margin-top: 20px; width: 95%; margin-left: 3%;">
                         <div class="modal-header bg-primary">
                             <h1 class="modal-title fs-5" id="modalScrollableTitle" style="color: rgb(0, 0, 0)">
                                 Detail Asesmen
                                 Tanggal:
-                                {{ $asesmen->created_at ? date_format(date_create($asesmen->created_at), 'd-m-Y') : 'N/A' }}
+                                <?php echo e($asesmen->created_at ? date_format(date_create($asesmen->created_at), 'd-m-Y') : 'N/A'); ?>
+
                             </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
@@ -553,9 +579,10 @@
                                     </thead>
                                     <tbody style="text-align: center;">
                                         <tr>
-                                            <td>{{ $asesmen->created_at ? date_format(date_create($asesmen->created_at), 'Y-m-d H:i:s') : 'N/A' }}
+                                            <td><?php echo e($asesmen->created_at ? date_format(date_create($asesmen->created_at), 'Y-m-d H:i:s') : 'N/A'); ?>
+
                                             </td>
-                                            <td>{{ $asesmen->nama_dokter ?? 'N/A' }}</td>
+                                            <td><?php echo e($asesmen->nama_dokter ?? 'N/A'); ?></td>
                                             <td style="text-align: left">
                                                 <table class="table">
                                                     <thead>
@@ -568,21 +595,21 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $asesmen->keluhan_utama ?? 'N/A' }}</td>
+                                                            <td><?php echo e($asesmen->keluhan_utama ?? 'N/A'); ?></td>
                                                             <td>
                                                                 <ul>
-                                                                    <li>Tensi: {{ $asesmen->p_tensi ?? 'N/A' }} mmHg
+                                                                    <li>Tensi: <?php echo e($asesmen->p_tensi ?? 'N/A'); ?> mmHg
                                                                     </li>
-                                                                    <li>RR: {{ $asesmen->p_rr ?? 'N/A' }} / minute</li>
-                                                                    <li>Nadi: {{ $asesmen->p_nadi ?? 'N/A' }} / minute
+                                                                    <li>RR: <?php echo e($asesmen->p_rr ?? 'N/A'); ?> / minute</li>
+                                                                    <li>Nadi: <?php echo e($asesmen->p_nadi ?? 'N/A'); ?> / minute
                                                                     </li>
-                                                                    <li>Suhu: {{ $asesmen->p_suhu ?? 'N/A' }} °C</li>
-                                                                    <li>TB: {{ $asesmen->p_tb ?? 'N/A' }} cm</li>
-                                                                    <li>BB: {{ $asesmen->p_bb ?? 'N/A' }} kg</li>
+                                                                    <li>Suhu: <?php echo e($asesmen->p_suhu ?? 'N/A'); ?> °C</li>
+                                                                    <li>TB: <?php echo e($asesmen->p_tb ?? 'N/A'); ?> cm</li>
+                                                                    <li>BB: <?php echo e($asesmen->p_bb ?? 'N/A'); ?> kg</li>
                                                                 </ul>
                                                             </td>
                                                             <td>
-                                                                @php
+                                                                <?php
                                                                     $diagnosaPrimer = !empty($asesmen->soap_a_primer)
                                                                         ? json_decode($asesmen->soap_a_primer, true)
                                                                         : [];
@@ -597,27 +624,27 @@
                                                                     $diagnosaSekunder = is_array($diagnosaSekunder)
                                                                         ? array_values($diagnosaSekunder)
                                                                         : [];
-                                                                @endphp
+                                                                ?>
                                                                 <p style="font-weight: bold">Diagnosa Primer</p>
-                                                                @if (!empty($diagnosaPrimer))
-                                                                    @foreach ($diagnosaPrimer as $diag)
+                                                                <?php if(!empty($diagnosaPrimer)): ?>
+                                                                    <?php $__currentLoopData = $diagnosaPrimer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <ul>
-                                                                            <li>{{ $diag }}</li>
+                                                                            <li><?php echo e($diag); ?></li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                                 <p style="font-weight: bold">Diagnosa Sekunder</p>
-                                                                @if (!empty($diagnosaSekunder))
-                                                                    @foreach ($diagnosaSekunder as $diagn)
+                                                                <?php if(!empty($diagnosaSekunder)): ?>
+                                                                    <?php $__currentLoopData = $diagnosaSekunder; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diagn): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <ul>
-                                                                            <li>{{ $diagn }}</li>
+                                                                            <li><?php echo e($diagn); ?></li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td>
                                                                 <p style="font-weight: bold; margin-bottom: 0">Resep:
@@ -625,58 +652,60 @@
                                                                 <p style="font-weight: bold; margin-bottom: 0">Non
                                                                     Racikan
                                                                 </p>
-                                                                @php
+                                                                <?php
                                                                     $resep = !empty($asesmen->soap_p)
                                                                         ? json_decode($asesmen->soap_p, true)
                                                                         : [];
                                                                     $aturan = !empty($asesmen->soap_p_aturan)
                                                                         ? json_decode($asesmen->soap_p_aturan, true)
                                                                         : [];
-                                                                @endphp
-                                                                @if (is_array($resep) && is_array($aturan) && count($resep) == count($aturan) && !empty($resep))
-                                                                    @foreach ($resep as $obat => $namaObat)
-                                                                        @php
+                                                                ?>
+                                                                <?php if(is_array($resep) && is_array($aturan) && count($resep) == count($aturan) && !empty($resep)): ?>
+                                                                    <?php $__currentLoopData = $resep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $obat => $namaObat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php
                                                                             $aturanMinum = $aturan[$obat] ?? 'N/A';
-                                                                        @endphp
+                                                                        ?>
                                                                         <ul>
-                                                                            <li>{{ $namaObat }} |
-                                                                                {{ $aturanMinum }}
+                                                                            <li><?php echo e($namaObat); ?> |
+                                                                                <?php echo e($aturanMinum); ?>
+
                                                                             </li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
 
                                                                 <p style="font-weight: bold; margin-bottom: 0">Racikan
                                                                     (Puyer)
                                                                 </p>
-                                                                @php
+                                                                <?php
                                                                     $obatRacikan = !empty($asesmen->soap_r)
                                                                         ? json_decode($asesmen->soap_r, true)
                                                                         : [];
                                                                     $takaran = !empty($asesmen->soap_r_takaran)
                                                                         ? json_decode($asesmen->soap_r_takaran, true)
                                                                         : [];
-                                                                @endphp
-                                                                @if (is_array($obatRacikan) && is_array($takaran) && count($obatRacikan) > 0 && count($obatRacikan) == count($takaran))
-                                                                    @foreach ($obatRacikan as $namaObat => $jumlah)
+                                                                ?>
+                                                                <?php if(is_array($obatRacikan) && is_array($takaran) && count($obatRacikan) > 0 && count($obatRacikan) == count($takaran)): ?>
+                                                                    <?php $__currentLoopData = $obatRacikan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $namaObat => $jumlah): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <ul>
-                                                                            <li>{{ $namaObat }} -
-                                                                                {{ $jumlah }}
-                                                                                ({{ $takaran[$namaObat] ?? 'N/A' }})
+                                                                            <li><?php echo e($namaObat); ?> -
+                                                                                <?php echo e($jumlah); ?>
+
+                                                                                (<?php echo e($takaran[$namaObat] ?? 'N/A'); ?>)
                                                                             </li>
                                                                         </ul>
-                                                                    @endforeach
-                                                                @else
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php else: ?>
                                                                     <p>-</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </td>
-                                            <td>{{ $asesmen->edukasi ?? 'N/A' }}</td>
+                                            <td><?php echo e($asesmen->edukasi ?? 'N/A'); ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -690,12 +719,12 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    @endif
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    <?php endif; ?>
 
-    {{-- TAMPILKAN LEWATI --}}
-    @foreach ($pasien as $item)
-        <div class="modal fade" id="lewati{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    
+    <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="lewati<?php echo e($item->id); ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -711,16 +740,16 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <form action="{{ url('perawat/lewati/' . $item->id) }}" method="POST"
+                        <form action="<?php echo e(url('perawat/lewati/' . $item->id)); ?>" method="POST"
                             enctype="multipart/form-data">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="btn btn-primary">Lewati</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <!-- Modal PASIEN UMUM -->
     <div class="modal fade" id="pasienumum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -738,18 +767,16 @@
                         <label for="no_rm">Poli</label>
                         <select name="poli" id="poli_umum" class="form-control mt-2 mb-2">
                             <option value="#" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_umum" class="form-control mt-2 mb-2">
                             <option value="#">Pilih Dokter</option>
-                            {{-- @foreach ($dokter as $item)
-                    <option value="{{ $item->id }}">{{ $item->nama_dokter }}</option>
-                @endforeach --}}
+                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -761,11 +788,25 @@
                     </div>
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="nik" id="nik" placeholder="Masukkan NIK" required>
-                        @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="form-group">
                         <label for="nama_kk">Nama Kepala Keluarga</label>
@@ -807,7 +848,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                    
                     <button type="button" class="btn btn-primary" id="btnSimpan" onclick="saveData()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status"
                             aria-hidden="true"></span>
@@ -833,18 +874,16 @@
                         <label for="no_rm">Poli</label>
                         <select name="poli" id="poli_bpjs" class="form-control mt-2 mb-2">
                             <option value="#" disabled selected>Pilih Poli</option>
-                            @foreach ($poli as $item)
-                                <option value="{{ $item->KdPoli }}">{{ $item->namapoli }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $poli; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($item->KdPoli); ?>"><?php echo e($item->namapoli); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_bpjs" class="form-control mt-2 mb-2">
                             <option value="#">Pilih Dokter</option>
-                            {{-- @foreach ($dokter as $item)
-                            <option value="{{ $item->id }}">{{ $item->nama_dokter }}</option>
-                        @endforeach --}}
+                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -864,11 +903,25 @@
                     </div>
                     <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="text" class="form-control mt-2 mb-2 @error('nik') is-invalid @enderror"
+                        <input type="text" class="form-control mt-2 mb-2 <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                             name="nik" id="nikbpjs" placeholder="Masukkan NIK" required>
-                        @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['nik'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="form-group">
                         <label for="nama_kk">Nama Kepala Keluarga</label>
@@ -921,27 +974,27 @@
         </div>
     </div>
 
-    @include('perawat.kunjunganSehat.modalSehat')
-    @include('perawat.kunjunganOnline.modalOnline')
+    <?php echo $__env->make('perawat.kunjunganSehat.modalSehat', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('perawat.kunjunganOnline.modalOnline', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    @push('style')
+    <?php $__env->startPush('style'); ?>
         <style>
             /* Alert */
             .swal2-container {
                 z-index: 9999 !important;
             }
         </style>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-    @push('script')
+    <?php $__env->startPush('script'); ?>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="{{ asset('aset/js/popper/popper.min.js') }}"></script>
-        {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script> --}}
+        <script src="<?php echo e(asset('aset/js/popper/popper.min.js')); ?>"></script>
+        
         <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-        {{-- <script src="{{ asset('assets/responsivevoice.js') }}"></script> --}}
-        <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
-        <script src="{{ asset('assets/js/script.js') }}"></script>
+        
+        <script src="<?php echo e(asset('assets/js/antrian.script.js')); ?>"></script>
+        <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
 
         <script>
             // Cache elements
@@ -1238,7 +1291,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: "GET",
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     if (res) {
                                         $("#dokter_umum").empty();
@@ -1406,7 +1459,7 @@
                         if (poli_id) {
                             $.ajax({
                                 type: "GET",
-                                url: "{{ url('get-dokter-by-poli') }}/" + poli_id,
+                                url: "<?php echo e(url('get-dokter-by-poli')); ?>/" + poli_id,
                                 success: function(res) {
                                     if (res) {
                                         $("#dokter_bpjs").empty();
@@ -1559,6 +1612,12 @@
                 });
             }
         </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-</x-admin.layout.terminal>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc)): ?>
+<?php $component = $__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc; ?>
+<?php unset($__componentOriginal7e574ae613b9c7a71481c42282e2125e07f655dc); ?>
+<?php endif; ?>
+<?php /**PATH E:\xampp\htdocs\Job_Rs_Master\resources\views/perawat/index.blade.php ENDPATH**/ ?>

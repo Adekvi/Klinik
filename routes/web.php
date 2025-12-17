@@ -144,6 +144,10 @@ Route::group(['middleware' => ['auth', 'perawat']], function () {
     Route::get('perawat/daftar', [PerawatController::class, 'daftar'])->name('perawat.daftar');
     Route::post('perawat/store/{id}', [PerawatController::class, 'store']);
 
+    // Get Pasien
+    Route::get('/antrian-perawat-json', [PerawatController::class, 'getAntrianPerawatJson'])->name('pasien.antrian');
+    Route::get('/stats-antrian', [PerawatController::class, 'getStats']);
+
     // KAJIAN AWAL
     Route::post('perawat/kajian/{id}', [PerawatController::class, 'kajian']);
 
