@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AntrianPerawat;
 use App\Models\Diagnosa;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -84,7 +85,7 @@ class BerandaPerawatController extends Controller
                 ->orderBy('id', 'asc');
 
             // Tentukan rentang tanggal default (minggu berjalan: Senin hingga hari ini)
-            $defaultStart = Carbon::now()->startOfWeek(Carbon::MONDAY)->startOfDay();
+            $defaultStart = Carbon::now()->startOfWeek(CarbonInterface::MONDAY)->startOfDay();
             $defaultEnd = Carbon::now()->endOfDay();
 
             // Filter berdasarkan rentang tanggal

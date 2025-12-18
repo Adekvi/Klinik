@@ -286,7 +286,7 @@ class PasienController extends Controller
 
         // Tambahkan usia
         $pasien = $pasien->map(function ($item) {
-            $item->usia = $item->tgllahir ? \Carbon\Carbon::parse($item->tgllahir)->age : '-';
+            $item->usia = $item->tgllahir ? Carbon::parse($item->tgllahir)->age : '-';
             return $item;
         });
 
