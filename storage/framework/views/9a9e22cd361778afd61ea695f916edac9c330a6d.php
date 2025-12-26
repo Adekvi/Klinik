@@ -1,4 +1,4 @@
-<div id="formKajian{{ $booking->id }}">
+<div id="formKajian<?php echo e($booking->id); ?>">
     <div class="kebiasaan">
         <h5 class="text-center fw-bold" onclick="toggleStep(this)">
             Kebiasaan</h5>
@@ -520,7 +520,7 @@
             </div>
         </div>
         <div class="form-group mb-4">
-            <img src="{{ asset('assets/images/analog-scale.png') }}" alt="" height="auto" width="55%"
+            <img src="<?php echo e(asset('assets/images/analog-scale.png')); ?>" alt="" height="auto" width="55%"
                 style="margin-left: 30px">
             <div class="row mb-2">
                 <div class="col">
@@ -612,7 +612,7 @@
             <div class="form-group">
                 <label for="ak_analisis_masalah_keperawatan">Analisa Masalah Keperawatan</label>
                 <select wire:model="selectedAnalisaMasalah" name="ak_analisis_masalah_keperawatan"
-                    id="ak_analisis_masalah_keperawatan{{ $booking->id }}" class="form-control mt-2 mb-2">
+                    id="ak_analisis_masalah_keperawatan<?php echo e($booking->id); ?>" class="form-control mt-2 mb-2">
                     <option value="">Pilih Masalah</option>
                     <option value="Bersihkan Jalan Nafas tidak Efektif">Bersihkan Jalan Nafas tidak Efektif</option>
                     <option value="Perubahan Nutrisi Kurang / Lebih Cairan">Perubahan Nutrisi Kurang / Lebih Cairan
@@ -636,3 +636,4 @@
     </div>
 
 </div>
+<?php /**PATH C:\laragon\www\Klinik\resources\views/perawat/modalPerawat/tabs/tab-kajian-awal.blade.php ENDPATH**/ ?>

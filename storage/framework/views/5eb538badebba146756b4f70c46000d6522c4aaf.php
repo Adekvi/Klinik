@@ -1,4 +1,4 @@
-<div class="form-hamil{{ $booking->id }}">
+<div class="form-hamil<?php echo e($booking->id); ?>">
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -82,29 +82,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for ($i = 1; $i <= 5; $i++)
+                                <?php for($i = 1; $i <= 5; $i++): ?>
                                     <tr>
                                         <!-- No. Urut -->
-                                        <td class="text-center fw-bold">{{ $i }}</td>
+                                        <td class="text-center fw-bold"><?php echo e($i); ?></td>
 
                                         <!-- Umur Anak -->
                                         <td>
                                             <input type="text"
                                                 class="form-control form-control-sm border-0 border-bottom"
-                                                name="hd_umur_anak_{{ $i }}" placeholder="tahun">
+                                                name="hd_umur_anak_<?php echo e($i); ?>" placeholder="tahun">
                                         </td>
 
                                         <!-- Berat Lahir -->
                                         <td>
                                             <input type="text"
                                                 class="form-control form-control-sm border-0 border-bottom text-center"
-                                                name="hd_berat_lahir_{{ $i }}" placeholder="gram">
+                                                name="hd_berat_lahir_<?php echo e($i); ?>" placeholder="gram">
                                         </td>
 
                                         <!-- Penolong Persalinan (Dropdown) -->
                                         <td class="text-center">
                                             <select class="form-select form-select-sm"
-                                                name="hd_penolong_{{ $i }}">
+                                                name="hd_penolong_<?php echo e($i); ?>">
                                                 <option value="">- Pilih -</option>
                                                 <option value="Dokter">Dokter</option>
                                                 <option value="Bidan">Bidan</option>
@@ -115,7 +115,7 @@
                                         <!-- Cara Persalinan (Dropdown) -->
                                         <td class="text-center">
                                             <select class="form-select form-select-sm"
-                                                name="hd_cara_persalinan_{{ $i }}">
+                                                name="hd_cara_persalinan_<?php echo e($i); ?>">
                                                 <option value="">- Pilih -</option>
                                                 <option value="Normal">Normal</option>
                                                 <option value="SC">SC</option>
@@ -125,7 +125,7 @@
                                         <!-- Keadaan Bayi (Dropdown) -->
                                         <td class="text-center">
                                             <select class="form-select form-select-sm"
-                                                name="hd_keadaan_bayi_{{ $i }}">
+                                                name="hd_keadaan_bayi_<?php echo e($i); ?>">
                                                 <option value="">- Pilih -</option>
                                                 <option value="Sehat">Sehat</option>
                                                 <option value="Sakit/Cacat">Sakit / Cacat</option>
@@ -137,10 +137,10 @@
                                         <td>
                                             <input type="text"
                                                 class="form-control form-control-sm border-0 border-bottom"
-                                                name="hd_komplikasi_{{ $i }}">
+                                                name="hd_komplikasi_<?php echo e($i); ?>">
                                         </td>
                                     </tr>
-                                @endfor
+                                <?php endfor; ?>
                             </tbody>
                         </table>
 
@@ -274,40 +274,7 @@
                     </th>
                     <td class="p-3">
                         <!-- RIWAYAT PERKAWINAN -->
-                        {{-- <div class="mb-4">
-                            <strong>RIWAYAT PERKAWINAN</strong>
-                            <div class="ms-4 mt-2">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="me-3" style="width: 150px;">Bersuami</span>
-                                    <label class="d-flex align-items-center me-4">
-                                        <input type="checkbox" name="bersuami_ya" class="form-check-input me-2"
-                                            style="transform: scale(1.4);"> Ya
-                                    </label>
-                                    <label class="d-flex align-items-center">
-                                        <input type="checkbox" name="bersuami_tidak" class="form-check-input me-2"
-                                            style="transform: scale(1.4);"> Tidak
-                                    </label>
-                                </div>
-
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="me-3" style="width: 150px;">Berapa lama</span>
-                                    <span class="border-bottom border-dark"
-                                        style="width: 400px; display: inline-block;"></span>
-                                </div>
-
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="me-3" style="width: 150px;">Berapa kali</span>
-                                    <span class="border-bottom border-dark"
-                                        style="width: 400px; display: inline-block;"></span>
-                                </div>
-
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="me-3" style="width: 150px;">Usia pertama kali kawin</span>
-                                    <span class="border-bottom border-dark"
-                                        style="width: 400px; display: inline-block;"></span>
-                                </div>
-                            </div>
-                        </div> --}}
+                        
 
                         <!-- RIWAYAT MENSTRUASI -->
                         <div class="mb-4">
@@ -473,10 +440,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- <div class="col-sm-5">
-                                            <input type="text" name="jumlah_lain" id="jumlah_lain"
-                                                class="form-control" placeholder="Isi jika lain-lain">
-                                        </div> --}}
+                                        
                                     </div>
 
                                     <div class="row align-items-center mb-2">
@@ -671,3 +635,4 @@
         </table>
     </div>
 </div>
+<?php /**PATH C:\laragon\www\Klinik\resources\views/perawat/modalPerawat/tabs/tab-hamil.blade.php ENDPATH**/ ?>

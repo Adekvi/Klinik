@@ -10,6 +10,7 @@ use App\Models\Pasien;
 use App\Models\PasienSehat;
 use App\Models\Poli;
 use App\Models\RmDa1;
+use App\Models\RmKehamilan;
 use App\Models\Soap;
 use App\Models\TtdMedis;
 use Carbon\Carbon;
@@ -163,7 +164,6 @@ class PerawatController extends Controller
         $data = $request->all();
         $antrianPerawat = AntrianPerawat::where('id', $id)->get()->first();
         $now = Carbon::now();
-        // dd($data);
 
         if (!empty($data['idrm'])) {
 
@@ -193,12 +193,13 @@ class PerawatController extends Controller
             $dataIsian = [
                 'id_poli' => $antrianPerawat->id_poli,
                 'id_dokter' => $antrianPerawat->id_dokter,
-                'p_tensi' => $request->tensi,
-                'p_rr' => $request->rr,
-                'p_suhu' => $request->suhu,
-                'p_nadi' => $request->nadi,
-                'p_tb' => $request->tb,
-                'p_bb' => $request->bb,
+                'p_tensi' => $request->p_tensi,
+                'p_rr'    => $request->p_rr,
+                'spo2'  => $request->p_spo2,
+                'p_suhu'  => $request->p_suhu,
+                'p_nadi'  => $request->p_nadi,
+                'p_tb'    => $request->p_tb,
+                'p_bb'    => $request->p_bb,
                 'p_imt' => $request->p_imt,
                 'created_at' => $now,
                 'updated_at' => $now,
@@ -210,7 +211,7 @@ class PerawatController extends Controller
                 'status' => 'M',
             ];
 
-            AntrianPerawat::where('id', $id)->update($updateAntrianP);
+            $idAntrianPerawat = AntrianPerawat::where('id', $id)->update($updateAntrianP);
 
             // Simpan data AntrianDokter
             $antrianDokter = [
@@ -230,6 +231,149 @@ class PerawatController extends Controller
 
             AntrianDokter::create($antrianDokter);
 
+            $antrian = AntrianPerawat::findOrFail($idAntrianPerawat);
+            $booking = Booking::findOrFail($antrian->id_booking);
+
+            /* ================= KONTRASEPSI ================= */
+            $kontrasepsi = array_values(array_filter([
+                $request->kontra_tidak_menggunakan,
+                $request->kontra_suntik,
+                $request->kontra_pil,
+                $request->kontra_iud,
+                $request->kontra_implan,
+            ]));
+
+            /* ================= RIWAYAT KEHAMILAN TERDAHULU ================= */
+            $riwayatKehamilan = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+
+            $row = [
+                'umur_anak'   => $request->input("hd_umur_anak_$i"),
+                'berat_lahir' => $request->input("hd_berat_lahir_$i"),
+                'penolong'    => $request->input("hd_penolong_$i"),
+                'cara'        => $request->input("hd_cara_persalinan_$i"),
+                'keadaan'     => $request->input("hd_keadaan_bayi_$i"),
+                'komplikasi'  => $request->input("hd_komplikasi_$i"),
+            ];
+
+            // cek apakah MINIMAL SATU kolom diisi
+            if (collect($row)->filter()->isNotEmpty()) {
+                $riwayatKehamilan[] = $row;
+            }
+        }
+
+
+
+            /* ================= STATUS PSIKOSOSIAL ================= */
+            $statusPsiko = [
+                'mental' => array_keys(array_filter([
+                    'orientasi'      => $request->hd_status_mental_orientasi,
+                    'disorientasi'   => $request->hd_status_mental_disorientasi,
+                    'gelisah'        => $request->hd_status_mental_gelisah,
+                    'tidak_respon'   => $request->hd_status_mental_tidak_respon,
+                ])),
+                'emosi' => array_keys(array_filter([
+                    'tenang'   => $request->hd_respons_tenang,
+                    'takut'    => $request->hd_respons_takut,
+                    'tegang'   => $request->hd_respons_tegang,
+                    'marah'    => $request->hd_respons_marah,
+                    'sedih'    => $request->hd_respons_sedih,
+                    'menangis' => $request->hd_respons_menangis,
+                    'gelisah'  => $request->hd_respons_gelisah,
+                ])),
+                'hubungan_keluarga' => $request->hd_hubungan_baik ? 'baik' : 'tidak_baik',
+                'ketaatan_ibadah'   => $request->hd_taat_baik ? 'baik' : 'tidak_baik',
+                'bahasa' => [
+                    'indonesia' => (bool)$request->hd_bhs_indo,
+                    'jawa'      => (bool)$request->hd_bhs_jawa,
+                    'lainnya'   => $request->hd_bhs_lainnya,
+                ]
+            ];
+
+            /* ================= RIWAYAT MENSTRUASI ================= */
+            $riwayatMenstruasi = [
+                'siklus_hari' => $request->hs_rm_siklus_hari,
+                'siklus'      => $request->hs_rm_siklus_teratur ? 'teratur' : 'tidak_teratur',
+                'banyak'      => array_keys(array_filter([
+                    'banyak'  => $request->hs_rm_banyak_banyak,
+                    'sedang'  => $request->hs_rm_banyak_sedang,
+                    'sedikit' => $request->hs_rm_banyak_sedikit,
+                ])),
+                'gumpalan' => array_keys(array_filter([
+                    'gumpal' => $request->hs_rm_gumpalan_gumpal,
+                    'biasa'  => $request->hs_rm_gumpalan_biasa,
+                    'encer'  => $request->hs_rm_gumpalan_encair,
+                ])),
+                'sakit' => array_keys(array_filter([
+                    'sebelum' => $request->hs_rm_sakit_sebelum,
+                    'selama'  => $request->hs_rm_sakit_selama,
+                    'sesudah' => $request->hs_rm_sakit_sesudah,
+                ])),
+                'fluor' => $request->hs_rm_fluor_ya ? 'ya' : 'tidak',
+                'lama'  => $request->hs_rm_berapa_lama,
+                'warna' => $request->hs_rm_warna,
+                'bau'   => $request->hs_rm_bau,
+            ];
+
+            /* ================= OBJEKTIF ================= */
+            $statusGeneralis = [
+                'bentuk_tubuh' => array_keys(array_filter([
+                    'normal'            => $request->obj_bentuk_normal,
+                    'panggul'           => $request->obj_bentuk_kelainan_panggul,
+                    'tulang_belakang'   => $request->obj_bentuk_tulang_belakang,
+                    'tungkai'           => $request->obj_bentuk_tungkai,
+                ])),
+                'payudara' => [
+                    'kondisi' => array_keys(array_filter([
+                        'normal'     => $request->obj_payudara_normal,
+                        'benjolan'   => $request->obj_payudara_benjolan,
+                        'kemerahan'  => $request->obj_payudara_kemerahan,
+                        'retracted'  => $request->obj_payudara_retracted_nipple,
+                    ])),
+                    'lainnya' => $request->obj_payudara_lainnya,
+                ]
+            ];
+
+            $statusKebidanan = [
+                'tinggi_fundus' => $request->obj_tinggi_fundus,
+                'letak_janin'   => array_keys(array_filter([
+                    'kepala'   => $request->obj_letak_kepala,
+                    'sungsang' => $request->obj_letak_sungsang,
+                    'lintang'  => $request->obj_letak_lintang,
+                ])),
+                'gerak_janin' => array_keys(array_filter([
+                    'aktif' => $request->obj_gerak_aktif,
+                    'jarang'=> $request->obj_gerak_jarang,
+                    'tidak' => $request->obj_gerak_tidak_ada,
+                ])),
+                'djj' => $request->obj_detak_jantung,
+                'perdarahan' => $request->obj_perdarahan_ya ? 'ya' : 'tidak',
+            ];
+
+            $statusGizi = [
+                'tinggi_badan' => $request->input('tinggi_badan'),
+            ];
+
+            /* ================= SIMPAN ================= */
+            RmKehamilan::create([
+                'id_pasien'            => $booking->id_pasien,
+                'id_booking'           => $booking->id,
+                'id_antrian_perawat'   => $antrian->id,
+
+                'kontrasepsi'          => $kontrasepsi,
+                'kontrasepsi_lainnya'  => $request->kontra_lainnya,
+                'riwayat_kehamilan'    => $riwayatKehamilan,
+                'status_psikososial'   => $statusPsiko,
+
+                'hpht' => $request->hs_hpht,
+                'usia_kehamilan' => $request->hs_usia_kehamilan,
+                'riwayat_menstruasi'   => $riwayatMenstruasi,
+
+                'status_generalis'     => $statusGeneralis,
+                'status_kebidanan'     => $statusKebidanan,
+                'status_gizi'          => $statusGizi,
+            ]);
             return redirect()->route('perawat.index');
         } else {
 
@@ -276,25 +420,25 @@ class PerawatController extends Controller
                 'o_keadaan_umum' => $data['keadaan_umum'],
                 'o_kesadaran' => $data['kesadaran'],
                 'o_kepala' => $data['kepala'],
-                'o_kepala_uraian' => $data['alasan-kepala'],
+                'o_kepala_uraian' => $data['alasan_kepala'],
                 'o_mata' => $data['mata'],
-                'o_mata_uraian' => $data['alasan-mata'],
+                'o_mata_uraian' => $data['alasan_mata'],
                 'o_tht' => $data['tht'],
-                'o_tht_uraian' => $data['alasan-tht'],
+                'o_tht_uraian' => $data['alasan_tht'],
                 'o_thorax' => $data['thorax'],
-                'o_thorax_uraian' => $data['alasan-thorax'],
+                'o_thorax_uraian' => $data['alasan_thorax'],
                 'o_paru' => $data['paru'],
-                'o_paru_uraian' => $data['alasan-paru'],
+                'o_paru_uraian' => $data['alasan_paru'],
                 'o_jantung' => $data['jantung'],
-                'o_jantung_uraian' => $data['alasan-jantung'],
+                'o_jantung_uraian' => $data['alasan_jantung'],
                 'o_abdomen' => $data['abdomen'],
-                'o_abdomen_uraian' => $data['alasan-abdomen'],
+                'o_abdomen_uraian' => $data['alasan_abdomen'],
                 'o_leher' => $data['leher'],
-                'o_leher_uraian' => $data['alasan-leher'],
+                'o_leher_uraian' => $data['alasan_leher'],
                 'o_ekstremitas' => $data['ekstremitas'],
-                'o_ekstremitas_uraian' => $data['alasan-ekstremitas'],
+                'o_ekstremitas_uraian' => $data['alasan_ekstremitas'],
                 'o_kulit' => $data['kulit'],
-                'o_kulit_uraian' => $data['alasan-kulit'],
+                'o_kulit_uraian' => $data['alasan_kulit'],
                 'lain_lain' => $data['lain'],
             ];
 
@@ -328,8 +472,6 @@ class PerawatController extends Controller
                 'p_dws_olahraga' => $request->olahraga,
                 'p_anak_riwayat_lahir_spontan' => $request->p_anak_riwayat_lahir_spontan,
                 'p_anak_riwayat_lahir_operasi' => $request->p_anak_riwayat_lahir_operasi,
-                'p_anak_riwayat_lahir_cukup_bulan' => $request->p_anak_riwayat_lahir_cukup_bulan,
-                'p_anak_riwayat_lahir_kurang_bulan' => $request->p_anak_riwayat_lahir_kurang_bulan,
                 'p_anak_riwayat_lahir_bb' => $request->p_anak_riwayat_lahir_bb,
                 'p_anak_riwayat_lahir_pb' => $request->p_anak_riwayat_lahir_pb,
                 'p_anak_riwayat_lahir_vaksin_bcg' => $request->p_anak_riwayat_lahir_vaksin_bcg,
@@ -337,13 +479,13 @@ class PerawatController extends Controller
                 'p_anak_riwayat_lahir_vaksin_dpt' => $request->p_anak_riwayat_lahir_vaksin_dpt,
                 'p_anak_riwayat_lahir_vaksin_campak' => $request->p_anak_riwayat_lahir_vaksin_campak,
                 'p_anak_riwayat_lahir_vaksin_polio' => $request->p_anak_riwayat_lahir_vaksin_polio,
-                'p_tensi' => $request->tensi,
-                'p_rr' => $request->rr,
-                'spo2' => $request->spo2,
-                'p_suhu' => $request->suhu,
-                'p_nadi' => $request->nadi,
-                'p_tb' => $request->tb,
-                'p_bb' => $request->bb,
+                'p_tensi' => $request->p_tensi,
+                'p_rr'    => $request->p_rr,
+                'spo2'  => $request->p_spo2,
+                'p_suhu'  => $request->p_suhu,
+                'p_nadi'  => $request->p_nadi,
+                'p_tb'    => $request->p_tb,
+                'p_bb'    => $request->p_bb,
                 'p_imt' => $request->p_imt,
                 'p_lngkr_kepala_anak' => $request->lingkar_kepala_anak,
                 'p_lngkr_lengan_anc' => $request->lingkar_lengan_anc,
@@ -359,9 +501,9 @@ class PerawatController extends Controller
                 'ak_jenisaktifitas_makan_minum' => $request->ak_jenisaktivitas_makan_minum,
                 'ak_jenisaktifitas_mandi' => $request->ak_jenisaktivitas_mandi,
                 'ak_jenisaktifitas_berpakaian' => $request->ak_jenisaktivitas_berpakaian,
-                'ak_resiko_jatuh_rendah' => $request->ak_resiko_jatuh_rendah,
-                'ak_resiko_jatuh_sedang' => $request->ak_resiko_jatuh_sedang,
-                'ak_resiko_jatuh_tinggi' => $request->ak_resiko_jatuh_tinggi,
+                'ak_resiko_jatuh_rendah' => null,
+                'ak_resiko_jatuh_sedang' => null,
+                'ak_resiko_jatuh_tinggi' => null,
                 'ak_psikologis_senang' => $request->ak_psikologis_senang,
                 'ak_psikologis_tenang' => $request->ak_psikologis_tenang,
                 'ak_psikologis_sedih' => $request->ak_psikologis_sedih,
@@ -389,6 +531,24 @@ class PerawatController extends Controller
                 'ak_analisis_masalah_keperawatan' => $request->ak_analisis_masalah_keperawatan,
                 // 'ak_ttdperawat_bidan' => $request->ak_ttdperawat_bidan
             ];
+            if ($request->p_anak_riwayat_lahir_bulan === 'cukup') {
+                $data2['p_anak_riwayat_lahir_cukup_bulan'] = 'Cukup Bulan';
+            }
+
+            if ($request->p_anak_riwayat_lahir_bulan === 'kurang') {
+                $data2['p_anak_riwayat_lahir_kurang_bulan'] = 'Kurang Bulan';
+            }
+            if ($request->ak_resiko_jatuh === 'Rendah') {
+                $data2['ak_resiko_jatuh_rendah'] = 'Rendah';
+            }
+
+            if ($request->ak_resiko_jatuh === 'Sedang') {
+                $data2['ak_resiko_jatuh_sedang'] = 'Sedang';
+            }
+
+            if ($request->ak_resiko_jatuh === 'Tinggi') {
+                $data2['ak_resiko_jatuh_tinggi'] = 'Tinggi';
+            }
 
             $isianId = IsianPerawat::create($data2);
             $IdIsian = $isianId->id;
@@ -402,7 +562,7 @@ class PerawatController extends Controller
 
             // dd($dataAnamnesis, $data2, $updateAntrianP);
 
-            AntrianPerawat::where('id_booking', $booking->id)->update($updateAntrianP);
+            $idAntrianPerawat = AntrianPerawat::where('id_booking', $booking->id)->update($updateAntrianP);
 
             // Ambil data pasien
             $pasien = Pasien::find($booking->id_pasien); // atau dari mana pun id_pasien berasal
@@ -440,6 +600,149 @@ class PerawatController extends Controller
             // dd($dataAnamnesis, $data2, $antrianDokter);
 
             AntrianDokter::create($antrianDokter);
+
+            $antrian = AntrianPerawat::findOrFail($idAntrianPerawat);
+            $booking = Booking::findOrFail($antrian->id_booking);
+
+            /* ================= KONTRASEPSI ================= */
+            $kontrasepsi = array_values(array_filter([
+                $request->kontra_tidak_menggunakan,
+                $request->kontra_suntik,
+                $request->kontra_pil,
+                $request->kontra_iud,
+                $request->kontra_implan,
+            ]));
+
+            /* ================= RIWAYAT KEHAMILAN TERDAHULU ================= */
+            $riwayatKehamilan = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+
+            $row = [
+                'umur_anak'   => $request->input("hd_umur_anak_$i"),
+                'berat_lahir' => $request->input("hd_berat_lahir_$i"),
+                'penolong'    => $request->input("hd_penolong_$i"),
+                'cara'        => $request->input("hd_cara_persalinan_$i"),
+                'keadaan'     => $request->input("hd_keadaan_bayi_$i"),
+                'komplikasi'  => $request->input("hd_komplikasi_$i"),
+            ];
+
+            // cek apakah MINIMAL SATU kolom diisi
+            if (collect($row)->filter()->isNotEmpty()) {
+                $riwayatKehamilan[] = $row;
+            }
+        }
+
+
+            /* ================= STATUS PSIKOSOSIAL ================= */
+            $statusPsiko = [
+                'mental' => array_keys(array_filter([
+                    'orientasi'      => $request->hd_status_mental_orientasi,
+                    'disorientasi'   => $request->hd_status_mental_disorientasi,
+                    'gelisah'        => $request->hd_status_mental_gelisah,
+                    'tidak_respon'   => $request->hd_status_mental_tidak_respon,
+                ])),
+                'emosi' => array_keys(array_filter([
+                    'tenang'   => $request->hd_respons_tenang,
+                    'takut'    => $request->hd_respons_takut,
+                    'tegang'   => $request->hd_respons_tegang,
+                    'marah'    => $request->hd_respons_marah,
+                    'sedih'    => $request->hd_respons_sedih,
+                    'menangis' => $request->hd_respons_menangis,
+                    'gelisah'  => $request->hd_respons_gelisah,
+                ])),
+                'hubungan_keluarga' => $request->hd_hubungan_baik ? 'baik' : 'tidak_baik',
+                'ketaatan_ibadah'   => $request->hd_taat_baik ? 'baik' : 'tidak_baik',
+                'bahasa' => [
+                    'indonesia' => (bool)$request->hd_bhs_indo,
+                    'jawa'      => (bool)$request->hd_bhs_jawa,
+                    'lainnya'   => $request->hd_bhs_lainnya,
+                ]
+            ];
+
+            /* ================= RIWAYAT MENSTRUASI ================= */
+            $riwayatMenstruasi = [
+                'siklus_hari' => $request->hs_rm_siklus_hari,
+                'siklus'      => $request->hs_rm_siklus_teratur ? 'teratur' : 'tidak_teratur',
+                'banyak'      => array_keys(array_filter([
+                    'banyak'  => $request->hs_rm_banyak_banyak,
+                    'sedang'  => $request->hs_rm_banyak_sedang,
+                    'sedikit' => $request->hs_rm_banyak_sedikit,
+                ])),
+                'gumpalan' => array_keys(array_filter([
+                    'gumpal' => $request->hs_rm_gumpalan_gumpal,
+                    'biasa'  => $request->hs_rm_gumpalan_biasa,
+                    'encer'  => $request->hs_rm_gumpalan_encair,
+                ])),
+                'sakit' => array_keys(array_filter([
+                    'sebelum' => $request->hs_rm_sakit_sebelum,
+                    'selama'  => $request->hs_rm_sakit_selama,
+                    'sesudah' => $request->hs_rm_sakit_sesudah,
+                ])),
+                'fluor' => $request->hs_rm_fluor_ya ? 'ya' : 'tidak',
+                'lama'  => $request->hs_rm_berapa_lama,
+                'warna' => $request->hs_rm_warna,
+                'bau'   => $request->hs_rm_bau,
+            ];
+
+            /* ================= OBJEKTIF ================= */
+            $statusGeneralis = [
+                'bentuk_tubuh' => array_keys(array_filter([
+                    'normal'            => $request->obj_bentuk_normal,
+                    'panggul'           => $request->obj_bentuk_kelainan_panggul,
+                    'tulang_belakang'   => $request->obj_bentuk_tulang_belakang,
+                    'tungkai'           => $request->obj_bentuk_tungkai,
+                ])),
+                'payudara' => [
+                    'kondisi' => array_keys(array_filter([
+                        'normal'     => $request->obj_payudara_normal,
+                        'benjolan'   => $request->obj_payudara_benjolan,
+                        'kemerahan'  => $request->obj_payudara_kemerahan,
+                        'retracted'  => $request->obj_payudara_retracted_nipple,
+                    ])),
+                    'lainnya' => $request->obj_payudara_lainnya,
+                ]
+            ];
+
+            $statusKebidanan = [
+                'tinggi_fundus' => $request->obj_tinggi_fundus,
+                'letak_janin'   => array_keys(array_filter([
+                    'kepala'   => $request->obj_letak_kepala,
+                    'sungsang' => $request->obj_letak_sungsang,
+                    'lintang'  => $request->obj_letak_lintang,
+                ])),
+                'gerak_janin' => array_keys(array_filter([
+                    'aktif' => $request->obj_gerak_aktif,
+                    'jarang'=> $request->obj_gerak_jarang,
+                    'tidak' => $request->obj_gerak_tidak_ada,
+                ])),
+                'djj' => $request->obj_detak_jantung,
+                'perdarahan' => $request->obj_perdarahan_ya ? 'ya' : 'tidak',
+            ];
+
+            $statusGizi = [
+                'tinggi_badan' => $request->input('tinggi_badan'),
+            ];
+
+            /* ================= SIMPAN ================= */
+            RmKehamilan::create([
+                'id_pasien'            => $booking->id_pasien,
+                'id_booking'           => $booking->id,
+                'id_antrian_perawat'   => $antrian->id,
+
+                'kontrasepsi'          => $kontrasepsi,
+                'kontrasepsi_lainnya'  => $request->kontra_lainnya,
+                'riwayat_kehamilan'    => $riwayatKehamilan,
+                'status_psikososial'   => $statusPsiko,
+
+                'hpht' => $request->hs_hpht,
+                'usia_kehamilan' => $request->hs_usia_kehamilan,
+                'riwayat_menstruasi'   => $riwayatMenstruasi,
+
+                'status_generalis'     => $statusGeneralis,
+                'status_kebidanan'     => $statusKebidanan,
+                'status_gizi'          => $statusGizi,
+            ]);
 
             return redirect()->route('perawat.index')->with('success', 'Pasien Telah Di Asesmen');
         }
