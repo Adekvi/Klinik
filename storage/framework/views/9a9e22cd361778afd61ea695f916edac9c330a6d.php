@@ -88,6 +88,7 @@
             <label for="p_anak_riwayat_lahir" onclick="toggleInput('p_anak_riwayat_lahir)">Riwayat
                 Lahir Bulan</label>
             <div id="p_anak_riwayat_lahir">
+                <label>Riwayat Lahir Bulan</label>
 
                 <div class="form-group mb-2 mt-2">
                     <label>

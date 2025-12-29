@@ -86,10 +86,28 @@ class PasienController extends Controller
                 'status' => $request->status,
                 'kategori' => $request->kategori,
             ]);
+            // ==========================
+            // GENERATE NOMOR KUNJUNGAN
+            // ==========================
+            $tanggal = Carbon::today()->format('Ymd');
+
+            $lastNomor = Booking::whereDate('created_at', Carbon::today())
+                    ->orderBy('id', 'desc')
+                    ->value('no_kunjungan');
+            if ($lastNomor) {
+                $lastUrut = (int) substr($lastNomor, -4);
+                $nextUrut = $lastUrut + 1;
+            } else {
+                $nextUrut = 1;
+            }
+
+            $prefix = $request->poli == 1 ? 'KJU' : 'KJG';
+            $nomorKunjungan = $prefix . '-' . $tanggal . '-' . str_pad($nextUrut, 4, '0', STR_PAD_LEFT);
 
             $booking = Booking::create([
                 'id_pasien' => $pasienBaru->id,
                 'no_rm' => $nomorUrutan,
+                'no_kunjungan' => $nomorKunjungan
             ]);
 
             $urutanAntrian = AntrianPerawat::max('urutan') ?? 0;
@@ -192,10 +210,31 @@ class PasienController extends Controller
                 return response()->json(['error' => 'Gagal memperbarui data pasien'], 500);
             }
 
+            // ==========================
+            // GENERATE NOMOR KUNJUNGAN
+            // ==========================
+            $tanggal = Carbon::today()->format('Ymd');
+
+            $lastNomor = Booking::whereDate('created_at', Carbon::today())
+                        ->orderBy('id', 'desc')
+                        ->value('no_kunjungan');
+
+            if ($lastNomor) {
+                $lastUrut = (int) substr($lastNomor, -4);
+                $nextUrut = $lastUrut + 1;
+            } else {
+                $nextUrut = 1;
+            }
+
+            $prefix = $request->poli == 1 ? 'KJU' : 'KJG';
+            $nomorKunjungan = $prefix . '-' . $tanggal . '-' . str_pad($nextUrut, 4, '0', STR_PAD_LEFT);
+
+
             // Membuat booking
             $bookingData = [
                 'id_pasien' => $existingPasien->id,
                 'no_rm' => $existingPasien->no_rm,
+                'no_kunjungan' => $nomorKunjungan
             ];
             $booking = Booking::create($bookingData);
 
