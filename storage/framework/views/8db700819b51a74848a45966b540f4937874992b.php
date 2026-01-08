@@ -563,12 +563,12 @@ unset($__errorArgs, $__bag); ?>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row" style="width: 35%">No RM</th>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" name="no_rm" id="noRM"
-                                            style="font-weight: bold;" readonly required></td>
-                                </tr>
+                                    <tr>
+                                        <th scope="row" style="width: 35%">No RM</th>
+                                        <td>:</td>
+                                        <td><input type="text" class="form-control" name="no_rm" id="noRM"
+                                                style="font-weight: bold;" readonly required></td>
+                                    </tr>
                                 <tr>
                                     <th scope="row" style="width: 35%">Nama Pasien</th>
                                     <td>:</td>
@@ -1579,6 +1579,27 @@ unset($__errorArgs, $__bag); ?>
                 attemptSave();
             }
         </script>
+        <script>
+window.addEventListener('load', function () {
+    const rm = document.getElementById('no_rm');
+    if (rm) {
+        rm.readOnly = true;
+        rm.style.backgroundColor = '#e9ecef';
+        rm.style.cursor = 'not-allowed';
+    }
+});
+</script>
+        <script>
+window.addEventListener('load', function () {
+    const rm = document.getElementById('noRM');
+    if (rm) {
+        rm.readOnly = true;
+        rm.style.backgroundColor = '#e9ecef';
+        rm.style.cursor = 'not-allowed';
+    }
+});
+</script>
+
     <?php $__env->stopPush(); ?>
 
  <?php echo $__env->renderComponent(); ?>

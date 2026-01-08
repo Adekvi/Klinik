@@ -230,7 +230,6 @@ class PasienController extends Controller
             $nomorKunjungan = $prefix . '-' . $tanggal . '-' . str_pad($nextUrut, 4, '0', STR_PAD_LEFT);
 
 
-            // Membuat booking
             $bookingData = [
                 'id_pasien' => $existingPasien->id,
                 'no_rm' => $existingPasien->no_rm,
