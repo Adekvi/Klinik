@@ -1,4 +1,4 @@
-{{-- modal soap --}}
+
 <div class="modal fade" id="modalSoap" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="pasienbaru" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -8,14 +8,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ url('dokter/store/' . $id) }}" method="post" enctype="multipart/form-data">
-                    @csrf
+                <form action="<?php echo e(url('dokter/store/' . $id)); ?>" method="post" enctype="multipart/form-data">
+                    <?php echo csrf_field(); ?>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="profesi" style="font-weight: bold">Dokter Penanggung Jawab Pasien</label>
                                 <input type="text" style="font-weight: bold"
-                                    value="{{ $antrianDokter->dokter->nama_dokter }}" class="form-control mt-2"
+                                    value="<?php echo e($antrianDokter->dokter->nama_dokter); ?>" class="form-control mt-2"
                                     disabled>
                             </div>
                         </div>
@@ -25,14 +25,14 @@
                             <div class="form-group">
                                 <label for="">Nama Pasien</label>
                                 <input type="text" name="nama_pasien" id="nama_pasien" class="form-control mt-2"
-                                    value="{{ $antrianDokter->booking->pasien->nama_pasien }}" readonly>
+                                    value="<?php echo e($antrianDokter->booking->pasien->nama_pasien); ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-6 mt-2">
                             <div class="form-group">
                                 <label for="">Umur</label>
                                 <input type="text" class="form-control mt-2"
-                                    value="{{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun' }}"
+                                    value="<?php echo e(\Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun'); ?>"
                                     readonly>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                         <div class="col-4">
                             <div class="form-group mt-3">
                                 <label for="keluhan" style="font-weight: bold">Keluhan (S)</label>
-                                <input type="text" name="keluhan" value="{{ $antrianDokter->rm->a_keluhan_utama }}"
+                                <input type="text" name="keluhan" value="<?php echo e($antrianDokter->rm->a_keluhan_utama); ?>"
                                     class="form-control mt-2">
                             </div>
                         </div>
@@ -50,8 +50,8 @@
                             <div class="form-group mt-3">
                                 <label for="riwayat-alergi" style="font-weight: bold">Alergi</label>
                                 <select name="a_riwayat_alergi" id="a_riwayat_alergi" class="form-control mt-2 mb-2 ">
-                                    <option value="{{ $antrianDokter->rm->a_riwayat_alergi ?? 'Tidak Ada' }}" selected>
-                                        {{ $antrianDokter->rm->a_riwayat_alergi ?? 'Tidak Ada' }}</option>
+                                    <option value="<?php echo e($antrianDokter->rm->a_riwayat_alergi ?? 'Tidak Ada'); ?>" selected>
+                                        <?php echo e($antrianDokter->rm->a_riwayat_alergi ?? 'Tidak Ada'); ?></option>
                                     <option value="Ada">Ada</option>
                                     <option value="Tidak">Tidak</option>
                                 </select>
@@ -62,15 +62,15 @@
                                 <label for="riwayat-penyakit-skrg"><strong>Riwayat Penyakit Sekarang</strong></label>
                                 <input type="text" name="a_riwayat_penyakit_skrg" id="a_riwayat_penyakit_skrg"
                                     class="form-control mt-2 mb-2 " placeholder="Isi Riwayat Penyakit Sekarang"
-                                    value="{{ $antrianDokter->rm->a_riwayat_penyakit_skrg ?? '' }}">
+                                    value="<?php echo e($antrianDokter->rm->a_riwayat_penyakit_skrg ?? ''); ?>">
                             </div>
                         </div>
                     </div>
                     <div class="form-group mt-3">
                         <label for="isian" style="font-weight: bold; margin-bottom: 10px">Isian Pilihan</label>
-                        @php
+                        <?php
                             $isianPilihan = trim(optional($antrianDokter->isian)->p_form_isian_pilihan ?? '');
-                        @endphp
+                        ?>
 
                         <div id="isian" class="mt-3 mb-2">
                             <label>
@@ -85,12 +85,12 @@
                         </div>
 
                         <div id="alasan-isian-soap"
-                            style="{{ $isianPilihan === 'Aloanamnesis' ? 'display:block' : 'display:none' }}">
-                            <input type="text" class="form-control" value="{{ optional($antrianDokter->isian)->p_form_isian_pilihan_uraian }}">
+                            style="<?php echo e($isianPilihan === 'Aloanamnesis' ? 'display:block' : 'display:none'); ?>">
+                            <input type="text" class="form-control" value="<?php echo e(optional($antrianDokter->isian)->p_form_isian_pilihan_uraian); ?>">
                         </div>
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
-                                const value = @json($isianPilihan);
+                                const value = <?php echo json_encode($isianPilihan, 15, 512) ?>;
 
                                 if (value === 'Auto-anamnesis') {
                                     document.getElementById('isian-ya').checked = true;
@@ -117,13 +117,13 @@
                             <label for="gcs" style="width: 30%">2. GCS</label> :
                             <div class="input-group d-flex mt-3" style="width: 40%">
                                 <input type="text" name="gcs_e" id="gcs_e"
-                                    value="{{ $antrianDokter->isian->gcs_e }}" class="form-control"
+                                    value="<?php echo e($antrianDokter->isian->gcs_e); ?>" class="form-control"
                                     aria-describedby="basic-addon2" placeholder="E">
                                 <input type="text" name="gcs_m" id="gcs_m"
-                                    value="{{ $antrianDokter->isian->gcs_m }}" class="form-control"
+                                    value="<?php echo e($antrianDokter->isian->gcs_m); ?>" class="form-control"
                                     aria-describedby="basic-addon2" placeholder="M">
                                 <input type="text" name="gcs_v" id="gcs_v"
-                                    value="{{ $antrianDokter->isian->gcs_v }}" class="form-control"
+                                    value="<?php echo e($antrianDokter->isian->gcs_v); ?>" class="form-control"
                                     aria-describedby="basic-addon2" placeholder="V">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2"
@@ -137,179 +137,195 @@
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="kepala" style="width: 30%">3. Kepala</label> :
                             <select name="kepala" id="kepala" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-kepala_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_kepala === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-kepala_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_kepala === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_kepala === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_kepala === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-kepala_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_kepala === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-kepala_{{ $antrianDokter->rm->id }}"
+                        <div id="alasan-kepala_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_kepala === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-kepala_<?php echo e($antrianDokter->rm->id); ?>"
                                 name="alasan-kepala" class="form-control mt-2 mb-2"
-                                value="{{ $antrianDokter->rm->o_kepala_uraian }}"
+                                value="<?php echo e($antrianDokter->rm->o_kepala_uraian); ?>"
                                 placeholder="Alasan Kepala Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="mata" style="width: 30%">4. Mata</label> :
                             <select name="mata" id="mata" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-mata_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_mata === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-mata_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_mata === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_mata === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_mata === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-mata_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_mata === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-mata_{{ $antrianDokter->rm->id }}" name="alasan-mata"
-                                value="{{ $antrianDokter->rm->o_mata_uraian }}" class="form-control mt-2 mb-2"
+                        <div id="alasan-mata_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_mata === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-mata_<?php echo e($antrianDokter->rm->id); ?>" name="alasan-mata"
+                                value="<?php echo e($antrianDokter->rm->o_mata_uraian); ?>" class="form-control mt-2 mb-2"
                                 placeholder="Alasan Mata Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="leher" style="width: 30%">5. Leher</label> :
                             <select name="leher" id="leher" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-leher_{{ $antrianDokter->rm->id }}', this)">
+                                onclick="toggleChangeSoap('alasan-leher_<?php echo e($antrianDokter->rm->id); ?>', this)">
                                 <option value="Normal"
-                                    {{ $antrianDokter->rm->o_leher === 'Normal' ? 'selected' : '' }}>Normal</option>
+                                    <?php echo e($antrianDokter->rm->o_leher === 'Normal' ? 'selected' : ''); ?>>Normal</option>
                                 <option value="Abnormal"
-                                    {{ $antrianDokter->rm->o_leher === 'Abnormal' ? 'selected' : '' }}>Abnormal
+                                    <?php echo e($antrianDokter->rm->o_leher === 'Abnormal' ? 'selected' : ''); ?>>Abnormal
                                 </option>
                             </select>
                         </div>
-                        <div id="alasan-leher_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_leher === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-leher_{{ $antrianDokter->rm->id }}" name="alasan-leher"
-                                value="{{ $antrianDokter->rm->o_leher_uraian }}" class="form-control mt-2 mb-2"
+                        <div id="alasan-leher_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_leher === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-leher_<?php echo e($antrianDokter->rm->id); ?>" name="alasan-leher"
+                                value="<?php echo e($antrianDokter->rm->o_leher_uraian); ?>" class="form-control mt-2 mb-2"
                                 placeholder="Alasan Leher Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="tht" style="width: 30%">6. THT</label> :
                             <select name="tht" id="tht" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-tht_{{ $antrianDokter->rm->id }}', this)">
-                                <option value="Normal" {{ $antrianDokter->rm->o_tht === 'Normal' ? 'selected' : '' }}>
+                                onclick="toggleChangeSoap('alasan-tht_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option value="Normal" <?php echo e($antrianDokter->rm->o_tht === 'Normal' ? 'selected' : ''); ?>>
                                     Normal</option>
                                 <option value="Abnormal"
-                                    {{ $antrianDokter->rm->o_tht === 'Abnormal' ? 'selected' : '' }}>Abnormal</option>
+                                    <?php echo e($antrianDokter->rm->o_tht === 'Abnormal' ? 'selected' : ''); ?>>Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-tht_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-tht_{{ $antrianDokter->rm->id }}" name="alasan-tht"
-                                value="{{ $antrianDokter->rm->o_tht_uraian }}" class="form-control mt-2 mb-2"
+                        <div id="alasan-tht_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-tht_<?php echo e($antrianDokter->rm->id); ?>" name="alasan-tht"
+                                value="<?php echo e($antrianDokter->rm->o_tht_uraian); ?>" class="form-control mt-2 mb-2"
                                 placeholder="Alasan THT Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="thorax" style="width: 30%">7. Thorax</label> :
                             <select name="thorax" id="thorax" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-thorax_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_thorax === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-thorax_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_thorax === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_thorax === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_thorax === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-thorax_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-thorax_{{ $antrianDokter->rm->id }}"
-                                name="alasan-thorax" value="{{ $antrianDokter->rm->o_thorax_uraian }}"
+                        <div id="alasan-thorax_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-thorax_<?php echo e($antrianDokter->rm->id); ?>"
+                                name="alasan-thorax" value="<?php echo e($antrianDokter->rm->o_thorax_uraian); ?>"
                                 class="form-control mt-2 mb-2" placeholder="Alasan Thorax Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="paru" style="width: 30%">8. Paru</label> :
                             <select name="paru" id="paru" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-paru_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_paru === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-paru_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_paru === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_paru === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_paru === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-paru_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_paru === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-paru_{{ $antrianDokter->rm->id }}" name="alasan-paru"
-                                class="form-control mt-2 mb-2" value="{{ $antrianDokter->rm->o_paru_uraian }}"
+                        <div id="alasan-paru_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_paru === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-paru_<?php echo e($antrianDokter->rm->id); ?>" name="alasan-paru"
+                                class="form-control mt-2 mb-2" value="<?php echo e($antrianDokter->rm->o_paru_uraian); ?>"
                                 placeholder="Alasan Paru Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="jantung" style="width: 30%">9. Jantung</label> :
                             <select name="jantung" id="jantung" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-jantung_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_jantung === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-jantung_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_jantung === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_jantung === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_jantung === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-jantung_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_jantung === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-jantung_{{ $antrianDokter->rm->id }}"
-                                name="alasan-jantung" value="{{ $antrianDokter->rm->o_jantung_uraian }}"
+                        <div id="alasan-jantung_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_jantung === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-jantung_<?php echo e($antrianDokter->rm->id); ?>"
+                                name="alasan-jantung" value="<?php echo e($antrianDokter->rm->o_jantung_uraian); ?>"
                                 class="form-control mt-2 mb-2" placeholder="Alasan Jantung Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="abdomen" style="width: 30%">10. Abdomen</label> :
                             <select name="abdomen" id="abdomen" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-abdomen_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_abdomen === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-abdomen_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_abdomen === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_abdomen === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_abdomen === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-abdomen_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_abdomen === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-abdomen_{{ $antrianDokter->rm->id }}"
-                                value="{{ $antrianDokter->rm->o_abdomen_uraian }}" name="alasan-abdomen"
+                        <div id="alasan-abdomen_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_abdomen === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-abdomen_<?php echo e($antrianDokter->rm->id); ?>"
+                                value="<?php echo e($antrianDokter->rm->o_abdomen_uraian); ?>" name="alasan-abdomen"
                                 class="form-control mt-2 mb-2" placeholder="Alasan Abdomen Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="ekstremitas" style="width: 30%">11. Ekstremitas</label> :
                             <select name="ekstremitas" id="ekstremitas" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-ekstremitas_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_ekstremitas === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-ekstremitas_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_ekstremitas === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_ekstremitas === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_ekstremitas === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-ekstremitas_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_ekstremitas === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-ekstremitas_{{ $antrianDokter->rm->id }}"
-                                name="alasan-ekstremitas" value="{{ $antrianDokter->rm->o_ekstremitas_uraian }}"
+                        <div id="alasan-ekstremitas_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_ekstremitas === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-ekstremitas_<?php echo e($antrianDokter->rm->id); ?>"
+                                name="alasan-ekstremitas" value="<?php echo e($antrianDokter->rm->o_ekstremitas_uraian); ?>"
                                 class="form-control mt-2 mb-2" placeholder="Alasan Ekstremitas Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="kulit" style="width: 30%">12. Kulit</label> :
                             <select name="kulit" id="kulit" class="form-control mt-3" style="width: 40%"
-                                onclick="toggleChangeSoap('alasan-kulit_{{ $antrianDokter->rm->id }}', this)">
-                                <option {{ $antrianDokter->rm->o_kulit === 'Normal' ? 'selected' : '' }}
+                                onclick="toggleChangeSoap('alasan-kulit_<?php echo e($antrianDokter->rm->id); ?>', this)">
+                                <option <?php echo e($antrianDokter->rm->o_kulit === 'Normal' ? 'selected' : ''); ?>
+
                                     id="jawaban-normal" value="Normal">Normal</option>
-                                <option {{ $antrianDokter->rm->o_kulit === 'Abnormal' ? 'selected' : '' }}
+                                <option <?php echo e($antrianDokter->rm->o_kulit === 'Abnormal' ? 'selected' : ''); ?>
+
                                     id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <div id="alasan-kulit_{{ $antrianDokter->rm->id }}"
-                            style="{{ $antrianDokter->rm->o_kulit === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                            <input type="text" id="alasan-kulit_{{ $antrianDokter->rm->id }}"
-                                value="{{ $antrianDokter->rm->o_kulit_uraian }}" name="alasan-kulit"
+                        <div id="alasan-kulit_<?php echo e($antrianDokter->rm->id); ?>"
+                            style="<?php echo e($antrianDokter->rm->o_kulit === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                            <input type="text" id="alasan-kulit_<?php echo e($antrianDokter->rm->id); ?>"
+                                value="<?php echo e($antrianDokter->rm->o_kulit_uraian); ?>" name="alasan-kulit"
                                 class="form-control mt-2 mb-2" placeholder="Alasan Kulit Abnormal">
                         </div>
                         <div class="form"
                             style="display: flex; align-items: baseline; justify-content: space-between">
                             <label for="lain-lain" style="width: 30%">13. Lain-lain</label> :
                             <input type="text" id="lain" name="lain"
-                                value="{{ $antrianDokter->rm->lain_lain }}" class="form-control mt-3 mb-2"
+                                value="<?php echo e($antrianDokter->rm->lain_lain); ?>" class="form-control mt-3 mb-2"
                                 placeholder="Lain-lain" style="width: 40%">
                         </div>
                         <div id="imageContainer"></div>
@@ -324,7 +340,7 @@
                                         <label for="tensi">Tensi</label>
                                         <div class="input-group">
                                             <input type="text" name="tensi"
-                                                value="{{ $antrianDokter->isian->p_tensi }}"
+                                                value="<?php echo e($antrianDokter->isian->p_tensi); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -342,7 +358,7 @@
                                         <label for="rr">RR</label>
                                         <div class="input-group">
                                             <input type="text" name="rr"
-                                                value="{{ $antrianDokter->isian->p_rr }}"
+                                                value="<?php echo e($antrianDokter->isian->p_rr); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -360,7 +376,7 @@
                                         <label for="nadi">Nadi</label>
                                         <div class="input-group">
                                             <input type="text" name="nadi"
-                                                value="{{ $antrianDokter->isian->p_nadi }}"
+                                                value="<?php echo e($antrianDokter->isian->p_nadi); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -378,7 +394,7 @@
                                         <label for="spo2">SpO2</label>
                                         <div class="input-group">
                                             <input type="text" name="spo2"
-                                                value="{{ $antrianDokter->isian->spo2 }}"
+                                                value="<?php echo e($antrianDokter->isian->spo2); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -396,7 +412,7 @@
                                         <label for="suhu">Suhu</label>
                                         <div class="input-group">
                                             <input type="text" name="suhu"
-                                                value="{{ $antrianDokter->isian->p_suhu }}"
+                                                value="<?php echo e($antrianDokter->isian->p_suhu); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -414,7 +430,7 @@
                                         <label for="tb">Tinggi Badan</label>
                                         <div class="input-group">
                                             <input type="number" name="tb" id="tb"
-                                                value="{{ $antrianDokter->isian->p_tb }}"
+                                                value="<?php echo e($antrianDokter->isian->p_tb); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -432,7 +448,7 @@
                                         <label for="bb">Berat Badan</label>
                                         <div class="input-group">
                                             <input type="number" name="bb" id="bb"
-                                                value="{{ $antrianDokter->isian->p_bb }}"
+                                                value="<?php echo e($antrianDokter->isian->p_bb); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                             <div class="input-group-append mt-2 mb-2">
                                                 <span class="input-group-text" id="basic-addon2"
@@ -450,7 +466,7 @@
                                         <label for="imt">IMT</label>
                                         <div class="input-group">
                                             <input type="text" name="p_imt" id="p_imt"
-                                                value="{{ $antrianDokter->isian->p_imt }}"
+                                                value="<?php echo e($antrianDokter->isian->p_imt); ?>"
                                                 class="form-control mt-2 mb-2" aria-describedby="basic-addon2"
                                                 readonly>
                                             <div class="input-group-append mt-2 mb-2">
@@ -463,23 +479,23 @@
                                     </div>
                                 </div>
 
-                                @php
+                                <?php
                                     $tgllahir = \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir);
                                     $umur = $tgllahir->diffInMonths(\Carbon\Carbon::now());
                                     $jenis_kelamin = $antrianDokter->booking->pasien->jekel;
                                     // dd($umur, $jenis_kelamin);
-                                @endphp
+                                ?>
 
-                                @if ($umur > 16 && $jenis_kelamin === 'P')
-                                    {{-- Umur lebih dari 16 tahun dalam bulan --}}
-                                    {{-- Lingkar Kepala Anak --}}
+                                <?php if($umur > 16 && $jenis_kelamin === 'P'): ?>
+                                    
+                                    
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="lingkar-kepala-anak">Lingkar Kepala Anak</label>
                                             <div class="input-group">
                                                 <input type="number" name="p_lngkr_kepala_anak"
                                                     id="p_lngkr_kepala_anak"
-                                                    value="{{ $antrianDokter->isian->p_lngkr_kepala_anak }}"
+                                                    value="<?php echo e($antrianDokter->isian->p_lngkr_kepala_anak); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -491,14 +507,14 @@
                                         </div>
                                     </div>
 
-                                    {{-- Lingkar Lengan --}}
+                                    
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="lingkar-lengan">Lingkar Lengan</label>
                                             <div class="input-group">
                                                 <input type="text" name="p_lngkr_lengan_anc"
                                                     id="p_lngkr_lengan_anc"
-                                                    value="{{ $antrianDokter->isian->p_lngkr_lengan_anc }}"
+                                                    value="<?php echo e($antrianDokter->isian->p_lngkr_lengan_anc); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -509,7 +525,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
                             </div>
                         </div>
@@ -517,7 +533,7 @@
                     <div class="form-group row mt-2">
                         <label for="soap_a_0" style="font-weight: bold">Diagnosa (A)</label>
                         <div class="col-md-12 mt-2">
-                            {{-- BARU --}}
+                            
 
                             <div class="row">
                                 <div class="col-6">
@@ -558,7 +574,7 @@
                                         <div class="selected-tags" id="modal-resep_0_tags"></div>
                                         <input type="text" class="autocomplete-input multi-select-input"
                                             id="modal-resep_0" placeholder="Cari Obat" autocomplete="off"
-                                            data-url="{{ url('/resep-autocomplete') }}"
+                                            data-url="<?php echo e(url('/resep-autocomplete')); ?>"
                                             data-dropdown="modal-dropdown-resep_0">
                                     </div>
                                     <input type="hidden" name="soap_p[0][resep][]" id="modal-resep_0_hidden">
@@ -578,7 +594,7 @@
                                         <div class="selected-tags" id="modal-jenis_obat_0_tags"></div>
                                         <input type="text" class="autocomplete-input multi-select-input"
                                             id="modal-jenis_obat_0" placeholder="Cari Jenis Obat" autocomplete="off"
-                                            data-url="{{ url('jenis-autocomplete') }}"
+                                            data-url="<?php echo e(url('jenis-autocomplete')); ?>"
                                             data-dropdown="modal-dropdown-jenis_obat_0">
                                     </div>
                                     <input type="hidden" name="soap_p[0][jenisobat][]"
@@ -599,7 +615,7 @@
                                         <div class="selected-tags" id="modal-aturan_0_tags"></div>
                                         <input type="text" class="autocomplete-input multi-select-input"
                                             id="modal-aturan_0" placeholder="Cari Aturan Pakai" autocomplete="off"
-                                            data-url="{{ url('aturan-autocomplete') }}"
+                                            data-url="<?php echo e(url('aturan-autocomplete')); ?>"
                                             data-dropdown="modal-dropdown-aturan_0">
                                     </div>
                                     <input type="hidden" name="soap_p[0][aturan][]" id="modal-aturan_0_hidden">
@@ -619,7 +635,7 @@
                                         <div class="selected-tags" id="modal-anjuran_0_tags"></div>
                                         <input type="text" class="autocomplete-input multi-select-input"
                                             id="modal-anjuran_0" placeholder="Cari Anjuran Minum" autocomplete="off"
-                                            data-url="{{ url('anjuran-autocomplete') }}"
+                                            data-url="<?php echo e(url('anjuran-autocomplete')); ?>"
                                             data-dropdown="modal-dropdown-anjuran_0">
                                     </div>
                                     <input type="hidden" name="soap_p[0][anjuran][]" id="modal-anjuran_0_hidden">
@@ -677,7 +693,7 @@
     </div>
 </div>
 
-@push('style')
+<?php $__env->startPush('style'); ?>
     <style>
         /* RESEP */
         .resep {
@@ -820,11 +836,11 @@
             background-color: #f0f0f0;
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('script')
+<?php $__env->startPush('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
 
     <script>
         // DIAGNOSA
@@ -1160,4 +1176,5 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php /**PATH C:\laragon\www\Klinik\resources\views/dokter/modal/modalSoap.blade.php ENDPATH**/ ?>
