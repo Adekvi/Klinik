@@ -79,17 +79,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Event listener untuk button panggil perawat
-    document
-        .querySelectorAll('.btn-panggil-perawat')
-        .forEach(function (button) {
-            button.addEventListener('click', function () {
-                var nomorAntrianPerawat = button.getAttribute(
-                    'data-nomor-antrian-perawat'
-                )
-                var poli = button.getAttribute('data-poli')
-                panggilAntrianPerawat(nomorAntrianPerawat, poli)
-            })
-        })
+    // Tangkap klik pada seluruh document, lalu filter tombol target
+    document.addEventListener('click', function (e) {
+        const button = e.target.closest('.btn-panggil-perawat');
+        if (!button) return; // kalau bukan tombol, abaikan
+
+        const nomorAntrianPerawat = button.getAttribute('data-nomor-antrian-perawat');
+        const poli = button.getAttribute('data-poli');
+        panggilAntrianPerawat(nomorAntrianPerawat, poli);
+    });
 
     function panggilAntrianPerawat(nomorAntrianPerawat, poli) {
         $.ajax({

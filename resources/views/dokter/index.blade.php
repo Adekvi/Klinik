@@ -650,7 +650,8 @@
 
     @push('script')
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        {{-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script> --}}
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=EbYPThWO"></script>
         <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {

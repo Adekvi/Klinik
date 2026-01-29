@@ -938,7 +938,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="{{ asset('aset/js/popper/popper.min.js') }}"></script>
         {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script> --}}
-        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        {{-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script> --}}
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=EbYPThWO"></script>
         {{-- <script src="{{ asset('assets/responsivevoice.js') }}"></script> --}}
         <script src="{{ asset('assets/js/antrian.script.js') }}"></script>
         <script src="{{ asset('assets/js/script.js') }}"></script>

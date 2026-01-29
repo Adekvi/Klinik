@@ -145,7 +145,7 @@
                                             <?php
                                             $tgllahir = \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir);
                                             $umur = $tgllahir->diffInMonths(\Carbon\Carbon::now());
-                                            
+
                                             if ($umur < 12) {
                                                 echo $tgllahir->diff(\Carbon\Carbon::now())->format('%m&nbsp;bulan&nbsp;%d&nbsp;hari');
                                             } else {

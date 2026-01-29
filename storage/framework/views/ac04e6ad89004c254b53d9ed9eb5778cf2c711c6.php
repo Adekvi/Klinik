@@ -72,7 +72,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                
+
                                                 <div id="shiftPagi" class="shift-container">
                                                     <table class="table table-bordered table-responsive">
                                                         <thead class="table-primary">
@@ -227,7 +227,7 @@
                         <div class="card-body">
                             <form method="GET" action="<?php echo e(route('perawat.index')); ?>"
                                 class="d-flex justify-content-between align-items-center mb-3">
-                                <input type="hidden" name="page" value="1"> 
+                                <input type="hidden" name="page" value="1">
                                 <div class="d-flex align-items-center">
                                     <label for="entries" class="me-2">Tampilkan:</label>
                                     <select name="entries" id="entries" class="form-select form-select-sm me-3"
@@ -280,7 +280,7 @@
                                         <?php else: ?>
                                             <?php $no = 1; ?>
                                             <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                
+
                                                 <?php if($item->status == 'D'): ?>
                                                     <tr id="row_<?php echo e($item->id); ?>">
                                                         <td><?php echo e($no++); ?></td>
@@ -378,7 +378,7 @@ echo $html;
                     <div class="card-body">
                         <form method="GET" action="<?php echo e(route('perawat.index')); ?>"
                             class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="hidden" name="page" value="1"> 
+                            <input type="hidden" name="page" value="1">
                             <div class="d-flex align-items-center">
                                 <label for="periksa_entries" class="me-2">Tampilkan:</label>
                                 <select name="periksa_entries" id="periksa_entries"
@@ -456,7 +456,7 @@ echo $html;
                                                     </td>
                                                 </tr>
                                             <?php endif; ?>
-                                            
+
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php endif; ?>
                                 </tbody>
@@ -472,9 +472,9 @@ echo $html;
         </div>
     </div>
 
-    
+
     <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        
+
         <div class="modal fade" id="riwayatModal<?php echo e($item->id); ?>" tabindex="-1"
             aria-labelledby="exampleModalLabel<?php echo e($item->id); ?>" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -549,7 +549,7 @@ echo $html;
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-    
+
     <?php if(!empty($soap)): ?>
         <?php $__currentLoopData = $soap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asesmen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="modal fade" id="detailAsesmen<?php echo e($asesmen->id); ?>" tabindex="-1"
@@ -722,7 +722,7 @@ echo $html;
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     <?php endif; ?>
 
-    
+
     <?php $__currentLoopData = $pasien; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="modal fade" id="lewati<?php echo e($item->id); ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -776,7 +776,7 @@ echo $html;
                         <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_umum" class="form-control mt-2 mb-2">
                             <option value="#">Pilih Dokter</option>
-                            
+
                         </select>
                     </div>
                     <div class="form-group">
@@ -848,7 +848,7 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    
+
                     <button type="button" class="btn btn-primary" id="btnSimpan" onclick="saveData()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status"
                             aria-hidden="true"></span>
@@ -883,7 +883,7 @@ unset($__errorArgs, $__bag); ?>
                         <label for="dokter">Dokter</label>
                         <select name="dokter" id="dokter_bpjs" class="form-control mt-2 mb-2">
                             <option value="#">Pilih Dokter</option>
-                            
+
                         </select>
                     </div>
                     <div class="form-group">
@@ -990,9 +990,10 @@ unset($__errorArgs, $__bag); ?>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="<?php echo e(asset('aset/js/popper/popper.min.js')); ?>"></script>
-        
-        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-        
+
+        <!-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script> -->
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=EbYPThWO"></script>
+
         <script src="<?php echo e(asset('assets/js/antrian.script.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
 

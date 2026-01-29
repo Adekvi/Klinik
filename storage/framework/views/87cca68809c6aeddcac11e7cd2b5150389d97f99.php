@@ -352,15 +352,15 @@
                             <?php
 if (! isset($_instance)) {
     $html = \Livewire\Livewire::mount('perawat.asesmen-pasien-modal', [])->html();
-} elseif ($_instance->childHasBeenRendered('AX9aElX')) {
-    $componentId = $_instance->getRenderedChildComponentId('AX9aElX');
-    $componentTag = $_instance->getRenderedChildComponentTagName('AX9aElX');
+} elseif ($_instance->childHasBeenRendered('cPnBKmb')) {
+    $componentId = $_instance->getRenderedChildComponentId('cPnBKmb');
+    $componentTag = $_instance->getRenderedChildComponentTagName('cPnBKmb');
     $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
-    $_instance->preserveRenderedChild('AX9aElX');
+    $_instance->preserveRenderedChild('cPnBKmb');
 } else {
     $response = \Livewire\Livewire::mount('perawat.asesmen-pasien-modal', []);
     $html = $response->html();
-    $_instance->logRenderedChild('AX9aElX', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+    $_instance->logRenderedChild('cPnBKmb', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
 }
 echo $html;
 ?>
@@ -991,7 +991,8 @@ unset($__errorArgs, $__bag); ?>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="<?php echo e(asset('aset/js/popper/popper.min.js')); ?>"></script>
         
-        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=EbYPThWO"></script>
         
         <script src="<?php echo e(asset('assets/js/antrian.script.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>

@@ -95,14 +95,14 @@
                                                         <?php
                                                         // Parsing tanggal lahir dari data pasien menggunakan Carbon
                                                         $tgllahir = \Carbon\Carbon::parse($item->booking->pasien->tgllahir);
-                                                        
+
                                                         // Menghitung umur dalam bulan dari tanggal lahir hingga saat ini
                                                         $umurDalamBulan = $tgllahir->diffInMonths(\Carbon\Carbon::now());
-                                                        
+
                                                         // Mengubah umur ke dalam tahun dan bulan jika diperlukan
                                                         $tahun = floor($umurDalamBulan / 12); // Hitung tahun
                                                         $bulan = $umurDalamBulan % 12; // Sisa bulan setelah hitungan tahun
-                                                        
+
                                                         // Menampilkan hasil dalam format "X tahun Y bulan"
                                                         echo $tahun . ' tahun ';
                                                         ?>

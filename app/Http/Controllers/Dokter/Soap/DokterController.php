@@ -81,7 +81,7 @@ class DokterController extends Controller
         $selectedNoGigi = $fisik && $fisik->no_gigi ? explode(',', $fisik->no_gigi) : [];
         $lastTubuhTime = $fisik ? $fisik->created_at : null;
         $lastOdontogramTime = $fisik ? $fisik->created_at : null;
-
+        $diagnosas = Diagnosa::select('id', 'kd_diagno', 'nm_diagno')->limit(10)->get();
         // dd(vars: $soap);
 
         return view('dokter.soap', compact(
@@ -90,6 +90,7 @@ class DokterController extends Controller
             'diagnosaPrimer',
             'diagnosaSekunder',
             'resep',
+            'diagnosas',
             'resepJenis',
             'resepAturan',
             'resepAnjuran',

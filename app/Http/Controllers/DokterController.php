@@ -211,11 +211,11 @@ class DokterController extends Controller
         // dd(vars: $antrianDokter);
 
         return view('dokter.index', compact(
-            'antrianDokter', 
-            'ttd', 
+            'antrianDokter',
+            'ttd',
             'groupedAntrian',
-            'entries', 
-            'search', 
+            'entries',
+            'search',
             'umumDilayani',
             'umumBelumDilayani',
             'gigiDilayani',
