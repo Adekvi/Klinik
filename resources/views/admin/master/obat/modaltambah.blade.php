@@ -11,6 +11,26 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
+                            <label>No Faktur</label>
+                            <input type="text" name="no_faktur" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Nama Distributor</label>
+                            <input type="text" name="nama_distributor" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6 mt-2">
+                            <label>Telepon Distributor (Opsional)</label>
+                            <input type="text" name="hp_distributor" class="form-control">
+                        </div>
+
+                        {{-- <div class="col-md-6 mt-2">
+                            <label>Alamat Distributor (Opsional)</label>
+                            <input type="text" name="alamat_distributor" class="form-control">
+                        </div> --}}
+
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Golongan</label>
                                 <input type="text" name="golongan" id="golongan" class="form-control mt-2 mb-2"
@@ -35,7 +55,7 @@
                             <div class="form-group">
                                 <label for="">Margin</label>
                                 <div class="input-group">
-                                    <input type="text" id="id_margin_display" class="form-control" readonly
+                                    <input type="text" id="id_margin_display" class="form-control"
                                         value="{{ $margen ? $margen->margin : '0' }}">
 
                                     <!-- Input hidden untuk menyimpan id_margin -->
@@ -79,20 +99,46 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Stok Awal</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control mt-2 mb-2" name="stok_awal"
-                                        id="stok_awal">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text mt-2" style="background: rgb(228, 228, 228)">
-                                            <b>Total</b>
-                                        </span>
+                        <div class="col-12">
+                            <hr>
+                            <h6>Batch Obat (Expired & Jumlah)</h6>
+
+                            <div id="batch-container">
+                                <div class="row batch-item mb-2">
+                                    <div class="col-md-3">
+                                        <label for="">Tanggal Terima</label>
+                                        <input type="date" name="tanggal_terima[]" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="">Expired Date</label>
+                                        <input type="date" name="expired_date[]" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="">Jumlah</label>
+                                        <input type="number" name="jumlah[]" class="form-control jumlah-input" placeholder="Jumlah" required>
+                                    </div>
+
+                                    <div class="col-md-2"  style="padding: 20px">
+                                        <button type="button" class="btn btn-danger btn-sm mt-2 remove-batch w-100">
+                                            Hapus
+                                        </button>
                                     </div>
                                 </div>
                             </div>
+
+                            <button type="button" class="btn btn-success btn-sm mt-2" id="add-batch">
+                                + Tambah Batch
+                            </button>
+
+                            <div class="mt-3">
+                                <label>Total Stok</label>
+                                <input type="number" name="stok_awal" id="stok_awal"
+                                    class="form-control" readonly>
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -130,4 +176,72 @@
             }
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const container = document.getElementById("batch-container");
+            const addButton = document.getElementById("add-batch");
+
+            // Tambah batch
+            addButton.addEventListener("click", function () {
+                const newRow = document.createElement("div");
+                newRow.classList.add("row", "batch-item", "mb-2", "align-items-end");
+
+                newRow.innerHTML = `
+                    <div class="col-md-3">
+                        <input type="date" name="tanggal_terima[]"
+                            class="form-control" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="date" name="expired_date[]"
+                            class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input type="number" name="jumlah[]"
+                            class="form-control jumlah-input"
+                            placeholder="Jumlah" required>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="button"
+                            class="btn btn-danger btn-sm remove-batch w-100">
+                            Hapus
+                        </button>
+                    </div>
+                `;
+
+
+                container.appendChild(newRow);
+            });
+
+            // Hapus batch
+            container.addEventListener("click", function (e) {
+                if (e.target.classList.contains("remove-batch")) {
+                    e.target.closest(".batch-item").remove();
+                    calculateTotal();
+                }
+            });
+
+            // Hitung total stok otomatis
+            container.addEventListener("input", function (e) {
+                if (e.target.classList.contains("jumlah-input")) {
+                    calculateTotal();
+                }
+            });
+
+            function calculateTotal() {
+                let total = 0;
+                document.querySelectorAll(".jumlah-input").forEach(function (input) {
+                    total += parseInt(input.value) || 0;
+                });
+
+                document.getElementById("stok_awal").value = total;
+            }
+
+        });
+    </script>
+
+
 @endpush

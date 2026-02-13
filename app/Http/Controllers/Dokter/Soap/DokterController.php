@@ -109,664 +109,408 @@ class DokterController extends Controller
 
     public function store(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
-            'soap_p.0.resep.*' => 'exists:reseps,id|nullable',
-            'soap_p.0.jenisobat.*' => 'exists:jenisobats,id|nullable',
-            'soap_p.0.aturan.*' => 'exists:aturans,id|nullable',
-            'soap_p.0.anjuran.*' => 'exists:anjurans,id|nullable',
-            'soap_p.0.jumlah.*' => 'numeric|min:1|nullable',
-            'soap_p.0.resep' => 'array',
-            'soap_p.0.jenisobat' => 'array|size:' . count($request->input('soap_p.0.resep', [])),
-            'soap_p.0.aturan' => 'array|size:' . count($request->input('soap_p.0.resep', [])),
-            'soap_p.0.anjuran' => 'array|size:' . count($request->input('soap_p.0.resep', [])),
-            'soap_p.0.jumlah' => 'array|size:' . count($request->input('soap_p.0.resep', [])),
+            'keluhan' => 'nullable|string',
+            'a_riwayat_alergi' => 'nullable|string',
+            'a_riwayat_penyakit_skrg' => 'nullable|string',
+            'isian' => 'nullable|string',
+            'kesadaran' => 'nullable|string',
+            'gcs_e' => 'nullable|numeric',
+            'gcs_m' => 'nullable|numeric',
+            'gcs_v' => 'nullable|numeric',
+            'kepala' => 'nullable|string',
+            'alasan-kepala' => 'nullable|string',
+            'mata' => 'nullable|string',
+            'alasan-mata' => 'nullable|string',
+            'leher' => 'nullable|string',
+            'alasan-leher' => 'nullable|string',
+            'tht' => 'nullable|string',
+            'alasan-tht' => 'nullable|string',
+            'thorax' => 'nullable|string',
+            'alasan-thorax' => 'nullable|string',
+            'paru' => 'nullable|string',
+            'alasan-paru' => 'nullable|string',
+            'jantung' => 'nullable|string',
+            'alasan-jantung' => 'nullable|string',
+            'abdomen' => 'nullable|string',
+            'alasan-abdomen' => 'nullable|string',
+            'ekstremitas' => 'nullable|string',
+            'alasan-ekstremitas' => 'nullable|string',
+            'kulit' => 'nullable|string',
+            'alasan-kulit' => 'nullable|string',
+            'lain' => 'nullable|string',
+            'tensi' => 'nullable|numeric',
+            'rr' => 'nullable|numeric',
+            'nadi' => 'nullable|numeric',
+            'spo2' => 'nullable|numeric',
+            'suhu' => 'nullable|numeric',
+            'tb' => 'nullable|numeric',
+            'bb' => 'nullable|numeric',
+            'p_imt' => 'nullable|numeric',
+            'diagnosa' => 'nullable|array',
+            'obat' => 'nullable|array',
+            'edukasi' => 'nullable|string',
+            'rujuk' => 'nullable|string',
         ]);
 
         $data = $request->all();
-        // dd($data);
-
-        // Inisialisasi array untuk menyimpan data
-        $resepNames = [];
-        $jenisNames = [];
-        $aturanNames = [];
-        $anjuranNames = [];
-        $jumlahData = [];
-        $resepIds = [];
-        $jenisIds = [];
-        $aturanIds = [];
-        $anjuranIds = [];
-
-        // Proses soap_p[0]
-        if (isset($data['soap_p'][0]) && is_array($data['soap_p'][0])) {
-            $item = $data['soap_p'][0];
-
-            // Proses resep (obat)
-            if (!empty($item['resep']) && is_array($item['resep'])) {
-                foreach ($item['resep'] as $obatId) {
-                    if ($obatId && $obatId !== 'null' && $obatId !== '') {
-                        $obatId = intval($obatId);
-                        $obat = Resep::find($obatId);
-                        if ($obat) {
-                            $resepNames[] = $obat->nama_obat;
-                            $resepIds[] = $obatId;
-                        }
-                    }
-                }
-            }
-
-            // Proses jenis obat
-            if (!empty($item['jenisobat']) && is_array($item['jenisobat'])) {
-                foreach ($item['jenisobat'] as $jenisId) {
-                    if ($jenisId && $jenisId !== 'null' && $jenisId !== '') {
-                        $jenisId = intval($jenisId);
-                        $jenis = Jenisobat::find($jenisId);
-                        if ($jenis) {
-                            $jenisNames[] = $jenis->jenis;
-                            $jenisIds[] = $jenisId;
-                        }
-                    }
-                }
-            }
-
-            // Proses aturan
-            if (!empty($item['aturan']) && is_array($item['aturan'])) {
-                foreach ($item['aturan'] as $aturanId) {
-                    if ($aturanId && $aturanId !== 'null' && $aturanId !== '') {
-                        $aturanId = intval($aturanId);
-                        $aturan = Aturan::find($aturanId);
-                        if ($aturan) {
-                            $aturanNames[] = $aturan->aturan_minum;
-                            $aturanIds[] = $aturanId;
-                        }
-                    }
-                }
-            }
-
-            // Proses anjuran
-            if (!empty($item['anjuran']) && is_array($item['anjuran'])) {
-                foreach ($item['anjuran'] as $anjuranId) {
-                    if ($anjuranId && $anjuranId !== 'null' && $anjuranId !== '') {
-                        $anjuranId = intval($anjuranId);
-                        $anjuran = Anjuran::find($anjuranId);
-                        if ($anjuran) {
-                            $anjuranNames[] = $anjuran->kode_anjuran;
-                            $anjuranIds[] = $anjuranId;
-                        }
-                    }
-                }
-            }
-
-            // Proses jumlah
-            if (!empty($item['jumlah']) && is_array($item['jumlah'])) {
-                foreach ($item['jumlah'] as $jumlah) {
-                    if ($jumlah && $jumlah !== 'null' && $jumlah !== '' && is_numeric($jumlah) && $jumlah > 0) {
-                        $jumlahData[] = $jumlah;
-                    }
-                }
-            }
-        } else {
-            Log::error('Data soap_p tidak ada atau bukan array.', ['id_antrian' => $id]);
-            return redirect()->back()->with('error', 'Data resep tidak valid.');
-        }
-
-        // Encode data untuk penyimpanan (array satu tingkat)
-        $encodeObatTable = json_encode($resepNames) ?? null;
-        $encodeJenisObat = json_encode($jenisNames) ?? null;
-        $encodeAturan = json_encode($aturanNames) ?? null;
-        $encodeAnjuran = json_encode($anjuranNames) ?? null;
-        $encodeJumlah = json_encode($jumlahData) ?? null;
-
-        if (isset($data['soap_p'][0]) && is_array($data['soap_p'][0])) {
-            $item = $data['soap_p'][0];
-            $item['resep'] = array_filter($item['resep'] ?? [], fn($value) => !is_null($value) && $value !== '');
-            $item['jenisobat'] = array_filter($item['jenisobat'] ?? [], fn($value) => !is_null($value) && $value !== '');
-            $item['aturan'] = array_filter($item['aturan'] ?? [], fn($value) => !is_null($value) && $value !== '');
-            $item['anjuran'] = array_filter($item['anjuran'] ?? [], fn($value) => !is_null($value) && $value !== '');
-            $item['jumlah'] = array_filter($item['jumlah'] ?? [], fn($value) => !is_null($value) && $value !== '');
-            $data['soap_p'][0] = $item;
-        }
-
-        // Proses diagnosa primer dan sekunder
-        $diagno = [];
-        $diagnosek = [];
-
-        if (isset($data['soap_a']) && is_array($data['soap_a'])) {
-            foreach ($data['soap_a'] as $value) {
-                if (isset($value['diagnosa_primer']) && !empty($value['diagnosa_primer'])) {
-                    $diag = $value['diagnosa_primer'];
-                    if (!in_array($diag, $diagno)) {
-                        $diagno[] = $diag;
-                    }
-                }
-            }
-        }
-
-        if (isset($data['soap_a_b']) && is_array($data['soap_a_b'])) {
-            foreach ($data['soap_a_b'] as $value) {
-                if (isset($value['diagnosa_sekunder']) && !empty($value['diagnosa_sekunder'])) {
-                    $diagn = $value['diagnosa_sekunder'];
-                    if (!in_array($diagn, $diagnosek)) {
-                        $diagnosek[] = $diagn;
-                    }
-                }
-            }
-        }
-
-        $diagnosa = [];
-        $diagnosa_sekun = [];
-
-        foreach ($diagno as $p) {
-            $parts = explode(' - ', $p);
-            if (isset($parts[0])) {
-                $id_diagnosa = trim($parts[0]);
-                $diagnoModel = Diagnosa::where('kd_diagno', $id_diagnosa)->first();
-                if ($diagnoModel) {
-                    $diagnosa[] = [
-                        'id' => $diagnoModel->id,
-                        'kd_diagno' => $diagnoModel->kd_diagno,
-                        'nm_diagno' => $diagnoModel->nm_diagno,
-                    ];
-                }
-            }
-        }
-
-        foreach ($diagnosek as $di) {
-            $parts = explode(' - ', $di);
-            if (isset($parts[0])) {
-                $id_diagnosa_sekun = trim($parts[0]);
-                $diagnosekModel = Diagnosa::where('kd_diagno', $id_diagnosa_sekun)->first();
-                if ($diagnosekModel) {
-                    $diagnosa_sekun[] = [
-                        'id' => $diagnosekModel->id,
-                        'kd_diagno' => $diagnosekModel->kd_diagno,
-                        'nm_diagno' => $diagnosekModel->nm_diagno,
-                    ];
-                }
-            }
-        }
-
-        $encodeDiagnosaPrimer = json_encode(array_column($diagnosa, 'nm_diagno')) ?? null;
-        $encodeDiagnosaSekunder = json_encode(array_column($diagnosa_sekun, 'nm_diagno')) ?? null;
-
-        // Ambil data antrian dan gender
-        $antrianDokter = AntrianPerawat::with(['booking.pasien'])->findOrFail($id);
-        $gender = $antrianDokter->booking->pasien->jekel == 'Laki-Laki' ? 'L' : 'P';
-
-        // Simpan diagnosa terbanyak
-        $allDiagnoses = array_merge($diagnosa, $diagnosa_sekun);
-        foreach ($allDiagnoses as $diagnosis) {
-            DB::table('diagnosa_terbanyaks')->insert([
-                'id_diagnosa' => $diagnosis['id'],
-                'diagnosa' => $diagnosis['nm_diagno'],
-                'gender' => $gender,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        $dokter = DataDokter::findOrFail($antrianDokter->id_dokter);
         $now = Carbon::now();
 
-        // Data untuk tabel RmDa1
+        // Ambil data antrian & pasien
+        $antrian = AntrianPerawat::with(['booking.pasien'])->findOrFail($id);
+        $dokter = DataDokter::findOrFail($antrian->id_dokter);
+        $pasien = $antrian->booking->pasien;
+
+        /**
+         * ============================
+         * PROSES DIAGNOSA
+         * ============================
+         */
+        $diagnosaArray = $data['diagnosa'] ?? [];
+        $primer = $diagnosaArray[0] ?? null;
+        $sekunder = array_slice($diagnosaArray, 1);
+
+        $soapPrimer = [];
+        $soapSekunder = [];
+
+        // Primer
+        if ($primer) {
+            $parts = explode(' - ', $primer);
+            $kd = trim($parts[0]);
+            $model = Diagnosa::where('kd_diagno', $kd)->first();
+            if ($model) {
+                $soapPrimer[] = $model->nm_diagno;
+            }
+        }
+
+        // Sekunder
+        foreach ($sekunder as $sk) {
+            $parts = explode(' - ', $sk);
+            $kd = trim($parts[0]);
+            $model = Diagnosa::where('kd_diagno', $kd)->first();
+            if ($model) {
+                $soapSekunder[] = $model->nm_diagno;
+            }
+        }
+
+        $encodeDiagnosaPrimer = json_encode($soapPrimer);
+        $encodeDiagnosaSekunder = json_encode($soapSekunder);
+
+        /**
+         * ============================
+         * PROSES OBAT (sesuai dd terbaru)
+         * ============================
+         */
+        $obatNames = [];
+        $obatJenis = [];
+        $obatAturan = [];
+        $obatAnjuran = [];
+        $obatJumlah = [];
+
+        foreach ($data['obat'] ?? [] as $o) {
+            $decoded = json_decode($o, true);
+            if (!$decoded) continue;
+
+            $obatNames[] = $decoded['nama'] ?? null;
+            $obatJenis[] = $decoded['jenis_sediaan'] ?? null;
+            $obatAturan[] = $decoded['aturan'] ?? null;
+            $obatAnjuran[] = $decoded['anjuran'] ?? null;
+            $obatJumlah[] = $decoded['jumlah'] ?? null;
+        }
+
+        $encodeObat = json_encode($obatNames);
+        $encodeJenis = json_encode($obatJenis);
+        $encodeAturan = json_encode($obatAturan);
+        $encodeAnjuran = json_encode($obatAnjuran);
+        $encodeJumlah = json_encode($obatJumlah);
+
+        /**
+         * ============================
+         * SIMPAN ANAMNESA / ISIAN
+         * ============================
+         */
         $dataAnamnesis = [
-            'id_poli' => $antrianDokter->id_poli,
-            'id_dokter' => $antrianDokter->id_dokter,
-            'a_keluhan_utama' => $data['keluhan'],
-            'a_riwayat_alergi' => $data['a_riwayat_alergi'],
-            'a_riwayat_penyakit_skrg' => $data['a_riwayat_penyakit_skrg'],
-            'o_kesadaran' => $data['kesadaran'],
-            'o_kepala' => $data['kepala'],
-            'o_kepala_uraian' => $data['alasan-kepala'],
-            'o_mata' => $data['mata'],
-            'o_mata_uraian' => $data['alasan-mata'],
-            'o_tht' => $data['tht'],
-            'o_tht_uraian' => $data['alasan-tht'],
-            'o_thorax' => $data['thorax'],
-            'o_thorax_uraian' => $data['alasan-thorax'],
-            'o_paru' => $data['paru'],
-            'o_paru_uraian' => $data['alasan-paru'],
-            'o_jantung' => $data['jantung'],
-            'o_jantung_uraian' => $data['alasan-jantung'],
-            'o_abdomen' => $data['abdomen'],
-            'o_abdomen_uraian' => $data['alasan-abdomen'],
-            'o_leher' => $data['leher'],
-            'o_leher_uraian' => $data['alasan-leher'],
-            'o_ekstremitas' => $data['ekstremitas'],
-            'o_ekstremitas_uraian' => $data['alasan-ekstremitas'],
-            'o_kulit' => $data['kulit'],
-            'o_kulit_uraian' => $data['alasan-kulit'],
-            'lain_lain' => $data['lain'],
+            'id_poli' => $antrian->id_poli,
+            'id_dokter' => $antrian->id_dokter,
+            'a_keluhan_utama' => $data['keluhan'] ?? null,
+            'a_riwayat_alergi' => $data['a_riwayat_alergi'] ?? null,
+            'a_riwayat_penyakit_skrg' => $data['a_riwayat_penyakit_skrg'] ?? null,
+            'o_kesadaran' => $data['kesadaran'] ?? null,
+            'o_kepala' => $data['kepala'] ?? null,
+            'o_kepala_uraian' => $data['alasan-kepala'] ?? null,
+            'o_mata' => $data['mata'] ?? null,
+            'o_mata_uraian' => $data['alasan-mata'] ?? null,
+            'o_tht' => $data['tht'] ?? null,
+            'o_tht_uraian' => $data['alasan-tht'] ?? null,
+            'o_thorax' => $data['thorax'] ?? null,
+            'o_thorax_uraian' => $data['alasan-thorax'] ?? null,
+            'o_paru' => $data['paru'] ?? null,
+            'o_paru_uraian' => $data['alasan-paru'] ?? null,
+            'o_jantung' => $data['jantung'] ?? null,
+            'o_jantung_uraian' => $data['alasan-jantung'] ?? null,
+            'o_abdomen' => $data['abdomen'] ?? null,
+            'o_abdomen_uraian' => $data['alasan-abdomen'] ?? null,
+            'o_leher' => $data['leher'] ?? null,
+            'o_leher_uraian' => $data['alasan-leher'] ?? null,
+            'o_ekstremitas' => $data['ekstremitas'] ?? null,
+            'o_ekstremitas_uraian' => $data['alasan-ekstremitas'] ?? null,
+            'o_kulit' => $data['kulit'] ?? null,
+            'o_kulit_uraian' => $data['alasan-kulit'] ?? null,
+            'lain_lain' => $data['lain'] ?? null,
             'created_at' => $now,
             'updated_at' => $now,
         ];
+        RmDa1::where('id', $antrian->id_rm)->update($dataAnamnesis);
 
-        // Data untuk tabel IsianPerawat
         $dataIsian = [
-            'id_poli' => $antrianDokter->id_poli,
-            'id_dokter' => $antrianDokter->id_dokter,
-            'p_form_isian_pilihan' => $data['isian'],
-            'p_form_isian_pilihan_uraian' => $data['isian_alasan'],
-            'p_tensi' => $data['tensi'],
-            'p_rr' => $data['rr'],
-            'spo2' => $data['spo2'],
-            'p_suhu' => $data['suhu'],
-            'p_nadi' => $data['nadi'],
-            'p_tb' => $data['tb'],
-            'p_bb' => $data['bb'],
-            'p_imt' => $data['p_imt'],
-            'gcs_e' => $data['gcs_e'],
-            'gcs_m' => $data['gcs_m'],
-            'gcs_v' => $data['gcs_v'],
-            'rujuk' => $data['rujuk'],
+            'id_poli' => $antrian->id_poli,
+            'id_dokter' => $antrian->id_dokter,
+            'p_form_isian_pilihan' => $data['isian'] ?? null,
+            'p_form_isian_pilihan_uraian' => $data['isian_alasan'] ?? null,
+            'p_tensi' => $data['tensi'] ?? null,
+            'p_rr' => $data['rr'] ?? null,
+            'spo2' => $data['spo2'] ?? null,
+            'p_suhu' => $data['suhu'] ?? null,
+            'p_nadi' => $data['nadi'] ?? null,
+            'p_tb' => $data['tb'] ?? null,
+            'p_bb' => $data['bb'] ?? null,
+            'p_imt' => $data['p_imt'] ?? null,
+            'gcs_e' => $data['gcs_e'] ?? null,
+            'gcs_m' => $data['gcs_m'] ?? null,
+            'gcs_v' => $data['gcs_v'] ?? null,
+            'rujuk' => $data['rujuk'] ?? null,
             'created_at' => $now,
             'updated_at' => $now,
         ];
+        IsianPerawat::where('id', $antrian->id_isian)->update($dataIsian);
 
-        // Update data RmDa1 dan IsianPerawat
-        RmDa1::where('id', $antrianDokter->id_rm)->update($dataAnamnesis);
-        IsianPerawat::where('id', $antrianDokter->id_isian)->update($dataIsian);
-
-        // Data untuk tabel Soap
-        $data2 = [
-            'id_pasien' => $antrianDokter->booking->pasien->id,
-            'id_poli' => $antrianDokter->id_poli,
-            'id_dokter' => $antrianDokter->id_dokter,
-            'id_rm' => $antrianDokter->id_rm,
-            'id_isian' => $antrianDokter->id_isian,
+        /**
+         * ============================
+         * SIMPAN SOAP
+         * ============================
+         */
+        $soapData = [
+            'id_pasien' => $pasien->id,
+            'id_poli' => $antrian->id_poli,
+            'id_dokter' => $antrian->id_dokter,
+            'id_rm' => $antrian->id_rm,
+            'id_isian' => $antrian->id_isian,
             'nama_dokter' => $dokter->nama_dokter,
-            'keluhan_utama' => $data['keluhan'],
-            'p_form_isian_pilihan' => $data['isian'],
-            'p_form_isian_pilihan_uraian' => $data['isian_alasan'],
-            'a_riwayat_alergi' => $data['a_riwayat_alergi'],
-            'o_kesadaran' => $data['kesadaran'],
-            'o_kepala' => $data['kepala'],
-            'o_kepala_uraian' => $data['alasan-kepala'],
-            'o_mata' => $data['mata'],
-            'o_mata_uraian' => $data['alasan-mata'],
-            'o_tht' => $data['tht'],
-            'o_tht_uraian' => $data['alasan-tht'],
-            'o_thorax' => $data['thorax'],
-            'o_thorax_uraian' => $data['alasan-thorax'],
-            'o_paru' => $data['paru'],
-            'o_paru_uraian' => $data['alasan-paru'],
-            'o_jantung' => $data['jantung'],
-            'o_jantung_uraian' => $data['alasan-jantung'],
-            'o_abdomen' => $data['abdomen'],
-            'o_abdomen_uraian' => $data['alasan-abdomen'],
-            'o_leher' => $data['leher'],
-            'o_leher_uraian' => $data['alasan-leher'],
-            'o_ekstremitas' => $data['ekstremitas'],
-            'o_ekstremitas_uraian' => $data['alasan-ekstremitas'],
-            'o_kulit' => $data['kulit'],
-            'o_kulit_uraian' => $data['alasan-kulit'],
-            'lain_lain' => $data['lain'],
-            'p_tensi' => $data['tensi'],
-            'p_rr' => $data['rr'],
-            'spo2' => $data['spo2'],
-            'p_suhu' => $data['suhu'],
-            'p_nadi' => $data['nadi'],
-            'p_tb' => $data['tb'],
-            'p_bb' => $data['bb'],
-            'p_imt' => $data['p_imt'],
-            'gcs_e' => $data['gcs_e'],
-            'gcs_m' => $data['gcs_m'],
-            'gcs_v' => $data['gcs_v'],
+            'keluhan_utama' => $data['keluhan'] ?? null,
+            'p_form_isian_pilihan' => $data['isian'] ?? null,
+            'p_form_isian_pilihan_uraian' => $data['isian_alasan'] ?? null,
+            'a_riwayat_alergi' => $data['a_riwayat_alergi'] ?? null,
+            'o_kesadaran' => $data['kesadaran'] ?? null,
+            'o_kepala' => $data['kepala'] ?? null,
+            'o_kepala_uraian' => $data['alasan-kepala'] ?? null,
+            'o_mata' => $data['mata'] ?? null,
+            'o_mata_uraian' => $data['alasan-mata'] ?? null,
+            'o_tht' => $data['tht'] ?? null,
+            'o_tht_uraian' => $data['alasan-tht'] ?? null,
+            'o_thorax' => $data['thorax'] ?? null,
+            'o_thorax_uraian' => $data['alasan-thorax'] ?? null,
+            'o_paru' => $data['paru'] ?? null,
+            'o_paru_uraian' => $data['alasan-paru'] ?? null,
+            'o_jantung' => $data['jantung'] ?? null,
+            'o_jantung_uraian' => $data['alasan-jantung'] ?? null,
+            'o_abdomen' => $data['abdomen'] ?? null,
+            'o_abdomen_uraian' => $data['alasan-abdomen'] ?? null,
+            'o_leher' => $data['leher'] ?? null,
+            'o_leher_uraian' => $data['alasan-leher'] ?? null,
+            'o_ekstremitas' => $data['ekstremitas'] ?? null,
+            'o_ekstremitas_uraian' => $data['alasan-ekstremitas'] ?? null,
+            'o_kulit' => $data['kulit'] ?? null,
+            'o_kulit_uraian' => $data['alasan-kulit'] ?? null,
+            'lain_lain' => $data['lain'] ?? null,
+            'p_tensi' => $data['tensi'] ?? null,
+            'p_rr' => $data['rr'] ?? null,
+            'spo2' => $data['spo2'] ?? null,
+            'p_suhu' => $data['suhu'] ?? null,
+            'p_nadi' => $data['nadi'] ?? null,
+            'p_tb' => $data['tb'] ?? null,
+            'p_bb' => $data['bb'] ?? null,
+            'p_imt' => $data['p_imt'] ?? null,
+            'gcs_e' => $data['gcs_e'] ?? null,
+            'gcs_m' => $data['gcs_m'] ?? null,
+            'gcs_v' => $data['gcs_v'] ?? null,
             'soap_a_primer' => $encodeDiagnosaPrimer,
             'soap_a_sekunder' => $encodeDiagnosaSekunder,
-            'soap_p' => $encodeObatTable,
-            'soap_p_jenis' => $encodeJenisObat,
+            'soap_p' => $encodeObat,
+            'soap_p_jenis' => $encodeJenis,
             'soap_p_aturan' => $encodeAturan,
             'soap_p_anjuran' => $encodeAnjuran,
             'soap_p_jumlah' => $encodeJumlah,
-            'obat_Ro' => $encodeObatTable,
+            'obat_Ro' => $encodeObat,
             'ObatRacikan' => $data['ObatRacikan'] ?? null,
-            'edukasi' => $data['edukasi'],
-            'rujuk' => $data['rujuk'],
+            'edukasi' => $data['edukasi'] ?? null,
+            'rujuk' => $data['rujuk'] ?? null,
             'created_at' => $now,
             'updated_at' => $now,
         ];
 
-        // Simpan data ke tabel Soap
-        $sDokter = Soap::create($data2);
-        $IdSoap = $sDokter->id;
+        $soap = Soap::create($soapData);
+        $IdSoap = $soap->id;
 
-        // Simpan ke tabel pivot dengan mendukung duplikasi
-        if (isset($data['soap_p'][0]) && is_array($data['soap_p'][0])) {
-            $item = $data['soap_p'][0];
-
-            // Simpan ke pivot soap_p_obats
-            if (!empty($resepIds)) {
-                foreach ($resepIds as $obatId) {
-                    DB::table('soap_p_obats')->insert([
-                        'soap_id' => $IdSoap,
-                        'obat_id' => $obatId,
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ]);
-                }
-            }
-
-            // Simpan ke pivot soap_p_jenis
-            if (!empty($jenisIds)) {
-                foreach ($jenisIds as $jenisId) {
-                    DB::table('soap_p_jenis')->insert([
-                        'soap_id' => $IdSoap,
-                        'jenis_id' => $jenisId,
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ]);
-                }
-            }
-
-            // Simpan ke pivot soap_p_aturans
-            if (!empty($aturanIds)) {
-                foreach ($aturanIds as $aturanId) {
-                    DB::table('soap_p_aturans')->insert([
-                        'soap_id' => $IdSoap,
-                        'aturan_id' => $aturanId,
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ]);
-                }
-            }
-
-            // Simpan ke pivot soap_p_anjurans
-            if (!empty($anjuranIds)) {
-                foreach ($anjuranIds as $anjuranId) {
-                    DB::table('soap_p_anjurans')->insert([
-                        'soap_id' => $IdSoap,
-                        'anjuran_id' => $anjuranId,
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ]);
-                }
-            }
-        }
-
-        // Simpan data ke tabel Obat
+        /**
+         * ============================
+         * SIMPAN KE OBAT
+         * ============================
+         */
         $obatData = [
-            'id_booking' => $antrianDokter->booking->id,
-            'id_dokter' => $antrianDokter->id_dokter,
-            'id_pasien' => $antrianDokter->booking->pasien->id,
-            'id_poli' => $antrianDokter->id_poli,
+            'id_booking' => $antrian->booking->id,
+            'id_dokter' => $antrian->id_dokter,
+            'id_pasien' => $pasien->id,
+            'id_poli' => $antrian->id_poli,
             'id_soap' => $IdSoap,
-            'obat_Ro' => $encodeObatTable,
-            'obat_Ro_namaObatUpdate' => $encodeObatTable,
-            'obat_Ro_jenisObat' => $encodeJenisObat,
+            'obat_Ro' => $encodeObat,
+            'obat_Ro_namaObatUpdate' => $encodeObat,
+            'obat_Ro_jenisObat' => $encodeJenis,
             'obat_Ro_aturan' => $encodeAturan,
             'obat_Ro_anjuran' => $encodeAnjuran,
             'obat_Ro_jumlah' => $encodeJumlah,
-            'obat_Ro_hargaTablet' => null,
-            'obat_Ro_hargaTotal' => null,
             'obat_racikan' => $data['ObatRacikan'] ?? null,
-            'aturan_tambahan' => null,
             'status' => 'B',
             'created_at' => $now,
             'updated_at' => $now,
         ];
 
         $obat = Obat::create($obatData);
-        $idObat = $obat->id;
 
         // Update status antrian
-        $updateAnDokter = [
-            'id_obat' => $idObat,
+        $antrian->update([
+            'id_obat' => $obat->id,
             'status' => 'P',
-        ];
+        ]);
 
-        AntrianPerawat::find($id)->update($updateAnDokter);
-
-        return redirect()->route('dokter.soap', $id)->with('success', 'Pasien Berhasil Di Asesmen');
+        return redirect()->route('dokter.soap', $id)->with('success', 'Pasien berhasil diasesmen.');
     }
 
     public function updateSoap(Request $request, $id, $soap_id)
-    {
-        // Validasi input
-       $request->validate([
-            "soap_p.{$soap_id}.resep.*" => 'exists:reseps,id|nullable',
-            "soap_p.{$soap_id}.jenis.*" => 'exists:jenisobats,id|nullable',
-            "soap_p.{$soap_id}.aturan.*" => 'exists:aturans,id|nullable',
-            "soap_p.{$soap_id}.anjuran.*" => 'exists:anjurans,id|nullable',
-            "soap_p.{$soap_id}.jumlah.*" => 'numeric|min:1|nullable',
-            "soap_p.{$soap_id}.resep" => 'array|min:1',
-            "soap_p.{$soap_id}.jenis" => 'array|size:' . count($request->input("soap_p.{$soap_id}.resep", [])),
-            "soap_p.{$soap_id}.aturan" => 'array|size:' . count($request->input("soap_p.{$soap_id}.resep", [])),
-            "soap_p.{$soap_id}.anjuran" => 'array|size:' . count($request->input("soap_p.{$soap_id}.resep", [])),
-            "soap_p.{$soap_id}.jumlah" => 'array|size:' . count($request->input("soap_p.{$soap_id}.resep", [])),
-        ]);
+{
+    $data = $request->all();
+    $now = Carbon::now();
 
-        $data = $request->all();
-        // dd($data);
+    // Ambil data SOAP lama
+    $soap = Soap::findOrFail($soap_id);
+    $antrianDokter = AntrianPerawat::with(['booking.pasien'])->findOrFail($id);
 
-        // Inisialisasi array untuk menyimpan data
-        $resepNames = [];
-        $jenisNames = [];
-        $aturanNames = [];
-        $anjuranNames = [];
-        $jumlahData = [];
-        $resepIds = [];
-        $jenisIds = [];
-        $aturanIds = [];
-        $anjuranIds = [];
+    // === 1. Diagnosa Primer & Sekunder ===
+    $primerInput = $data['diagnosa_primer'] ?? [];
+    $sekunderInput = $data['diagnosa_sekunder'] ?? [];
 
-        // Proses soap_p[0]
-        if (isset($data['soap_p'][$soap_id]) && is_array($data['soap_p'][$soap_id])) {
-            $item = $data['soap_p'][$soap_id];
+    $soap_a_primer = array_unique(array_merge(json_decode($soap->soap_a_primer ?? '[]', true), $primerInput));
+    $soap_a_sekunder = array_unique(array_merge(json_decode($soap->soap_a_sekunder ?? '[]', true), $sekunderInput));
 
-            // Proses resep (obat)
-            if (!empty($item['resep']) && is_array($item['resep'])) {
-                foreach ($item['resep'] as $obatId) {
-                    if ($obatId && $obatId !== 'null' && $obatId !== '') {
-                        $obatId = intval($obatId);
-                        $obat = Resep::find($obatId);
-                        if ($obat) {
-                            $resepNames[] = $obat->nama_obat;
-                            $resepIds[] = $obatId;
-                        }
+    // === 2. Obat ===
+    $resepNames = json_decode($soap->soap_p ?? '[]', true);
+    $jenisNames = json_decode($soap->soap_p_jenis ?? '[]', true);
+    $aturanNames = json_decode($soap->soap_p_aturan ?? '[]', true);
+    $anjuranNames = json_decode($soap->soap_p_anjuran ?? '[]', true);
+    $jumlahData = json_decode($soap->soap_p_jumlah ?? '[]', true);
+
+    $resepIds = DB::table('soap_p_obats')->where('soap_id', $soap_id)->pluck('obat_id')->toArray();
+    $jenisIds = DB::table('soap_p_jenis')->where('soap_id', $soap_id)->pluck('jenis_id')->toArray();
+    $aturanIds = DB::table('soap_p_aturans')->where('soap_id', $soap_id)->pluck('aturan_id')->toArray();
+    $anjuranIds = DB::table('soap_p_anjurans')->where('soap_id', $soap_id)->pluck('anjuran_id')->toArray();
+
+    if (!empty($data['soap_p'][$soap_id])) {
+        $item = $data['soap_p'][$soap_id];
+
+        // Resep / obat
+        if (!empty($item['resep'])) {
+            foreach ($item['resep'] as $idx => $obatId) {
+                if (!$obatId || $obatId === 'null') continue;
+                $obatId = intval($obatId);
+                $obat = Resep::find($obatId);
+                if (!$obat) continue;
+
+                // Tambah ke JSON jika belum ada
+                if (!in_array($obat->nama_obat, $resepNames)) $resepNames[] = $obat->nama_obat;
+                if (!in_array($obatId, $resepIds)) {
+                    $resepIds[] = $obatId;
+                    DB::table('soap_p_obats')->insert([
+                        'soap_id' => $soap_id,
+                        'obat_id' => $obatId,
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ]);
+                }
+
+                // Jenis
+                $jenisId = $item['jenis'][$idx] ?? null;
+                if ($jenisId && $jenisId !== 'null') {
+                    $jenisId = intval($jenisId);
+                    $jenis = Jenisobat::find($jenisId);
+                    if ($jenis && !in_array($jenis->jenis, $jenisNames)) $jenisNames[] = $jenis->jenis;
+                    if ($jenis && !in_array($jenisId, $jenisIds)) {
+                        $jenisIds[] = $jenisId;
+                        DB::table('soap_p_jenis')->insert([
+                            'soap_id' => $soap_id,
+                            'jenis_id' => $jenisId,
+                            'created_at' => $now,
+                            'updated_at' => $now
+                        ]);
                     }
                 }
-            }
 
-            // Proses jenis obat
-            if (!empty($item['jenis']) && is_array($item['jenis'])) {
-                foreach ($item['jenis'] as $jenisId) {
-                    if ($jenisId && $jenisId !== 'null' && $jenisId !== '') {
-                        $jenisId = intval($jenisId);
-                        $jenis = Jenisobat::find($jenisId);
-                        if ($jenis) {
-                            $jenisNames[] = $jenis->jenis;
-                            $jenisIds[] = $jenisId;
-                        }
+                // Aturan
+                $aturanId = $item['aturan'][$idx] ?? null;
+                if ($aturanId && $aturanId !== 'null') {
+                    $aturanId = intval($aturanId);
+                    $aturan = Aturan::find($aturanId);
+                    if ($aturan && !in_array($aturan->aturan_minum, $aturanNames)) $aturanNames[] = $aturan->aturan_minum;
+                    if ($aturan && !in_array($aturanId, $aturanIds)) {
+                        $aturanIds[] = $aturanId;
+                        DB::table('soap_p_aturans')->insert([
+                            'soap_id' => $soap_id,
+                            'aturan_id' => $aturanId,
+                            'created_at' => $now,
+                            'updated_at' => $now
+                        ]);
                     }
                 }
-            }
 
-            // Proses aturan
-            if (!empty($item['aturan']) && is_array($item['aturan'])) {
-                foreach ($item['aturan'] as $aturanId) {
-                    if ($aturanId && $aturanId !== 'null' && $aturanId !== '') {
-                        $aturanId = intval($aturanId);
-                        $aturan = Aturan::find($aturanId);
-                        if ($aturan) {
-                            $aturanNames[] = $aturan->aturan_minum;
-                            $aturanIds[] = $aturanId;
-                        }
+                // Anjuran
+                $anjuranId = $item['anjuran'][$idx] ?? null;
+                if ($anjuranId && $anjuranId !== 'null') {
+                    $anjuranId = intval($anjuranId);
+                    $anjuran = Anjuran::find($anjuranId);
+                    if ($anjuran && !in_array($anjuran->kode_anjuran, $anjuranNames)) $anjuranNames[] = $anjuran->kode_anjuran;
+                    if ($anjuran && !in_array($anjuranId, $anjuranIds)) {
+                        $anjuranIds[] = $anjuranId;
+                        DB::table('soap_p_anjurans')->insert([
+                            'soap_id' => $soap_id,
+                            'anjuran_id' => $anjuranId,
+                            'created_at' => $now,
+                            'updated_at' => $now
+                        ]);
                     }
                 }
-            }
 
-            // Proses anjuran
-            if (!empty($item['anjuran']) && is_array($item['anjuran'])) {
-                foreach ($item['anjuran'] as $anjuranId) {
-                    if ($anjuranId && $anjuranId !== 'null' && $anjuranId !== '') {
-                        $anjuranId = intval($anjuranId);
-                        $anjuran = Anjuran::find($anjuranId);
-                        if ($anjuran) {
-                            $anjuranNames[] = $anjuran->kode_anjuran;
-                            $anjuranIds[] = $anjuranId;
-                        }
-                    }
-                }
-            }
-
-            // Proses jumlah
-            if (!empty($item['jumlah']) && is_array($item['jumlah'])) {
-                foreach ($item['jumlah'] as $jumlah) {
-                    if ($jumlah && $jumlah !== 'null' && $jumlah !== '' && is_numeric($jumlah) && $jumlah > 0) {
-                        $jumlahData[] = $jumlah;
-                    }
-                }
-            }
-        } else {
-            Log::error('Data soap_p tidak valid untuk soap_id: ' . $soap_id, [
-                'id_antrian' => $id,
-                'soap_id' => $soap_id,
-                'soap_p' => $data['soap_p'] ?? null
-            ]);
-            return redirect()->back()->with('error', 'Data resep tidak valid.');
-        }
-
-        // Encode data untuk penyimpanan (array satu tingkat)
-        $encodeObatTable = json_encode($resepNames) ?? null;
-        $encodeJenisObat = json_encode($jenisNames) ?? null;
-        $encodeAturan = json_encode($aturanNames) ?? null;
-        $encodeAnjuran = json_encode($anjuranNames) ?? null;
-        $encodeJumlah = json_encode($jumlahData) ?? null;
-
-        // Ambil data SOAP yang akan diedit
-        $soap = Soap::findOrFail($soap_id);
-        $antrianDokter = AntrianPerawat::with(['booking.pasien'])->findOrFail($id);
-        $now = Carbon::now();
-
-        // Update data SOAP
-        $data2 = [
-            'id_pasien' => $antrianDokter->booking->pasien->id,
-            'id_poli' => $antrianDokter->id_poli,
-            'id_dokter' => $antrianDokter->id_dokter,
-            'id_rm' => $antrianDokter->id_rm,
-            'id_isian' => $antrianDokter->id_isian,
-            'nama_dokter' => DataDokter::findOrFail($antrianDokter->id_dokter)->nama_dokter,
-            'keluhan_utama' => $data['keluhan'] ?? $soap->keluhan_utama,
-            'p_form_isian_pilihan' => $data['isian'] ?? $soap->p_form_isian_pilihan,
-            'p_form_isian_pilihan_uraian' => $data['isian_alasan'] ?? $soap->p_form_isian_pilihan_uraian,
-            'a_riwayat_alergi' => $data['a_riwayat_alergi'] ?? $soap->a_riwayat_alergi,
-            'o_kesadaran' => $data['kesadaran'] ?? $soap->o_kesadaran,
-            'o_kepala' => $data['kepala'] ?? $soap->o_kepala,
-            'o_kepala_uraian' => $data['alasan-kepala'] ?? $soap->o_kepala_uraian,
-            'o_mata' => $data['mata'] ?? $soap->o_mata,
-            'o_mata_uraian' => $data['alasan-mata'] ?? $soap->o_mata_uraian,
-            'o_tht' => $data['tht'] ?? $soap->o_tht,
-            'o_tht_uraian' => $data['alasan-tht'] ?? $soap->o_tht_uraian,
-            'o_thorax' => $data['thorax'] ?? $soap->o_thorax,
-            'o_thorax_uraian' => $data['alasan-thorax'] ?? $soap->o_thorax_uraian,
-            'o_paru' => $data['paru'] ?? $soap->o_paru,
-            'o_paru_uraian' => $data['alasan-paru'] ?? $soap->o_paru_uraian,
-            'o_jantung' => $data['jantung'] ?? $soap->o_jantung,
-            'o_jantung_uraian' => $data['alasan-jantung'] ?? $soap->o_jantung_uraian,
-            'o_abdomen' => $data['abdomen'] ?? $soap->o_abdomen,
-            'o_abdomen_uraian' => $data['alasan-abdomen'] ?? $soap->o_abdomen_uraian,
-            'o_leher' => $data['leher'] ?? $soap->o_leher,
-            'o_leher_uraian' => $data['alasan-leher'] ?? $soap->o_leher_uraian,
-            'o_ekstremitas' => $data['ekstremitas'] ?? $soap->o_ekstremitas,
-            'o_ekstremitas_uraian' => $data['alasan-ekstremitas'] ?? $soap->o_ekstremitas_uraian,
-            'o_kulit' => $data['kulit'] ?? $soap->o_kulit,
-            'o_kulit_uraian' => $data['alasan-kulit'] ?? $soap->o_kulit_uraian,
-            'lain_lain' => $data['lain'] ?? $soap->lain_lain,
-            'p_tensi' => $data['tensi'] ?? $soap->p_tensi,
-            'p_rr' => $data['rr'] ?? $soap->p_rr,
-            'spo2' => $data['spo2'] ?? $soap->spo2,
-            'p_suhu' => $data['suhu'] ?? $soap->p_suhu,
-            'p_nadi' => $data['nadi'] ?? $soap->p_nadi,
-            'p_tb' => $data['tb'] ?? $soap->p_tb,
-            'p_bb' => $data['bb'] ?? $soap->p_bb,
-            'p_imt' => $data['p_imt'] ?? $soap->p_imt,
-            'gcs_e' => $data['gcs_e'] ?? $soap->gcs_e,
-            'gcs_m' => $data['gcs_m'] ?? $soap->gcs_m,
-            'gcs_v' => $data['gcs_v'] ?? $soap->gcs_v,
-            'soap_a_primer' => $soap->soap_a_primer,
-            'soap_a_sekunder' => $soap->soap_a_sekunder,
-            'soap_p' => $encodeObatTable,
-            'soap_p_jenis' => $encodeJenisObat,
-            'soap_p_aturan' => $encodeAturan,
-            'soap_p_anjuran' => $encodeAnjuran,
-            'soap_p_jumlah' => $encodeJumlah,
-            'obat_Ro' => $encodeObatTable,
-            'ObatRacikan' => $data['ObatRacikan'] ?? $soap->ObatRacikan,
-            'edukasi' => $data['edukasi'] ?? $soap->edukasi,
-            'rujuk' => $data['rujuk'] ?? $soap->rujuk,
-            'updated_at' => $now,
-        ];
-
-        // Update data SOAP
-        $soap->update($data2);
-
-        // Hapus semua entri lama di tabel pivot
-        DB::table('soap_p_obats')->where('soap_id', $soap_id)->delete();
-        DB::table('soap_p_jenis')->where('soap_id', $soap_id)->delete();
-        DB::table('soap_p_aturans')->where('soap_id', $soap_id)->delete();
-        DB::table('soap_p_anjurans')->where('soap_id', $soap_id)->delete();
-
-        // Simpan entri baru ke tabel pivot dengan mendukung duplikasi
-        if (!empty($resepIds)) {
-            foreach ($resepIds as $obatId) {
-                DB::table('soap_p_obats')->insert([
-                    'soap_id' => $soap_id,
-                    'obat_id' => $obatId,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]);
+                // Jumlah
+                $jumlah = $item['jumlah'][$idx] ?? null;
+                if ($jumlah && is_numeric($jumlah) && $jumlah > 0) $jumlahData[] = $jumlah;
             }
         }
-
-        if (!empty($jenisIds)) {
-            foreach ($jenisIds as $jenisId) {
-                DB::table('soap_p_jenis')->insert([
-                    'soap_id' => $soap_id,
-                    'jenis_id' => $jenisId,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]);
-            }
-        }
-
-        if (!empty($aturanIds)) {
-            foreach ($aturanIds as $aturanId) {
-                DB::table('soap_p_aturans')->insert([
-                    'soap_id' => $soap_id,
-                    'aturan_id' => $aturanId,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]);
-            }
-        }
-
-        if (!empty($anjuranIds)) {
-            foreach ($anjuranIds as $anjuranId) {
-                DB::table('soap_p_anjurans')->insert([
-                    'soap_id' => $soap_id,
-                    'anjuran_id' => $anjuranId,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]);
-            }
-        }
-
-        // Update data Obat
-        $obat = Obat::where('id_soap', $soap_id)->first();
-        if ($obat) {
-            $obat->update([
-                'obat_Ro' => $encodeObatTable,
-                'obat_Ro_namaObatUpdate' => $encodeObatTable,
-                'obat_Ro_jenisObat' => $encodeJenisObat,
-                'obat_Ro_aturan' => $encodeAturan,
-                'obat_Ro_anjuran' => $encodeAnjuran,
-                'obat_Ro_jumlah' => $encodeJumlah,
-                'obat_racikan' => $data['ObatRacikan'] ?? $obat->obat_racikan,
-                'updated_at' => $now,
-            ]);
-        }
-
-        return redirect()->route('dokter.soap', $id)->with('success', 'Data SOAP Berhasil Diperbarui');
     }
+
+    // === 3. Update SOAP JSON ===
+    $soap->update([
+        'soap_a_primer' => json_encode($soap_a_primer),
+        'soap_a_sekunder' => json_encode($soap_a_sekunder),
+        'soap_p' => json_encode($resepNames),
+        'soap_p_jenis' => json_encode($jenisNames),
+        'soap_p_aturan' => json_encode($aturanNames),
+        'soap_p_anjuran' => json_encode($anjuranNames),
+        'soap_p_jumlah' => json_encode($jumlahData),
+        'ObatRacikan' => $data['ObatRacikan'] ?? $soap->ObatRacikan,
+        'edukasi' => $data['edukasi'] ?? $soap->edukasi,
+        'rujuk' => $data['rujuk'] ?? $soap->rujuk,
+        'updated_at' => $now,
+    ]);
+
+    return redirect()->route('dokter.soap', $id)->with('success', 'Data SOAP berhasil diperbarui');
+}
+
+
 }

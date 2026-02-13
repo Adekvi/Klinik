@@ -1,5 +1,5 @@
-@if ($soapTerbaru)
-    <div class="modal fade" id="editSoap{{ $soapTerbaru['id'] }}" data-bs-backdrop="static" data-bs-keyboard="false"
+<?php if($soapTerbaru): ?>
+    <div class="modal fade" id="editSoap<?php echo e($soapTerbaru['id']); ?>" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="pasienbaru" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -10,18 +10,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('soap.update', ['id' => $id, 'soap_id' => $soapTerbaru->id]) }}"
+                    <form action="<?php echo e(route('soap.update', ['id' => $id, 'soap_id' => $soapTerbaru->id])); ?>"
                         method="POST" enctype="multipart/form-data" class="text-start edit-soap-form"
-                        id="edit-soap-form-{{ $soapTerbaru->id }}">
-                        @csrf
-                        @method('PUT')
+                        id="edit-soap-form-<?php echo e($soapTerbaru->id); ?>">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PUT'); ?>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="profesi" style="font-weight: bold">Dokter Penanggung Jawab
                                         Pasien</label>
                                     <input type="text" style="font-weight: bold"
-                                        value="{{ $soapTerbaru->dokter->nama_dokter }}" class="form-control mt-2"
+                                        value="<?php echo e($soapTerbaru->dokter->nama_dokter); ?>" class="form-control mt-2"
                                         disabled>
                                 </div>
                             </div>
@@ -31,14 +31,14 @@
                                 <div class="form-group">
                                     <label for="">Nama Pasien</label>
                                     <input type="text" name="nama_pasien" id="nama_pasien" class="form-control mt-2"
-                                        value="{{ $soapTerbaru->pasien->nama_pasien }}" readonly>
+                                        value="<?php echo e($soapTerbaru->pasien->nama_pasien); ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6 mt-2">
                                 <div class="form-group">
                                     <label for="">Umur</label>
                                     <input type="text" class="form-control mt-2"
-                                        value="{{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun' }}"
+                                        value="<?php echo e(\Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun'); ?>"
                                         readonly>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                             <div class="col-4">
                                 <div class="form-group mt-3">
                                     <label for="keluhan" style="font-weight: bold">Keluhan (S)</label>
-                                    <input type="text" name="keluhan" value="{{ $soapTerbaru->rm->a_keluhan_utama }}"
+                                    <input type="text" name="keluhan" value="<?php echo e($soapTerbaru->rm->a_keluhan_utama); ?>"
                                         class="form-control mt-2">
                                 </div>
                             </div>
@@ -57,9 +57,9 @@
                                     <label for="riwayat-alergi" style="font-weight: bold">Alergi</label>
                                     <select name="a_riwayat_alergi" id="a_riwayat_alergi"
                                         class="form-control mt-2 mb-2 ">
-                                        <option value="{{ $soapTerbaru->rm->a_riwayat_alergi ?? 'Tidak Ada' }}"
+                                        <option value="<?php echo e($soapTerbaru->rm->a_riwayat_alergi ?? 'Tidak Ada'); ?>"
                                             selected>
-                                            {{ $soapTerbaru->rm->a_riwayat_alergi ?? 'Tidak Ada' }}</option>
+                                            <?php echo e($soapTerbaru->rm->a_riwayat_alergi ?? 'Tidak Ada'); ?></option>
                                         <option value="Ada">Ada</option>
                                         <option value="Tidak">Tidak</option>
                                     </select>
@@ -71,7 +71,7 @@
                                             Sekarang</strong></label>
                                     <input type="text" name="a_riwayat_penyakit_skrg" id="a_riwayat_penyakit_skrg"
                                         class="form-control mt-2 mb-2 " placeholder="Isi Riwayat Penyakit Sekarang"
-                                        value="{{ $soapTerbaru->rm->a_riwayat_penyakit_skrg ?? '' }}">
+                                        value="<?php echo e($soapTerbaru->rm->a_riwayat_penyakit_skrg ?? ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                     <input type="radio" name="isian" checked id="isian-ya_edit"
                                         style="transform: scale(1.5); margin-right: 10px" value="auto-anamnesis"
                                         onclick="toggleChangeSoapEdit('alasan-isian-soap_edit', this)"
-                                        {{ $soapTerbaru->isian->p_form_isian_pilihan === 'auto-anamnesis' ? 'checked' : '' }}>
+                                        <?php echo e($soapTerbaru->isian->p_form_isian_pilihan === 'auto-anamnesis' ? 'checked' : ''); ?>>
                                     Auto Anamnesis
                                 </label>
                                 <label for="isian-tidak_edit">
@@ -90,15 +90,15 @@
                                         style="transform: scale(1.5); margin-right: 10px; margin-left: 30px"
                                         value="Aloanamnesis"
                                         onclick="toggleChangeSoapEdit('alasan-isian-soap_edit', this)"
-                                        {{ $soapTerbaru->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'checked' : '' }}>
+                                        <?php echo e($soapTerbaru->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'checked' : ''); ?>>
                                     Aloanamnesis
                                 </label>
                             </div>
                             <div id="alasan-isian-soap_edit"
-                                style="{{ $soapTerbaru->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'display: block;' : 'display: none;' }}">
+                                style="<?php echo e($soapTerbaru->isian->p_form_isian_pilihan === 'Aloanamnesis' ? 'display: block;' : 'display: none;'); ?>">
                                 <input type="text" id="isian_alasan_edit" name="isian_alasan"
                                     class="form-control mt-2 mb-2" placeholder="Alasan"
-                                    value="{{ $soapTerbaru->isian->p_form_isian_pilihan_uraian }}">
+                                    value="<?php echo e($soapTerbaru->isian->p_form_isian_pilihan_uraian); ?>">
                             </div>
                         </div>
                         <div class="form-group mt-3 mb-2">
@@ -120,13 +120,13 @@
                                 <label for="gcs_edit" style="width: 30%">2. GCS</label> :
                                 <div class="input-group d-flex mt-3" style="width: 40%">
                                     <input type="text" name="gcs_e" id="gcs_e_edit"
-                                        value="{{ $soapTerbaru->isian->gcs_e }}" class="form-control"
+                                        value="<?php echo e($soapTerbaru->isian->gcs_e); ?>" class="form-control"
                                         aria-describedby="basic-addon2_edit" placeholder="E">
                                     <input type="text" name="gcs_m" id="gcs_m_edit"
-                                        value="{{ $soapTerbaru->isian->gcs_m }}" class="form-control"
+                                        value="<?php echo e($soapTerbaru->isian->gcs_m); ?>" class="form-control"
                                         aria-describedby="basic-addon2_edit" placeholder="M">
                                     <input type="text" name="gcs_v" id="gcs_v_edit"
-                                        value="{{ $soapTerbaru->isian->gcs_v }}" class="form-control"
+                                        value="<?php echo e($soapTerbaru->isian->gcs_v); ?>" class="form-control"
                                         aria-describedby="basic-addon2_edit" placeholder="V">
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon2_edit"
@@ -140,127 +140,137 @@
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="kepala_edit" style="width: 30%">3. Kepala</label> :
                                 <select name="kepala" id="kepala_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-kepala_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_kepala === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-kepala_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_kepala === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_kepala === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_kepala === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-kepala_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_kepala === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-kepala_edit_{{ $soapTerbaru->rm->id }}"
+                            <div id="alasan-kepala_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_kepala === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-kepala_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-kepala" class="form-control mt-2 mb-2"
-                                    value="{{ $soapTerbaru->rm->o_kepala_uraian }}"
+                                    value="<?php echo e($soapTerbaru->rm->o_kepala_uraian); ?>"
                                     placeholder="Alasan Kepala Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="mata_edit" style="width: 30%">4. Mata</label> :
                                 <select name="mata" id="mata_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-mata_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_mata === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-mata_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_mata === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_mata === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_mata === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-mata_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_mata === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-mata_edit_{{ $soapTerbaru->rm->id }}"
-                                    name="alasan-mata" value="{{ $soapTerbaru->rm->o_mata_uraian }}"
+                            <div id="alasan-mata_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_mata === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-mata_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-mata" value="<?php echo e($soapTerbaru->rm->o_mata_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Mata Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="leher_edit" style="width: 30%">5. Leher</label> :
                                 <select name="leher" id="leher_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-leher_edit_{{ $soapTerbaru->rm->id }}', this)">
+                                    onclick="toggleChangeSoap('alasan-leher_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option value="Normal"
-                                        {{ $soapTerbaru->rm->o_leher === 'Normal' ? 'selected' : '' }}>
+                                        <?php echo e($soapTerbaru->rm->o_leher === 'Normal' ? 'selected' : ''); ?>>
                                         Normal
                                     </option>
                                     <option value="Abnormal"
-                                        {{ $soapTerbaru->rm->o_leher === 'Abnormal' ? 'selected' : '' }}>Abnormal
+                                        <?php echo e($soapTerbaru->rm->o_leher === 'Abnormal' ? 'selected' : ''); ?>>Abnormal
                                     </option>
                                 </select>
                             </div>
-                            <div id="alasan-leher_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_leher === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-leher_edit_{{ $soapTerbaru->rm->id }}"
-                                    name="alasan-leher" value="{{ $soapTerbaru->rm->o_leher_uraian }}"
+                            <div id="alasan-leher_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_leher === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-leher_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-leher" value="<?php echo e($soapTerbaru->rm->o_leher_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Leher Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="tht_edit" style="width: 30%">6. THT</label> :
                                 <select name="tht" id="tht_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-tht_edit_{{ $soapTerbaru->rm->id }}', this)">
+                                    onclick="toggleChangeSoap('alasan-tht_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
                                     <option value="Normal"
-                                        {{ $soapTerbaru->rm->o_tht === 'Normal' ? 'selected' : '' }}>
+                                        <?php echo e($soapTerbaru->rm->o_tht === 'Normal' ? 'selected' : ''); ?>>
                                         Normal</option>
                                     <option value="Abnormal"
-                                        {{ $soapTerbaru->rm->o_tht === 'Abnormal' ? 'selected' : '' }}>
+                                        <?php echo e($soapTerbaru->rm->o_tht === 'Abnormal' ? 'selected' : ''); ?>>
                                         Abnormal
                                     </option>
                                 </select>
                             </div>
-                            <div id="alasan-tht_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-tht_edit_{{ $soapTerbaru->rm->id }}"
-                                    name="alasan-tht" value="{{ $soapTerbaru->rm->o_tht_uraian }}"
+                            <div id="alasan-tht_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-tht_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-tht" value="<?php echo e($soapTerbaru->rm->o_tht_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan THT Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="thorax_edit" style="width: 30%">7. Thorax</label> :
                                 <select name="thorax" id="thorax_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-thorax_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_thorax === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-thorax_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_thorax === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_thorax === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_thorax === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-thorax_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-thorax_edit_{{ $soapTerbaru->rm->id }}"
-                                    name="alasan-thorax" value="{{ $soapTerbaru->rm->o_thorax_uraian }}"
+                            <div id="alasan-thorax_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_tht === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-thorax_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-thorax" value="<?php echo e($soapTerbaru->rm->o_thorax_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Thorax Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="paru_edit" style="width: 30%">8. Paru</label> :
                                 <select name="paru" id="paru_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-paru_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_paru === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-paru_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_paru === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_paru === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_paru === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-paru_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_paru === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-paru_edit_{{ $soapTerbaru->rm->id }}"
+                            <div id="alasan-paru_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_paru === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-paru_edit_<?php echo e($soapTerbaru->rm->id); ?>"
                                     name="alasan-paru" class="form-control mt-2 mb-2"
-                                    value="{{ $soapTerbaru->rm->o_paru_uraian }}" placeholder="Alasan Paru Abnormal">
+                                    value="<?php echo e($soapTerbaru->rm->o_paru_uraian); ?>" placeholder="Alasan Paru Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="jantung_edit" style="width: 30%">9. Jantung</label> :
                                 <select name="jantung" id="jantung_edit" class="form-control mt-3"
                                     style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-jantung_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_jantung === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-jantung_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_jantung === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_jantung === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_jantung === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-jantung_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_jantung === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-jantung_edit_{{ $soapTerbaru->rm->id }}"
-                                    name="alasan-jantung" value="{{ $soapTerbaru->rm->o_jantung_uraian }}"
+                            <div id="alasan-jantung_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_jantung === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-jantung_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-jantung" value="<?php echo e($soapTerbaru->rm->o_jantung_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Jantung Abnormal">
                             </div>
                             <div class="form"
@@ -268,17 +278,19 @@
                                 <label for="abdomen_edit" style="width: 30%">10. Abdomen</label> :
                                 <select name="abdomen" id="abdomen_edit" class="form-control mt-3"
                                     style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-abdomen_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_abdomen === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-abdomen_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_abdomen === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_abdomen === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_abdomen === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-abdomen_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_abdomen === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-abdomen_edit_{{ $soapTerbaru->rm->id }}"
-                                    value="{{ $soapTerbaru->rm->o_abdomen_uraian }}" name="alasan-abdomen"
+                            <div id="alasan-abdomen_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_abdomen === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-abdomen_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    value="<?php echo e($soapTerbaru->rm->o_abdomen_uraian); ?>" name="alasan-abdomen"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Abdomen Abnormal">
                             </div>
                             <div class="form"
@@ -286,41 +298,45 @@
                                 <label for="ekstremitas_edit" style="width: 30%">11. Ekstremitas</label> :
                                 <select name="ekstremitas" id="ekstremitas_edit" class="form-control mt-3"
                                     style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-ekstremitas_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_ekstremitas === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-ekstremitas_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_ekstremitas === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_ekstremitas === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_ekstremitas === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-ekstremitas_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_ekstremitas === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-ekstremitas_edit_{{ $soapTerbaru->rm->id }}"
-                                    name="alasan-ekstremitas" value="{{ $soapTerbaru->rm->o_ekstremitas_uraian }}"
+                            <div id="alasan-ekstremitas_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_ekstremitas === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-ekstremitas_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    name="alasan-ekstremitas" value="<?php echo e($soapTerbaru->rm->o_ekstremitas_uraian); ?>"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Ekstremitas Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="kulit_edit" style="width: 30%">12. Kulit</label> :
                                 <select name="kulit" id="kulit_edit" class="form-control mt-3" style="width: 40%"
-                                    onclick="toggleChangeSoap('alasan-kulit_edit_{{ $soapTerbaru->rm->id }}', this)">
-                                    <option {{ $soapTerbaru->rm->o_kulit === 'Normal' ? 'selected' : '' }}
+                                    onclick="toggleChangeSoap('alasan-kulit_edit_<?php echo e($soapTerbaru->rm->id); ?>', this)">
+                                    <option <?php echo e($soapTerbaru->rm->o_kulit === 'Normal' ? 'selected' : ''); ?>
+
                                         id="jawaban-normal" value="Normal">Normal</option>
-                                    <option {{ $soapTerbaru->rm->o_kulit === 'Abnormal' ? 'selected' : '' }}
+                                    <option <?php echo e($soapTerbaru->rm->o_kulit === 'Abnormal' ? 'selected' : ''); ?>
+
                                         id="jawaban-abnormal" value="Abnormal">Abnormal</option>
                                 </select>
                             </div>
-                            <div id="alasan-kulit_edit_{{ $soapTerbaru->rm->id }}"
-                                style="{{ $soapTerbaru->rm->o_kulit === 'Abnormal' ? 'display: block;' : 'display: none;' }}">
-                                <input type="text" id="alasan-kulit_edit_{{ $soapTerbaru->rm->id }}"
-                                    value="{{ $soapTerbaru->rm->o_kulit_uraian }}" name="alasan-kulit"
+                            <div id="alasan-kulit_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                style="<?php echo e($soapTerbaru->rm->o_kulit === 'Abnormal' ? 'display: block;' : 'display: none;'); ?>">
+                                <input type="text" id="alasan-kulit_edit_<?php echo e($soapTerbaru->rm->id); ?>"
+                                    value="<?php echo e($soapTerbaru->rm->o_kulit_uraian); ?>" name="alasan-kulit"
                                     class="form-control mt-2 mb-2" placeholder="Alasan Kulit Abnormal">
                             </div>
                             <div class="form"
                                 style="display: flex; align-items: baseline; justify-content: space-between">
                                 <label for="lain-lain" style="width: 30%">13. Lain-lain</label> :
                                 <input type="text" id="lain" name="lain"
-                                    value="{{ $soapTerbaru->rm->lain_lain }}" class="form-control mt-3 mb-2"
+                                    value="<?php echo e($soapTerbaru->rm->lain_lain); ?>" class="form-control mt-3 mb-2"
                                     placeholder="Lain-lain" style="width: 40%">
                             </div>
                             <div id="imageContainer"></div>
@@ -335,7 +351,7 @@
                                             <label for="tensi">Tensi</label>
                                             <div class="input-group">
                                                 <input type="text" name="tensi"
-                                                    value="{{ $soapTerbaru->isian->p_tensi }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_tensi); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -353,7 +369,7 @@
                                             <label for="rr">RR</label>
                                             <div class="input-group">
                                                 <input type="text" name="rr"
-                                                    value="{{ $soapTerbaru->isian->p_rr }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_rr); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -371,7 +387,7 @@
                                             <label for="nadi">Nadi</label>
                                             <div class="input-group">
                                                 <input type="text" name="nadi"
-                                                    value="{{ $soapTerbaru->isian->p_nadi }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_nadi); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -389,7 +405,7 @@
                                             <label for="spo2">SpO2</label>
                                             <div class="input-group">
                                                 <input type="text" name="spo2"
-                                                    value="{{ $soapTerbaru->isian->spo2 }}"
+                                                    value="<?php echo e($soapTerbaru->isian->spo2); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -407,7 +423,7 @@
                                             <label for="suhu">Suhu</label>
                                             <div class="input-group">
                                                 <input type="text" name="suhu"
-                                                    value="{{ $soapTerbaru->isian->p_suhu }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_suhu); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -425,7 +441,7 @@
                                             <label for="tb_edit">Tinggi Badan</label>
                                             <div class="input-group">
                                                 <input type="number" name="tb" id="tb_edit"
-                                                    value="{{ $soapTerbaru->isian->p_tb }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_tb); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -443,7 +459,7 @@
                                             <label for="bb_edit">Berat Badan</label>
                                             <div class="input-group">
                                                 <input type="number" name="bb" id="bb_edit"
-                                                    value="{{ $soapTerbaru->isian->p_bb }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_bb); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2">
                                                 <div class="input-group-append mt-2 mb-2">
                                                     <span class="input-group-text" id="basic-addon2"
@@ -461,7 +477,7 @@
                                             <label for="imt_edit">IMT</label>
                                             <div class="input-group">
                                                 <input type="text" name="p_imt" id="p_imt_edit"
-                                                    value="{{ $soapTerbaru->isian->p_imt }}"
+                                                    value="<?php echo e($soapTerbaru->isian->p_imt); ?>"
                                                     class="form-control mt-2 mb-2" aria-describedby="basic-addon2"
                                                     readonly>
                                                 <div class="input-group-append mt-2 mb-2">
@@ -474,23 +490,23 @@
                                         </div>
                                     </div>
 
-                                    @php
+                                    <?php
                                         $tgllahir = \Carbon\Carbon::parse($soapTerbaru->pasien->tgllahir);
                                         $umur = $tgllahir->diffInMonths(\Carbon\Carbon::now());
                                         $jenis_kelamin = $soapTerbaru->pasien->jekel;
                                         // dd($umur, $jenis_kelamin);
-                                    @endphp
+                                    ?>
 
-                                    @if ($umur > 16 && $jenis_kelamin === 'P')
-                                        {{-- Umur lebih dari 16 tahun dalam bulan --}}
-                                        {{-- Lingkar Kepala Anak --}}
+                                    <?php if($umur > 16 && $jenis_kelamin === 'P'): ?>
+                                        
+                                        
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="lingkar-kepala-anak">Lingkar Kepala Anak</label>
                                                 <div class="input-group">
                                                     <input type="number" name="p_lngkr_kepala_anak"
                                                         id="p_lngkr_kepala_anak"
-                                                        value="{{ $soapTerbaru->isian->p_lngkr_kepala_anak }}"
+                                                        value="<?php echo e($soapTerbaru->isian->p_lngkr_kepala_anak); ?>"
                                                         class="form-control mt-2 mb-2"
                                                         aria-describedby="basic-addon2">
                                                     <div class="input-group-append">
@@ -503,14 +519,14 @@
                                             </div>
                                         </div>
 
-                                        {{-- Lingkar Lengan --}}
+                                        
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="lingkar-lengan">Lingkar Lengan</label>
                                                 <div class="input-group">
                                                     <input type="text" name="p_lngkr_lengan_anc"
                                                         id="p_lngkr_lengan_anc"
-                                                        value="{{ $soapTerbaru->isian->p_lngkr_lengan_anc }}"
+                                                        value="<?php echo e($soapTerbaru->isian->p_lngkr_lengan_anc); ?>"
                                                         class="form-control mt-2 mb-2"
                                                         aria-describedby="basic-addon2">
                                                     <div class="input-group-append">
@@ -522,7 +538,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
 
                                 </div>
                             </div>
@@ -538,25 +554,27 @@
 
                                 <!-- Container untuk daftar diagnosa yang sudah ada -->
                                 <ul id="diagnosa-list" class="list-group mt-2">
-                                    {{-- Diagnosa Primer --}}
-                                    @foreach ($diagnosaPrimer as $index => $diag)
+                                    
+                                    <?php $__currentLoopData = $diagnosaPrimer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $diag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <span class="badge bg-info me-2">Primer</span>
-                                            {{ $diag }}
-                                            <input type="hidden" name="diagnosa_primer[]" value="{{ $diag }}">
+                                            <?php echo e($diag); ?>
+
+                                            <input type="hidden" name="diagnosa_primer[]" value="<?php echo e($diag); ?>">
                                             <button class="btn btn-danger btn-sm ms-2 remove-diagnosa">Hapus</button>
                                         </li>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                    {{-- Diagnosa Sekunder --}}
-                                    @foreach ($diagnosaSekunder as $index => $diag)
+                                    
+                                    <?php $__currentLoopData = $diagnosaSekunder; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $diag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <span class="badge bg-secondary me-2">Sekunder</span>
-                                            {{ $diag }}
-                                            <input type="hidden" name="diagnosa_sekunder[]" value="{{ $diag }}">
+                                            <?php echo e($diag); ?>
+
+                                            <input type="hidden" name="diagnosa_sekunder[]" value="<?php echo e($diag); ?>">
                                             <button class="btn btn-danger btn-sm ms-2 remove-diagnosa">Hapus</button>
                                         </li>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
                         </div>
@@ -573,7 +591,7 @@
                    class="form-control"
                    placeholder="Cari Nama Obat"
                    autocomplete="off"
-                   data-url="{{ url('/resep-autocomplete') }}">
+                   data-url="<?php echo e(url('/resep-autocomplete')); ?>">
         </div>
 
         <!-- Field Pendek untuk jenis, aturan, anjuran, jumlah -->
@@ -584,7 +602,7 @@
                        class="form-control"
                        placeholder="Jenis Sediaan"
                        autocomplete="off"
-                       data-url="{{ url('/jenis-autocomplete') }}">
+                       data-url="<?php echo e(url('/jenis-autocomplete')); ?>">
             </div>
 
             <div class="col-md-3">
@@ -593,7 +611,7 @@
                        class="form-control"
                        placeholder="Aturan Pakai"
                        autocomplete="off"
-                       data-url="{{ url('/aturan-autocomplete') }}">
+                       data-url="<?php echo e(url('/aturan-autocomplete')); ?>">
             </div>
 
             <div class="col-md-3">
@@ -602,7 +620,7 @@
                        class="form-control"
                        placeholder="Anjuran Minum"
                        autocomplete="off"
-                       data-url="{{ url('/anjuran-autocomplete') }}">
+                       data-url="<?php echo e(url('/anjuran-autocomplete')); ?>">
             </div>
 
             <div class="col-md-2">
@@ -628,13 +646,13 @@
     <textarea id="racikan-textarea"
               rows="4"
               class="form-control mb-3"
-              name="ObatRacikan">{{ $soapTerbaru->ObatRacikan }}</textarea>
+              name="ObatRacikan"><?php echo e($soapTerbaru->ObatRacikan); ?></textarea>
 
     <!-- List obat yang sudah ditambahkan -->
    <!-- List obat yang sudah ditambahkan -->
 <ul id="obat-list" class="list-group">
-@foreach ($resep as $index => $nama_obat)
-    @php
+<?php $__currentLoopData = $resep; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $nama_obat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <?php
         $obat = App\Models\Resep::where('nama_obat', $nama_obat)->first();
         $obatId = $obat ? $obat->id : '';
         $jenis = $resepJenis[$index] ?? '';
@@ -651,19 +669,20 @@
         ];
 
         $jsonResep = json_encode($resepData, JSON_UNESCAPED_UNICODE);
-    @endphp
+    ?>
 
-    @if ($obatId)
+    <?php if($obatId): ?>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ $nama_obat }} - {{ $jenis }} - {{ $aturan }} - {{ $anjuran }} - QTY: {{ $jumlah }}
+            <?php echo e($nama_obat); ?> - <?php echo e($jenis); ?> - <?php echo e($aturan); ?> - <?php echo e($anjuran); ?> - QTY: <?php echo e($jumlah); ?>
+
 
             <!-- Pakai e() untuk escape, jangan htmlspecialchars -->
-            <input type="hidden" name="obat[]" value="{{ e($jsonResep) }}">
+            <input type="hidden" name="obat[]" value="<?php echo e(e($jsonResep)); ?>">
 
-            <span class="badge bg-danger rounded-pill remove-obat" data-index="{{ $index }}" style="cursor:pointer;">×</span>
+            <span class="badge bg-danger rounded-pill remove-obat" data-index="<?php echo e($index); ?>" style="cursor:pointer;">×</span>
         </li>
-    @endif
-@endforeach
+    <?php endif; ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </ul>
 
 </div>
@@ -671,17 +690,17 @@
 <div class="form-group">
     <label for="edukasi" style="font-weight: bold">Edukasi</label>
     <input type="text" class="form-control mt-2 mb-2" name="edukasi" id="edukasi"
-           placeholder="Edukasi" value="{{ $soapTerbaru->edukasi }}">
+           placeholder="Edukasi" value="<?php echo e($soapTerbaru->edukasi); ?>">
 </div>
 
                         <div class="form-group">
                             <label for="rujuk" style="font-weight: bold">Rencana Tindak Lanjut</label>
                             <select name="rujuk" id="rujuk" class="form-control mt-2 mb-2">
-                                <option value="Tidak Ada" {{ $soapTerbaru->rujuk == 'Tidak Ada' ? 'selected' : '' }}>
+                                <option value="Tidak Ada" <?php echo e($soapTerbaru->rujuk == 'Tidak Ada' ? 'selected' : ''); ?>>
                                     Tidak Ada</option>
                                 <option value="Rumah Sakit"
-                                    {{ $soapTerbaru->rujuk == 'Rumah Sakit' ? 'selected' : '' }}>Rumah Sakit</option>
-                                <option value="Laborat" {{ $soapTerbaru->rujuk == 'Laborat' ? 'selected' : '' }}>
+                                    <?php echo e($soapTerbaru->rujuk == 'Rumah Sakit' ? 'selected' : ''); ?>>Rumah Sakit</option>
+                                <option value="Laborat" <?php echo e($soapTerbaru->rujuk == 'Laborat' ? 'selected' : ''); ?>>
                                     Laborat</option>
                             </select>
                         </div>
@@ -694,9 +713,9 @@
             </div>
         </div>
     </div>
-@endif
+<?php endif; ?>
 
-@push('style')
+<?php $__env->startPush('style'); ?>
     <style>
         #edit-resep,
         .input-wrapper {
@@ -781,12 +800,12 @@
             background-color: rgb(228, 228, 228);
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('script')
+<?php $__env->startPush('script'); ?>
     <!-- JS Select2 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script src="{{ asset('assets/js/script.js') }}"></script> --}}
+    
 
     <script>
         // Fungsi toggle untuk form editSoap
@@ -892,9 +911,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeEditSoap();
 
-            // Ambil RM ID dengan fallback (handle null di PHP: @if ($soapTerbaru && $soapTerbaru->rm) {{ $soapTerbaru->rm->id }} @else 0 @endif
-            // const rmId = {{ $soapTerbaru && $soapTerbaru->rm ? $soapTerbaru->rm->id : 'null' }};
-            const rmId = @json(optional($soapTerbaru->rm)->id);
+            // Ambil RM ID dengan fallback (handle null di PHP: <?php if($soapTerbaru && $soapTerbaru->rm): ?> <?php echo e($soapTerbaru->rm->id); ?> <?php else: ?> 0 <?php endif; ?>
+            // const rmId = <?php echo e($soapTerbaru && $soapTerbaru->rm ? $soapTerbaru->rm->id : 'null'); ?>;
+            const rmId = <?php echo json_encode(optional($soapTerbaru->rm)->id, 15, 512) ?>;
 
             // Tambahkan event listener untuk semua select yang memicu toggle
             const selects = document.querySelectorAll(
@@ -1355,4 +1374,5 @@
 
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php /**PATH C:\laragon\www\Klinik\resources\views/dokter/modal/editSoap.blade.php ENDPATH**/ ?>

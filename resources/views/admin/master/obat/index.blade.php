@@ -56,7 +56,7 @@
                                             <th>NAMA OBAT</th>
                                             <th>HARGA BELI</th>
                                             <th>HARGA JUAL</th>
-                                            <th>MASUK</th>
+                                            {{-- <th>MASUK</th> --}}
                                             <th>KELUAR</th>
                                             <th>RETUR</th>
                                             <th>STOK OBAT</th>

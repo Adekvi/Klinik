@@ -35,7 +35,7 @@
                             <div class="form-group">
                                 <label for="">Margin</label>
                                 <div class="input-group">
-                                    <input type="text" id="id_margin_display" class="form-control" readonly
+                                    <input type="text" id="id_margin_display" class="form-control"
                                         value="{{ $margen ? $margen->margin : '0' }}">
 
                                     <!-- Input hidden untuk menyimpan id_margin -->

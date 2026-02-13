@@ -7,7 +7,9 @@ use App\Models\Margin;
 use App\Models\Obat;
 use App\Models\RecordStok;
 use App\Models\Resep;
+use App\Models\ResepDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DataObatController extends Controller
 {
@@ -17,7 +19,7 @@ class DataObatController extends Controller
         $entries = $request->input('entries', 10);
 
         // Ambil data obat dengan paginasi berdasarkan entries yang dipilih
-        $obat = Resep::with('margin')->orderBy('id', 'desc')->paginate($entries);
+        $obat = Resep::with(['margin', 'details'])->orderBy('id', 'desc')->paginate($entries);
 
         // Ambil daftar obat dengan stok rendah
         $lowStockObat = Resep::where('stok', '<', 50)->get();
@@ -53,59 +55,71 @@ class DataObatController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $request->validate([
             'id_margin' => 'required|exists:margins,id',
+            'no_faktur' => 'required',
+            'nama_distributor' => 'required',
+            'tanggal_terima.*' => 'required|date',
+            'expired_date.*' => 'required|date',
+            'jumlah.*' => 'required|integer|min:1',
         ]);
 
-        // Ambil data stok dari input
-        $stokAwal = $request->stok_awal;
-        $stokMasuk = $request->masuk ?? 0;
-        $stokKeluar = $request->keluar ?? 0;
-        $stokRetur = $request->retur ?? 0;
+        DB::transaction(function () use ($request) {
 
-        // Hitung stok akhir
-        $stokAkhir = $stokAwal + $stokMasuk - $stokKeluar + $stokRetur;
+            // Ambil margin
+            $margen = Margin::find($request->id_margin);
 
-        // Ambil margin berdasarkan id_margin yang dipilih
-        $margen = Margin::find($request->id_margin); // Pastikan id_margin dikirimkan dalam request
+            // Hitung harga jual
+            $hargaJual = 0;
+            if ($margen && $request->harga_pokok) {
+                $hargaJual = $request->harga_pokok * (1 + $margen->margin / 100);
+            }
 
-        // Hitung harga jual berdasarkan margin dan harga pokok
-        $hargaJual = 0;
-        if ($margen && $request->harga_pokok) {
-            // Hitung harga jual berdasarkan margin dan harga pokok
-            $hargaJual = $request->harga_pokok * (1 + $margen->margin / 100);
-        }
+            // Total stok dari hasil JS
+            $stokAwal = $request->stok_awal ?? 0;
 
-        // Data untuk tabel Resep
-        $data = [
-            'golongan' => $request->golongan,
-            'jenis_sediaan' => $request->jenis_sediaan,
-            'nama_obat' => $request->nama_obat,
-            'harga_pokok' => $request->harga_pokok,
-            'harga_jual' => $hargaJual, // Simpan harga jual yang telah dihitung
-            'id_margin' => $request->id_margin, // Simpan id_margin untuk relasi
-            'stok_awal' => $stokAwal,
-            'masuk' => $stokMasuk,
-            'keluar' => $stokKeluar,
-            'retur' => $stokRetur,
-            'stok' => $stokAkhir,
-        ];
+            // Simpan ke tabel reseps
+            $resep = Resep::create([
+                'id_margin'         => $request->id_margin,
+                'golongan'          => $request->golongan,
+                'jenis_sediaan'     => $request->jenis_sediaan,
+                'nama_obat'         => $request->nama_obat,
+                'harga_pokok'       => $request->harga_pokok,
+                'harga_jual'        => $hargaJual,
+                'stok_awal'         => $stokAwal,
+                'masuk'             => $stokAwal,
+                'keluar'            => 0,
+                'retur'             => 0,
+                'stok'              => $stokAwal,
 
-        // dd($data);
+                // Distributor & Faktur
+                'no_faktur'         => $request->no_faktur,
+                'nama_distributor'  => $request->nama_distributor,
+                'hp_distributor'    => $request->hp_distributor,
+                'alamat_distributor'=> $request->alamat_distributor,
+            ]);
 
-        // Simpan data obat baru ke tabel Resep
-        $obat = Resep::create($data);
+            // Simpan batch detail
+            foreach ($request->expired_date as $key => $expired) {
+                ResepDetail::create([
+                    'resep_id'        => $resep->id,
+                    'etd'             => $request->tanggal_terima[$key],
+                    'expired_date'    => $expired,
+                    'jumlah_expired'  => $request->jumlah[$key],
+                ]);
+            }
 
-        // Simpan log stok awal ke tabel RecordStok
-        RecordStok::create([
-            'id_reseps' => $obat->id,
-            'stok_masuk' => $stokMasuk,
-            'stok_keluar' => $stokKeluar,
-            'stok_retur' => $stokRetur,
-            'stok_total' => $stokAkhir,
-        ]);
+            // Simpan ke record stok
+            RecordStok::create([
+                'id_reseps'   => $resep->id,
+                'stok_masuk'  => $stokAwal,
+                'stok_keluar' => 0,
+                'stok_retur'  => 0,
+                'stok_total'  => $stokAwal,
+            ]);
+
+        });
+
 
         return redirect()->route('master.obat')->with('success', 'Data Obat Berhasil Ditambah');
     }

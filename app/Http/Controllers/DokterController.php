@@ -296,6 +296,7 @@ class DokterController extends Controller
         $term = $request->input('term');
 
         $results = Jenisobat::where('jenis', 'LIKE', '%' . $term . '%')
+            ->where('status', 'Aktif')
             ->select('id', 'jenis as text') // Sesuaikan dengan kolom yang diinginkan
             ->take(10)
             ->get();

@@ -40,4 +40,8 @@ class Resep extends Model
     {
         return $this->belongsToMany(Soap::class, 'soap_p_obats', 'obat_id', 'soap_id');
     }
+    public function details()
+    {
+        return $this->hasMany(ResepDetail::class, 'resep_id');
+    }
 }

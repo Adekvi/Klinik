@@ -20,20 +20,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mt-2">
-                            <div class="form-group">
-                                <label for="">Nama Pasien</label>
-                                <input type="text" name="nama_pasien" id="nama_pasien" class="form-control mt-2"
-                                    value="{{ $antrianDokter->booking->pasien->nama_pasien }}" readonly>
-                            </div>
+                     {{-- Info Pasien --}}
+                    <div class="card shadow-sm mb-4 mt-4">
+                        <div class="card-header bg-info text-white fw-bold p-2">
+                            Info Pasien
                         </div>
-                        <div class="col-md-6 mt-2">
-                            <div class="form-group">
-                                <label for="">Umur</label>
-                                <input type="text" class="form-control mt-2"
-                                    value="{{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age . ' Tahun' }}"
-                                    readonly>
+                        <div class="card-body">
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-6">
+                                    <div><strong>Nama :</strong> {{ $antrianDokter->booking->pasien->nama_pasien }}</div>
+                                </div>
+                                <div class="col-6">
+                                    <div><strong>Tanggal Lahir :</strong>  {{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->translatedFormat('d F Y') }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><strong>Umur :</strong> {{ \Carbon\Carbon::parse($antrianDokter->booking->pasien->tgllahir)->age }} Tahun</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><strong>No. RM :</strong> {{ $antrianDokter->booking->pasien->no_rm }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><strong>Jenis Kelamin :</strong> {{ $antrianDokter->booking->pasien->jekel ?? '-' }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><strong>Alamat Asal :</strong> {{ $antrianDokter->booking->pasien->alamat_asal ?? '-' }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><strong>Domisili :</strong> {{ $antrianDokter->booking->pasien->domisili ?? '-' }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -514,6 +528,7 @@
                             </div>
                         </div>
                     </div>
+                    {{-- DIAGNOSA --}}
                     <div class="form-group row mt-2">
                         <label for="soap_a_input" style="font-weight: bold">Diagnosa (A)</label>
                         <div class="col-md-12 mt-2">
@@ -529,39 +544,76 @@
                     </div>
 
                     <div class="form-group mt-3 mb-2">
-                        <label for="soap_p_input" style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">
-                        Pilih Obat (P)
-                        </label>
+                        <label class="fw-bold mb-2">Pilih Obat (P)</label>
 
                         <div id="obat-form" class="mb-3">
 
-                        <!-- Baris Nama Obat dan Jenis Sediaan -->
-                        <div class="input-row d-flex gap-3 mb-2">
-                            <input type="text" id="nama-obat-input" class="form-control flex-grow-1" placeholder="Cari Nama Obat" autocomplete="off" data-url="{{ url('/resep-autocomplete') }}">
-                            <input type="text" id="jenis-sediaan-input" class="form-control" style="flex-basis: 220px;" placeholder="Cari Jenis Sediaan" autocomplete="off" data-url="{{ url('/jenis-autocomplete') }}">
-                        </div>
+                            <!-- Nama Obat (Full) -->
+                            <div class="mb-2">
+                                <input type="text"
+                                    id="nama-obat-input"
+                                    class="form-control"
+                                    placeholder="Cari Nama Obat"
+                                    autocomplete="off"
+                                    data-url="{{ url('/resep-autocomplete') }}">
+                            </div>
 
-                        <!-- Baris Aturan Pakai dan Anjuran Minum -->
-                        <div class="input-row d-flex gap-3 mb-2">
-                            <input type="text" id="aturan-pakai-input" class="form-control flex-grow-1" placeholder="Cari Aturan Pakai" autocomplete="off" data-url="{{ url('/aturan-autocomplete') }}">
-                            <input type="text" id="anjuran-minum-input" class="form-control" style="flex-basis: 220px;" placeholder="Cari Anjuran Minum" autocomplete="off" data-url="{{ url('/anjuran-autocomplete') }}">
-                        </div>
+                            <!-- Field Pendek -->
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-4">
+                                    <input type="text"
+                                        id="jenis-sediaan-input"
+                                        class="form-control"
+                                        placeholder="Jenis Sediaan"
+                                        autocomplete="off"
+                                        data-url="{{ url('/jenis-autocomplete') }}">
+                                </div>
 
-                        <!-- Baris Jumlah dan Tombol Add -->
-                        <div class="input-row d-flex gap-3 align-items-center">
-                            <input type="number" id="jumlah-input" class="form-control" placeholder="Jumlah" min="1" style="flex-basis: 100px;">
-                            <button id="add-obat-btn" class="btn btn-primary" style="flex-basis: 80px; padding: 6px 12px;">Add</button>
-                        </div>
+                                <div class="col-md-3">
+                                    <input type="text"
+                                        id="aturan-pakai-input"
+                                        class="form-control"
+                                        placeholder="Aturan Pakai"
+                                        autocomplete="off"
+                                        data-url="{{ url('/aturan-autocomplete') }}">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <input type="text"
+                                        id="anjuran-minum-input"
+                                        class="form-control"
+                                        placeholder="Anjuran Minum"
+                                        autocomplete="off"
+                                        data-url="{{ url('/anjuran-autocomplete') }}">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="number"
+                                        id="jumlah-input"
+                                        class="form-control"
+                                        placeholder="QTY"
+                                        min="1">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button id="add-obat-btn"
+                                            type="button"
+                                            class="btn btn-primary w-100">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
 
                         </div>
-
                         <!-- Racikan -->
-                        <label for="racikan-textarea" style="font-weight: bold; margin-top: 20px; margin-bottom: 5px; display: block;">Resep Racikan</label>
-                        <textarea name="ObatRacikan" id="racikan-textarea" cols="30" rows="5" class="form-control mb-3"></textarea>
+                        <label class="fw-bold mt-4 mb-2">Resep Racikan</label>
+                        <textarea id="racikan-textarea"
+                                rows="4"
+                                class="form-control mb-3" name="ObatRacikan"></textarea>
 
-                        <!-- List Obat hasil Add -->
                         <ul id="obat-list" class="list-group"></ul>
                     </div>
+
                     <div class="form-group">
                         <label for="edukasi" style="font-weight: bold">Edukasi</label>
                         <input type="text" class="form-control mt-2 mb-2" name="edukasi" id="edukasi"
@@ -654,253 +706,284 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
-        // DIAGNOSA
-        document.addEventListener('DOMContentLoaded', function() {
-            const input = document.getElementById('soap_a_input');
-            const dropdown = document.getElementById('dropdown-diagnosa');
-            const addBtn = document.getElementById('add-diagnosa-btn');
-            const diagnosaList = document.getElementById('diagnosa-list');
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('soap_a_input');
+    const dropdown = document.getElementById('dropdown-diagnosa');
+    const addBtn = document.getElementById('add-diagnosa-btn');
+    const diagnosaList = document.getElementById('diagnosa-list');
 
-            function showDropdown(results) {
-                dropdown.innerHTML = '';
-                if (results.length === 0) {
-                    dropdown.style.display = 'none';
-                    return;
-                }
-                results.forEach(result => {
-                    const option = document.createElement('div');
-                    option.classList.add('dropdown-item');
-                    option.textContent = result.text;
-                    option.dataset.id = result.id;
+    function showDropdown(results) {
+        dropdown.innerHTML = '';
+        if (results.length === 0) {
+            dropdown.style.display = 'none';
+            return;
+        }
+        results.forEach(result => {
+            const option = document.createElement('div');
+            option.classList.add('dropdown-item');
+            option.textContent = result.text;
+            option.dataset.id = result.id;
 
-                    option.addEventListener('click', function() {
-                        input.value = result.text;
-                        dropdown.style.display = 'none';
-                    });
-
-                    dropdown.appendChild(option);
-                });
-                dropdown.style.display = 'block';
-            }
-
-            function searchDiagnosa(term, callback) {
-                fetch(`/search-diagnosa?term=${encodeURIComponent(term)}`)
-                    .then(res => res.json())
-                    .then(data => callback(data))
-                    .catch(err => console.error(err));
-            }
-
-            input.addEventListener('input', function() {
-                const term = input.value;
-                if (term.length > 2) {
-                    searchDiagnosa(term, showDropdown);
-                } else {
-                    dropdown.style.display = 'none';
-                }
+            option.addEventListener('click', function() {
+                input.value = result.text;
+                dropdown.style.display = 'none';
             });
 
-            document.addEventListener('click', function(e) {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
-            });
-
-            function addDiagnosa(value) {
-                if (!value.trim()) return;
-
-                const li = document.createElement('li');
-                li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-
-                const badge = document.createElement('span');
-                badge.classList.add('badge', 'bg-info', 'me-2');
-                badge.textContent = diagnosaList.children.length === 0 ? 'Primer' : 'Sekunder';
-
-                const textNode = document.createTextNode(value);
-                li.appendChild(badge);
-                li.appendChild(textNode);
-
-                const removeBtn = document.createElement('button');
-                removeBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2');
-                removeBtn.textContent = 'Hapus';
-                removeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    li.remove();
-                });
-
-                li.appendChild(removeBtn);
-
-                // Klik item untuk ubah tipe
-                li.addEventListener('click', function(e) {
-                    const currentType = badge.textContent;
-
-                    if (currentType === 'Sekunder') {
-                        if (confirm(`Jadikan "${value}" sebagai Primer?`)) {
-                            // Cari Primer saat ini, ubah jadi Sekunder
-                            const items = diagnosaList.children;
-                            for (let i = 0; i < items.length; i++) {
-                                const b = items[i].querySelector('span.badge');
-                                if (b.textContent === 'Primer') {
-                                    b.textContent = 'Sekunder';
-                                }
-                            }
-                            // Jadikan item ini Primer
-                            badge.textContent = 'Primer';
-                            diagnosaList.prepend(li); // naik ke atas
-                        }
-                    } else if (currentType === 'Primer') {
-                        if (confirm(`Jadikan "${value}" sebagai Sekunder?`)) {
-                            badge.textContent = 'Sekunder';
-                            diagnosaList.appendChild(li); // pindah ke bawah
-                        }
-                    }
-                });
-
-                diagnosaList.appendChild(li);
-            }
-
-            addBtn.addEventListener('click', function() {
-                addDiagnosa(input.value.trim());
-                input.value = '';
-            });
+            dropdown.appendChild(option);
         });
+        dropdown.style.display = 'block';
+    }
 
-
-
-
-
-        // RESEP
-        document.addEventListener('DOMContentLoaded', function() {
-  // Helper: buat autocomplete sederhana
-  function setupAutocomplete(input) {
-    const url = input.dataset.url;
-    const dropdown = document.createElement('div');
-    dropdown.classList.add('autocomplete-dropdown');
-    input.parentNode.style.position = 'relative';
-    input.parentNode.appendChild(dropdown);
+    function searchDiagnosa(term, callback) {
+        fetch(`/search-diagnosa?term=${encodeURIComponent(term)}`)
+            .then(res => res.json())
+            .then(data => callback(data))
+            .catch(err => console.error(err));
+    }
 
     input.addEventListener('input', function() {
-      const term = input.value.trim();
-      if(term.length < 2) {
-        dropdown.style.display = 'none';
-        return;
-      }
-      fetch(`${url}?term=${encodeURIComponent(term)}`)
-        .then(res => res.json())
-        .then(data => {
-          dropdown.innerHTML = '';
-          if(data.length === 0) {
-            dropdown.innerHTML = '<div class="dropdown-item disabled">Tidak ada data</div>';
-          } else {
-            data.forEach(item => {
-              const option = document.createElement('div');
-              option.classList.add('dropdown-item');
-              option.textContent = item.text || item.nama || item.nama_obat || item.jenis || item.aturan || item.anjuran || 'Unknown';
-              option.dataset.value = item.id || item.value || option.textContent;
-              option.addEventListener('click', () => {
-                input.value = option.textContent;
-                dropdown.style.display = 'none';
-              });
-              dropdown.appendChild(option);
-            });
-          }
-          dropdown.style.display = 'block';
-        })
-        .catch(() => {
-          dropdown.innerHTML = '<div class="dropdown-item disabled">Error loading data</div>';
-          dropdown.style.display = 'block';
+        const term = input.value;
+        if (term.length > 2) {
+            searchDiagnosa(term, showDropdown);
+        } else {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    function updateBadges() {
+        diagnosaList.querySelectorAll('li').forEach((li) => {
+            const badge = li.querySelector('span.badge');
+            badge.textContent = li.classList.contains('primer') ? 'Primer' : 'Sekunder';
         });
-    });
-
-    // Hide dropdown saat klik di luar
-    document.addEventListener('click', e => {
-      if(!input.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.style.display = 'none';
-      }
-    });
-  }
-
-  // Setup autocomplete pada semua input dengan data-url
-  ['nama-obat-input', 'jenis-sediaan-input', 'aturan-pakai-input', 'anjuran-minum-input'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) setupAutocomplete(el);
-  });
-
-  // Referensi input dan tombol
-  const namaObatInput = document.getElementById('nama-obat-input');
-  const jenisSediaanInput = document.getElementById('jenis-sediaan-input');
-  const aturanPakaiInput = document.getElementById('aturan-pakai-input');
-  const anjuranMinumInput = document.getElementById('anjuran-minum-input');
-  const jumlahInput = document.getElementById('jumlah-input');
-  const addBtn = document.getElementById('add-obat-btn');
-  const obatList = document.getElementById('obat-list');
-  const racikanTextarea = document.getElementById('racikan-textarea');
-
-  // Fungsi clear semua input setelah add
-  function clearInputs() {
-    namaObatInput.value = '';
-    jenisSediaanInput.value = '';
-    aturanPakaiInput.value = '';
-    anjuranMinumInput.value = '';
-    jumlahInput.value = '';
-  }
-
-  // Fungsi tambah item obat ke list
-  function addObat() {
-    const namaObat = namaObatInput.value.trim();
-    const jenisSediaan = jenisSediaanInput.value.trim();
-    const aturanPakai = aturanPakaiInput.value.trim();
-    const anjuranMinum = anjuranMinumInput.value.trim();
-    const jumlah = jumlahInput.value.trim();
-
-    if(!namaObat) {
-      alert('Nama Obat harus diisi');
-      namaObatInput.focus();
-      return;
-    }
-    if(!jumlah || isNaN(jumlah) || parseInt(jumlah) <= 0) {
-      alert('Jumlah harus angka lebih dari 0');
-      jumlahInput.focus();
-      return;
     }
 
-    const li = document.createElement('li');
-    li.classList.add('list-group-item');
+    function addDiagnosa(value) {
+        if (!value.trim()) return;
 
-    li.innerHTML = `
-      <div>
-        <strong>${namaObat}</strong> - ${jenisSediaan ? jenisSediaan : '-'}<br>
-        Aturan Pakai: ${aturanPakai ? aturanPakai : '-'}, Anjuran Minum: ${anjuranMinum ? anjuranMinum : '-'}<br>
-        Jumlah: ${jumlah}
-      </div>
-      <button class="btn btn-danger btn-sm">Hapus</button>
-    `;
+        const li = document.createElement('li');
+        li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
 
-    // Event hapus
-    li.querySelector('button').addEventListener('click', () => {
-      li.remove();
-    });
+        // Tandai primer otomatis kalau list kosong
+        if (diagnosaList.children.length === 0) li.classList.add('primer');
 
-    // Tambah ke list
-    obatList.appendChild(li);
+        const badge = document.createElement('span');
+        badge.classList.add('badge', 'bg-info', 'me-2');
+        li.appendChild(badge);
 
-    // Clear input form
-    clearInputs();
+        const textNode = document.createTextNode(value);
+        li.appendChild(textNode);
 
-    // Fokus ke nama obat
-    namaObatInput.focus();
-  }
+        // Input hidden
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'diagnosa[]';
+        hidden.value = value;
+        li.appendChild(hidden);
 
-  // Event klik tombol Add
-  addBtn.addEventListener('click', addObat);
+        // Tombol hapus
+        const removeBtn = document.createElement('button');
+        removeBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2');
+        removeBtn.textContent = 'Hapus';
+        removeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            li.remove();
+            updateBadges();
+        });
+        li.appendChild(removeBtn);
 
-  // Optional: bisa juga tekan Enter di jumlah input untuk Add
-  jumlahInput.addEventListener('keypress', e => {
-    if(e.key === 'Enter') {
-      e.preventDefault();
-      addObat();
+        // Klik pada nama diagnosa → toggle primer/sekunder
+        li.addEventListener('click', function(e) {
+            if (e.target === removeBtn) return; // jangan toggle kalau klik hapus
+            if (li.classList.contains('primer')) {
+                li.classList.remove('primer'); // primer → sekunder
+            } else {
+                // jadikan ini primer, sekunder lainnya
+                diagnosaList.querySelectorAll('li').forEach(item => item.classList.remove('primer'));
+                li.classList.add('primer');
+            }
+            updateBadges();
+        });
+
+        diagnosaList.appendChild(li);
+        updateBadges();
     }
-  });
+
+    addBtn.addEventListener('click', function() {
+        addDiagnosa(input.value.trim());
+        input.value = '';
+    });
 });
+</script>
 
+    <script>
+          // RESEP
+        document.addEventListener('DOMContentLoaded', function () {
+
+            /* ===============================
+            AUTOCOMPLETE GENERIC
+            =============================== */
+            function setupAutocomplete(input) {
+                const url = input.dataset.url;
+                if (!url) return;
+
+                const dropdown = document.createElement('div');
+                dropdown.className = 'autocomplete-dropdown list-group position-absolute w-100';
+                dropdown.style.zIndex = 1000;
+
+                input.parentElement.style.position = 'relative';
+                input.parentElement.appendChild(dropdown);
+
+                let controller;
+
+                input.addEventListener('input', function () {
+                    const term = this.value.trim();
+
+                    if (term.length < 2) {
+                        dropdown.innerHTML = '';
+                        dropdown.style.display = 'none';
+                        return;
+                    }
+
+                    if (controller) controller.abort();
+                    controller = new AbortController();
+
+                    fetch(`${url}?term=${encodeURIComponent(term)}`, {
+                        signal: controller.signal
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        dropdown.innerHTML = '';
+
+                        if (!Array.isArray(data) || data.length === 0) {
+                            dropdown.innerHTML =
+                                `<div class="list-group-item disabled">Tidak ada data</div>`;
+                        } else {
+                            data.forEach(item => {
+                                const option = document.createElement('button');
+                                option.type = 'button';
+                                option.className = 'list-group-item list-group-item-action';
+                                option.textContent = item.text ?? item.nama ?? item.nama_obat ?? '-';
+
+                                option.addEventListener('click', () => {
+                                    input.value = option.textContent;
+                                    dropdown.style.display = 'none';
+                                });
+
+                                dropdown.appendChild(option);
+                            });
+                        }
+
+                        dropdown.style.display = 'block';
+                    })
+                    .catch(() => {
+                        dropdown.innerHTML =
+                            `<div class="list-group-item disabled">Gagal mengambil data</div>`;
+                        dropdown.style.display = 'block';
+                    });
+                });
+
+                document.addEventListener('click', e => {
+                    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.style.display = 'none';
+                    }
+                });
+            }
+
+            /* ===============================
+            INIT AUTOCOMPLETE
+            =============================== */
+            [
+                'nama-obat-input',
+                'jenis-sediaan-input',
+                'aturan-pakai-input',
+                'anjuran-minum-input'
+            ].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) setupAutocomplete(el);
+            });
+
+            /* ===============================
+            FORM ELEMENT
+            =============================== */
+            const namaObatInput     = document.getElementById('nama-obat-input');
+            const jenisSediaanInput = document.getElementById('jenis-sediaan-input');
+            const aturanPakaiInput  = document.getElementById('aturan-pakai-input');
+            const anjuranMinumInput = document.getElementById('anjuran-minum-input');
+            const jumlahInput       = document.getElementById('jumlah-input');
+            const addBtn            = document.getElementById('add-obat-btn');
+            const obatList          = document.getElementById('obat-list');
+
+            /* ===============================
+            HELPER
+            =============================== */
+            function clearInputs() {
+                namaObatInput.value = '';
+                jenisSediaanInput.value = '';
+                aturanPakaiInput.value = '';
+                anjuranMinumInput.value = '';
+                jumlahInput.value = '';
+            }
+
+            /* ===============================
+            ADD OBAT
+            =============================== */
+            function addObat() {
+                const namaObat = namaObatInput.value.trim();
+                const jumlah   = jumlahInput.value.trim();
+
+                if (!namaObat) return;
+
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-start';
+
+                const detail = `${namaObat} | ${jenisSediaanInput.value || '-'} | ${aturanPakaiInput.value || '-'} | ${anjuranMinumInput.value || '-'} | QTY: ${jumlah}`;
+
+                li.innerHTML = `
+                    <div>
+                        ${detail}
+                    </div>
+                    <button type="button" class="btn btn-sm btn-danger">Hapus</button>
+                `;
+
+                // Hidden input untuk form
+                const hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'obat[]';
+                hidden.value = JSON.stringify({
+                    nama: namaObat,
+                    jenis_sediaan: jenisSediaanInput.value,
+                    aturan: aturanPakaiInput.value,
+                    anjuran: anjuranMinumInput.value,
+                    jumlah: jumlah
+                });
+                li.appendChild(hidden);
+
+                li.querySelector('button').addEventListener('click', () => li.remove());
+
+                obatList.appendChild(li);
+                clearInputs();
+            }
+
+
+            /* ===============================
+            EVENTS
+            =============================== */
+            addBtn.addEventListener('click', addObat);
+
+            jumlahInput.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addObat();
+                }
+            });
+
+        });
     </script>
+
 @endpush

@@ -216,7 +216,8 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-        <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+        
+        <script src="https://code.responsivevoice.org/responsivevoice.js?key=EbYPThWO"></script>
         <script src="<?php echo e(asset('assets/responsivevoice.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/antrian.script.js')); ?>"></script>
         <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>

@@ -1,5 +1,5 @@
 <!-- Modal Resep BARU -->
-<div class="modal fade" id="tambahObat{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="tambahObat<?php echo e($item->id); ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="pasienbaru" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -9,13 +9,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ url('obat/store/' . $item->id) }}" method="post" enctype="multipart/form-data">
-                    @csrf
+                <form action="<?php echo e(url('obat/store/' . $item->id)); ?>" method="post" enctype="multipart/form-data">
+                    <?php echo csrf_field(); ?>
                     <div class="modal-body">
                         <div class="container" style="margin-top: -10px">
                             <div class="row mb-3">
                                 <div class="col-md-4">
-                                    <h2><strong>{{ $item->booking->pasien->nama_pasien }}</strong></h2>
+                                    <h2><strong><?php echo e($item->booking->pasien->nama_pasien); ?></strong></h2>
                                     <hr style="margin-top: -5px">
                                     <p style="font-size: 14px; margin-top: -5px">
                                         <strong>Sengonbugel RT.01/01, Mayong, Jepara</strong>
@@ -23,9 +23,10 @@
                                     <hr style="margin-top: -5px">
                                     <p style="margin-top: -5px">
                                         <strong>
-                                            {{ $item->booking->pasien->alamat_asal }},
-                                            {{ $item->booking->pasien->tgllahir }}
-                                            ({{ \Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age }} Tahun)
+                                            <?php echo e($item->booking->pasien->alamat_asal); ?>,
+                                            <?php echo e($item->booking->pasien->tgllahir); ?>
+
+                                            (<?php echo e(\Carbon\Carbon::parse($item->booking->pasien->tgllahir)->age); ?> Tahun)
                                         </strong>
                                     </p>
                                     <hr style="margin-top: -5px">
@@ -35,22 +36,22 @@
                                         <div class="info-item">
                                             <label style="min-width: 100px;">Tinggi Badan</label>
                                             <span>:</span>
-                                            <p>{{ $item->isian->p_tb }} Cm</p>
+                                            <p><?php echo e($item->isian->p_tb); ?> Cm</p>
                                         </div>
                                         <div class="info-item">
                                             <label style="min-width: 100px;">Berat Badan</label>
                                             <span>:</span>
-                                            <p>{{ $item->isian->p_bb }} Kg</p>
+                                            <p><?php echo e($item->isian->p_bb); ?> Kg</p>
                                         </div>
                                         <div class="info-item">
                                             <label style="min-width: 100px;">Jenis Kelamin</label>
                                             <span>:</span>
                                             <p>
-                                                @if ($item->booking->pasien->jekel === 'P' ?? 'Perempuan')
+                                                <?php if($item->booking->pasien->jekel === 'P' ?? 'Perempuan'): ?>
                                                     Perempuan
-                                                @elseif($item->booking->pasien->jekel === 'L' ?? 'Laki-laki')
+                                                <?php elseif($item->booking->pasien->jekel === 'L' ?? 'Laki-laki'): ?>
                                                     Laki-laki
-                                                @endif
+                                                <?php endif; ?>
                                             </p>
                                         </div>
                                     </div>
@@ -60,27 +61,28 @@
                                         <div class="info-item">
                                             <label style="min-width: 100px;">Jenis Pasien</label>
                                             <span>:</span>
-                                            <p>{{ $item->booking->pasien->jenis_pasien }}</p>
+                                            <p><?php echo e($item->booking->pasien->jenis_pasien); ?></p>
                                         </div>
                                         <div class="info-item">
                                             <label style="min-width: 100px;">Poli</label>
                                             <span>:</span>
-                                            <p>{{ $item->poli->namapoli }}</p>
+                                            <p><?php echo e($item->poli->namapoli); ?></p>
                                         </div>
                                         <div class="info-item">
                                             <label style="min-width: 100px;">No. NIK</label>
                                             <span>:</span>
-                                            <p>{{ $item->booking->pasien->nik }}</p>
+                                            <p><?php echo e($item->booking->pasien->nik); ?></p>
                                         </div>
                                         <div class="info-item">
                                             <label style="min-width: 100px;">No. BPJS</label>
                                             <span>:</span>
                                             <p>
-                                                @if (!empty($item->booking->pasien->bpjs))
-                                                    {{ $item->booking->pasien->bpjs }}
-                                                @else
+                                                <?php if(!empty($item->booking->pasien->bpjs)): ?>
+                                                    <?php echo e($item->booking->pasien->bpjs); ?>
+
+                                                <?php else: ?>
                                                     -
-                                                @endif
+                                                <?php endif; ?>
                                             </p>
                                         </div>
                                     </div>
@@ -102,7 +104,7 @@
                     </tr>
                 </thead>
                 <tbody class="text-center">
-                    @php
+                    <?php
                         $soap = $item->obat->soap ?? null;
 
                         // Data utama (update manual)
@@ -130,10 +132,10 @@
                         }
 
                         $hargaJualData = $reseps->keyBy('nama_obat');
-                    @endphp
+                    ?>
 
-                    @forelse($semuaObat as $index => $namaObat)
-                        @php
+                    <?php $__empty_1 = true; $__currentLoopData = $semuaObat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $namaObat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <?php
                             $namaObat = is_array($namaObat) ? implode(', ', $namaObat) : trim($namaObat);
                             $aturan = $aturanMinum[$index] ?? '';
                             $anjuran = $anjuranMinum[$index] ?? 'AC';
@@ -141,63 +143,65 @@
                             $jenis = $jenisObat[$index] ?? '-';
                             $hargaSatuan = $hargaJualData->get($namaObat)->harga_jual ?? 0;
                             $totalHarga = $jumlah * $hargaSatuan;
-                        @endphp
+                        ?>
                         <tr>
                             <!-- Nama Obat -->
                             <td>
-                                <input type="text" name="obat_Ro[{{ $index }}][namaObatUpdate]"
-                                    value="{{ $namaObat }}" class="form-control" placeholder="Cari Obat..." />
-                                <input type="hidden" name="obat_Ro[{{ $index }}][anjuran]" value="{{ $anjuran }}">
+                                <input type="text" name="obat_Ro[<?php echo e($index); ?>][namaObatUpdate]"
+                                    value="<?php echo e($namaObat); ?>" class="form-control" placeholder="Cari Obat..." />
+                                <input type="hidden" name="obat_Ro[<?php echo e($index); ?>][anjuran]" value="<?php echo e($anjuran); ?>">
                             </td>
 
                             <!-- Aturan Penggunaan -->
                             <td>
-                                <select name="obat_Ro[{{ $index }}][aturan]" class="form-control">
-                                    @foreach ($aturanList as $opt)
-                                        <option value="{{ $opt }}" {{ $aturan === $opt ? 'selected' : '' }}>
-                                            {{ $opt }}
+                                <select name="obat_Ro[<?php echo e($index); ?>][aturan]" class="form-control">
+                                    <?php $__currentLoopData = $aturanList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $opt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($opt); ?>" <?php echo e($aturan === $opt ? 'selected' : ''); ?>>
+                                            <?php echo e($opt); ?>
+
                                         </option>
-                                    @endforeach
-                                    <option value="custom" {{ !in_array($aturan, $aturanList) ? 'selected' : '' }}>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="custom" <?php echo e(!in_array($aturan, $aturanList) ? 'selected' : ''); ?>>
                                         Lainnya
                                     </option>
                                 </select>
 
-                                <input type="text" name="obat_Ro[{{ $index }}][aturan_custom]" class="form-control mt-1"
-                                    value="{{ !in_array($aturan, $aturanList) ? $aturan : '' }}"
+                                <input type="text" name="obat_Ro[<?php echo e($index); ?>][aturan_custom]" class="form-control mt-1"
+                                    value="<?php echo e(!in_array($aturan, $aturanList) ? $aturan : ''); ?>"
                                     placeholder="Aturan custom">
                             </td>
 
                             <!-- Jumlah Obat -->
                             <td>
-                                <input type="number" name="obat_Ro[{{ $index }}][jumlah]"
-                                    value="{{ $jumlah }}" class="form-control mb-1" min="0" style="width:80px; display:inline-block;">
-                                <select name="obat_Ro[{{ $index }}][jenisObat]" class="form-control" style="width:100px; display:inline-block;">
-                                    @foreach ($jenisObatList as $j)
-                                        <option value="{{ $j }}" {{ $jenis === $j ? 'selected' : '' }}>
-                                            {{ $j }}
+                                <input type="number" name="obat_Ro[<?php echo e($index); ?>][jumlah]"
+                                    value="<?php echo e($jumlah); ?>" class="form-control mb-1" min="0" style="width:80px; display:inline-block;">
+                                <select name="obat_Ro[<?php echo e($index); ?>][jenisObat]" class="form-control" style="width:100px; display:inline-block;">
+                                    <?php $__currentLoopData = $jenisObatList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $j): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($j); ?>" <?php echo e($jenis === $j ? 'selected' : ''); ?>>
+                                            <?php echo e($j); ?>
+
                                         </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </td>
 
                             <!-- Harga / Tablet -->
                             <td>
-                                <input type="text" name="obat_Ro[{{ $index }}][hargaTablet]"
-                                    value="{{ number_format($hargaSatuan, 0, ',', '.') }}" class="form-control" readonly>
+                                <input type="text" name="obat_Ro[<?php echo e($index); ?>][hargaTablet]"
+                                    value="<?php echo e(number_format($hargaSatuan, 0, ',', '.')); ?>" class="form-control" readonly>
                             </td>
 
                             <!-- Total Harga -->
                             <td>
-                                <input type="text" name="obat_Ro[{{ $index }}][hargaTotal]"
-                                    value="{{ number_format($totalHarga, 0, ',', '.') }}" class="form-control" readonly>
+                                <input type="text" name="obat_Ro[<?php echo e($index); ?>][hargaTotal]"
+                                    value="<?php echo e(number_format($totalHarga, 0, ',', '.')); ?>" class="form-control" readonly>
                             </td>
                         </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="5">Tidak ada obat</td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -208,7 +212,7 @@
                             <div class="col-4">
                                 <div class="form-group mt-3">
                                     <label for="racikan">Obat Racikan</label>
-                                    <textarea name="obat_racikan" id="obat_racikan" class="form-control obat-racikan mt-2" rows="3" readonly>{{ $item->obat->soap->ObatRacikan ?? 'Tidak ada obat racikan' }}</textarea>
+                                    <textarea name="obat_racikan" id="obat_racikan" class="form-control obat-racikan mt-2" rows="3" readonly><?php echo e($item->obat->soap->ObatRacikan ?? 'Tidak ada obat racikan'); ?></textarea>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -228,8 +232,8 @@
                                             </span>
                                         </div>
                                         <input type="text" name="totalSemuaHarga"
-                                            data-pasien-id="{{ $item->id }}"
-                                            id="totalSemuaHarga_{{ $item->id }}"
+                                            data-pasien-id="<?php echo e($item->id); ?>"
+                                            id="totalSemuaHarga_<?php echo e($item->id); ?>"
                                             class="form-control mt-2 text-end total-harga" readonly
                                             placeholder="Total Semua">
                                     </div>
@@ -249,7 +253,7 @@
     </div>
 </div>
 
-@push('style')
+<?php $__env->startPush('style'); ?>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     <style>
@@ -556,9 +560,9 @@
             }
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('script')
+<?php $__env->startPush('script'); ?>
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -1382,4 +1386,5 @@
             }
         }
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php /**PATH C:\laragon\www\Klinik\resources\views/obat/ModalTambahResep/ModalResep.blade.php ENDPATH**/ ?>
